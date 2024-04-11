@@ -1,0 +1,1837 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.5.0
+    itemVersion: 2.2.0
+    packID: AutoFocus
+    packName: AutoFocus by Palo Alto Networks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: "The playbook queries the PANW Autofocus session and samples log data
+  for traffic indicators such as URLs, IP addresses, and domains. \n\nA simple search
+  mode queries Autofocus based on the traffic indicators specified in the playbook
+  inputs. Advanced search mode queries can also be used with multiple query parameters,
+  but require all field names, parameters, and operators (JSON format) to be specified.
+  \nWe recommended using the Autofocus UI to create an advanced query, exporting it,
+  and pasting it into the relevant playbook inputs. \n\nNote that multiple search
+  values should be separated by commas only (without spaces or any special characters)."
+id: Autofocus - Traffic Indicators Hunting
+inputs:
+- description: |-
+    One or more IP addresses to search for in Autofocus simple mode search.
+
+    Separate multiple search values by commas only (without spaces or any special characters).
+  key: IPAddress
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: |-
+    One or more URLs and/or domains to search for in Autofocus simple mode search.
+
+    Separate multiple search values by commas only (without spaces or any special characters).
+  key: URLDomain
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: "Which Autofocus search types should be executed. \n\nPossible values
+    are session, sample, tag, or all. Session and sample are the recommended search
+    types for this playbook. \n\nSample-based search detects threat indicators or
+    identifiers within samples sent to WildFire for analysis. \n\nSession-based search
+    detects threat indicators or identifiers within various context details and session
+    data provided by samples during sample submission. \n\nTag-based search identifies
+    the most popular tags."
+  key: Search Type
+  playbookInputQuery: null
+  required: true
+  value:
+    simple: session,sample
+- description: Search scope for sample and session. Possible values are industry,
+    organization, or global.
+  key: Scope
+  playbookInputQuery: null
+  required: true
+  value:
+    simple: global
+- description: |-
+    use the Autofocus advanced search mode to leverage a variety of query options within a sample search. Advanced search requires you to specify all field names, parameters, and operators.
+
+    The query currently supports only JSON format which can be extracted from the Autofocus web console API radio button.
+  key: SampleQuery
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: |-
+    Narrow down a sample-based search by specifying the timestamp samples were first uploaded to WildFire for analysis (indicators will be searched within samples after this timestamp).
+
+    Specify the time in ISO 8601 format, for example, 2019-09-12T00:00:00.
+  key: Sample first seen
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: |-
+    Narrow down a sample-based search by specifying the timestamp samples were last modified (indicators will be searched within samples after this timestamp).
+
+    Specify the time in ISO 8601 format, for example, 2019-09-12T00:00:00.
+  key: Sample last modified
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: |-
+    Use the Autofocus advanced search mode to leverage a variety of query options in a session search. Advanced search requires you to specify all field names, parameters, and operators.
+
+    The query currently supports only JSON format which can be extracted from the Autofocus web console API radio button.
+  key: SessionQuery
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: |-
+    Narrow down a session-based search by specifying the query end timestamp (indicators will be searched within sessions before this timestamp).
+
+    Specify the time in ISO 8601 format, for example, 2019-09-12T00:00:00.
+  key: Sessions time before
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: |-
+    Narrow down a session-based search by specifying the query start timestamp (indicators will be searched within sessions after this timestamp).
+
+    Specify the time in ISO 8601 format, for example, 2019-09-12T00:00:00.
+  key: Sessions time after
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: "Filter results by WildFire classification assigned to samples based
+    on properties, behaviors, and activities observed for files or email links during
+    static and dynamic analysis.\n\nPossible values are malware, benign, phishing,
+    and greyware. "
+  key: Wildfire Verdict
+  playbookInputQuery: null
+  required: false
+  value: {}
+name: Autofocus - Traffic Indicators Hunting
+outputs:
+- contextPath: Autofocus.Samples.HuntingResults
+  description: Sample objects containing relevant fields.
+  type: string
+- contextPath: Autofocus.Samples.HuntingResults.Created
+  description: The date the file was created.
+  type: date
+- contextPath: Autofocus.Samples.HuntingResults.Finished
+  description: The date the file was finished.
+  type: date
+- contextPath: Autofocus.Samples.HuntingResults.FileName
+  description: The name of the file.
+  type: string
+- contextPath: Autofocus.Samples.HuntingResults.FileType
+  description: The file type.
+  type: string
+- contextPath: Autofocus.Samples.HuntingResults.SHA1
+  description: The SHA1 hash of the file.
+  type: string
+- contextPath: Autofocus.Samples.HuntingResults.SHA256
+  description: The SHA256 hash of the file.
+  type: string
+- contextPath: Autofocus.Samples.HuntingResults.MD5
+  description: The MD5 hash of the file.
+  type: string
+- contextPath: Autofocus.Samples.HuntingResults.Region
+  description: The region of the sample.
+  type: string
+- contextPath: Autofocus.Samples.HuntingResults.Tags
+  description: The tags attached to the sample.
+  type: string
+- contextPath: Autofocus.Samples.HuntingResults.TagGroups
+  description: The groups of relevant tags.
+  type: string
+- contextPath: Autofocus.Samples.HuntingResults.Verdict
+  description: The verdict of the sample.
+  type: number
+- contextPath: Autofocus.Samples.HuntingResults.Artifact.confidence
+  description: The decision confidence.
+  type: string
+- contextPath: Autofocus.Samples.HuntingResults.Artifact.indicator
+  description: The indicator that was tested.
+  type: string
+- contextPath: Autofocus.Samples.HuntingResults.Artifact.indicator_type
+  description: 'The indicator type, for example: Mutex, User agent, IPv4, Domain.'
+  type: string
+- contextPath: Autofocus.Samples.HuntingResults.Artifact.b
+  description: How many set the artifact as benign.
+  type: string
+- contextPath: Autofocus.Samples.HuntingResults.Artifact.g
+  description: How many set the artifact as grayware.
+  type: string
+- contextPath: Autofocus.Samples.HuntingResults.Artifact.m
+  description: How many set the artifact as malicious.
+  type: string
+- contextPath: Autofocus.Sessions.HuntingResults
+  description: Session objects containing relevant fields.
+  type: string
+- contextPath: Autofocus.Sessions.HuntingResults.Seen
+  description: The seen date.
+  type: date
+- contextPath: Autofocus.Sessions.HuntingResults.UploadSource
+  description: The source of the uploaded sample.
+  type: string
+- contextPath: Autofocus.Sessions.HuntingResults.ID
+  description: The ID of the session. Used to get session details.
+  type: string
+- contextPath: Autofocus.Sessions.HuntingResults.FileName
+  description: The name of the file.
+  type: string
+- contextPath: Autofocus.Sessions.HuntingResults.FileURL
+  description: The URL of the file.
+  type: string
+- contextPath: Autofocus.Sessions.HuntingResults.SHA256
+  description: The SHA256 hash of the file.
+  type: string
+- contextPath: Autofocus.Sessions.HuntingResults.Industry
+  description: The related industry.
+  type: string
+- contextPath: Autofocus.Sessions.HuntingResults.Region
+  description: The regions of the sessions.
+  type: string
+- contextPath: Autofocus.Sessions.HuntingResults.Tags
+  description: The relevant tags.
+  type: string
+- contextPath: Autofocus.Sessions.HuntingResults.app
+  description: The associated application name.
+  type: string
+- contextPath: Autofocus.Sessions.HuntingResults.dst_ip
+  description: The associated destination IP.
+  type: string
+- contextPath: Autofocus.Sessions.HuntingResults.src_ip
+  description: The associated source IP.
+  type: string
+- contextPath: Autofocus.Sessions.HuntingResults.dst_countrycode
+  description: The associated destination country code.
+  type: string
+- contextPath: Autofocus.Sessions.HuntingResults.src_countrycode
+  description: The associated source country code.
+  type: string
+- contextPath: Autofocus.Sessions.HuntingResults.dst_port
+  description: The associated destination port number.
+  type: number
+- contextPath: Autofocus.Sessions.HuntingResults.src_port
+  description: The associated source port number.
+  type: number
+- contextPath: Autofocus.Sessions.HuntingResults.user_id
+  description: The recipient user ID.
+  type: string
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "213"
+      - "212"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: efd174b1-c3ae-48ce-8d14-52e397954612
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: efd174b1-c3ae-48ce-8d14-52e397954612
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 1750,
+          "y": 50
+        }
+      }
+  "5":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.IPAddress
+          operator: isNotEmpty
+          right:
+            value: {}
+      label: "yes"
+    continueonerrortype: ""
+    id: "5"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "204"
+      "yes":
+      - "203"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks whether there are any IP addresses available for searching.
+      id: caec1f23-3c5e-4c31-87cd-e79589b93f1f
+      iscommand: false
+      name: Any IP addresses to hunt for?
+      type: condition
+      version: -1
+    taskid: caec1f23-3c5e-4c31-87cd-e79589b93f1f
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 1530,
+          "y": 330
+        }
+      }
+  "10":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.URLDomain
+          operator: isNotEmpty
+          right:
+            value: {}
+      label: "yes"
+    continueonerrortype: ""
+    id: "10"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "205"
+      "yes":
+      - "179"
+      - "180"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks whether there are any URLs or domains available for searching.
+      id: deab1211-6fdb-45a2-87c9-28b758689426
+      iscommand: false
+      name: Any URLs or domains to hunt for?
+      type: condition
+      version: -1
+    taskid: deab1211-6fdb-45a2-87c9-28b758689426
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 1970,
+          "y": 330
+        }
+      }
+  "153":
+    continueonerrortype: ""
+    id: "153"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 3ab00780-9973-4e65-8271-1f0d598b5fbd
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 3ab00780-9973-4e65-8271-1f0d598b5fbd
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 1750,
+          "y": 1130
+        }
+      }
+  "179":
+    continueonerrortype: ""
+    id: "179"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "182"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: b90d1be4-f385-423d-8d01-cdc51f74ac50
+      iscommand: false
+      name: Search URL
+      type: title
+      version: -1
+    taskid: b90d1be4-f385-423d-8d01-cdc51f74ac50
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 3240,
+          "y": 510
+        }
+      }
+  "180":
+    continueonerrortype: ""
+    id: "180"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "201"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 3e9dceeb-d692-48da-89ea-5ca1de910f94
+      iscommand: false
+      name: Search Domain
+      type: title
+      version: -1
+    taskid: 3e9dceeb-d692-48da-89ea-5ca1de910f94
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 2390,
+          "y": 510
+        }
+      }
+  "182":
+    continueonerrortype: ""
+    id: "182"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "208"
+      - "207"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      Commodity:
+        complex:
+          root: inputs.Commodity
+      Sample first seen:
+        complex:
+          root: inputs.Sample first seen
+      Sample last modified:
+        complex:
+          root: inputs.Sample last modified
+      SampleQuery:
+        complex:
+          accessor: SampleQuery
+          filters:
+          - - left:
+                iscontext: true
+                value:
+                  simple: inputs.SampleQuery
+              operator: isNotEmpty
+          root: inputs
+      Scope:
+        complex:
+          filters:
+          - - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Scope
+              operator: containsGeneral
+              right:
+                value:
+                  simple: industry
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Scope
+              operator: containsGeneral
+              right:
+                value:
+                  simple: organization
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Scope
+              operator: containsGeneral
+              right:
+                value:
+                  simple: global
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Scope
+              operator: containsGeneral
+              right:
+                value:
+                  simple: all
+          root: inputs.Scope
+      Search Type:
+        complex:
+          filters:
+          - - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Search Type
+              operator: containsGeneral
+              right:
+                value:
+                  simple: session
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Search Type
+              operator: containsGeneral
+              right:
+                value:
+                  simple: sample
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Search Type
+              operator: containsGeneral
+              right:
+                value:
+                  simple: tag
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Search Type
+              operator: containsGeneral
+              right:
+                value:
+                  simple: all
+          root: inputs.Search Type
+      SessionQuery:
+        complex:
+          filters:
+          - - left:
+                iscontext: true
+                value:
+                  simple: inputs.SessionQuery
+              operator: isNotEmpty
+          root: inputs.SessionQuery
+      Sessions time after:
+        complex:
+          root: inputs.Sessions time after
+      Sessions time before:
+        complex:
+          root: inputs.Sessions time before
+      Tags class:
+        complex:
+          filters:
+          - - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Tags class
+              operator: containsGeneral
+              right:
+                value:
+                  simple: Actor
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Tags class
+              operator: containsGeneral
+              right:
+                value:
+                  simple: Campaign
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Tags class
+              operator: containsGeneral
+              right:
+                value:
+                  simple: Exploit
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Tags class
+              operator: containsGeneral
+              right:
+                value:
+                  simple: Malicious Behavior
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Tags class
+              operator: containsGeneral
+              right:
+                value:
+                  simple: Malware Family
+          root: inputs.Tags class
+      Tags private:
+        complex:
+          root: inputs.Tags private
+      Tags public:
+        complex:
+          root: inputs.Tags public
+      Tags scope:
+        complex:
+          filters:
+          - - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Tags scope
+              operator: containsGeneral
+              right:
+                value:
+                  simple: industry
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Tags scope
+              operator: containsGeneral
+              right:
+                value:
+                  simple: organization
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Tags scope
+              operator: containsGeneral
+              right:
+                value:
+                  simple: global
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Tags scope
+              operator: containsGeneral
+              right:
+                value:
+                  simple: all
+          root: inputs.Tags scope
+      URL:
+        complex:
+          root: inputs.URLDomain
+          transformers:
+          - operator: uniq
+          - args:
+              separator:
+                value:
+                  simple: ','
+            operator: join
+      Unit 42:
+        complex:
+          root: inputs.Unit 42
+      Wildfire Verdict:
+        complex:
+          filters:
+          - - left:
+                iscontext: true
+                value:
+                  simple: inputs.wildfire_verdict
+              operator: isNotEmpty
+          - - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.wildfire_verdict
+              operator: containsGeneral
+              right:
+                value:
+                  simple: Malware
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.wildfire_verdict
+              operator: containsGeneral
+              right:
+                value:
+                  simple: Grayware
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.wildfire_verdict
+              operator: containsGeneral
+              right:
+                value:
+                  simple: Benign
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.wildfire_verdict
+              operator: isEqualString
+              right:
+                value:
+                  simple: Phishing
+          root: inputs.wildfire_verdict
+    separatecontext: true
+    skipunavailable: false
+    task:
+      brand: ""
+      description: "This playbook queries the PANW threat intelligence Autofocus system.
+        The playbook accepts indicators such as IPs, hashes, and domains to run basic
+        queries or mode advanced queries that can leverage several query parameters.
+        \nTo run advanced queries, we recommend using the Autofocus UI https://autofocus.paloaltonetworks.com/#/dashboard/organization
+        to create a query and then using the export search button. The result can
+        be used as a playbook input.\n\nThe playbook supports searching both the Samples
+        API and the Sessions API."
+      id: 2b1a85b9-a5ce-4fe3-88f7-3f1184f3530b
+      iscommand: false
+      name: Autofocus Query Samples, Sessions and Tags
+      playbookId: Autofocus Query Samples, Sessions and Tags
+      type: playbook
+      version: -1
+    taskid: 2b1a85b9-a5ce-4fe3-88f7-3f1184f3530b
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 3240,
+          "y": 640
+        }
+      }
+  "201":
+    continueonerrortype: ""
+    id: "201"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "206"
+      - "209"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      Commodity:
+        complex:
+          root: inputs.Commodity
+      Domain:
+        complex:
+          root: inputs.URLDomain
+          transformers:
+          - operator: uniq
+          - args:
+              separator:
+                value:
+                  simple: ','
+            operator: join
+      Sample first seen:
+        complex:
+          root: inputs.Sample first seen
+      Sample last modified:
+        complex:
+          root: inputs.Sample last modified
+      SampleQuery:
+        complex:
+          accessor: SampleQuery
+          filters:
+          - - left:
+                iscontext: true
+                value:
+                  simple: inputs.SampleQuery
+              operator: isNotEmpty
+          root: inputs
+      Scope:
+        complex:
+          filters:
+          - - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Scope
+              operator: containsGeneral
+              right:
+                value:
+                  simple: industry
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Scope
+              operator: containsGeneral
+              right:
+                value:
+                  simple: organization
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Scope
+              operator: containsGeneral
+              right:
+                value:
+                  simple: global
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Scope
+              operator: containsGeneral
+              right:
+                value:
+                  simple: all
+          root: inputs.Scope
+      Search Type:
+        complex:
+          filters:
+          - - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Search Type
+              operator: containsGeneral
+              right:
+                value:
+                  simple: session
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Search Type
+              operator: containsGeneral
+              right:
+                value:
+                  simple: sample
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Search Type
+              operator: containsGeneral
+              right:
+                value:
+                  simple: tag
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Search Type
+              operator: containsGeneral
+              right:
+                value:
+                  simple: all
+          root: inputs.Search Type
+      SessionQuery:
+        complex:
+          filters:
+          - - left:
+                iscontext: true
+                value:
+                  simple: inputs.SessionQuery
+              operator: isNotEmpty
+          root: inputs.SessionQuery
+      Sessions time after:
+        complex:
+          root: inputs.Sessions time after
+      Sessions time before:
+        complex:
+          root: inputs.Sessions time before
+      Tags class:
+        complex:
+          filters:
+          - - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Tags class
+              operator: containsGeneral
+              right:
+                value:
+                  simple: Actor
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Tags class
+              operator: containsGeneral
+              right:
+                value:
+                  simple: Campaign
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Tags class
+              operator: containsGeneral
+              right:
+                value:
+                  simple: Exploit
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Tags class
+              operator: containsGeneral
+              right:
+                value:
+                  simple: Malicious Behavior
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Tags class
+              operator: containsGeneral
+              right:
+                value:
+                  simple: Malware Family
+          root: inputs.Tags class
+      Tags private:
+        complex:
+          root: inputs.Tags private
+      Tags public:
+        complex:
+          root: inputs.Tags public
+      Tags scope:
+        complex:
+          filters:
+          - - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Tags scope
+              operator: containsGeneral
+              right:
+                value:
+                  simple: industry
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Tags scope
+              operator: containsGeneral
+              right:
+                value:
+                  simple: organization
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Tags scope
+              operator: containsGeneral
+              right:
+                value:
+                  simple: global
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Tags scope
+              operator: containsGeneral
+              right:
+                value:
+                  simple: all
+          root: inputs.Tags scope
+      Unit 42:
+        complex:
+          root: inputs.Unit 42
+      Wildfire Verdict:
+        complex:
+          filters:
+          - - left:
+                iscontext: true
+                value:
+                  simple: inputs.wildfire_verdict
+              operator: isNotEmpty
+          - - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.wildfire_verdict
+              operator: containsGeneral
+              right:
+                value:
+                  simple: Malware
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.wildfire_verdict
+              operator: containsGeneral
+              right:
+                value:
+                  simple: Grayware
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.wildfire_verdict
+              operator: containsGeneral
+              right:
+                value:
+                  simple: Benign
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.wildfire_verdict
+              operator: isEqualString
+              right:
+                value:
+                  simple: Phishing
+          root: inputs.wildfire_verdict
+    separatecontext: true
+    skipunavailable: false
+    task:
+      brand: ""
+      description: "This playbook queries the PANW Threat Intelligence Autofocus system.
+        The playbook accepts indicators such as IPs, hashes, and domains to run basic
+        queries or mode advanced queries that can leverage several query parameters.
+        \nTo run advanced queries, we recommend using the Autofocus UI https://autofocus.paloaltonetworks.com/#/dashboard/organization
+        to create a query and then using the export search button. The result can
+        be used as a playbook input.\n\nThe playbook supports searching both the Samples
+        API and the sessions API."
+      id: 95ae259a-dc33-4e18-8a20-653d529cc2ce
+      iscommand: false
+      name: Autofocus Query Samples, Sessions and Tags
+      playbookId: Autofocus Query Samples, Sessions and Tags
+      type: playbook
+      version: -1
+    taskid: 95ae259a-dc33-4e18-8a20-653d529cc2ce
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 2390,
+          "y": 640
+        }
+      }
+  "202":
+    continueonerrortype: ""
+    id: "202"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "210"
+      - "211"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      Commodity:
+        complex:
+          root: inputs.Commodity
+      Domain:
+        complex:
+          root: inputs.URLDomain
+          transformers:
+          - args:
+              delimiter:
+                value:
+                  simple: ','
+            operator: split
+          - operator: uniq
+      IP:
+        complex:
+          root: inputs.IPAddress
+          transformers:
+          - operator: uniq
+          - args:
+              separator:
+                value:
+                  simple: ','
+            operator: join
+      Sample first seen:
+        complex:
+          root: inputs.Sample first seen
+      Sample last modified:
+        complex:
+          root: inputs.Sample last modified
+      SampleQuery:
+        complex:
+          accessor: SampleQuery
+          filters:
+          - - left:
+                iscontext: true
+                value:
+                  simple: inputs.SampleQuery
+              operator: isNotEmpty
+          root: inputs
+      Scope:
+        complex:
+          filters:
+          - - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Scope
+              operator: containsGeneral
+              right:
+                value:
+                  simple: industry
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Scope
+              operator: containsGeneral
+              right:
+                value:
+                  simple: organization
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Scope
+              operator: containsGeneral
+              right:
+                value:
+                  simple: global
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Scope
+              operator: containsGeneral
+              right:
+                value:
+                  simple: all
+          root: inputs.Scope
+      Search Type:
+        complex:
+          filters:
+          - - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Search Type
+              operator: containsGeneral
+              right:
+                value:
+                  simple: session
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Search Type
+              operator: containsGeneral
+              right:
+                value:
+                  simple: sample
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Search Type
+              operator: containsGeneral
+              right:
+                value:
+                  simple: tag
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Search Type
+              operator: containsGeneral
+              right:
+                value:
+                  simple: all
+          root: inputs.Search Type
+      SessionQuery:
+        complex:
+          filters:
+          - - left:
+                iscontext: true
+                value:
+                  simple: inputs.SessionQuery
+              operator: isNotEmpty
+          root: inputs.SessionQuery
+      Sessions time after:
+        complex:
+          root: inputs.Sessions time after
+      Sessions time before:
+        complex:
+          root: inputs.Sessions time before
+      Tags class:
+        complex:
+          filters:
+          - - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Tags class
+              operator: containsGeneral
+              right:
+                value:
+                  simple: Actor
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Tags class
+              operator: containsGeneral
+              right:
+                value:
+                  simple: Campaign
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Tags class
+              operator: containsGeneral
+              right:
+                value:
+                  simple: Exploit
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Tags class
+              operator: containsGeneral
+              right:
+                value:
+                  simple: Malicious Behavior
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Tags class
+              operator: containsGeneral
+              right:
+                value:
+                  simple: Malware Family
+          root: inputs.Tags class
+      Tags private:
+        complex:
+          root: inputs.Tags private
+      Tags public:
+        complex:
+          root: inputs.Tags public
+      Tags scope:
+        complex:
+          filters:
+          - - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Tags scope
+              operator: containsGeneral
+              right:
+                value:
+                  simple: industry
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Tags scope
+              operator: containsGeneral
+              right:
+                value:
+                  simple: organization
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Tags scope
+              operator: containsGeneral
+              right:
+                value:
+                  simple: global
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.Tags scope
+              operator: containsGeneral
+              right:
+                value:
+                  simple: all
+          root: inputs.Tags scope
+      Unit 42:
+        complex:
+          root: inputs.Unit 42
+      Wildfire Verdict:
+        complex:
+          filters:
+          - - left:
+                iscontext: true
+                value:
+                  simple: inputs.wildfire_verdict
+              operator: isNotEmpty
+          - - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.wildfire_verdict
+              operator: containsGeneral
+              right:
+                value:
+                  simple: Malware
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.wildfire_verdict
+              operator: containsGeneral
+              right:
+                value:
+                  simple: Grayware
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.wildfire_verdict
+              operator: containsGeneral
+              right:
+                value:
+                  simple: Benign
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.wildfire_verdict
+              operator: isEqualString
+              right:
+                value:
+                  simple: Phishing
+          root: inputs.wildfire_verdict
+    separatecontext: true
+    skipunavailable: false
+    task:
+      brand: ""
+      description: "This playbook queries the PANW Threat Intelligence Autofocus system.
+        The playbook accepts indicators such as IPs, hashes, and domains to run basic
+        queries or advanced queries that can leverage several query parameters. \nTo
+        run advanced queries, we recommend using the Autofocus UI https://autofocus.paloaltonetworks.com/#/dashboard/organization
+        to create a query and then using the export search button. The result can
+        be used as a playbook input.\n\nThe playbook supports searching both the Samples
+        API and the sessions API."
+      id: 517f7685-6e25-4c6f-8ec4-16727ffb6864
+      iscommand: false
+      name: Autofocus Query Samples, Sessions and Tags
+      playbookId: Autofocus Query Samples, Sessions and Tags
+      type: playbook
+      version: -1
+    taskid: 517f7685-6e25-4c6f-8ec4-16727ffb6864
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 1100,
+          "y": 640
+        }
+      }
+  "203":
+    continueonerrortype: ""
+    id: "203"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "202"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 83200c28-3f39-4c9f-8b5c-b52ba0d107f9
+      iscommand: false
+      name: Search IP Address
+      type: title
+      version: -1
+    taskid: 83200c28-3f39-4c9f-8b5c-b52ba0d107f9
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 1100,
+          "y": 510
+        }
+      }
+  "204":
+    continueonerrortype: ""
+    id: "204"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "153"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 60df7ed0-880c-4961-88b1-e89f9f9801cb
+      iscommand: false
+      name: IP Address Hunting Done
+      type: title
+      version: -1
+    taskid: 60df7ed0-880c-4961-88b1-e89f9f9801cb
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 1530,
+          "y": 985
+        }
+      }
+  "205":
+    continueonerrortype: ""
+    id: "205"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "153"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 7983a420-f9ee-417a-89d3-3f9186d44d0c
+      iscommand: false
+      name: URLDomain Hunting Done
+      type: title
+      version: -1
+    taskid: 7983a420-f9ee-417a-89d3-3f9186d44d0c
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 1970,
+          "y": 985
+        }
+      }
+  "206":
+    continueonerrortype: ""
+    id: "206"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "205"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      key:
+        simple: Autofocus.Sessions.HuntingResults
+      value:
+        complex:
+          filters:
+          - - left:
+                iscontext: true
+                value:
+                  simple: AutoFocus.SessionsResults.ID
+              operator: isNotEmpty
+          root: AutoFocus.SessionsResults
+          transformers:
+          - operator: uniq
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: |-
+        Set a value in context under the key you entered. If no value is entered, the script doesn't do anything.
+
+        This automation runs using the default Limited User role, unless you explicitly change the permissions.
+        For more information, see the section about permissions here:
+        https://docs-cortex.paloaltonetworks.com/r/Cortex-XSOAR/6.10/Cortex-XSOAR-Administrator-Guide/Automations
+      id: 0a1f5cd9-2778-4665-8bb8-517fd3572981
+      iscommand: false
+      name: Save Matching Results - Sessions Search
+      script: SetAndHandleEmpty
+      type: regular
+      version: -1
+    taskid: 0a1f5cd9-2778-4665-8bb8-517fd3572981
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 2600,
+          "y": 810
+        }
+      }
+  "207":
+    continueonerrortype: ""
+    id: "207"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "205"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      key:
+        simple: Autofocus.Samples.HuntingResults
+      value:
+        complex:
+          filters:
+          - - left:
+                iscontext: true
+                value:
+                  simple: AutoFocus.SamplesResults.ID
+              operator: isNotEmpty
+          root: AutoFocus.SamplesResults
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: |-
+        Set a value in context under the key you entered. If no value is entered, the script doesn't do anything.
+
+        This automation runs using the default Limited User role, unless you explicitly change the permissions.
+        For more information, see the section about permissions here:
+        https://docs-cortex.paloaltonetworks.com/r/Cortex-XSOAR/6.10/Cortex-XSOAR-Administrator-Guide/Automations
+      id: 082d5347-c37b-4820-8ba2-23653396d49a
+      iscommand: false
+      name: Save Matching Results - Samples Results
+      script: SetAndHandleEmpty
+      type: regular
+      version: -1
+    taskid: 082d5347-c37b-4820-8ba2-23653396d49a
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 3040,
+          "y": 810
+        }
+      }
+  "208":
+    continueonerrortype: ""
+    id: "208"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "205"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      key:
+        simple: Autofocus.Sessions.HuntingResults
+      value:
+        complex:
+          filters:
+          - - left:
+                iscontext: true
+                value:
+                  simple: AutoFocus.SessionsResults.ID
+              operator: isNotEmpty
+          root: AutoFocus.SessionsResults
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: |-
+        Set a value in context under the key you entered. If no value is entered, the script doesn't do anything.
+
+        This automation runs using the default Limited User role, unless you explicitly change the permissions.
+        For more information, see the section about permissions here:
+        https://docs-cortex.paloaltonetworks.com/r/Cortex-XSOAR/6.10/Cortex-XSOAR-Administrator-Guide/Automations
+      id: 69becee9-c4da-43bd-86e5-b3d86e14406e
+      iscommand: false
+      name: Save Matching Results - Sessions Search
+      script: SetAndHandleEmpty
+      type: regular
+      version: -1
+    taskid: 69becee9-c4da-43bd-86e5-b3d86e14406e
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 3450,
+          "y": 810
+        }
+      }
+  "209":
+    continueonerrortype: ""
+    id: "209"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "205"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      key:
+        simple: Autofocus.Samples.HuntingResults
+      value:
+        complex:
+          filters:
+          - - left:
+                iscontext: true
+                value:
+                  simple: AutoFocus.SamplesResults.ID
+              operator: isNotEmpty
+          root: AutoFocus.SamplesResults
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: |-
+        Set a value in context under the key you entered. If no value is entered, the script doesn't do anything.
+
+        This automation runs using the default Limited User role, unless you explicitly change the permissions.
+        For more information, see the section about permissions here:
+        https://docs-cortex.paloaltonetworks.com/r/Cortex-XSOAR/6.10/Cortex-XSOAR-Administrator-Guide/Automations
+      id: f2e76905-6583-4142-84e0-fe3cdc8bbb05
+      iscommand: false
+      name: Save Matching Results - Samples Results
+      script: SetAndHandleEmpty
+      type: regular
+      version: -1
+    taskid: f2e76905-6583-4142-84e0-fe3cdc8bbb05
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 2190,
+          "y": 810
+        }
+      }
+  "210":
+    continueonerrortype: ""
+    id: "210"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "204"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      key:
+        simple: Autofocus.Samples.HuntingResults
+      value:
+        complex:
+          filters:
+          - - left:
+                iscontext: true
+                value:
+                  simple: AutoFocus.SamplesResults.ID
+              operator: isNotEmpty
+          root: AutoFocus.SamplesResults
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: |-
+        Set a value in context under the key you entered. If no value is entered, the script doesn't do anything.
+
+        This automation runs using the default Limited User role, unless you explicitly change the permissions.
+        For more information, see the section about permissions here:
+        https://docs-cortex.paloaltonetworks.com/r/Cortex-XSOAR/6.10/Cortex-XSOAR-Administrator-Guide/Automations
+      id: e5d307d4-a11b-4b9d-811a-9070f2e96fe3
+      iscommand: false
+      name: Save Matching Results - Samples Results
+      script: SetAndHandleEmpty
+      type: regular
+      version: -1
+    taskid: e5d307d4-a11b-4b9d-811a-9070f2e96fe3
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 890,
+          "y": 810
+        }
+      }
+  "211":
+    continueonerrortype: ""
+    id: "211"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "204"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      key:
+        simple: Autofocus.Sessions.HuntingResults
+      value:
+        complex:
+          filters:
+          - - left:
+                iscontext: true
+                value:
+                  simple: AutoFocus.SessionsResults.ID
+              operator: isNotEmpty
+          root: AutoFocus.SessionsResults
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: |-
+        Set a value in context under the key you entered. If no value is entered, the script doesn't do anything.
+
+        This automation runs using the default Limited User role, unless you explicitly change the permissions.
+        For more information, see the section about permissions here:
+        https://docs-cortex.paloaltonetworks.com/r/Cortex-XSOAR/6.10/Cortex-XSOAR-Administrator-Guide/Automations
+      id: e9b1d756-a69d-461b-8fd0-9fe0dd8c46c5
+      iscommand: false
+      name: Save Matching Results - Sessions Search
+      script: SetAndHandleEmpty
+      type: regular
+      version: -1
+    taskid: e9b1d756-a69d-461b-8fd0-9fe0dd8c46c5
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 1310,
+          "y": 810
+        }
+      }
+  "212":
+    continueonerrortype: ""
+    id: "212"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "5"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: d4cbc935-012a-4db6-8f33-0351f9e2b643
+      iscommand: false
+      name: IP Address Indicators
+      type: title
+      version: -1
+    taskid: d4cbc935-012a-4db6-8f33-0351f9e2b643
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 1530,
+          "y": 195
+        }
+      }
+  "213":
+    continueonerrortype: ""
+    id: "213"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "10"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: d13e74f1-f0bf-4287-874b-7a65d1ebf957
+      iscommand: false
+      name: URLDomain Indicators
+      type: title
+      version: -1
+    taskid: d13e74f1-f0bf-4287-874b-7a65d1ebf957
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 1970,
+          "y": 195
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 1145,
+        "width": 2940,
+        "x": 890,
+        "y": 50
+      }
+    }
+  }
