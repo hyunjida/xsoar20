@@ -1,0 +1,21 @@
+{
+	"cacheVersn": 0,
+	"color": "#F7B933",
+	"definitionId": "ThreatIntelReport",
+	"detached": false,
+	"disabled": false,
+	"fromServerVersion": "6.5.0",
+	"id": "ThreatIntelReport_Campaign",
+	"itemVersion": "1.0.13",
+	"layout": "Campaign Report",
+	"locked": false,
+	"name": "Campaign",
+	"packID": "ThreatIntelReports",
+	"packName": "Threat Intel Reports (BETA)",
+	"packPropagationLabels": [
+		"all"
+	],
+	"system": true,
+	"toServerVersion": "",
+	"version": -1
+}
