@@ -1,0 +1,77 @@
+{
+	"Cache": null,
+	"cacheVersn": 0,
+	"category": "",
+	"dataType": "indicators",
+	"dateRange": {
+		"fromDate": "0001-01-01T00:00:00Z",
+		"fromDateLicense": "0001-01-01T00:00:00Z",
+		"period": {
+			"by": "",
+			"byFrom": "days",
+			"byTo": "",
+			"field": "",
+			"fromValue": 30,
+			"toValue": null
+		},
+		"toDate": "0001-01-01T00:00:00Z"
+	},
+	"definitionId": "",
+	"fromServerVersion": "6.2.0",
+	"id": "9a7aeb89-f57e-4caa-8148-85b6ca22cbd5",
+	"isPredefined": true,
+	"itemVersion": "1.2.48",
+	"name": "Indicators in Related Incidents",
+	"packID": "CommonWidgets",
+	"packName": "Common Widgets",
+	"packPropagationLabels": [
+		"all"
+	],
+	"params": {
+		"tableColumns": [
+			{
+				"displayed": true,
+				"isDefault": true,
+				"key": "indicator_type",
+				"width": 120
+			},
+			{
+				"displayed": true,
+				"isDefault": true,
+				"key": "value",
+				"width": 300
+			},
+			{
+				"displayed": true,
+				"isDefault": true,
+				"key": "relatedIncCount",
+				"width": 150
+			},
+			{
+				"displayed": true,
+				"isDefault": true,
+				"key": "score",
+				"width": 120
+			},
+			{
+				"displayed": true,
+				"isDefault": true,
+				"key": "sourceBrands",
+				"width": 175
+			}
+		]
+	},
+	"propagationLabels": [],
+	"query": "incident.id:* and expirationStatus:active and (verdict:Malicious or verdict:Suspicious or verdict:Unknown)",
+	"size": 10,
+	"sort": [
+		{
+			"asc": false,
+			"field": "relatedIncCount",
+			"fieldType": ""
+		}
+	],
+	"toServerVersion": "",
+	"version": -1,
+	"widgetType": "table"
+}
