@@ -1,0 +1,2708 @@
+category: Data Enrichment & Threat Intelligence
+commonfields:
+  id: VirusTotal - Premium (API v3)
+  version: -1
+configuration:
+- display: API Key (leave empty. Fill in the API key in the password field.)
+  displaypassword: API Key
+  hiddenusername: true
+  name: credentials
+  required: true
+  type: 9
+- display: Fetch incidents
+  name: isFetch
+  required: false
+  type: 8
+- defaultvalue: VirusTotal Intelligence LiveHunt Notification
+  display: Incident type
+  name: incidentType
+  required: false
+  type: 13
+- defaultvalue: "40"
+  display: Maximum number of incidents per fetch
+  name: max_fetch
+  required: false
+  type: 0
+- defaultvalue: 3 days
+  display: First fetch timestamp (<number> <time unit>, e.g., 12 hours, 7 days) or
+    a date or epoch timestamp.
+  name: first_fetch
+  required: false
+  type: 0
+- display: 'Tag: The ruleset''s name or the identifier for the YARA rule matching
+    the file to fetch its notifications. Leave blank to fetch all.'
+  name: tag
+  required: false
+  type: 0
+- display: Trust any certificate (not secure)
+  name: insecure
+  required: false
+  type: 8
+- display: Use system proxy settings
+  name: proxy
+  required: false
+  type: 8
+- defaultvalue: "1"
+  display: Incidents Fetch Interval
+  name: incidentFetchInterval
+  required: false
+  type: 19
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.5.0
+    itemVersion: 2.6.17
+    packID: VirusTotal
+    packName: VirusTotal
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+defaultmapperin: VirusTotal Intelligence LiveHunt Notification
+description: Analyse retro hunts, read live hunt notifications and download files
+  from VirusTotal.
+detaileddescription: "### Partner Contributed Integration\n#### Integration Author:
+  VirusTotal\nSupport and maintenance for this integration are provided by the author.
+  Please use the following contact details:\n- **Email**: [contact@virustotal.com](mailto:contact@virustotal.com)\n-
+  **URL**: [https://www.virustotal.com](https://www.virustotal.com)\n***\n## VirusTotal
+  - Premium API - V3\nAnalyze retro hunts, read live hunt notification,s and download
+  files from VirusTotal.\nThe premium API is a component of VirusTotal's [advanced
+  services for professionals](https://www.virustotal.com/gui/services-overview).\n\n##
+  Authorization:\nYour API key can be found in your VirusTotal account user menu.\nYour
+  API key carries all your privileges, so keep it secure and don't share it with anyone.\n\n###
+  Cortex XSOAR version 6.0.0 and below:\nFill anything in the \"Username\" fill box.
+  Use you API key in the password fill box.\n\n## Fetch Incidents:\nThe generated
+  incidents are notifications from vt-private-livehunt-notifications-list.\nUse \"Tag\"
+  to filter which notification tag to get. \nFor example, using the \"malicious_executables\"
+  will fetch only notifications caught by malicious_executables ruleset.\nThe scope
+  of the rule-set should be narrowed to catch only indicators that you want to analyze
+  by a playbook.\nDefining a broad rule-set will cause the integration to create multiple
+  redundant incidents.  \n\n---\n[View Integration Documentation](https://xsoar.pan.dev/docs/reference/integrations/virus-total---premium-api-v3)"
+display: VirusTotal - Premium (API v3) (Partner Contribution)
+image: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAAyCAYAAACXpx/YAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAABTNJREFUeNrsWcuN40YQpQQBvhnMwJoILB33tFQCO3QEoiKYVQSSItAoAlERLOWLj6IPho+rjWCZgWnfDB/sKuE1XNvTzaZIjmEb9YDGkMP+v6rXVa0oUigUCoVCoVAoFAqFQqFQKBQKhUKhUCgUCsX/EaM37/5MBujn+vP3o5ofqL+Y/szEt4q+Va5GrrpUpneO3dQ/91Wbufng2YOrrx3mPaXvV35PkoTXUJVlWYcmS3Vv66O61T9B8AQbeuzZz4LnLN4v4rmg8p2nXWqNvaayv3PsHZWt59sF468DfVys+TOmIPLW3iKbCd1g3RGez1TyFvPl9Z5MXRDO+/CWSow6t77aGAzN0czlTHN8Mf6E/0mVIrHRFUobTG2P442g/gpM+kYib5THGx6t97wDwb6Fp1hHRs+7kBfT94VHATYwgHlDcyZkGSIYZM6MwdP7e/TP7Q6i6hP6mzco0xTru4h9NvzVRl0mWJwkmRvuXNbgGGiLCboWnFqemjtkTtYpYBxDqdMTNu3RNX4bQPpXNKfPLOP0XrrqkaflRNaeCQxIb8brFJ5ZeDy1pL4+UknpW+Ho56Pw9hpKspdqSPNdMYdjsRjegJWREaqQ9djcIuCpkUWuMQqex0gWSLDc9JFVtj4Lp28F5PCpp7FwP0mLOqE9W2I+xjCazu2zFZ9IxDh2mNj5V78tjAItxLFxU9axtXmDkAw5lCSn8Fgf6XUbxbgDG7OR8LoYZ1UfhM7DAwj0yXMCUsuW433jOirFPvKxVxK5PK8Lqwe/C5WpXxA8sCeffR7rkuehmBV959bm9/Hi1BGE2TJ9lUR6vPfQZjBE5S/GhJF+ZvLGf5QFHws4g2OQfERbnsueuRt7PHAIkptk2u7vNKD3pjjPKyt4yxwqEjQWKkekYtcWTZxeTJtujK4IEBtTyUDa2nGepyBz8dMPC57PJyHjJv3i9G4O79+PG2Q2F+ff8V6JC8j00spjywEJ3tgGg7nkTWckB4xWucBbooY0z2XUKQh9oQC+AIxJpcJj/YJAKfcoRgHpvXCcwcGdw8B4LR9A+GEcyK+MrOUtLTgKeGaKAGj2SvKc4DwvPXNpK9MljPuB+lqFUiwZNKFt2hRcuZuWD1RGCJJ+5UgZcisN9YrvbEAZvudIp3IRWafI3beTBnKNtjO5q47BVkF91WLgR/H8hdUNmBrF8D5n3u5Ld1zReEecZE5scl9PuhPZt1oIwjhNquDNc5tkk+/+/vUlFpcwnM4lb959eS8xCZD7TI3XPRcs04fEIvjqu2bs4L1T9P/QcMX4HkYw5JFgk1Ug2DE5cdYlB0dufWyI6M03vjuYIw9O7ah/3EDuagBy7Wg6tvLJ08DemwfklDc6gTG8JnKx2cuBVSoSAXAuLj5S5Ma8/tKkneMGcgfJS3HZULeMtPsgC22kCPyyVyb4dt4jZaq7/LCAtlWDMVc4Os3Zy+/P2IOZCWgnIDeDi8fIoaa4hgzhbQeZlleTQ8lzBqtt098Bhrx9LXY5VSF+auzpoQO5MdqePGu9kY/nDEcOK9NeHIN8HG0nqCS1ftZwRdZHprPARUhfeV63VBQOUrhkA9+eubx406RSOGM/wankfQHvFd9Zbz1pYBn9/StgjTTuA0it8X1Ja3w2Pxfuei6mahFN7zrKc5uA6HxnLr0LvLdZbyh+yCHPTTHBj1S+tS6B+H8LczPm2MsHcWPHSrTDjzQ7OOaiY0qr+LfBvpm796ZOoVAoFAqFQqFQKBQKhUKhUCgUCoVCoVAoFP9d/CXAAFkzk5Fs4yqAAAAAAElFTkSuQmCC
+name: VirusTotal - Premium (API v3)
+script:
+  commands:
+  - arguments:
+    - default: true
+      description: SHA-256, SHA-1 or MD5 identifying the file.
+      name: hash
+      required: true
+    description: Downloads file from VirusTotal
+    name: vt-private-download-file
+    outputs:
+    - contextPath: File
+      description: The file details command results.
+      type: Unknown
+    - contextPath: File.Name
+      description: The full file name (including the file extension).
+      type: String
+    - contextPath: File.EntryID
+      description: The ID for locating the file in the War Room.
+      type: String
+    - contextPath: File.Size
+      description: The size of the file in bytes.
+      type: Number
+    - contextPath: File.MD5
+      description: The MD5 hash of the file.
+      type: String
+    - contextPath: File.SHA1
+      description: The SHA1 hash of the file.
+      type: String
+    - contextPath: File.SHA256
+      description: The SHA256 hash of the file.
+      type: String
+    - contextPath: File.SHA512
+      description: The SHA512 hash of the file.
+      type: String
+    - contextPath: File.Extension
+      description: 'The file extension. For example: "xls".'
+      type: String
+    - contextPath: File.Type
+      description: The file type, as determined by libmagic (same as displayed in
+        file entries).
+      type: String
+  - arguments:
+    - default: true
+      description: A commma separated list of hashes (SHA-256, SHA-1, or MD5) for
+        the files included in the ZIP.
+      isArray: true
+      name: file
+      required: true
+    - description: A password to protect the zip.
+      isArray: true
+      name: password
+      secret: true
+    description: Creates a password-protected ZIP file containing files from VirusTotal.
+    name: vt-private-zip-create
+    outputs:
+    - contextPath: VirusTotal.Zip.id
+      description: ID of the zip
+      type: String
+    - contextPath: VirusTotal.Zip.type
+      description: Type of the ID (zip_file)
+      type: String
+    - contextPath: VirusTotal.Zip.links.self
+      description: Self link to file
+      type: String
+    - contextPath: VirusTotal.Zip.attributes.files_error
+      description: The number of files resulted in error
+      type: Number
+    - contextPath: VirusTotal.Zip.attributes.files_ok
+      description: The number of files resulted in success zipped.
+      type: Number
+    - contextPath: VirusTotal.Zip.attributes.progress
+      description: Progress of the zipping command in percentage.
+      type: Number
+    - contextPath: VirusTotal.Zip.attributes.status
+      description: The status of the zip process. "finished" is the state when finished.
+      type: String
+  - arguments:
+    - default: true
+      description: A zip ID. Can be retrieved from the output of vt-private-zip-create.
+      name: zip_id
+      required: true
+    description: Retrieve information about a ZIP file.
+    name: vt-private-zip-get
+    outputs:
+    - contextPath: VirusTotal.Zip.id
+      description: ID of the zip
+      type: String
+    - contextPath: VirusTotal.Zip.type
+      description: Type of the ID (zip_file)
+      type: String
+    - contextPath: VirusTotal.Zip.links.self
+      description: Self link to file
+      type: String
+    - contextPath: VirusTotal.Zip.attributes.files_error
+      description: The number of files resulted in error
+      type: Number
+    - contextPath: VirusTotal.Zip.attributes.files_ok
+      description: The number of files resulted in success zipped.
+      type: Number
+    - contextPath: VirusTotal.Zip.attributes.progress
+      description: Progress of the zipping command in percentage.
+      type: Number
+    - contextPath: VirusTotal.Zip.attributes.status
+      description: The status of the zip process. "finished" is the state when finished.
+      type: String
+  - arguments:
+    - default: true
+      description: A zip ID. Can be retrieved from the output of vt-private-zip-create.
+      name: zip_id
+      required: true
+    description: Download a ZIP file.
+    name: vt-private-zip-download
+    outputs:
+    - contextPath: File
+      description: The file details command results.
+      type: Unknown
+    - contextPath: File.Name
+      description: The full file name (including the file extension).
+      type: String
+    - contextPath: File.EntryID
+      description: The ID for locating the file in the War Room.
+      type: String
+    - contextPath: File.Size
+      description: The size of the file in bytes.
+      type: Number
+    - contextPath: File.MD5
+      description: The MD5 hash of the file.
+      type: String
+    - contextPath: File.SHA1
+      description: The SHA1 hash of the file.
+      type: String
+    - contextPath: File.SHA256
+      description: The SHA256 hash of the file.
+      type: String
+    - contextPath: File.SHA512
+      description: The SHA512 hash of the file.
+      type: String
+    - contextPath: File.Extension
+      description: 'The file extension. For example: "xls".'
+      type: String
+    - contextPath: File.Type
+      description: The file type, as determined by libmagic (same as displayed in
+        file entries).
+      type: String
+  - arguments:
+    - default: true
+      description: Sandbox report ID. Can be aquired from vt-file-sandbox-report in
+        VirusTotal (API v3) integration.
+      name: report_id
+      required: true
+    description: Extracted PCAP from a sandbox analysis.
+    name: vt-private-file-sandbox-pcap
+    outputs:
+    - contextPath: File
+      description: The file details command results.
+      type: Unknown
+    - contextPath: File.Name
+      description: The full file name (including the file extension).
+      type: String
+    - contextPath: File.EntryID
+      description: The ID for locating the file in the War Room.
+      type: String
+    - contextPath: File.Size
+      description: The size of the file in bytes.
+      type: Number
+    - contextPath: File.MD5
+      description: The MD5 hash of the file.
+      type: String
+    - contextPath: File.SHA1
+      description: The SHA1 hash of the file.
+      type: String
+    - contextPath: File.SHA256
+      description: The SHA256 hash of the file.
+      type: String
+    - contextPath: File.SHA512
+      description: The SHA512 hash of the file.
+      type: String
+    - contextPath: File.Extension
+      description: 'The file extension. For example: "xls".'
+      type: String
+    - contextPath: File.Type
+      description: The file type, as determined by libmagic (same as displayed in
+        file entries).
+      type: String
+  - arguments:
+    - description: Search query.
+      name: query
+      required: true
+    - defaultValue: "10"
+      description: Maximum number of results.
+      name: limit
+    - description: The order value can be sorted depends on the query type. See documentation.
+        https://developers.virustotal.com/v3.0/reference#intelligence-search
+      name: order
+    - description: Continuation cursor.
+      name: cursor
+    - auto: PREDEFINED
+      defaultValue: "false"
+      description: Whether to return full object information or just object descriptors.
+      name: descriptors_only
+      predefined:
+      - "true"
+      - "false"
+    - auto: PREDEFINED
+      defaultValue: "false"
+      description: Whether to return full data information.
+      name: extended_data
+      predefined:
+      - "true"
+      - "false"
+    description: Search for files.
+    name: vt-private-intelligence-search
+    outputs:
+    - contextPath: VirusTotal.IntelligenceSearch.attributes.last_analysis_stats.harmless
+      description: number of reports saying that is harmless.
+      type: Number
+    - contextPath: VirusTotal.IntelligenceSearch.attributes.last_analysis_stats.malicious
+      description: number of reports saying that is malicious
+      type: Number
+    - contextPath: VirusTotal.IntelligenceSearch.attributes.last_analysis_stats.suspicious
+      description: number of reports saying that is suspicious.
+      type: Number
+    - contextPath: VirusTotal.IntelligenceSearch.attributes.last_analysis_stats.undetected
+      description: number of reports saying that is undetected.
+      type: Number
+    - contextPath: VirusTotal.IntelligenceSearch.attributes.last_analysis_stats.timeout
+      description: number of timeouts when analysing this URL/file.
+      type: Number
+    - contextPath: VirusTotal.IntelligenceSearch.attributes.reputation
+      description: file's score calculated from all votes posted by the VirusTotal
+        community.
+      type: Number
+    - contextPath: VirusTotal.IntelligenceSearch.attributes.last_modification_date
+      description: date when the object itself was last modified. UTC timestamp.
+      type: Number
+    - contextPath: VirusTotal.IntelligenceSearch.attributes.total_votes.harmless
+      description: number of positive votes.
+      type: Number
+    - contextPath: VirusTotal.IntelligenceSearch.attributes.total_votes.malicious
+      description: number of negative votes.
+      type: Number
+    - contextPath: VirusTotal.IntelligenceSearch.type
+      description: The type of the indicator (ip_address, domain, url, file)
+      type: String
+    - contextPath: VirusTotal.IntelligenceSearch.id
+      description: ID of the indicator
+      type: String
+    - contextPath: VirusTotal.IntelligenceSearch.links.self
+      description: Link to the response
+      type: String
+  - arguments:
+    - description: File search query. For example, query="type:peexe size:90kb+ positives:5+
+        behaviour:'taskkill'"
+      name: query
+      required: true
+    - auto: PREDEFINED
+      defaultValue: "false"
+      description: Return all of the results, note that it can be thousands of results.
+        Prefer not to use in playbooks. The default value is "false"
+      name: fullResponse
+      predefined:
+      - "true"
+      - "false"
+    description: Search for files.
+    name: vt-private-search-file
+    outputs:
+    - contextPath: VirusTotal.SearchFile.SearchResult
+      description: The hashes of files that fit the query
+      type: string
+    - contextPath: VirusTotal.SearchFile.Query
+      description: Original search query
+      type: string
+  - arguments:
+    - default: true
+      description: Ruleset identifier. Can be retreived from the vt-private-livehunt-rules-list
+        command.
+      name: id
+      required: true
+    description: Retrieve VT Hunting livehunt rulesets.
+    name: vt-private-livehunt-rules-get-by-id
+    outputs:
+    - contextPath: VirusTotal.LiveHuntRule.attributes.name
+      description: The rule's name
+      type: String
+    - contextPath: VirusTotal.LiveHuntRule.attributes.modification_date
+      description: last modification date as UTC timestamp.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntRule.attributes.rules
+      description: rule file contents
+      type: String
+    - contextPath: VirusTotal.LiveHuntRule.attributes.enabled
+      description: whether it's enabled or not
+      type: Boolean
+    - contextPath: VirusTotal.LiveHuntRule.attributes.creation_date
+      description: Creation date as UTC timestamp.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntRule.attributes.rule_names
+      description: contains the names of all rules in the ruleset.
+      type: String
+    - contextPath: VirusTotal.LiveHuntRule.attributes.limit
+      description: max number of notifications that will be generated by the ruleset
+        in a 24h period. If a match is found, number of generated hunting notifications
+        in the last 24h is looked up and if it's greater than this limit, that match
+        is ignored.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntRule.attributes.number_of_rules
+      description: Number of rules presented in the set
+      type: Number
+    - contextPath: VirusTotal.LiveHuntRule.type
+      description: The type of the entry (hunting_ruleset)
+      type: String
+    - contextPath: VirusTotal.LiveHuntRule.id
+      description: ID of the ruleset
+      type: Date
+    - contextPath: VirusTotal.LiveHuntRule.links.self
+      description: Link to the ruleset
+      type: String
+  - arguments:
+    - description: Return the rulesets matching the given criteria only.
+      name: filter
+    - defaultValue: "10"
+      description: Maximum number of results.
+      name: limit
+    - auto: PREDEFINED
+      description: Sort order.
+      name: order
+      predefined:
+      - name-
+      - creation_date-
+      - modification_date-
+      - name+
+      - creation_date+
+      - modification_date+
+    - description: Continuation cursor.
+      name: cursor
+    - auto: PREDEFINED
+      description: Should list only enabled or disabled rules.
+      name: enabled
+      predefined:
+      - "true"
+      - "false"
+    description: Retrieve VT Hunting livehunt rulesets.
+    name: vt-private-livehunt-rules-list
+    outputs:
+    - contextPath: VirusTotal.LiveHuntRule.attributes.name
+      description: The rule's name
+      type: String
+    - contextPath: VirusTotal.LiveHuntRule.attributes.modification_date
+      description: last modification date as UTC timestamp.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntRule.attributes.rules
+      description: rule file contents
+      type: String
+    - contextPath: VirusTotal.LiveHuntRule.attributes.enabled
+      description: whether it's enabled or not
+      type: Boolean
+    - contextPath: VirusTotal.LiveHuntRule.attributes.creation_date
+      description: creation date as UTC timestamp.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntRule.attributes.rule_names
+      description: contains the names of all rules in the ruleset.
+      type: String
+    - contextPath: VirusTotal.LiveHuntRule.attributes.limit
+      description: max number of notifications that will be generated by the ruleset
+        in a 24h period. If a match is found, number of generated hunting notifications
+        in the last 24h is looked up and if it's greater than this limit, that match
+        is ignored.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntRule.attributes.number_of_rules
+      description: Number of rules presented in the set
+      type: Number
+    - contextPath: VirusTotal.LiveHuntRule.type
+      description: The type of the entry (hunting_ruleset)
+      type: String
+    - contextPath: VirusTotal.LiveHuntRule.id
+      description: ID of the ruleset
+      type: Date
+    - contextPath: VirusTotal.LiveHuntRule.links.self
+      description: Link to the ruleset
+      type: String
+  - arguments:
+    - description: Name of the rule.
+      name: name
+      required: true
+    - description: The rule itself.
+      name: yara_rule
+      required: true
+    - auto: PREDEFINED
+      defaultValue: "false"
+      description: Whatever to enable the rule.
+      name: enabled
+      predefined:
+      - "true"
+      - "false"
+    - description: A comma-separated list of emails to notify.
+      name: notification_emails
+    - description: max number of notifications that will be generated by the ruleset
+        in a 24h period. If a match is found, number of generated hunting notifications
+        in the last 24h is looked up and if it's greater than this limit, that match
+        is ignored.
+      name: limit
+    description: Create a new VT Hunting Livehunt ruleset.
+    name: vt-private-livehunt-rules-create
+    outputs:
+    - contextPath: VirusTotal.LiveHuntRule.attributes.name
+      description: The rule's name
+      type: String
+    - contextPath: VirusTotal.LiveHuntRule.attributes.modification_date
+      description: last modification date as UTC timestamp.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntRule.attributes.rules
+      description: rule file contents
+      type: String
+    - contextPath: VirusTotal.LiveHuntRule.attributes.enabled
+      description: whether it's enabled or not
+      type: Boolean
+    - contextPath: VirusTotal.LiveHuntRule.attributes.creation_date
+      description: creation date as UTC timestamp.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntRule.attributes.rule_names
+      description: contains the names of all rules in the ruleset.
+      type: String
+    - contextPath: VirusTotal.LiveHuntRule.attributes.limit
+      description: max number of notifications that will be generated by the ruleset
+        in a 24h period. If a match is found, number of generated hunting notifications
+        in the last 24h is looked up and if it's greater than this limit, that match
+        is ignored.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntRule.attributes.number_of_rules
+      description: Number of rules presented in the set
+      type: Number
+    - contextPath: VirusTotal.LiveHuntRule.type
+      description: The type of the entry (hunting_ruleset)
+      type: String
+    - contextPath: VirusTotal.LiveHuntRule.id
+      description: ID of the ruleset
+      type: Date
+    - contextPath: VirusTotal.LiveHuntRule.links.self
+      description: Link to the ruleset
+      type: String
+  - arguments:
+    - default: true
+      description: Rule identifier. Can be retrieved from the vt-private-livehunt-rules-list
+        command.
+      name: id
+      required: true
+    - description: The rule itself.
+      name: yara_rule
+    - auto: PREDEFINED
+      defaultValue: "false"
+      description: Whatever to enable the rule.
+      name: enabled
+      predefined:
+      - "true"
+      - "false"
+    - description: A comma-separated list of emails to notify.
+      name: notification_emails
+    - description: max number of notifications that will be generated by the ruleset
+        in a 24h period. If a match is found, number of generated hunting notifications
+        in the last 24h is looked up and if it's greater than this limit, that match
+        is ignored.
+      name: limit
+    description: Update a VT Hunting Livehunt ruleset.
+    name: vt-private-livehunt-rules-update
+    outputs:
+    - contextPath: VirusTotal.LiveHuntRule.attributes.name
+      description: The rule's name
+      type: String
+    - contextPath: VirusTotal.LiveHuntRule.attributes.modification_date
+      description: last modification date as UTC timestamp.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntRule.attributes.rules
+      description: rule file contents
+      type: String
+    - contextPath: VirusTotal.LiveHuntRule.attributes.enabled
+      description: whether it's enabled or not
+      type: Boolean
+    - contextPath: VirusTotal.LiveHuntRule.attributes.creation_date
+      description: creation date as UTC timestamp.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntRule.attributes.rule_names
+      description: contains the names of all rules in the ruleset.
+      type: String
+    - contextPath: VirusTotal.LiveHuntRule.attributes.limit
+      description: max number of notifications that will be generated by the ruleset
+        in a 24h period. If a match is found, number of generated hunting notifications
+        in the last 24h is looked up and if it's greater than this limit, that match
+        is ignored.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntRule.attributes.number_of_rules
+      description: Number of rules presented in the set
+      type: Number
+    - contextPath: VirusTotal.LiveHuntRule.type
+      description: The type of the entry (hunting_ruleset)
+      type: String
+    - contextPath: VirusTotal.LiveHuntRule.id
+      description: ID of the ruleset
+      type: Date
+    - contextPath: VirusTotal.LiveHuntRule.links.self
+      description: Link to the ruleset
+      type: String
+  - arguments:
+    - default: true
+      description: Ruleset identifier. Can be retreived from the vt-private-livehunt-rules-list
+      name: id
+      required: true
+    description: Delete a VT Hunting Livehunt ruleset.
+    name: vt-private-livehunt-rules-delete
+  - arguments:
+    - defaultValue: "10"
+      description: Maximum number of notifications to retrieve. Maximum can be up
+        to 40.
+      name: limit
+    - description: Fetch notification from given time. Can be epoch time, a date or
+        time range (3 days, 1 year)
+      name: from_time
+    - description: Fetch notification from given time. Can be epoch time or a date.
+      name: to_time
+    - description: Continuation cursor.
+      name: cursor
+    - description: Filter notifications by tag.
+      name: tag
+    description: Retrieve VT Hunting Livehunt notifications.
+    name: vt-private-livehunt-notifications-list
+    outputs:
+    - contextPath: VirusTotal.LiveHuntNotification.meta.count
+      description: Notification count
+      type: Number
+    - contextPath: VirusTotal.LiveHuntNotification.meta.cursor
+      description: The cursor of the list
+      type: String
+    - contextPath: VirusTotal.LiveHuntNotification.data.attributes.tags
+      description: notification tags.
+      type: String
+    - contextPath: VirusTotal.LiveHuntNotification.data.attributes.source_country
+      description: Source country of the notification
+      type: String
+    - contextPath: VirusTotal.LiveHuntNotification.data.attributes.source_key
+      description: Source key of the notificaton
+      type: String
+    - contextPath: VirusTotal.LiveHuntNotification.data.attributes.snippet
+      description: The snippet ID (if exists)
+      type: String
+    - contextPath: VirusTotal.LiveHuntNotification.data.attributes.rule_name
+      description: contains the names of all rules in the ruleset.
+      type: String
+    - contextPath: VirusTotal.LiveHuntNotification.data.attributes.date
+      description: The date of the notification in epoch
+      type: Number
+    - contextPath: VirusTotal.LiveHuntNotification.data.attributes.match_in_subfile
+      description: whether the match was in a subfile or not.
+      type: Boolean
+    - contextPath: VirusTotal.LiveHuntNotification.data.type
+      description: Type of the notification (hunting_notification)
+      type: String
+    - contextPath: VirusTotal.LiveHuntNotification.data.id
+      description: The ID of the notification
+      type: String
+    - contextPath: VirusTotal.LiveHuntNotification.data.links.self
+      description: The link to the notificaton
+      type: String
+    - contextPath: VirusTotal.LiveHuntNotification.links.self
+      description: The link to the current page
+      type: String
+    - contextPath: VirusTotal.LiveHuntNotification.links.next
+      description: The link to the next page
+      type: String
+  - arguments:
+    - description: String to search within the hunting notification tags.
+      name: filter
+    - description: Continuation cursor.
+      name: cursor
+    - defaultValue: "10"
+      description: Maximum number of notifications to retrieve.
+      name: limit
+    description: Retrieve file objects for VT Hunting Livehunt notifications.
+    name: vt-private-livehunt-notifications-files-list
+    outputs:
+    - contextPath: VirusTotal.LiveHuntFiles.meta.count
+      description: Total file's count.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.meta.cursor
+      description: Cursor of the call
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.type_description
+      description: describes the file type.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.tlsh
+      description: Trend Micro's TLSH hash
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.vhash
+      description: in-house similarity clustering algorithm value, based on a simple
+        structural feature hash allows you to find similar files.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.exiftool
+      description: exiftool is a program for extracting Exif metadata from different
+        file formats. Metadata shown may vary depending on the file type, and given
+        the nature of Exif metadata, some fields may appear or not.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.trid.file_type
+      description: TrID is a utility designed to identify file types from their binary
+        signatures.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.trid.probability
+      description: probability of file format identification (given as percentage).
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.creation_date
+      description: extracted when possible from the file's metadata. Indicates when
+        it was built or compiled. It can also be faked by malware creators. UTC timestamp.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.reputation
+      description: file's score calculated from all votes posted by the VirusTotal
+        community.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.names
+      description: all file names associated with the file.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.last_modification_date
+      description: date when the object itself was last modified. UTC timestamp.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.type_tag
+      description: tag representing the file type. Can be used in vt-private-intelligence-search
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.times_submitted
+      description: number of times the file has been posted to VirusTotal.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.total_votes.harmless
+      description: number of positive votes.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.total_votes.malicious
+      description: number of negative votes.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.size
+      description: file size in bytes.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.type_extension
+      description: specifies file extension.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.last_submission_date
+      description: most recent date the file was posted to VirusTotal. UTC timestamp.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.downloadable
+      description: true if the file can be downloaded, false otherwise. (use vt-private-download-file)
+        to download the file)
+      type: Boolean
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.sha256
+      description: SHA-256 of the file.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.tags
+      description: The file's tags.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.last_analysis_date
+      description: most recent scan date. UTC timestamp.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.unique_sources
+      description: indicates from how many different sources the file has been posted
+        from.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.first_submission_date
+      description: date when the file was first seen in VirusTotal. UTC timestamp.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.ssdeep
+      description: SSDeep of the file.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.md5
+      description: MD5 of the file.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.sha1
+      description: SHA-1 if the file
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.magic
+      description: magic identifier of this app in hex format.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.main_icon.raw_md5
+      description: MD5 of the file's icon.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.main_icon.dhash
+      description: The dhash of the file's icon
+      type: Date
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.last_analysis_stats.harmless
+      description: number of reports saying that is harmless.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.last_analysis_stats.type-unsupported
+      description: number of AV engines that don't support that type of file.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.last_analysis_stats.suspicious
+      description: number of reports saying that is suspicious.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.last_analysis_stats.confirmed-timeout
+      description: number of AV engines that reach a timeout when analysing that file.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.last_analysis_stats.timeout
+      description: number of timeouts when analysing this URL/file.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.last_analysis_stats.failure
+      description: number of AV engines that fail when analysing that file.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.last_analysis_stats.malicious
+      description: number of reports saying that is malicious
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.last_analysis_stats.undetected
+      description: number of reports saying that is undetected.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.meaningful_name
+      description: the most interesting name out of all file's names.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.type
+      description: Type of the entry (file)
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.id
+      description: file ID
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.links.self
+      description: link to the file
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.context_attributes.notification_id
+      description: The notification ID the file is connected to
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.context_attributes.notification_source_key
+      description: The notification's source key
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.context_attributes.notification_tags
+      description: notification tags.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.context_attributes.ruleset_name
+      description: matched rule's ruleset name.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.context_attributes.notification_source_country
+      description: The notification's source country of the notification
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.context_attributes.rule_name
+      description: contains the names of all rules in the ruleset.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.context_attributes.notification_snippet
+      description: The notification snippet ID
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.context_attributes.ruleset_id
+      description: VirusTotal's ruleset ID.
+      type: Date
+    - contextPath: VirusTotal.LiveHuntFiles.data.context_attributes.notification_date
+      description: The notification date in epch.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.context_attributes.match_in_subfile
+      description: whether the match was in a subfile or not.
+      type: Boolean
+    - contextPath: VirusTotal.LiveHuntFiles.links.self
+      description: Link to the current apge
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.links.next
+      description: Link to the next page
+      type: String
+  - arguments:
+    - description: Hashes to search within VirusTotal. Will search only hashes and
+        will ignore any other value.
+      isArray: true
+      name: hash
+      required: true
+    - description: Continuation cursor.
+      name: cursor
+    description: Retrieve file objects for VT Hunting Livehunt notifications.
+    name: vt-private-livehunt-notifications-files-get-by-hash
+    outputs:
+    - contextPath: VirusTotal.LiveHuntFiles.meta.count
+      description: Total file's count.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.meta.cursor
+      description: Cursor of the call
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.type_description
+      description: describes the file type.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.tlsh
+      description: Trend Micro's TLSH hash
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.vhash
+      description: in-house similarity clustering algorithm value, based on a simple
+        structural feature hash allows you to find similar files.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.exiftool
+      description: exiftool is a program for extracting Exif metadata from different
+        file formats. Metadata shown may vary depending on the file type, and given
+        the nature of Exif metadata, some fields may appear or not.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.trid.file_type
+      description: TrID is a utility designed to identify file types from their binary
+        signatures.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.trid.probability
+      description: probability of file format identification (given as percentage).
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.creation_date
+      description: extracted when possible from the file's metadata. Indicates when
+        it was built or compiled. It can also be faked by malware creators. UTC timestamp.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.reputation
+      description: file's score calculated from all votes posted by the VirusTotal
+        community.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.names
+      description: all file names associated with the file.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.last_modification_date
+      description: date when the object itself was last modified. UTC timestamp.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.type_tag
+      description: tag representing the file type. Can be used in vt-private-intelligence-search
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.times_submitted
+      description: number of times the file has been posted to VirusTotal.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.total_votes.harmless
+      description: number of positive votes.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.total_votes.malicious
+      description: number of negative votes.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.size
+      description: file size in bytes.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.type_extension
+      description: specifies file extension.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.last_submission_date
+      description: most recent date the file was posted to VirusTotal. UTC timestamp.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.downloadable
+      description: true if the file can be downloaded, false otherwise. (use vt-private-download-file)
+        to download the file)
+      type: Boolean
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.sha256
+      description: SHA-256 of the file.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.tags
+      description: The file's tags.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.last_analysis_date
+      description: most recent scan date. UTC timestamp.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.unique_sources
+      description: indicates from how many different sources the file has been posted
+        from.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.first_submission_date
+      description: date when the file was first seen in VirusTotal. UTC timestamp.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.ssdeep
+      description: SSDeep of the file.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.md5
+      description: MD5 of the file.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.sha1
+      description: SHA-1 if the file
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.magic
+      description: magic identifier of this app in hex format.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.main_icon.raw_md5
+      description: MD5 of the file's icon.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.main_icon.dhash
+      description: The dhash of the file's icon
+      type: Date
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.last_analysis_stats.harmless
+      description: number of reports saying that is harmless.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.last_analysis_stats.type-unsupported
+      description: number of AV engines that don't support that type of file.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.last_analysis_stats.suspicious
+      description: number of reports saying that is suspicious.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.last_analysis_stats.confirmed-timeout
+      description: number of AV engines that reach a timeout when analysing that file.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.last_analysis_stats.timeout
+      description: number of timeouts when analysing this URL/file.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.last_analysis_stats.failure
+      description: number of AV engines that fail when analysing that file.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.last_analysis_stats.malicious
+      description: number of reports saying that is malicious
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.last_analysis_stats.undetected
+      description: number of reports saying that is undetected.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.attributes.meaningful_name
+      description: the most interesting name out of all file's names.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.type
+      description: Type of the entry (file)
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.id
+      description: file ID
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.links.self
+      description: link to the file
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.context_attributes.notification_id
+      description: The notification ID the file is connected to
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.context_attributes.notification_source_key
+      description: The notification's source key
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.context_attributes.notification_tags
+      description: notification tags.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.context_attributes.ruleset_name
+      description: matched rule's ruleset name.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.context_attributes.notification_source_country
+      description: The notification's source country of the notification
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.context_attributes.rule_name
+      description: contains the names of all rules in the ruleset.
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.context_attributes.notification_snippet
+      description: The notification snippet ID
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.data.context_attributes.ruleset_id
+      description: VirusTotal's ruleset ID.
+      type: Date
+    - contextPath: VirusTotal.LiveHuntFiles.data.context_attributes.notification_date
+      description: The notification date in epch.
+      type: Number
+    - contextPath: VirusTotal.LiveHuntFiles.data.context_attributes.match_in_subfile
+      description: whether the match was in a subfile or not.
+      type: Boolean
+    - contextPath: VirusTotal.LiveHuntFiles.links.self
+      description: Link to the current apge
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.links.next
+      description: Link to the next page
+      type: String
+  - arguments:
+    - default: true
+      description: Rule identifier. Can be retrieved from the vt-private-livehunt-rules-list
+        command.
+      name: id
+      required: true
+    - description: Continuation cursor.
+      name: cursor
+    - defaultValue: "10"
+      description: Maximum number of notifications to retrieve.
+      name: limit
+    description: Get a VT Hunting Livehunt ruleset by hunting notification files relationship.
+    name: vt-private-livehunt-rule-list-files
+    outputs:
+    - contextPath: VirusTotal.LiveHuntFiles.id
+      description: ID of the file
+      type: String
+    - contextPath: VirusTotal.LiveHuntFiles.type
+      description: Type of the entry (file)
+      type: String
+  - arguments:
+    - description: Return the jobs matching the given criteria only.
+      name: filter
+    - description: Continuation cursor.
+      name: cursor
+    - defaultValue: "10"
+      description: Maximum number jobs to retrieve.
+      name: limit
+    description: Get a VT Hunting Livehunt ruleset by hunting notification files relationship.
+    name: vt-private-retrohunt-jobs-list
+    outputs:
+    - contextPath: VirusTotal.RetroHuntJob.attributes.status
+      description: can be either "starting", "running", "aborting", "aborted" or "finished".
+      type: String
+    - contextPath: VirusTotal.RetroHuntJob.attributes.finish_date
+      description: date when the Retrohunt job finished
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJob.attributes.rules
+      description: The ruleset in the job
+      type: String
+    - contextPath: VirusTotal.RetroHuntJob.attributes.num_matches_outside_time_range
+      description: Matches outside time range
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJob.attributes.scanned_bytes
+      description: Total scanned bytes
+      type: Date
+    - contextPath: VirusTotal.RetroHuntJob.attributes.time_range.start
+      description: Start of job's time range
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJob.attributes.time_range.end
+      description: End of job's time range
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJob.attributes.num_matches
+      description: Number of matches.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJob.attributes.progress
+      description: The progress in percentage
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJob.attributes.corpus
+      description: Corpus of the job (main/goodware)
+      type: String
+    - contextPath: VirusTotal.RetroHuntJob.attributes.creation_date
+      description: Job's creation date as UTC timestamp.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJob.attributes.start_date
+      description: The start date of the job in epch.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJob.type
+      description: Type of the entry (retrohunt_job)
+      type: String
+    - contextPath: VirusTotal.RetroHuntJob.id
+      description: ID of the retro job.
+      type: String
+    - contextPath: VirusTotal.RetroHuntJob.links.self
+      description: Link to the entry
+      type: String
+  - arguments:
+    - default: true
+      description: Job identifier. Can be acquired from vt-private-retrohunt-jobs-list
+      name: id
+      required: true
+    description: Retrieve a retrohunt job.
+    name: vt-private-retrohunt-jobs-get-by-id
+    outputs:
+    - contextPath: VirusTotal.RetroHuntJob.attributes.status
+      description: can be either "starting", "running", "aborting", "aborted" or "finished".
+      type: String
+    - contextPath: VirusTotal.RetroHuntJob.attributes.finish_date
+      description: date when the Retrohunt job finished
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJob.attributes.rules
+      description: The ruleset in the job
+      type: String
+    - contextPath: VirusTotal.RetroHuntJob.attributes.num_matches_outside_time_range
+      description: Matches outside time range
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJob.attributes.scanned_bytes
+      description: Total scanned bytes
+      type: Date
+    - contextPath: VirusTotal.RetroHuntJob.attributes.time_range.start
+      description: Start of job's time range
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJob.attributes.time_range.end
+      description: End of job's time range
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJob.attributes.num_matches
+      description: Number of matches.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJob.attributes.progress
+      description: The progress in percentage
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJob.attributes.corpus
+      description: Corpus of the job (main/goodware)
+      type: String
+    - contextPath: VirusTotal.RetroHuntJob.attributes.creation_date
+      description: Job's creation date as UTC timestamp.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJob.attributes.start_date
+      description: The start date of the job in epch.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJob.type
+      description: Type of the entry (retrohunt_job)
+      type: String
+    - contextPath: VirusTotal.RetroHuntJob.id
+      description: ID of the retro job.
+      type: String
+    - contextPath: VirusTotal.RetroHuntJob.links.self
+      description: Link to the entry
+      type: String
+  - arguments:
+    - default: true
+      description: Job identifier. Can be acquired from vt-private-retrohunt-jobs-list
+      name: id
+      required: true
+    - auto: PREDEFINED
+      defaultValue: "false"
+      description: Whether to return full data information.
+      name: extended_data
+      predefined:
+      - "true"
+      - "false"
+    description: Retrieve matches for a retrohunt job matching file relationship.
+    name: vt-private-retrohunt-jobs-get-matching-files
+    outputs:
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.type_description
+      description: describes the file type.
+      type: String
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.tlsh
+      description: Trend Micro's TLSH hash
+      type: String
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.vhash
+      description: in-house similarity clustering algorithm value, based on a simple
+        structural feature hash allows you to find similar files.
+      type: String
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.exiftool
+      description: exiftool is a program for extracting Exif metadata from different
+        file formats. Metadata shown may vary depending on the file type, and given
+        the nature of Exif metadata, some fields may appear or not.
+      type: String
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.trid.file_type
+      description: TrID is a utility designed to identify file types from their binary
+        signatures.
+      type: String
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.trid.probability
+      description: probability of file format identification (given as percentage).
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.crowdsourced_yara_results.rule_name
+      description: contains the names of all rules in the ruleset.
+      type: String
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.crowdsourced_yara_results.description
+      description: matched rule description.
+      type: String
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.crowdsourced_yara_results.author
+      description: rule author.
+      type: String
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.crowdsourced_yara_results.ruleset_id
+      description: VirusTotal's ruleset ID.
+      type: String
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.crowdsourced_yara_results.ruleset_name
+      description: matched rule's ruleset name.
+      type: String
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.crowdsourced_yara_results.match_in_subfile
+      description: whether the match was in a subfile or not.
+      type: Boolean
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.crowdsourced_yara_results.source
+      description: ruleset source.
+      type: String
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.creation_date
+      description: extracted when possible from the file's metadata. Indicates when
+        it was built or compiled. It can also be faked by malware creators. UTC timestamp.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.names
+      description: all file names associated with the file.
+      type: String
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.last_modification_date
+      description: date when the object itself was last modified. UTC timestamp.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.type_tag
+      description: tag representing the file type. Can be used in vt-private-intelligence-search
+      type: String
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.capabilities_tags
+      description: list of representative tags related to the file's capabilities
+      type: String
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.total_votes.harmless
+      description: number of positive votes.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.total_votes.malicious
+      description: number of negative votes.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.size
+      description: file size in bytes.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.authentihash
+      description: sha256 hash used by Microsoft to verify that the relevant sections
+        of a PE image file have not been altered. This specific type of hash is used
+        by Microsoft AppLocker.
+      type: String
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.times_submitted
+      description: number of times the file has been posted to VirusTotal.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.last_submission_date
+      description: most recent date the file was posted to VirusTotal. UTC timestamp.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.meaningful_name
+      description: the most interesting name out of all file's names.
+      type: String
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.downloadable
+      description: true if the file can be downloaded, false otherwise.
+      type: Boolean
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.sha256
+      description: SHA-256 of the file
+      type: String
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.type_extension
+      description: specifies file extension.
+      type: String
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.tags
+      description: list of representative tags related to the file's capabilities
+      type: String
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.last_analysis_date
+      description: Most recent scan date. UTC timestamp.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.unique_sources
+      description: indicates from how many different sources the file has been posted
+        from.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.first_submission_date
+      description: date when the file was first seen in VirusTotal. UTC timestamp.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.sha1
+      description: SHA-1 of the file
+      type: String
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.magic
+      description: magic identifier of this app in hex format.
+      type: String
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.ssdeep
+      description: SSDeep of the file
+      type: String
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.md5
+      description: MD5 of the file
+      type: String
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.last_analysis_stats.harmless
+      description: number of reports saying that is harmless.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.last_analysis_stats.type-unsupported
+      description: number of AV engines that don't support that type of file.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.last_analysis_stats.suspicious
+      description: number of reports saying that is suspicious.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.last_analysis_stats.confirmed-timeout
+      description: number of AV engines that reach a timeout when analysing that file.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.last_analysis_stats.timeout
+      description: number of timeouts when analysing this URL/file.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.last_analysis_stats.failure
+      description: number of AV engines that fail when analysing that file.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.last_analysis_stats.malicious
+      description: number of reports saying that is malicious
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.last_analysis_stats.undetected
+      description: number of reports saying that is undetected.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.reputation
+      description: file's score calculated from all votes posted by the VirusTotal
+        community.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.sigma_analysis_stats.high
+      description: number of matched high severity rules.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.sigma_analysis_stats.medium
+      description: number of matched medium severity rules.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.sigma_analysis_stats.critical
+      description: number of matched critical severity rules.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJobFiles.attributes.sigma_analysis_stats.low
+      description: number of matched low severity rules.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJobFiles.type
+      description: The type of the entry (file)
+      type: String
+    - contextPath: VirusTotal.RetroHuntJobFiles.id
+      description: ID of file
+      type: String
+    - contextPath: VirusTotal.RetroHuntJobFiles.links.self
+      description: A link to the entry
+      type: String
+    - contextPath: VirusTotal.RetroHuntJobFiles.context_attributes.rule_name
+      description: contains the names of all rules in the ruleset.
+      type: String
+    - contextPath: VirusTotal.RetroHuntJobFiles.context_attributes.match_in_subfile
+      description: whether the match was in a subfile or not.
+      type: Boolean
+  - arguments:
+    - description: The rules to create. https://yara.readthedocs.io/en/stable/
+      name: rules
+      required: true
+    - auto: PREDEFINED
+      defaultValue: main
+      description: The "main" corpus is a composition of files sent to VirusTotal
+        during the last few months. The "goodware" corpus is a random selection of
+        ~1.000.000 files from the NSRL that are not detected by any antivirus engine.
+      name: corpus
+      predefined:
+      - main
+      - goodware
+    - description: A comma-separated list of emails to notify.
+      name: notification_email
+    - description: Fetch retrohunt jobs from given time. Can be epoch time, a date
+        or time range (3 days, 1 year)
+      name: start_time
+    - description: Fetch retrohunt jobs to given time. Can be epoch time, a date or
+        time range. If start_time supplied and not end_time, end_time will be the
+        current time.
+      name: end_time
+    description: Create a new retrohunt job.
+    name: vt-private-retrohunt-jobs-create
+    outputs:
+    - contextPath: VirusTotal.RetroHuntJob.attributes.status
+      description: can be either "starting", "running", "aborting", "aborted" or "finished".
+      type: String
+    - contextPath: VirusTotal.RetroHuntJob.attributes.finish_date
+      description: date when the Retrohunt job finished
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJob.attributes.rules
+      description: The ruleset in the job
+      type: String
+    - contextPath: VirusTotal.RetroHuntJob.attributes.num_matches_outside_time_range
+      description: Matches outside time range
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJob.attributes.scanned_bytes
+      description: Total scanned bytes
+      type: Date
+    - contextPath: VirusTotal.RetroHuntJob.attributes.time_range.start
+      description: Start of job's time range
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJob.attributes.time_range.end
+      description: End of job's time range
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJob.attributes.num_matches
+      description: Number of matches.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJob.attributes.progress
+      description: The progress in percentage
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJob.attributes.corpus
+      description: Corpus of the job (main/goodware)
+      type: String
+    - contextPath: VirusTotal.RetroHuntJob.attributes.creation_date
+      description: Job's creation date as UTC timestamp.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJob.attributes.start_date
+      description: The start date of the job in epch.
+      type: Number
+    - contextPath: VirusTotal.RetroHuntJob.type
+      description: Type of the entry (retrohunt_job)
+      type: String
+    - contextPath: VirusTotal.RetroHuntJob.id
+      description: ID of the retro job.
+      type: String
+    - contextPath: VirusTotal.RetroHuntJob.links.self
+      description: Link to the entry
+      type: String
+  - arguments:
+    - default: true
+      description: User ID or API key. If not supplied, will use the API Key configured
+        in the integration.
+      name: id
+      secret: true
+    description: Retrieve user's API usage.
+    name: vt-private-quota-limits-list
+    outputs:
+    - contextPath: VirusTotal.QuotaLimits.cases_creation_monthly.user.group.used
+      description: quota has been used.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.cases_creation_monthly.user.allowed
+      description: quota limit.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.intelligence_vtdiff_creation_monthly.group.inherited_from
+      description: group from which the quota is inherited.
+      type: String
+    - contextPath: VirusTotal.QuotaLimits.intelligence_vtdiff_creation_monthly.group.group.used
+      description: quota has been used.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.intelligence_vtdiff_creation_monthly.group.allowed
+      description: quota limit.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.intelligence_vtdiff_creation_monthly.user.group.used
+      description: quota has been used.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.intelligence_vtdiff_creation_monthly.user.allowed
+      description: quota limit.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.monitor_uploaded_files.user.group.used
+      description: quota has been used.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.monitor_uploaded_files.user.allowed
+      description: quota limit.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.monitor_uploaded_bytes.user.group.used
+      description: quota has been used.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.monitor_uploaded_bytes.user.allowed
+      description: quota limit.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.monitor_storage_files.user.group.used
+      description: quota has been used.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.monitor_storage_files.user.allowed
+      description: quota limit.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.api_requests_monthly.group.inherited_from
+      description: group from which the quota is inherited.
+      type: String
+    - contextPath: VirusTotal.QuotaLimits.api_requests_monthly.group.group.used
+      description: quota has been used.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.api_requests_monthly.group.allowed
+      description: quota limit.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.api_requests_monthly.user.group.used
+      description: quota has been used.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.api_requests_monthly.user.allowed
+      description: quota limit.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.intelligence_downloads_monthly.group.inherited_from
+      description: group from which the quota is inherited.
+      type: String
+    - contextPath: VirusTotal.QuotaLimits.intelligence_downloads_monthly.group.group.used
+      description: quota has been used.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.intelligence_downloads_monthly.group.allowed
+      description: quota limit.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.intelligence_downloads_monthly.user.group.used
+      description: quota has been used.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.intelligence_downloads_monthly.user.allowed
+      description: quota limit.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.api_requests_hourly.group.inherited_from
+      description: group from which the quota is inherited.
+      type: String
+    - contextPath: VirusTotal.QuotaLimits.api_requests_hourly.group.group.used
+      description: quota has been used.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.api_requests_hourly.group.allowed
+      description: hourly api requests group's quota limit
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.api_requests_hourly.user.group.used
+      description: quota has been used.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.api_requests_hourly.user.allowed
+      description: hourly api requests user's quota limit
+      type: Date
+    - contextPath: VirusTotal.QuotaLimits.intelligence_hunting_rules.group.inherited_from
+      description: group from which the quota is inherited.
+      type: String
+    - contextPath: VirusTotal.QuotaLimits.intelligence_hunting_rules.group.group.used
+      description: quota has been used.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.intelligence_hunting_rules.group.allowed
+      description: intelligence_hunting_rules group's quota limit
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.intelligence_hunting_rules.user.group.used
+      description: quota has been used.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.intelligence_hunting_rules.user.allowed
+      description: intelligence_hunting_rules user's quota limit
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.intelligence_graphs_private.group.inherited_from
+      description: group from which the quota is inherited.
+      type: String
+    - contextPath: VirusTotal.QuotaLimits.intelligence_graphs_private.group.group.used
+      description: quota has been used.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.intelligence_graphs_private.group.allowed
+      description: quota limit.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.intelligence_graphs_private.user.group.used
+      description: quota has been used.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.intelligence_graphs_private.user.allowed
+      description: quota limit.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.api_requests_daily.group.inherited_from
+      description: group from which the quota is inherited.
+      type: String
+    - contextPath: VirusTotal.QuotaLimits.api_requests_daily.group.group.used
+      description: quota has been used.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.api_requests_daily.group.allowed
+      description: quota limit.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.api_requests_daily.user.group.used
+      description: quota has been used.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.api_requests_daily.user.allowed
+      description: quota limit.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.monitor_storage_bytes.user.group.used
+      description: quota has been used.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.monitor_storage_bytes.user.allowed
+      description: quota limit.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.intelligence_retrohunt_jobs_monthly.group.inherited_from
+      description: group from which the quota is inherited.
+      type: String
+    - contextPath: VirusTotal.QuotaLimits.intelligence_retrohunt_jobs_monthly.group.group.used
+      description: quota has been used.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.intelligence_retrohunt_jobs_monthly.group.allowed
+      description: quota limit.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.intelligence_retrohunt_jobs_monthly.user.group.used
+      description: quota has been used.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.intelligence_retrohunt_jobs_monthly.user.allowed
+      description: quota limit.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.intelligence_searches_monthly.group.inherited_from
+      description: group from which the quota is inherited.
+      type: String
+    - contextPath: VirusTotal.QuotaLimits.intelligence_searches_monthly.group.group.used
+      description: quota has been used.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.intelligence_searches_monthly.group.allowed
+      description: quota limit.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.intelligence_searches_monthly.user.group.used
+      description: quota has been used.
+      type: Number
+    - contextPath: VirusTotal.QuotaLimits.intelligence_searches_monthly.user.allowed
+      description: quota limit.
+      type: Number
+  dockerimage: demisto/python3:3.10.12.63474
+  isfetch: true
+  runonce: false
+  script: |
+    register_module_line('VirusTotal - Premium (API v3)', 'start', __line__())
+    ### pack version: 2.6.17
+    """
+    VirusTotal V3 - Premium API
+    Difference: https://developers.virustotal.com/v3.0/reference#public-vs-premium-api
+    """
+    import copy
+    from typing import Tuple, Iterable
+
+    import urllib3
+    from dateparser import parse
+
+
+
+    # Disable insecure warnings
+
+    urllib3.disable_warnings()  # pylint: disable=no-member
+
+    # region Globals
+
+    INTEGRATION_NAME = "VirusTotal"
+    COMMAND_PREFIX = "vt-private"
+    INTEGRATION_ENTRY_CONTEXT = "VirusTotal"
+
+
+    # endregion
+
+    # region Helper functions
+    def convert_epoch_to_readable(
+            readable_inputs: dict,
+            keys: Iterable[str] = ('start_date', 'creation_date', 'finish_date')
+    ) -> dict:
+        """Gets the readable input from a function and converts it times to readable outputs
+
+        Args:
+            readable_inputs: a readable output with epoch times in it
+            keys: keys to convert
+
+        Returns:
+            epoch time in readable output
+        """
+        for date_ in keys:
+            if creation_date := readable_inputs.get(date_):
+                if creation_date := parse(str(creation_date)):
+                    readable_inputs[date_] = creation_date.replace(microsecond=0).isoformat()
+        return readable_inputs
+
+
+    def decrease_data_size(data: Union[dict, list]) -> Union[dict, list]:
+        """ Minifying data size.
+        Args:
+            data: the data object from raw response
+        Returns:
+            the same data without:
+                data['attributes']['last_analysis_results']
+                data['attributes']['pe_info']
+                data['attributes']['crowdsourced_ids_results']
+                data['attributes']['autostart_locations']
+                data['attributes']['sandbox_verdicts']
+                data['attributes']['sigma_analysis_summary']
+                data['attributes']['popular_threat_classification']
+                data['attributes']['packers']
+                data['attributes']['malware_config']
+        """
+        attributes_to_remove = [
+            'last_analysis_results', 'pe_info', 'crowdsourced_ids_results', 'autostart_locations', 'sandbox_verdicts',
+            'sigma_analysis_summary', 'popular_threat_classification', 'packers', 'malware_config'
+        ]
+        if isinstance(data, list):
+            data = [decrease_data_size(item) for item in data]
+        else:
+            for attribute in attributes_to_remove:
+                try:
+                    del data['attributes'][attribute]
+                except KeyError:
+                    pass
+        return data
+
+
+    def arg_to_boolean_can_be_none(arg: Optional[Union[bool, str]]) -> Optional[bool]:
+        """A wrapper of argToBool that can return None if arg is None or an empty string"""
+        if arg in (None, ''):
+            return None
+        else:
+            return argToBoolean(arg)
+
+
+    def get_last_run_time(params: Optional[dict] = None, last_run: Optional[dict] = None) -> datetime:
+        """getting the last run time.
+        Args:
+            params: Demisto params. Must contain the `first_fetch` key.
+            last_run: if exists, should contain the `date` key.
+
+        Returns:
+            A datetime object of the fetch time
+        """
+        if last_run is None:
+            last_run = demisto.getLastRun()
+        if params is None:
+            params = demisto.params()
+        if last_run:
+            last_run_date = parse(last_run.get('date'))  # type: ignore
+        else:  # first run
+            first_fetch = params.get('first_fetch')
+            try:
+                last_run_date = parse(first_fetch)  # type: ignore
+                if not last_run_date:
+                    raise TypeError
+            except TypeError:
+                raise DemistoException(f'The first fetch time is invalid "{first_fetch=}"')
+        assert last_run_date is not None
+        return last_run_date
+
+
+    def get_time_range_object(start_time: Optional[str] = None, end_time: Optional[str] = None) -> Dict[str, int]:
+        """Gets start and/or end times and converts them to time_range object.
+
+        Args:
+            start_time: A string represents time or date range (2018-01-01-18:00Z or 3 days)
+            end_time: A string represents time (2018-01-01-18:00Z). if not supplied, will use the current time.
+
+        Returns:
+            A dictionary with start and end time.
+
+        Examples:
+            >>> get_time_range_object('3 days')
+            {'start': 1615199101, 'end': 1615458301}
+            >>> get_time_range_object('2018-01-01')
+            {'start': 1514757600, 'end': 1615465632}
+            >>> get_time_range_object('2018-01-01', '2020-01-01T15:00Z')
+        """
+        time_range = {}
+        start_date: datetime
+        end_date: datetime
+        if start_time and end_time:
+            start_date = parse(start_time)  # type: ignore
+            assert start_date, f'Could not parse start_date argument. {start_time=}'
+            end_date = parse(end_time)  # type: ignore
+            assert end_date, f'Could not parse end_time argument. {end_time=}'
+
+            time_range = {
+                'start': int(start_date.timestamp()),
+                'end': int(end_date.timestamp())
+            }
+        elif start_time:
+            start_date, end_date = parse(start_time), datetime.now()  # type: ignore
+            assert start_date, f'Could not parse start_date argument. {start_time=}'
+            assert end_date, f'Could not parse end_time argument. {end_time=}'
+
+            time_range = {
+                'start': int(start_date.timestamp()),
+                'end': int(end_date.timestamp())
+            }
+        elif end_time:
+            raise AssertionError('Found end_time argument without start_time.')
+        return time_range
+
+
+    def arg_to_number_must_int(arg: Any, arg_name: Optional[str] = None, required: bool = False):
+        """Wrapper of arg_to_number that must return int
+        For mypy fixes.
+        """
+        arg_num = arg_to_number(arg, arg_name, required)
+        assert isinstance(arg_num, int)
+        return arg_num
+
+
+    def raise_if_hash_not_valid(
+            file_hash: str,
+            valid_hashes: Union[tuple, str] = ('sha256', 'sha1', 'md5')
+    ):
+        """Raises an error if file_hash is not valid
+        Args:
+            file_hash: file hash
+            valid_hashes: Valid hashes to not raise if file_hash is of its type
+        Raises:
+            ValueError: if hash is not sha256, sha1, md5
+        Examples:
+            >>> raise_if_hash_not_valid('not a hash')
+            Traceback (most recent call last):
+             ...
+            ValueError: Hash "not a hash" is not of type sha256, sha1, md5
+            >>> raise_if_hash_not_valid('not a hash', valid_hashes='sha1')
+            Traceback (most recent call last):
+             ...
+            ValueError: Hash "not a hash" is not of type sha1
+            >>> raise_if_hash_not_valid('7e641f6b9706d860baf09fe418b6cc87')
+        """
+        if isinstance(valid_hashes, str):
+            valid_hashes = tuple([valid_hashes])
+        if get_hash_type(file_hash) not in valid_hashes:
+            raise ValueError(f'Hash "{file_hash}" is not of type {", ".join(valid_hashes)}')
+
+
+    def get_file_name(content_disposition: str, ) -> str:
+        """Content-Disposition has the filename between the `"`. get it.
+
+        Args:
+            content_disposition: the content disposition from download header
+
+        Returns:
+            the file name
+        """
+        if match := re.search(r'"(.*?)"', content_disposition):
+            file_name = match.group(1)
+        else:
+            file_name = demisto.uniqueFile()
+        return file_name
+
+
+    # endregion
+
+    class Client(BaseClient):
+        def __init__(self, params: dict):
+            self.api_key = params['credentials']['password']
+            super().__init__(
+                'https://www.virustotal.com/api/v3/',
+                verify=not params.get('insecure'),
+                proxy=params.get('proxy'),
+                headers={
+                    'x-apikey': self.api_key,
+                    'x-tool': 'CortexVirusTotalV3Premium'
+                }
+            )
+
+        def download_file(self, file: str) -> requests.Response:
+            """Download a file.
+
+            See Also:
+                https://developers.virustotal.com/v3.0/reference#files-download
+            """
+            return self._http_request(
+                'GET',
+                f'files/{file}/download',
+                allow_redirects=True,
+                resp_type='response'
+            )
+
+        def create_zip(self, hashes: list, password: Optional[str] = None) -> dict:
+            """Creates a password-protected ZIP file containing files from VirusTotal.
+
+            See Also:
+                https://developers.virustotal.com/v3.0/reference#zip_files
+            """
+            body: dict = {
+                'hashes': hashes
+            }
+            if password:
+                body['password'] = password
+            return self._http_request(
+                'POST',
+                'intelligence/zip_files',
+                json_data={'data': body}
+            )
+
+        def get_zip(self, zip_id: str) -> dict:
+            """Retrieve information about a ZIP file
+
+            See Also:
+                https://developers.virustotal.com/v3.0/reference#get-zip-file
+            """
+            return self._http_request(
+                'GET',
+                f'intelligence/zip_files/{zip_id}'
+            )
+
+        def download_zip(self, zip_id: str) -> requests.Response:
+            """Download a ZIP file.
+
+            See Also:
+                https://developers.virustotal.com/v3.0/reference#zip-files-download
+            """
+            return self._http_request(
+                'GET',
+                f'intelligence/zip_files/{zip_id}/download',
+                allow_redirects=True,
+                resp_type='request'
+            )
+
+        def get_pcap_beaviour(self, report_id) -> dict:
+            """Extracted PCAP from a sandbox analysis.
+
+            See Also:
+                https://developers.virustotal.com/v3.0/reference#file_behaviours_pcap
+            """
+            return self._http_request(
+                'GET',
+                f'file_behaviours/{report_id}/pcap',
+                resp_type='content'
+            )
+
+        def search_intelligence(
+                self,
+                query: str,
+                order: Optional[str] = None,
+                limit: Optional[int] = None,
+                cursor: Optional[str] = None,
+                descriptors_only: Optional[bool] = None
+        ):
+            """Search for files.
+
+            See Also:
+                https://developers.virustotal.com/v3.0/reference#intelligence-search
+            """
+            return self._http_request(
+                'GET',
+                'intelligence/search',
+                params=assign_params(
+                    query=query,
+                    cursor=cursor,
+                    order=order,
+                    limit=limit,
+                    descriptors_only=descriptors_only
+                )
+            )
+
+        def get_livehunt_rule_by_id(self, id_: str):
+            """Retrieve a VT Hunting Livehunt ruleset.
+
+            See Also:
+                https://developers.virustotal.com/v3.0/reference#get-hunting-ruleset.
+            """
+            return self._http_request(
+                'GET',
+                f'intelligence/hunting_rulesets/{id_}'
+            )
+
+        def list_livehunt_rules(
+                self,
+                /,
+                limit: int,
+                order: Optional[str] = None,
+                name: Optional[str] = None,
+                enabled: Optional[bool] = None,
+                rule_content: Optional[str] = None,
+        ) -> dict:
+            """Retrieve a VT Hunting Livehunt rulesets.
+
+            See Also:
+                https://developers.virustotal.com/v3.0/reference#list-hunting-rulesets
+            """
+            filter_ = ''
+            if name:
+                filter_ += f'{name} '
+            if rule_content:
+                filter_ += f'rules:{rule_content} '
+            if enabled is not None:
+                filter_ += f'enabled:{enabled} '
+            return self._http_request(
+                'GET',
+                'intelligence/hunting_rulesets',
+                params=assign_params(
+                    filter=filter_,
+                    limit=limit,
+                    order=order
+                )
+            )
+
+        def create_livehunt_rule(
+                self,
+                name: str,
+                yara_rule: str,
+                enabled: Optional[bool],
+                limit: Optional[int],
+                notification_emails: Optional[List[str]]
+        ) -> dict:
+            """Create a new VT Hunting Livehunt ruleset.
+            See Also:
+                https://developers.virustotal.com/v3.0/reference#create-hunting-ruleset
+            """
+            return self._http_request(
+                'POST',
+                'intelligence/hunting_rulesets',
+                json_data={
+                    'data': {
+                        'type': 'hunting_ruleset',
+                        'attributes': assign_params(
+                            name=name,
+                            enabled=enabled,
+                            rules=yara_rule,
+                            limit=limit,
+                            notification_emails=notification_emails
+                        )
+                    }
+                }
+            )
+
+        def update_livehunt_rule(
+                self,
+                id_: str,
+                yara_rule: Optional[str],
+                enabled: Optional[bool],
+                limit: Optional[int],
+                notification_emails: Optional[List[str]]
+        ) -> dict:
+            """Update a VT Hunting Livehunt ruleset.
+
+            See Also:
+                https://developers.virustotal.com/v3.0/reference#create-hunting-ruleset
+            """
+            params = assign_params(
+                enabled=enabled,
+                rules=yara_rule,
+                limit=limit,
+                notification_emails=notification_emails
+            )
+            assert params, 'Found nothing to update'
+            return self._http_request(
+                'PATCH',
+                f'intelligence/hunting_rulesets/{id_}',
+                json_data={
+                    'data': {
+                        'type': 'hunting_ruleset',
+                        'id': id_,
+                        'attributes': params
+                    }
+                }
+            )
+
+        def delete_livehunt_rule(self, id_: str):
+            """Delete a VT Hunting Livehunt ruleset.
+
+            See Also:
+                https://developers.virustotal.com/v3.0/reference#delete-hunting-ruleset
+            """
+            self._http_request(
+                'DELETE',
+                f'intelligence/hunting_rulesets/{id_}',
+                resp_type='text'
+            )
+
+        def list_notifications(
+                self,
+                from_time: Optional[datetime] = None,
+                to_time: Optional[datetime] = None,
+                tag: Optional[str] = None,
+                cursor: Optional[str] = None,
+                limit: Optional[int] = None
+        ) -> dict:
+            """Retrieve VT Hunting Livehunt notifications.
+
+            See Also:
+                https://developers.virustotal.com/v3.0/reference#list-hunting-notifications
+            """
+            time_format = "%Y-%m-%dT%H:%M:%S"
+            filter_ = ''
+            if tag:
+                filter_ += f'{tag} '
+            if from_time:
+                filter_ += f'date:{from_time.strftime(time_format)}+ '
+            if to_time:
+                filter_ += f'date:{to_time.strftime(time_format)}- '
+            return self._http_request(
+                'GET',
+                'intelligence/hunting_notifications',
+                params=assign_params(
+                    filter=filter_,
+                    limit=limit,
+                    cursor=cursor
+                )
+            )
+
+        def list_notifications_files(self, filter_: Optional[str], cursor: Optional[str] = None,
+                                     limit: Optional[int] = None):
+            """Retrieve file objects for VT Hunting Livehunt notifications.
+
+            See Also:
+                https://developers.virustotal.com/v3.0/reference#hunting_notification_files
+            """
+            return self._http_request(
+                'GET',
+                'intelligence/hunting_notification_files',
+                params=assign_params(
+                    filter=filter_,
+                    limit=limit,
+                    cursor=cursor
+                )
+            )
+
+        def list_files_by_rule(self, id_: str, cursor: Optional[str] = None, limit: Optional[int] = None) -> dict:
+            """Get a VT Hunting Livehunt ruleset by hunting notification files relationship.
+
+            See Also:
+                https://developers.virustotal.com/v3.0/reference#get-hunting-ruleset-relationship
+            """
+            return self._http_request(
+                'GET',
+                f'intelligence/hunting_rulesets/{id_}/relationships/hunting_notification_files',
+                params=assign_params(
+                    cursor=cursor,
+                    limit=limit
+                )
+            )
+
+        def list_retrohunt_jobs(
+                self,
+                filter_: Optional[str] = None,
+                cursor: Optional[str] = None,
+                limit: Optional[int] = None
+        ) -> dict:
+            """Retrieve retrohunt jobs.
+
+            See Also:
+                https://developers.virustotal.com/v3.0/reference#get-retrohunt-jobs
+            """
+            return self._http_request(
+                'GET',
+                'intelligence/retrohunt_jobs',
+                params=assign_params(
+                    filter=filter_,
+                    limit=limit,
+                    cursor=cursor
+                )
+            )
+
+        def create_retrohunt_job(
+                self,
+                rules: str,
+                notification_email: Optional[List[str]] = None,
+                corpus: Optional[str] = None,
+                time_range: Optional[Dict[str, int]] = None
+        ) -> dict:
+            """Create a new retrohunt job.
+
+            See Also:
+                https://developers.virustotal.com/v3.0/reference#create-retrohunt-job
+            """
+            return self._http_request(
+                'POST',
+                'intelligence/retrohunt_jobs',
+                json_data={
+                    "data": {
+                        "type": "retrohunt_job",
+                        "attributes": assign_params(
+                            rules=rules,
+                            notification_email=notification_email,
+                            corpus=corpus,
+                            time_range=time_range
+                        )
+                    }
+                }
+            )
+
+        def get_retrohunt_job_by_id(self, id_: str) -> dict:
+            """Retrieve a retrohunt job.
+
+            See Also:
+                https://developers.virustotal.com/v3.0/reference#get-retrohunt-job
+            """
+            return self._http_request(
+                'GET',
+                f'intelligence/retrohunt_jobs/{id_}'
+            )
+
+        def get_retrohunt_job_matching_files(self, id_: str) -> dict:
+            """Retrieve matches for a retrohunt job matching file relationship..
+
+            See Also:
+                https://developers.virustotal.com/v3.0/reference#get-retrohunt-jobs-relationships
+            """
+            return self._http_request(
+                'GET',
+                f'intelligence/retrohunt_jobs/{id_}/matching_files'
+            )
+
+        def get_quota_limits(self, id_: str) -> dict:
+            """Retrieve user's API usage.
+
+            See Also:
+                https://developers.virustotal.com/v3.0/reference#user-api-usage
+            """
+            return self._http_request(
+                'GET',
+                f'users/{id_}/overall_quotas'
+            )
+
+
+    def test_module(client: Client, params: dict) -> str:
+        """Tests API connectivity and authentication'
+        A simple call to list_livehunt_rules
+
+        Returns:
+            'ok' if test passed, anything else will fail the test.
+        """
+        if argToBoolean(params.get('isFetch')):
+            fetch_incidents(client, params, get_last_run_time(last_run={}))
+        else:
+            client.list_livehunt_rules(limit=1)
+        return 'ok'
+
+
+    def download_file(client: Client, args: dict) -> dict:
+        """Download a file."""
+        file = args['hash']
+        raise_if_hash_not_valid(file)
+        response = client.download_file(file)
+        content = response.content
+        content_disposition = response.headers.get('Content-Disposition', '')
+        file_name = f'{get_file_name(content_disposition)}-vt-file'
+        return fileResult(file_name, content)
+
+
+    def create_zip(client: Client, args: dict) -> CommandResults:
+        """Creates a password-protected ZIP file containing files from VirusTotal."""
+        hashes = argToList(args['file'])
+        for hash_ in hashes:
+            raise_if_hash_not_valid(hash_)
+        password = args.get('password')
+        raw_response = client.create_zip(hashes, password)
+        data = raw_response.get('data', {})
+        return CommandResults(
+            f'{INTEGRATION_ENTRY_CONTEXT}.Zip',
+            'id',
+            outputs=data,
+            readable_output=tableToMarkdown(
+                'The request to create the ZIP was submitted successfully!',
+                {
+                    **data,
+                    **data.get('attributes', {})
+                },
+                headers=['id', 'status']
+            )
+        )
+
+
+    def get_zip(client: Client, args: dict) -> CommandResults:
+        """Retrieve information about a ZIP file"""
+        zip_id = args['zip_id']
+        raw_response = client.get_zip(zip_id)
+        data = raw_response['data']
+        status = data.get('attributes', {}).get('status')
+        return CommandResults(
+            f'{INTEGRATION_ENTRY_CONTEXT}.Zip',
+            'id',
+            outputs=data,
+            readable_output=f'ZIP creation status is "{status}"',
+            raw_response=raw_response
+        )
+
+
+    def download_zip(client: Client, args: dict) -> dict:
+        """Download a ZIP file."""
+        zip_id = args['zip_id']
+        response = client.download_zip(zip_id)
+        content = response.content
+        file_name = get_file_name(response.headers.get('Content-Disposition', ''))
+        return fileResult(file_name, content)
+
+
+    def get_pcap_behaviour(client: Client, args: dict) -> dict:
+        """Extracted PCAP from a sandbox analysis"""
+        report_id = args['report_id']
+        content = client.get_pcap_beaviour(report_id)
+        assert isinstance(content, (bytes, str)), 'Response from PCAP Behavior is not a bytes-like object.'
+        return fileResult(f'{report_id}.pcap', content)
+
+
+    def search_intelligence(client: Client, args: dict) -> CommandResults:
+        """Search for files."""
+        query = args['query']
+        limit = arg_to_number(args.get('limit'))
+        order = args.get('order')
+        cursor = args.get('cursor')
+        descriptors_only = arg_to_boolean_can_be_none(args.get('descriptors_only'))
+        raw_response = client.search_intelligence(query, order, limit, cursor, descriptors_only)
+        if not arg_to_boolean_can_be_none(args.get('extended_data')):
+            raw_response['data'] = decrease_data_size(raw_response.get('data', []))
+        data = raw_response['data']
+        return CommandResults(
+            f'{INTEGRATION_ENTRY_CONTEXT}.IntelligenceSearch',
+            'id',
+            outputs=data,
+            raw_response=raw_response
+        )
+
+
+    def get_livehunt_rule(client: Client, args: dict) -> CommandResults:
+        """Retrieve a VT Hunting Livehunt ruleset."""
+        id_ = args['id']
+        raw_response = client.get_livehunt_rule_by_id(id_)
+        data = raw_response.get('data', {})
+        readable_output = data.get('attributes')
+        return CommandResults(
+            f'{INTEGRATION_ENTRY_CONTEXT}.LiveHuntRule',
+            'id',
+            outputs=data,
+            raw_response=raw_response,
+            readable_output=tableToMarkdown(
+                f'Livehunt Ruleset {id_}',
+                readable_output,
+                headers=['name', 'enabled', 'rule_names']
+            )
+        )
+
+
+    def list_livehunt_rules(client: Client, args: dict) -> CommandResults:
+        """Retrieve a VT Hunting Livehunt rulesets."""
+        enabled = None if not args.get('enabled') else arg_to_boolean_can_be_none(args.get('enabled'))
+        rule_content = args.get('rule_content')
+        name = args.get('name')
+        order = args.get('order')
+        limit = arg_to_number_must_int(args.get('limit'))
+        raw_response = client.list_livehunt_rules(
+            limit=limit, name=name, enabled=enabled, rule_content=rule_content, order=order
+        )
+        data = raw_response.get('data', [])
+        return CommandResults(
+            f'{INTEGRATION_ENTRY_CONTEXT}.LiveHuntRule',
+            'id',
+            outputs=data,
+            raw_response=raw_response,
+            readable_output=tableToMarkdown(
+                'VT Hunting Livehunt rulesets',
+                [{
+                    **item.get('attributes', {}),
+                    'id': item.get('id')
+                } for item in data],
+                headers=['id', 'name', 'enabled', 'rule_names']
+            )
+        )
+
+
+    def create_livehunt_rule(client: Client, args: dict) -> CommandResults:
+        """Create a new VT Hunting Livehunt ruleset"""
+        name = args['name']
+        yara_rule = stringUnEscape(args['yara_rule'])
+        # optional
+        enabled = None if args.get('enabled') == "None" else arg_to_boolean_can_be_none(args.get('enabled'))
+        notification_emails = argToList(args.get('notification_emails'))
+        limit = arg_to_number(args.get('limit'))
+        raw_response = client.create_livehunt_rule(name, yara_rule, enabled, limit, notification_emails)
+        outputs = raw_response.get('data', {})
+        return CommandResults(
+            'VirusTotal.LiveHuntRule',
+            'id',
+            outputs=outputs,
+            raw_response=raw_response,
+            readable_output=tableToMarkdown(
+                f'New rule "{name}" was created successfully',
+                {
+                    **outputs,
+                    **outputs.get('attributes', {})
+                },
+                headers=['id', 'name', 'number_of_rules']
+            )
+        )
+
+
+    def update_livehunt_rules(client: Client, args: dict) -> CommandResults:
+        """Create a new VT Hunting Livehunt ruleset"""
+        id_ = args['id']
+        yara_rule = args.get('yara_rule')
+        enabled = arg_to_boolean_can_be_none(args.get('enabled'))
+        notification_emails = argToList(args.get('notification_emails'))
+        limit = arg_to_number(args.get('limit'))
+        raw_response = client.update_livehunt_rule(id_, yara_rule, enabled, limit, notification_emails)
+        outputs = raw_response.get('data', {})
+        return CommandResults(
+            'VirusTotal.LiveHuntRule',
+            'id',
+            outputs=outputs,
+            raw_response=raw_response,
+            readable_output=tableToMarkdown(
+                f'Rule "{id_}" has been updated!',
+                {
+                    **outputs,
+                    **outputs.get('attributes', {})
+                },
+                headers=['id', 'name', 'number_of_rules']
+            )
+        )
+
+
+    def delete_livehunt_rules(client: Client, args: dict) -> CommandResults:
+        """Delete a VT Hunting Livehunt ruleset."""
+        id_ = args['id']
+        client.delete_livehunt_rule(id_)
+        return CommandResults(
+            readable_output=f'Rule "{id_}" was deleted successfully'
+        )
+
+
+    def list_notifications(client: Client, args: dict) -> CommandResults:
+        """Retrieve VT Hunting Livehunt notifications."""
+        limit = arg_to_number_must_int(args.get('limit'))
+        assert limit <= 40, 'limit can\'t be above 40'
+        if to_time := args.get('to_time'):
+            to_time = parse(to_time)
+        if from_time := args.get('from_time'):
+            from_time = parse(from_time)
+        if from_time and to_time:
+            if from_time > to_time:
+                raise DemistoException(f'The from_time argument is later then to_time. {from_time} > {to_time}')
+        cursor = args.get('cursor')
+        tag = args.get('tag')
+        outputs = raw_response = client.list_notifications(from_time, to_time, tag, cursor, limit)
+        if not arg_to_boolean_can_be_none(args.get('extended_data')):
+            outputs = copy.deepcopy(raw_response)
+            outputs['data'] = decrease_data_size(outputs.get('data', []))
+        return CommandResults(
+            f'{INTEGRATION_ENTRY_CONTEXT}.LiveHuntNotification',
+            'id',
+            readable_output=tableToMarkdown(
+                'Notifications found:',
+                outputs.get('data', {}),
+                headers=['id']
+            ),
+            outputs=outputs,
+            raw_response=raw_response
+        )
+
+
+    def list_notifications_files_list(client: Client, args: dict) -> CommandResults:
+        """Retrieve file objects for VT Hunting Livehunt notifications"""
+        filter_ = args.get('filter')
+        limit = arg_to_number(args.get('limit'))
+        cursor = args.get('cursor')
+        outputs = raw_response = client.list_notifications_files(filter_, cursor, limit)
+        if not arg_to_boolean_can_be_none(args.get('extended_data')):
+            outputs = copy.deepcopy(raw_response)
+            outputs['data'] = decrease_data_size(outputs.get('data', []))
+        return CommandResults(
+            f'{INTEGRATION_ENTRY_CONTEXT}.LiveHuntFiles',
+            'id',
+            readable_output=tableToMarkdown(
+                'Notifications file listed:',
+                [
+                    {**item.get('attributes', {}), 'id': item.get('id')} for item in raw_response.get('data', [])
+                ],
+                headers=['id', 'meaningful_name', 'last_analysis_stats']
+            ),
+            outputs=outputs,
+            raw_response=raw_response
+        )
+
+
+    def list_notifications_files_list_by_hash(client: Client, args: dict) -> List[CommandResults]:
+        """Retrieve file objects for VT Hunting Livehunt notifications by hash."""
+        hashes_only = [hash_ for hash_ in argToList(args.get('hash')) if get_hash_type(hash_) != 'Unknown']
+        cursor = args.get('cursor')
+        results = list()
+        for hash_ in hashes_only:
+            try:
+                outputs = raw_response = client.list_notifications_files(hash_, cursor, limit=1)
+                if not arg_to_boolean_can_be_none(args.get('extended_data')):
+                    outputs = copy.deepcopy(raw_response)
+                    outputs['data'] = decrease_data_size(outputs.get('data', []))
+                results.append(CommandResults(
+                    f'{INTEGRATION_ENTRY_CONTEXT}.LiveHuntFiles',
+                    'id',
+                    readable_output=tableToMarkdown(
+                        'Notifications file listed:',
+                        [
+                            {**item.get('attributes', {}), 'id': item.get('id')} for item in raw_response.get('data', [])
+                        ],
+                        headers=['id', 'meaningful_name', 'last_analysis_stats']
+                    ),
+                    outputs=outputs,
+                    raw_response=raw_response
+                ))
+            except Exception as exc:
+                err = f'Could not process hash "{hash_}"'
+                demisto.debug(f'{err}\n{exc}')
+                results.append(CommandResults(readable_output=err))
+        return results
+
+
+    def list_files_by_rule(client: Client, args: dict) -> CommandResults:
+        """Get a VT Hunting Livehunt ruleset by hunting notification files relationship."""
+        id_ = args['id']
+        limit = arg_to_number(args.get('limit'))
+        cursor = args.get(args.get('cursor'))
+        raw_response = client.list_files_by_rule(id_, cursor, limit)
+        data = raw_response.get('data', [])
+        return CommandResults(
+            f'{INTEGRATION_ENTRY_CONTEXT}.LiveHuntFiles',
+            'id',
+            readable_output=tableToMarkdown(
+                f'Files found by rule {id_}',
+                data
+            ),
+            outputs=data,
+            raw_response=raw_response
+        )
+
+
+    def list_retrohunt_jobs(client: Client, args: dict) -> CommandResults:
+        """Retrieve retrohunt jobs"""
+        limit = arg_to_number(args.get('limit'))
+        cursor = args.get('cursor')
+        filter_ = args.get('filter')
+        raw_response = client.list_retrohunt_jobs(filter_, cursor, limit)
+        data = raw_response.get('data', [])
+        return CommandResults(
+            f'{INTEGRATION_ENTRY_CONTEXT}.RetroHuntJob',
+            'id',
+            readable_output=tableToMarkdown(
+                'Retrohunt jobs listed:',
+                [
+                    {
+                        **item.get('attributes', {}),
+                        'id': item.get('id')
+                    } for item in data
+                ],
+                headers=['id', 'corpus', 'status', 'rules']
+            ),
+            outputs=data,
+            raw_response=raw_response
+        )
+
+
+    def create_retrohunt_jobs(client: Client, args: dict) -> CommandResults:
+        """Create a new retrohunt job."""
+        rules = stringUnEscape(args.get('rules'))
+        notification_email = argToList(args.get('notification_email'))
+        corpus = args.get('corpus')  # main / goodware
+        start_time, end_time = args.get('start_time'), args.get('end_time')
+        time_range = get_time_range_object(start_time, end_time)
+        raw_response = client.create_retrohunt_job(rules, notification_email, corpus, time_range)
+        data = raw_response.get('data', {})
+        return CommandResults(
+            f'{INTEGRATION_ENTRY_CONTEXT}.RetroHuntJob',
+            'id',
+            readable_output=tableToMarkdown(
+                'Retrohunt job has been successfully created',
+                {
+                    **data,
+                    **data.get('attributes', {})
+                },
+                headers=['id', 'corpus', 'status', 'rules']
+            ),
+            outputs=data,
+            raw_response=raw_response
+        )
+
+
+    def get_retrohunt_job_by_id(client: Client, args: dict) -> CommandResults:
+        """Retrieve a retrohunt job."""
+        id_ = args['id']
+        raw_response = client.get_retrohunt_job_by_id(id_)
+        data = raw_response.get('data', {})
+        readable_inputs = {
+            **data,
+            **data.get('attributes', {})
+        }
+
+        readable_inputs.pop('attributes', None)
+        readable_inputs = convert_epoch_to_readable(readable_inputs)
+
+        return CommandResults(
+            f'{INTEGRATION_ENTRY_CONTEXT}.RetroHuntJob',
+            'id',
+            readable_output=tableToMarkdown(
+                f'Retrohunt job: {id_}',
+                readable_inputs
+            ),
+            outputs=data,
+            raw_response=raw_response
+        )
+
+
+    def get_retrohunt_job_matching_files(client: Client, args: dict) -> CommandResults:
+        """Retrieve matches for a retrohunt job matching file relationship."""
+        id_ = args['id']
+        raw_response = client.get_retrohunt_job_matching_files(id_)
+        if not arg_to_boolean_can_be_none(args.get('extended_data')):
+            raw_response['data'] = decrease_data_size(raw_response['data'])
+        data = raw_response.get('data', [])
+        return CommandResults(
+            f'{INTEGRATION_ENTRY_CONTEXT}.RetroHuntJobFiles',
+            'id',
+            readable_output=tableToMarkdown(
+                f'Files matching id "{id_}"',
+                [
+                    {
+                        **item.get('attributes', {}),
+                        'id': item.get('id')
+                    } for item in data
+                ],
+                headers=['sha256', 'popular_threat_classification', 'reputation']
+            ),
+            outputs=data,
+            raw_response=raw_response
+        )
+
+
+    def get_quota_limits(client: Client, args: dict) -> CommandResults:
+        """Retrieve user's API usage."""
+        id_ = args.get('id', client.api_key)
+        raw_response = client.get_quota_limits(id_)
+        data = raw_response.get('data', {})
+        return CommandResults(
+            f'{INTEGRATION_ENTRY_CONTEXT}.QuotaLimits',
+            readable_output=tableToMarkdown(
+                'Monthly quota data: More data can be found in the Context.',
+                {key: value for key, value in data.items() if 'monthly' in key}
+            ),
+            outputs=data,
+            raw_response=raw_response
+        )
+
+
+    def fetch_incidents(client: Client, params: dict, last_run_date: datetime) -> Tuple[List[dict], datetime]:
+        tag = params.get('tag')
+        max_fetch = arg_to_number_must_int(params.get('max_fetch', 10))
+        raw_response = client.list_notifications(from_time=last_run_date, tag=tag, limit=max_fetch)
+        incidents = list()
+        for notification in raw_response.get('data', []):
+            attributes = notification.get('attributes', {})
+            date = parse(str(attributes.get('date')))  # epoch int to str
+            if not date:
+                date = last_run_date
+            elif date > last_run_date:
+                last_run_date = date
+            incidents.append(
+                {
+                    'name': f'VirusTotal Intelligence LiveHunt Notification: {notification.get("id")}',
+                    'occurred': f'{date.replace(microsecond=0).isoformat()}Z',
+                    'rawJSON': json.dumps(notification)
+                }
+            )
+        if incidents:
+            # To not fetch duplicate notifications. If not incidents - Nothing found. keep going
+            last_run_date += timedelta(seconds=1)
+        return incidents, last_run_date
+
+
+    def search_file(client: Client, args: dict) -> CommandResults:
+        query = args['query']
+        limit = 1000 if argToBoolean(args.get('fullResponse')) else 50
+        raw_response = client.search_intelligence(query, limit=limit, descriptors_only=True)
+        hashes = [item['id'] for item in raw_response.get('data', []) if item.get('id')]
+        return CommandResults(
+            f'{INTEGRATION_ENTRY_CONTEXT}.SearchFile',
+            'Query',
+            readable_output=tableToMarkdown(
+                f'Found hashes for query: "{query}"',
+                hashes,
+                headers=['Found hashes']
+            ),
+            outputs={
+                'Query': query,
+                'SearchResult': hashes
+            },
+            raw_response=raw_response
+        )
+
+
+    def main():
+        """main function, parses params and runs command functions
+        """
+        results: Union[str, CommandResults, dict, List[CommandResults]]
+        command = demisto.command()
+        args = demisto.args()
+        demisto.debug(f'Command being called is {command}')
+        try:
+            params = demisto.params()
+            handle_proxy()
+            client = Client(params)
+            if command == 'fetch-incidents':
+                incidents, new_run_date = fetch_incidents(client, params, get_last_run_time())
+                demisto.setLastRun({'date': new_run_date.isoformat()})
+                demisto.incidents(incidents)
+            else:
+                if command == 'test-module':
+                    results = test_module(client, params)
+                elif command == f'{COMMAND_PREFIX}-download-file':
+                    results = download_file(client, args)
+                elif command == f'{COMMAND_PREFIX}-zip-create':
+                    results = create_zip(client, args)
+                elif command == f'{COMMAND_PREFIX}-zip-get':
+                    results = get_zip(client, args)
+                elif command == f'{COMMAND_PREFIX}-zip-download':
+                    results = download_zip(client, args)
+                elif command == f'{COMMAND_PREFIX}-file-sandbox-pcap':
+                    results = get_pcap_behaviour(client, args)
+                elif command == f'{COMMAND_PREFIX}-intelligence-search':
+                    results = search_intelligence(client, args)
+                elif command in (f'{COMMAND_PREFIX}-search-file', 'vt-private-search-file'):
+                    results = search_file(client, args)
+                elif command == f'{COMMAND_PREFIX}-livehunt-rules-list':
+                    results = list_livehunt_rules(client, args)
+                elif command == f'{COMMAND_PREFIX}-livehunt-rules-get-by-id':
+                    results = get_livehunt_rule(client, args)
+                elif command == f'{COMMAND_PREFIX}-livehunt-rules-create':
+                    results = create_livehunt_rule(client, args)
+                elif command == f'{COMMAND_PREFIX}-livehunt-rules-update':
+                    results = update_livehunt_rules(client, args)
+                elif command == f'{COMMAND_PREFIX}-livehunt-rules-delete':
+                    results = delete_livehunt_rules(client, args)
+                elif command == f'{COMMAND_PREFIX}-livehunt-notifications-list':
+                    results = list_notifications(client, args)
+                elif command == f'{COMMAND_PREFIX}-livehunt-notifications-files-list':
+                    results = list_notifications_files_list(client, args)
+                elif command == f'{COMMAND_PREFIX}-livehunt-notifications-files-get-by-hash':
+                    results = list_notifications_files_list_by_hash(client, args)
+                elif command == f'{COMMAND_PREFIX}-livehunt-rule-list-files':
+                    results = list_files_by_rule(client, args)
+                elif command == f'{COMMAND_PREFIX}-retrohunt-jobs-list':
+                    results = list_retrohunt_jobs(client, args)
+                elif command == f'{COMMAND_PREFIX}-retrohunt-jobs-get-by-id':
+                    results = get_retrohunt_job_by_id(client, args)
+                elif command == f'{COMMAND_PREFIX}-retrohunt-jobs-create':
+                    results = create_retrohunt_jobs(client, args)
+                elif command == f'{COMMAND_PREFIX}-retrohunt-jobs-get-matching-files':
+                    results = get_retrohunt_job_matching_files(client, args)
+                elif command == f'{COMMAND_PREFIX}-quota-limits-list':
+                    results = get_quota_limits(client, args)
+                else:
+                    raise NotImplementedError(f'Command "{command}" is not implemented')
+                return_results(results)
+        # Log exceptions and return errors
+        except Exception as e:
+            demisto.error(traceback.format_exc())  # print the traceback
+            return_error(f'Failed to execute {demisto.command()} command.\nError:\n{str(e)}')
+
+
+    ''' ENTRY POINT '''
+
+    if __name__ in ('__main__', '__builtin__', 'builtins'):
+        main()
+
+    register_module_line('VirusTotal - Premium (API v3)', 'end', __line__())
+  subtype: python3
+  type: python
+system: true
