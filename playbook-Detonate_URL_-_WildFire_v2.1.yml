@@ -1,0 +1,787 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 2.1.42
+    packID: Palo_Alto_Networks_WildFire
+    packName: WildFire by Palo Alto Networks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+deprecated: true
+description: Deprecated. Use Detonate URL - WildFire v2.2 instead.
+id: Detonate URL - WildFire v2.1
+inputs:
+- description: URL of the webpage or file URL to detonate. The URL is taken from the
+    context.
+  key: URL
+  playbookInputQuery: null
+  required: false
+  value:
+    complex:
+      accessor: Data
+      root: URL
+- description: Duration for executing the polling (in minutes).
+  key: Interval
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: "1"
+- description: The duration after which to stop polling and to resume the playbook
+    (in minutes).
+  key: Timeout
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: "60"
+- description: The resource type to download. Default is PDF. XML is also possible.
+  key: ReportFileType
+  playbookInputQuery: null
+  required: false
+  value: {}
+name: Detonate URL - WildFire v2.1
+outputs:
+- contextPath: DBotScore
+  description: The DBotScore object.
+  type: unknown
+- contextPath: DBotScore.Score
+  description: The actual score.
+  type: number
+- contextPath: File.Size
+  description: File size.
+  type: number
+- contextPath: File.MD5
+  description: MD5 hash.
+  type: string
+- contextPath: File.SHA1
+  description: SHA1 hash.
+  type: string
+- contextPath: File.Type
+  description: File type e.g. "PE".
+  type: string
+- contextPath: File.SHA256
+  description: SHA256 hash.
+  type: string
+- contextPath: File.EntryID
+  description: The Entry ID of the sample.
+  type: string
+- contextPath: File.Malicious.Vendor
+  description: For malicious files, the vendor that determined that the file is malicious.
+  type: string
+- contextPath: File.Name
+  description: Filename.
+  type: string
+- contextPath: File.Malicious.Description
+  description: For malicious files, the reason the vendor determined that the file
+    is malicious.
+  type: string
+- contextPath: DBotScore.Indicator
+  description: The indicator we tested.
+  type: string
+- contextPath: DBotScore.Type
+  description: The type of indicator.
+  type: string
+- contextPath: DBotScore.Vendor
+  description: Vendor used to calculate the score.
+  type: string
+- contextPath: IP.Address
+  description: IPs relevant to the sample.
+  type: string
+- contextPath: File
+  description: The File object.
+  type: unknown
+- contextPath: InfoFile
+  description: The report file object.
+  type: unknown
+- contextPath: InfoFile.EntryID
+  description: The EntryID of the report file.
+  type: string
+- contextPath: InfoFile.Extension
+  description: The extension of the report file.
+  type: string
+- contextPath: InfoFile.Name
+  description: The name of the report file.
+  type: string
+- contextPath: InfoFile.Info
+  description: The info of the report file.
+  type: string
+- contextPath: InfoFile.Size
+  description: The size of the report file.
+  type: number
+- contextPath: InfoFile.Type
+  description: The type of the report file.
+  type: string
+- contextPath: File.Malicious
+  description: The malicious object.
+  type: unknown
+- contextPath: WildFire.Report
+  description: The submission object.
+  type: unknown
+- contextPath: WildFire.Report.MD5
+  description: MD5 of the submission.
+  type: string
+- contextPath: WildFire.Report.SHA256
+  description: SHA256 of the submission.
+  type: string
+- contextPath: WildFire.Report.FileType
+  description: The type of the submission.
+  type: string
+- contextPath: WildFire.Report.Status
+  description: The status of the submission.
+  type: string
+- contextPath: WildFire.Report.Size
+  description: The size of the submission.
+  type: number
+- contextPath: WildFire.Report.URL
+  description: URL of the submission.
+  type: string
+- contextPath: WildFire.Report.detection_reasons
+  description: The detection reasons object.
+  type: unknown
+- contextPath: WildFire.Report.detection_reasons.description
+  description: Reason for the detection verdict.
+  type: string
+- contextPath: WildFire.Report.detection_reasons.name
+  description: Name of the detection.
+  type: string
+- contextPath: WildFire.Report.detection_reasons.type
+  description: Type of the detection.
+  type: string
+- contextPath: WildFire.Report.detection_reasons.verdict
+  description: Verdict of the detection.
+  type: string
+- contextPath: WildFire.Report.detection_reasons.artifacts
+  description: Artifacts for the detection reasons.
+  type: string
+- contextPath: WildFire.Report.iocs
+  description: Associated IOCs.
+  type: string
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "7"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 1b1b3125-d39b-4930-89fc-c9ff36ac559c
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: 1b1b3125-d39b-4930-89fc-c9ff36ac559c
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 50
+        }
+      }
+  "1":
+    continueonerror: true
+    continueonerrortype: ""
+    id: "1"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "17"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      upload:
+        complex:
+          root: inputs.URL
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Uploads the URL of a remote file to WildFire for analysis.
+      id: cc1e5c47-51c1-4cdb-8fb6-275c1f1fd8e7
+      iscommand: true
+      name: WildFire Upload File URL
+      script: '|||wildfire-upload-file-url'
+      type: regular
+      version: -1
+    taskid: cc1e5c47-51c1-4cdb-8fb6-275c1f1fd8e7
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 490,
+          "y": 545
+        }
+      }
+  "2":
+    continueonerrortype: ""
+    id: "2"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 0
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "8"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      Ids:
+        complex:
+          accessor: Report.URL
+          root: WildFire
+      Interval:
+        complex:
+          root: inputs.Interval
+      PollingCommandArgName:
+        simple: url
+      PollingCommandName:
+        simple: wildfire-report
+      Timeout:
+        complex:
+          root: inputs.Timeout
+      dt:
+        simple: WildFire.Report(val.Status != 'Success').URL
+    separatecontext: true
+    skipunavailable: false
+    task:
+      brand: ""
+      description: |-
+        Use this playbook as a sub-playbook to block execution of the master playbook until a remote action is complete.
+        This playbook implements polling by continuously running the command in Step \#2 until the operation completes.
+        The remote action should have the following structure:
+
+        1. Initiate the operation.
+        2. Poll to check if the operation completed.
+        3. (optional) Get the results of the operation.
+      id: 2ba5921c-3f35-4bef-8a5d-4965d1a211eb
+      iscommand: false
+      name: GenericPolling
+      playbookId: GenericPolling
+      type: playbook
+      version: -1
+    taskid: 2ba5921c-3f35-4bef-8a5d-4965d1a211eb
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 387.5,
+          "y": 1770
+        }
+      }
+  "5":
+    continueonerrortype: ""
+    id: "5"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 74b54d79-9464-4112-824b-e836cbce4dbc
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 74b54d79-9464-4112-824b-e836cbce4dbc
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 2120
+        }
+      }
+  "6":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: inputs.URL
+          operator: isExists
+      label: "yes"
+    continueonerrortype: ""
+    id: "6"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "5"
+      "yes":
+      - "1"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Look for file URLs to detonate
+      id: d4449595-5c9b-4dfd-8960-35f1d1dc309b
+      iscommand: false
+      name: Is there a URL to detonate?
+      type: condition
+      version: -1
+    taskid: d4449595-5c9b-4dfd-8960-35f1d1dc309b
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 377.5,
+          "y": 370
+        }
+      }
+  "7":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                filters:
+                - - left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: WildFire-v2
+                root: modules
+                transformers:
+                - args:
+                    field:
+                      value:
+                        simple: state
+                  operator: getField
+          operator: isEqualString
+          right:
+            value:
+              simple: active
+      label: "yes"
+    continueonerrortype: ""
+    id: "7"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "5"
+      "yes":
+      - "6"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Check if integration instance is enabled.
+      id: 8089eb7a-a9e8-4efd-8c2e-74a4583af22e
+      iscommand: false
+      name: Is WildFire-v2 enabled?
+      type: condition
+      version: -1
+    taskid: 8089eb7a-a9e8-4efd-8c2e-74a4583af22e
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 195
+        }
+      }
+  "8":
+    continueonerrortype: ""
+    id: "8"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "5"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      url:
+        complex:
+          accessor: Report.URL
+          root: WildFire
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Retrieves results for a file hash using WildFire.
+      id: f0f4a63c-bd8b-4653-8b06-1a74ad35e376
+      iscommand: true
+      name: WildFire Get Report
+      script: '|||wildfire-report'
+      type: regular
+      version: -1
+    taskid: f0f4a63c-bd8b-4653-8b06-1a74ad35e376
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 602.5,
+          "y": 1945
+        }
+      }
+  "9":
+    continueonerrortype: ""
+    id: "9"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "15"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      upload:
+        complex:
+          root: inputs.URL
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Uploads a URL of a webpage to WildFire for analysis.
+      id: f3212167-fc1a-48ef-8a85-2f1176cd01d5
+      iscommand: true
+      name: WildFire Upload URL
+      script: '|||wildfire-upload-url'
+      type: regular
+      version: -1
+    taskid: f3212167-fc1a-48ef-8a85-2f1176cd01d5
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 275,
+          "y": 1245
+        }
+      }
+  "11":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.URL
+                transformers:
+                - operator: count
+          operator: isEqualNumber
+          right:
+            iscontext: true
+            value:
+              complex:
+                accessor: URL
+                root: WildFire.Report
+                transformers:
+                - operator: count
+      label: "yes"
+    continueonerrortype: ""
+    id: "11"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "9"
+      "yes":
+      - "13"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Was the file successfully submitted using the URL provided.
+      id: 41cbd423-2161-4942-80c6-d09445b3a9a4
+      iscommand: false
+      name: Was there an unsuccessful file url submission?
+      type: condition
+      version: -1
+    taskid: 41cbd423-2161-4942-80c6-d09445b3a9a4
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 490,
+          "y": 1070
+        }
+      }
+  "12":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: Report.URL
+                filters:
+                - - left:
+                      iscontext: true
+                      value:
+                        simple: WildFire.Report.Status
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: Pending
+                root: WildFire
+          operator: isExists
+      label: "yes"
+    continueonerrortype: ""
+    id: "12"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "5"
+      "yes":
+      - "2"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 82a36b69-5d34-4346-85c2-7e8545cb16c1
+      iscommand: false
+      name: Was the file uploaded successfully and is a report pending?
+      type: condition
+      version: -1
+    taskid: 82a36b69-5d34-4346-85c2-7e8545cb16c1
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 275,
+          "y": 1595
+        }
+      }
+  "13":
+    continueonerrortype: ""
+    id: "13"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 0
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "8"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      Ids:
+        complex:
+          accessor: Report.SHA256
+          root: WildFire
+      Interval:
+        complex:
+          root: inputs.Interval
+      PollingCommandArgName:
+        simple: sha256
+      PollingCommandName:
+        simple: wildfire-report
+      Timeout:
+        complex:
+          root: inputs.Timeout
+      dt:
+        simple: WildFire.Report(val.Status != 'Success').SHA256
+    separatecontext: true
+    skipunavailable: false
+    task:
+      brand: ""
+      description: |-
+        Use this playbook as a sub-playbook to block execution of the master playbook until a remote action is complete.
+        This playbook implements polling by continuously running the command in Step \#2 until the operation completes.
+        The remote action should have the following structure:
+
+        1. Initiate the operation.
+        2. Poll to check if the operation completed.
+        3. (optional) Get the results of the operation.
+      id: 838162d1-3bac-4e12-8fdc-a9a645b35a13
+      iscommand: false
+      name: GenericPolling
+      playbookId: GenericPolling
+      type: playbook
+      version: -1
+    taskid: 838162d1-3bac-4e12-8fdc-a9a645b35a13
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 817.5,
+          "y": 1770
+        }
+      }
+  "15":
+    continueonerrortype: ""
+    id: "15"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "12"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      url:
+        complex:
+          accessor: Report.URL
+          root: WildFire
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks if a report already exists for the file or URL submitted.
+      id: 11c1bedb-67b4-4714-85b0-cbe931920d44
+      iscommand: true
+      name: WildFire Get Report - Check If a Report already exists
+      script: '|||wildfire-report'
+      type: regular
+      version: -1
+    taskid: 11c1bedb-67b4-4714-85b0-cbe931920d44
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 275,
+          "y": 1420
+        }
+      }
+  "16":
+    continueonerrortype: ""
+    id: "16"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "11"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      url:
+        complex:
+          accessor: Report.URL
+          root: WildFire
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks if a report already exists for the file or URL submitted.
+      id: 5b04ec2c-a219-4cde-81e8-e3addccd3e8d
+      iscommand: true
+      name: WildFire Get Report - Check If a Report already exists
+      script: '|||wildfire-report'
+      type: regular
+      version: -1
+    taskid: 5b04ec2c-a219-4cde-81e8-e3addccd3e8d
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 895
+        }
+      }
+  "17":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: URL
+                root: WildFire.Report
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "17"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "11"
+      "yes":
+      - "16"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Was the file successfully submitted using the URL provided.
+      id: c2ca0b0e-9cd0-499d-8076-1638adc2fb37
+      iscommand: false
+      name: Was there a successful file url submission?
+      type: condition
+      version: -1
+    taskid: c2ca0b0e-9cd0-499d-8076-1638adc2fb37
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 490,
+          "y": 720
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {
+      "7_5_#default#": 0.7
+    },
+    "paper": {
+      "dimensions": {
+        "height": 2135,
+        "width": 1147.5,
+        "x": 50,
+        "y": 50
+      }
+    }
+  }
