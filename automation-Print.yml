@@ -1,0 +1,43 @@
+args:
+- default: true
+  description: The value to print to war room, if you want to print a value stored
+    in context, value should be in format ${key}, where key is the name of context
+    key
+  name: value
+  required: true
+comment: Prints text to war room (Markdown supported)
+commonfields:
+  id: Print
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: Print
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  // pack version: 1.14.2
+  return {
+      HumanReadableFormat: formats.markdown,
+      Type: entryTypes.note,
+      Contents: args.value,
+      HumanReadable: args.value
+  };
+scripttarget: 0
+system: true
+tags:
+- Utility
+type: javascript
