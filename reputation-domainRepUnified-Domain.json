@@ -1,0 +1,476 @@
+{
+	"cacheVersn": 0,
+	"contextPath": "Domain(val.Name \u0026\u0026 val.Name === obj.Name)",
+	"contextValue": "Name",
+	"defaultMapping": {
+		"admincountry": {
+			"complex": {
+				"accessor": "Admin.Country",
+				"filters": [],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"adminemail": {
+			"complex": {
+				"accessor": "Admin.Email",
+				"filters": [],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"adminname": {
+			"complex": {
+				"accessor": "Admin.Name",
+				"filters": [],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"adminphone": {
+			"complex": {
+				"accessor": "Admin.Phone",
+				"filters": [],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"associations": {
+			"complex": {
+				"accessor": "Associations",
+				"filters": [],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"blocked": {
+			"complex": {
+				"accessor": "Blocked",
+				"filters": [],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"communitynotes": {
+			"complex": {
+				"accessor": "CommunityNotes",
+				"filters": [],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"creationdate": {
+			"complex": {
+				"accessor": "CreationDate",
+				"filters": [
+					[
+						{
+							"left": {
+								"isContext": true,
+								"value": {
+									"simple": "Domain.CreationDate"
+								}
+							},
+							"operator": "isExists"
+						}
+					]
+				],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					},
+					{
+						"args": {
+							"dayfirst": {
+								"isContext": false
+							},
+							"fuzzy": {
+								"isContext": false
+							},
+							"yearfirst": {
+								"isContext": false
+							}
+						},
+						"operator": "DateStringToISOFormat"
+					}
+				]
+			}
+		},
+		"detectionengines": {
+			"complex": {
+				"accessor": "DetectionEngines",
+				"filters": [],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"dns": {
+			"complex": {
+				"accessor": "DNS",
+				"filters": [],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"domainstatus": {
+			"complex": {
+				"accessor": "DomainStatus",
+				"filters": [],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"expirationdate": {
+			"complex": {
+				"accessor": "ExpirationDate",
+				"filters": [],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"feedrelatedindicators": {
+			"complex": {
+				"accessor": "FeedRelatedIndicators",
+				"filters": [],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"internal": {
+			"complex": {
+				"accessor": "Internal",
+				"filters": [],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"malwarefamily": {
+			"complex": {
+				"accessor": "MalwareFamily",
+				"filters": [],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"nameservers": {
+			"complex": {
+				"accessor": "NameServers",
+				"filters": [],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"organization": {
+			"complex": {
+				"accessor": "Admin.Organization",
+				"filters": [],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"positivedetections": {
+			"complex": {
+				"accessor": "PositiveDetections",
+				"filters": [],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"publications": {
+			"complex": {
+				"accessor": "Publications",
+				"filters": [],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"registrantcountry": {
+			"complex": {
+				"accessor": "Registrant.country",
+				"filters": [],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"registrantemail": {
+			"complex": {
+				"accessor": "Registrant.email",
+				"filters": [],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"registrantname": {
+			"complex": {
+				"accessor": "Registrant.name",
+				"filters": [],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"registrantphone": {
+			"complex": {
+				"accessor": "Registrant.phone",
+				"filters": [],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"registrarabuseemail": {
+			"complex": {
+				"accessor": "Whois.Registrar.AbuseEmail",
+				"filters": [],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"registrarabusephone": {
+			"complex": {
+				"accessor": "Registrar.AbusePhone",
+				"filters": [],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"registrarname": {
+			"complex": {
+				"accessor": "Whois.Registrar.Name",
+				"filters": [],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"reportedby": {
+			"complex": {
+				"accessor": "ReportedBy",
+				"filters": [],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"subdomains": {
+			"complex": {
+				"accessor": "Subdomains",
+				"filters": [],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"tags": {
+			"complex": {
+				"accessor": "Tags",
+				"filters": [],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"threattypes": {
+			"complex": {
+				"accessor": "ThreatTypes",
+				"filters": [],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"trafficlightprotocoltlp": {
+			"complex": {
+				"accessor": "TrafficLightProtocol",
+				"filters": [],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"updateddate": {
+			"complex": {
+				"accessor": "UpdatedDate",
+				"filters": [
+					[
+						{
+							"left": {
+								"isContext": true,
+								"value": {
+									"simple": "Domain.UpdatedDate"
+								}
+							},
+							"operator": "isExists"
+						}
+					]
+				],
+				"root": "Domain",
+				"transformers": [
+					{
+						"operator": "uniq"
+					},
+					{
+						"args": {
+							"dayfirst": {
+								"isContext": false
+							},
+							"fuzzy": {
+								"isContext": false
+							},
+							"yearfirst": {
+								"isContext": false
+							}
+						},
+						"operator": "DateStringToISOFormat"
+					}
+				]
+			}
+		}
+	},
+	"definitionId": "",
+	"details": "Domain",
+	"disabled": false,
+	"enhancementScriptNames": [
+		"DomainReputation"
+	],
+	"excludedBrands": [],
+	"expiration": 20160,
+	"file": false,
+	"fileHashesPriority": null,
+	"formatScript": "ExtractDomainAndFQDNFromUrlAndEmail",
+	"fromServerVersion": "5.5.0",
+	"id": "domainRepUnified",
+	"itemVersion": "3.4.1",
+	"layout": "domainRepUnified",
+	"legacyNames": null,
+	"locked": false,
+	"manualMapping": null,
+	"mergeContext": false,
+	"packID": "CommonTypes",
+	"packName": "Common Types",
+	"packPropagationLabels": [
+		"all"
+	],
+	"propagationLabels": [],
+	"regex": "(?i)(?P\u003cscheme\u003e(?:http|ftp|hxxp)s?(?:://|-3A__|%3A%2F%2F))?(?:%[\\da-f][\\da-f])?(?P\u003cdomain\u003e(?:[\\p{L}\\d\\-–]+(?:\\.|\\[\\.\\]))+[\\p{L}]{2,})(@|%40)?(?:\\b| |[[:punct:]]|$)",
+	"reputationCommand": "domain",
+	"reputationScriptName": "",
+	"shouldShareComments": false,
+	"system": true,
+	"toServerVersion": "",
+	"updateAfter": 0,
+	"version": -1
+}
