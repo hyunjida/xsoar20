@@ -1,0 +1,103 @@
+args:
+- description: YAML formatted string
+  name: string
+  required: true
+comment: Parses a YAML string into context
+commonfields:
+  id: ParseYAML
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.86272
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: ParseYAML
+outputs:
+- contextPath: ParseYAML
+  description: JSON data loaded from YAML string
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('ParseYAML', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+
+  """
+  Loads and parses a YAML string and outputs to context
+  """
+
+  import traceback
+  from typing import Any, Dict
+
+  import yaml
+
+
+  def load_yaml(stream: str) -> Dict:
+      """Simple YAML Loader function
+
+      Args:
+          stream (str): YAML formatted string
+
+      Returns:
+          Dict: python simple data structure
+      """
+      return yaml.safe_load(stream)
+
+
+  def load_and_parse_yaml_command(args: Dict[str, Any]) -> CommandResults:
+      """XSOAR command function
+
+      Args:
+          args (Dict[str, Any]): XSOAR args
+
+      Raises:
+          ValueError: Returned if no string was passed
+
+      Returns:
+          CommandResults: XSOAR CommandResults object
+      """
+      stream = args.get("string", None)
+
+      if not stream:
+          raise ValueError("string not specified in command args")
+
+      result = load_yaml(stream)
+
+      return CommandResults(
+          outputs_prefix="ParseYAML",
+          outputs_key_field="",
+          outputs=result,
+      )
+
+
+  def main():
+      try:
+          return_results(load_and_parse_yaml_command(demisto.args()))
+      except Exception as e:
+          demisto.error(traceback.format_exc())
+          return_error(f"Failed to execute ParseYAML script. Error: {str(e)}")
+
+
+  if __name__ in ("__main__", "__builtin__", "builtins"):
+      main()
+
+  register_module_line('ParseYAML', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- Utilities
+type: python
