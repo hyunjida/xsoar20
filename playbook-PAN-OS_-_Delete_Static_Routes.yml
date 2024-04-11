@@ -1,0 +1,341 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 2.1.22
+    packID: PAN-OS
+    packName: PAN-OS by Palo Alto Networks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: This playbook deletes a PAN-OS static route from the PAN-OS instance.
+id: PAN-OS - Delete Static Routes
+inputs:
+- description: Name of the virtual router to configure the static routes for.
+  key: virtual_router_name
+  playbookInputQuery: null
+  required: true
+  value: {}
+- description: Enter a name to identify the static route (up to 31 characters). The
+    name is case-sensitive and must be unique. Use only letters, numbers, spaces,
+    hyphens, and underscores.
+  key: route_name
+  playbookInputQuery: null
+  required: true
+  value: {}
+- description: This input established whether to auto-commit the configuration to
+    PAN-OS. Specify Yes/No.
+  key: AutoCommit
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: "No"
+name: PAN-OS - Delete Static Routes
+outputs: []
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "31"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 112c0782-0355-4935-84a2-7dd2d4b33be7
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: 112c0782-0355-4935-84a2-7dd2d4b33be7
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 280,
+          "y": -210
+        }
+      }
+  "7":
+    continueonerrortype: ""
+    id: "7"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: Builtin
+      id: 172ccb68-eb94-4998-8ddb-ae03b9440af7
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 172ccb68-eb94-4998-8ddb-ae03b9440af7
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 280,
+          "y": 770
+        }
+      }
+  "11":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.AutoCommit
+                transformers:
+                - operator: toLowerCase
+          operator: isEqualString
+          right:
+            value:
+              simple: "yes"
+      label: "yes"
+    continueonerrortype: ""
+    id: "11"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "29"
+      "yes":
+      - "32"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 90c8b22c-6bf3-4340-8eb4-da045b1d1768
+      iscommand: false
+      name: Auto commit configuration?
+      type: condition
+      version: -1
+    taskid: 90c8b22c-6bf3-4340-8eb4-da045b1d1768
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 740,
+          "y": 430
+        }
+      }
+  "27":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.route_name
+          operator: isEqualString
+          right:
+            iscontext: true
+            value:
+              simple: Panorama.StaticRoutes.Name
+      label: "yes"
+    continueonerrortype: ""
+    id: "27"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "7"
+      "yes":
+      - "30"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: f0c8e362-f349-4af5-828f-c0a618395993
+      iscommand: false
+      name: Route exists?
+      type: condition
+      version: -1
+    taskid: f0c8e362-f349-4af5-828f-c0a618395993
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 280,
+          "y": 100
+        }
+      }
+  "29":
+    continueonerrortype: ""
+    id: "29"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "7"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 63fb434d-2d3a-449f-819a-6250dbe667eb
+      iscommand: false
+      name: Manually commit PAN-OS configuration
+      type: regular
+      version: -1
+    taskid: 63fb434d-2d3a-449f-819a-6250dbe667eb
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 960,
+          "y": 600
+        }
+      }
+  "30":
+    continueonerrortype: ""
+    id: "30"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "11"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      route_name:
+        complex:
+          root: inputs.route_name
+      virtual_router:
+        complex:
+          root: inputs.virtual_router_name
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Deletes a static route.
+      id: 69933a31-e392-4d8c-8749-6f4265d6ea66
+      iscommand: true
+      name: PAN-OS - delete static route
+      script: '|||pan-os-delete-static-route'
+      type: regular
+      version: -1
+    taskid: 69933a31-e392-4d8c-8749-6f4265d6ea66
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 740,
+          "y": 270
+        }
+      }
+  "31":
+    continueonerrortype: ""
+    id: "31"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "27"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      show_uncommitted:
+        simple: "true"
+      virtual_router:
+        complex:
+          root: inputs.virtual_router_name
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Lists the static routes for a virtual router.
+      id: 19aba921-7ed7-4f1e-8729-0b44e20af5c7
+      iscommand: true
+      name: PAN-OS - list static routes
+      script: '|||pan-os-list-static-routes'
+      type: regular
+      version: -1
+    taskid: 19aba921-7ed7-4f1e-8729-0b44e20af5c7
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 280,
+          "y": -70
+        }
+      }
+  "32":
+    continueonerrortype: ""
+    id: "32"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "7"
+    note: false
+    quietmode: 0
+    separatecontext: true
+    skipunavailable: false
+    task:
+      brand: ""
+      id: b9c8b2c7-1d39-493c-8fbb-a0dde71c372a
+      iscommand: false
+      name: PAN-OS Commit Configuration
+      playbookId: PAN-OS Commit Configuration
+      type: playbook
+      version: -1
+    taskid: b9c8b2c7-1d39-493c-8fbb-a0dde71c372a
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 520,
+          "y": 600
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {
+      "11_28_yes": 0.57,
+      "11_29_#default#": 0.59,
+      "27_7_#default#": 0.34
+    },
+    "paper": {
+      "dimensions": {
+        "height": 1045,
+        "width": 1060,
+        "x": 280,
+        "y": -210
+      }
+    }
+  }
