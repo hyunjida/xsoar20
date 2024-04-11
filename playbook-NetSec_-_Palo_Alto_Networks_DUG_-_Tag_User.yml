@@ -1,0 +1,314 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 2.1.22
+    packID: PAN-OS
+    packName: PAN-OS by Palo Alto Networks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: Block a user by tagging them in the Palo Alto Networks NGFW. This requires
+  PAN-OS 9.1 or higher.
+id: NetSec - Palo Alto Networks DUG - Tag User
+inputs:
+- description: ""
+  key: tagname
+  playbookInputQuery: null
+  required: true
+  value: {}
+- description: ""
+  key: username
+  playbookInputQuery: null
+  required: true
+  value: {}
+- description: Name of the list that contains VIP users who can only be blocked after
+    manager approval.
+  key: VIPListName
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: VIP_Users
+name: NetSec - Palo Alto Networks DUG - Tag User
+outputs: []
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "10"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: e075a102-f806-43e4-85ce-a1aca534406e
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: e075a102-f806-43e4-85ce-a1aca534406e
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 550,
+          "y": -165
+        }
+      }
+  "1":
+    continueonerrortype: ""
+    id: "1"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "9"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      Users:
+        simple: ${inputs.username}
+      tag:
+        simple: ${inputs.tagname}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 2b0f9a00-495e-45d1-8a07-df0818217a83
+      iscommand: true
+      name: Pan-os - Tag User
+      script: '|||pan-os-register-user-tag'
+      type: regular
+      version: -1
+    taskid: 2b0f9a00-495e-45d1-8a07-df0818217a83
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 740
+        }
+      }
+  "5":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: inputs.username
+          operator: inList
+          right:
+            iscontext: true
+            value:
+              complex:
+                root: VIPUsers
+                transformers:
+                - args:
+                    delimiter:
+                      value:
+                        simple: ','
+                  operator: splitAndTrim
+      label: "yes"
+    continueonerrortype: ""
+    id: "5"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "1"
+      "yes":
+      - "6"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: |-
+        Checks whether an inputted user name appears in the VIP list (in Demisto). If the name appears, the name is passed to the admin user to determine if they should be blocked.
+        If the name does not appear, the user is blocked automatically.
+      id: 5d60dd32-6e84-48be-8a7a-6e7334530c31
+      iscommand: false
+      name: Is user in VIP list excluded from automated containment?
+      type: condition
+      version: -1
+    taskid: 5d60dd32-6e84-48be-8a7a-6e7334530c31
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 60,
+          "y": 300
+        }
+      }
+  "6":
+    continueonerrortype: ""
+    defaultassigneecomplex:
+      simple: admin
+    id: "6"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      "no":
+      - "9"
+      "yes":
+      - "1"
+    note: false
+    quietmode: 0
+    restrictedcompletion: true
+    separatecontext: false
+    skipunavailable: false
+    sla:
+      days: 0
+      hours: 1
+      minutes: 0
+      weeks: 0
+    task:
+      brand: ""
+      description: The admin user manually approves or denies the quarantine request.
+      id: 7056a53e-acb5-417c-804b-28def00eb058
+      iscommand: false
+      name: Escalate - Manager approves quarantine for VIP user?
+      type: condition
+      version: -1
+    taskid: 7056a53e-acb5-417c-804b-28def00eb058
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 70,
+          "y": 550
+        }
+      }
+  "9":
+    continueonerrortype: ""
+    id: "9"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 5d58bd45-6dc5-489a-84e5-bfe0d642343f
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 5d58bd45-6dc5-489a-84e5-bfe0d642343f
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 260,
+          "y": 1000
+        }
+      }
+  "10":
+    continueonerrortype: ""
+    id: "10"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "1"
+      "yes":
+      - "11"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      listName:
+        simple: ${inputs.VIPListName}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Check if a list of VIP users exists in Demisto. If the list exists,
+        the playbook retrieves the list. If no list exists, the user is automatically
+        blocked.
+      id: a0c6678d-898f-43d8-8aeb-4a8c6fd83122
+      iscommand: false
+      name: Is there a VIP username list to check?
+      script: IsListExist
+      type: condition
+      version: -1
+    taskid: a0c6678d-898f-43d8-8aeb-4a8c6fd83122
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 550,
+          "y": -30
+        }
+      }
+  "11":
+    continueonerrortype: ""
+    id: "11"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "5"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      extend-context:
+        simple: VIPUsers=.
+      listName:
+        simple: ${inputs.VIPListName}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: Builtin
+      description: commands.local.cmd.list.get
+      id: cada2e5b-96b5-4d58-8e89-0385c9f03656
+      iscommand: true
+      name: Get VIP user list
+      script: Builtin|||getList
+      type: regular
+      version: -1
+    taskid: cada2e5b-96b5-4d58-8e89-0385c9f03656
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 60,
+          "y": 140
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 1230,
+        "width": 870,
+        "x": 60,
+        "y": -165
+      }
+    }
+  }
