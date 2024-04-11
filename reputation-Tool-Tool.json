@@ -1,0 +1,39 @@
+{
+	"cacheVersn": 0,
+	"contextPath": "",
+	"contextValue": "",
+	"defaultMapping": null,
+	"definitionId": "",
+	"details": "Tool",
+	"disabled": false,
+	"enhancementScriptNames": [],
+	"excludedBrands": [],
+	"expiration": 0,
+	"file": false,
+	"fileHashesPriority": null,
+	"formatScript": "",
+	"fromServerVersion": "6.2.0",
+	"id": "Tool",
+	"itemVersion": "3.4.1",
+	"layout": "STIX Tool",
+	"legacyNames": [
+		"STIX Tool"
+	],
+	"locked": false,
+	"manualMapping": {},
+	"mergeContext": false,
+	"packID": "CommonTypes",
+	"packName": "Common Types",
+	"packPropagationLabels": [
+		"all"
+	],
+	"propagationLabels": [],
+	"regex": "",
+	"reputationCommand": "",
+	"reputationScriptName": "",
+	"shouldShareComments": false,
+	"system": true,
+	"toServerVersion": "",
+	"updateAfter": 0,
+	"version": -1
+}
