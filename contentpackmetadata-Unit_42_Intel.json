@@ -1,0 +1,108 @@
+{
+	"author": "Cortex XSOAR",
+	"authorImage": "content/packs/Base/Author_image.png",
+	"beta": false,
+	"cacheVersn": 0,
+	"categories": [
+		"Data Enrichment \u0026 Threat Intelligence"
+	],
+	"certification": "certified",
+	"contentItemTypes": [
+		"integration"
+	],
+	"contentItems": {
+		"automation": null,
+		"classifier": null,
+		"dashboard": null,
+		"genericfield": null,
+		"generictype": null,
+		"incidentfield": null,
+		"incidenttype": null,
+		"indicatorfield": null,
+		"integration": [
+			{
+				"category": "Data Enrichment \u0026 Threat Intelligence",
+				"commands": [
+					{
+						"description": "Gets indicators from the feed.",
+						"name": "unit42intel-objects-feed-get-indicators"
+					}
+				],
+				"description": "Use the Unit 42 Intel Objects Feed integration to fetch indicators from Unit 42 Intel Objects.",
+				"id": "Unit42IntelObjectsFeed",
+				"name": "Unit 42 Intel Objects Feed"
+			}
+		],
+		"layoutscontainer": null,
+		"list": null,
+		"playbook": null,
+		"report": null,
+		"reputation": null,
+		"widget": null,
+		"wizard": null
+	},
+	"currentVersion": "1.0.22",
+	"definitionId": "",
+	"dependencies": {
+		"Base": {
+			"author": "Cortex XSOAR",
+			"certification": "certified",
+			"mandatory": true,
+			"minVersion": "1.33.27",
+			"name": "Base"
+		}
+	},
+	"deprecated": false,
+	"description": "Use the Unit 42 Intel pack to enrich your Threat Intel Library with Palo Alto Networks threat intelligence.",
+	"disabledMonthly": false,
+	"downloads": 13130,
+	"eulaLink": "https://github.com/demisto/content/blob/master/LICENSE",
+	"fromServerVersion": "6.5.0",
+	"general": [
+		"generalFieldCertified",
+		"generalFieldByCortexXSOAR",
+		"generalFieldFree",
+		"generalFieldSupportIncluded"
+	],
+	"id": "Unit42Intel",
+	"installMessage": "",
+	"integrations": [
+		{
+			"imagePath": "content/packs/Unit42Intel/Unit42IntelObjectsFeed_image.png",
+			"name": "Unit 42 Intel Objects Feed"
+		}
+	],
+	"itemVersion": "1.0.22",
+	"keywords": [],
+	"legacy": true,
+	"name": "Unit 42 Intel",
+	"packID": "Unit42Intel",
+	"packName": "",
+	"premium": false,
+	"previewOnly": false,
+	"price": 0,
+	"propagationLabels": [
+		"all"
+	],
+	"rawKeywords": null,
+	"rawTags": null,
+	"rawUseCases": null,
+	"readme": "Unit 42 Intel provides threat intelligence from multiple Palo Alto Networks services. Using Unit 42 Intel data, you can investigate indicators and their behaviors, and use that knowledge to better safeguard your network from malicious activity.\n\n## What does this pack do?\nGet Unit 42 Intel Objects and their details\n\n## This content pack includes:\n- Integrations:\n  - **Unit 42 Intel Objects Feed**: Fetch a list of threat intel objects, including Campaigns, Threat Actors, Malware and Attack Patterns, provided by Palo Alto Network's Unit 42 threat researchers.",
+	"searchRank": 10,
+	"serverMaxVersion": "",
+	"serverMinVersion": "6.5.0",
+	"support": "xsoar",
+	"supportDetails": {
+		"email": "",
+		"url": "https://www.paloaltonetworks.com/cortex"
+	},
+	"tags": [
+		"TIM"
+	],
+	"toServerVersion": "",
+	"updated": "2024-02-14T05:23:01+09:00",
+	"useCases": [],
+	"version": -1,
+	"versionInfo": "825773",
+	"videos": []
+}
