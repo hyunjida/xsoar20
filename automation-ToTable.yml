@@ -1,0 +1,52 @@
+args:
+- default: true
+  description: The data to display as table - expecting array of objects
+  isArray: true
+  name: data
+  required: true
+- description: Title for the table
+  name: title
+- description: Comma-separated list of columns to display. Accepts nested columns
+    using dot notation.
+  name: columns
+comment: Convert an array to a nice table display. Usually, from the context.
+commonfields:
+  id: ToTable
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: ToTable
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  // pack version: 1.14.2
+  var data = args.data;
+  var headers = args.columns ? args.columns.split(',') : null;
+  if(!Array.isArray(data)) {
+      data = [data]
+  }
+  var flatData = [];
+  data.forEach(function(element) {
+    var flattenObject = treeToFlattenObject(element);
+    flatData.push(flattenObject);
+  });
+  return {Type: entryTypes.note, Contents: tableToMarkdown(args.title, flatData, headers), ContentsFormat: formats.markdown};
+scripttarget: 0
+system: true
+tags:
+- Utility
+type: javascript
