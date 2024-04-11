@@ -1,0 +1,162 @@
+{
+	"author": "Cortex XSOAR",
+	"authorImage": "content/packs/Base/Author_image.png",
+	"beta": false,
+	"cacheVersn": 0,
+	"categories": [
+		"Data Enrichment \u0026 Threat Intelligence"
+	],
+	"certification": "certified",
+	"contentItemTypes": [
+		"integration",
+		"playbook"
+	],
+	"contentItems": {
+		"automation": null,
+		"classifier": null,
+		"dashboard": null,
+		"genericfield": null,
+		"generictype": null,
+		"incidentfield": null,
+		"incidenttype": null,
+		"indicatorfield": null,
+		"integration": [
+			{
+				"category": "Data Enrichment \u0026 Threat Intelligence",
+				"commands": [
+					{
+						"description": "Provides data enrichment for ips.",
+						"name": "ip"
+					},
+					{
+						"description": "Provides data enrichment for domains.",
+						"name": "domain"
+					},
+					{
+						"description": "Provides data enrichment for domains using free resources. Availability of those services may be limited.",
+						"name": "whois"
+					}
+				],
+				"description": "Provides data enrichment for domains.",
+				"id": "Whois",
+				"name": "Whois"
+			}
+		],
+		"layoutscontainer": null,
+		"list": null,
+		"playbook": [
+			{
+				"description": "This playbook compares the domain registrant against the Cortex XSOAR list of approved registrants provided in the inputs. A registrant is the company or entity that owns the domain.",
+				"name": "TIM - Process Domain Registrant With Whois"
+			},
+			{
+				"description": "This playbook compares the domain creation time against a provided time value such as one month ago. The period can be configured within the playbook inputs MinimumAgeOfDomainMonths or MinimumAgeOfDomainHours. The playbook calculates the timestamp for the relevant period and compares it to the domain creation time value provided by Whois. The domains are outputted accordingly if they were created before or after the compared time, respectively.",
+				"name": "TIM - Process Domain Age With Whois"
+			},
+			{
+				"description": "This playbook uses several sub playbooks to process and tag indicators based on the results of the Whois tool.",
+				"name": "TIM - Process Domains With Whois"
+			}
+		],
+		"report": null,
+		"reputation": null,
+		"widget": null,
+		"wizard": null
+	},
+	"currentVersion": "1.5.9",
+	"definitionId": "",
+	"dependencies": {
+		"Base": {
+			"author": "Cortex XSOAR",
+			"certification": "certified",
+			"mandatory": true,
+			"minVersion": "1.33.28",
+			"name": "Base"
+		},
+		"CommonScripts": {
+			"author": "Cortex XSOAR",
+			"certification": "certified",
+			"mandatory": true,
+			"minVersion": "1.13.38",
+			"name": "Common Scripts"
+		},
+		"DomainTools": {
+			"author": "DomainTools",
+			"certification": "certified",
+			"mandatory": false,
+			"minVersion": "1.1.5",
+			"name": "DomainTools Enterprise"
+		},
+		"JsonWhoIs": {
+			"author": "Cortex XSOAR",
+			"certification": "certified",
+			"mandatory": false,
+			"minVersion": "1.0.22",
+			"name": "JsonWhoIs"
+		}
+	},
+	"deprecated": false,
+	"description": "This Content Pack helps you run Whois commands as playbook tasks or real-time actions within Cortex XSOAR to obtain valuable domain metadata.",
+	"disabledMonthly": false,
+	"downloads": 32176,
+	"eulaLink": "https://github.com/demisto/content/blob/master/LICENSE",
+	"fromServerVersion": "5.0.0",
+	"general": [
+		"generalFieldCertified",
+		"generalFieldByCortexXSOAR",
+		"generalFieldFree",
+		"generalFieldSupportIncluded"
+	],
+	"id": "Whois",
+	"installMessage": "",
+	"integrations": [
+		{
+			"imagePath": "content/packs/Whois/Whois_image.png",
+			"name": "Whois"
+		},
+		{
+			"imagePath": "content/packs/JsonWhoIs/JsonWhoIs_image.png",
+			"name": "JsonWhoIs"
+		},
+		{
+			"imagePath": "content/packs/DomainTools/DomainTools_image.png",
+			"name": "DomainTools"
+		}
+	],
+	"itemVersion": "1.5.9",
+	"keywords": [],
+	"legacy": true,
+	"name": "Whois",
+	"packID": "Whois",
+	"packName": "",
+	"premium": false,
+	"previewOnly": false,
+	"price": 0,
+	"propagationLabels": [
+		"all"
+	],
+	"rawKeywords": null,
+	"rawTags": null,
+	"rawUseCases": null,
+	"readme": "Whois is a powerful open source tool and protocol for querying details about a domain. Domain details that can be obtained include the domain registrant that owns the domain name, the registrar or service provider who registered the domain, the domain creation date and other metadata related to that domain.\n\nThis Whois content pack contains the Cortex XSOAR and Whois integration that executes the Whois command against the provided domains to provide relevant metadata for the domains. The ‘TIM - Process Domains With Whois’ playbook which accepts domain indicators provided by TIM feeds, contains two subplaybooks that perform tests on domains such as checking the domain registrant or domain age according to user specified inputs, and tagging the domain indicators accordingly.\n\n##### What does this pack do?\nThe Integration included in this pack helps you run the Whois command for domains which provides valuable context and data on domains.\nThe playbooks included in this pack help you save time and automate repetitive tasks associated with investigating data related to Whois enrichment for domains such as:\nAutomating the process of getting domain registrant information and verifying if the registrant is part of the user’s approved list.\nAutomating the process of checking the domain registration age according to the predefined minimum age provided by the user.\n\n##### Troubleshooting\n\n###### `ip` command timeout\nThe ***ip*** command can timeout when there are excessive calls to the whois service, which rate limits these calls.\nIn that case, the default behavior is to try 3 times, with a 120 second wait between retries.\nYou can use the following arguments to mitigate this:\n  - *rate_limit_retry_count* - Default: 3 times.\n  - *rate_limit_wait_seconds* - Default: 120 seconds.\n  - *rate_limit_errors_suppressed* - Default: False.\n\n\n\nFor more information, visit our  [Cortex XSOAR Developer Docs](https://xsoar.pan.dev/docs/reference/playbooks/tim---process-domains-with-whois)\n\n![TIM - Process Domains With Whois](https://storage.googleapis.com/marketplace-dist/content/packs/Whois/readme_images/TIM_-_Process_Domains_With_Whois.png)",
+	"searchRank": 10,
+	"serverMaxVersion": "",
+	"serverMinVersion": "5.0.0",
+	"support": "xsoar",
+	"supportDetails": {
+		"email": "",
+		"url": "https://www.paloaltonetworks.com/cortex"
+	},
+	"tags": [
+		"Getting Started",
+		"Free Enricher",
+		"TIM",
+		"Plug \u0026 Enrich"
+	],
+	"toServerVersion": "",
+	"updated": "2024-04-01T18:27:37+09:00",
+	"useCases": [],
+	"version": -1,
+	"versionInfo": "827009",
+	"videos": []
+}
