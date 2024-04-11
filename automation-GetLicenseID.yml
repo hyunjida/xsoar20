@@ -1,0 +1,54 @@
+comment: Returns the license ID.
+commonfields:
+  id: GetLicenseID
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.5.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.86272
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: GetLicenseID
+outputs:
+- contextPath: License.ID
+  description: The license ID.
+  type: string
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('GetLicenseID', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+
+  def main():
+      human_readable, context_data = get_license_id()
+      return_outputs(human_readable, context_data)
+
+
+  def get_license_id():
+      license_id = demisto.getLicenseID()
+      human_readable = tableToMarkdown('Cortex XSOAR License ID', license_id, headers='License ID')
+      return human_readable, {'License': {"ID": license_id}}
+
+
+  if __name__ in ('__main__', '__builtin__', 'builtins'):
+      main()
+
+  register_module_line('GetLicenseID', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags: []
+type: python
