@@ -1,0 +1,332 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 2.6.15
+    packID: CommonPlaybooks
+    packName: Common Playbooks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+deprecated: true
+description: |
+  Deprecated. Use `Get File Sample From Path - Generic V3` instead.
+  This playbook returns a file sample correlating to a path into the War Room using the following sub-playbooks:
+  inputs:
+  1) Get File Sample From Path - D2.
+  2) Get File Sample From Path - VMware Carbon Black EDR (Live Response API).
+id: Get File Sample From Path - Generic V2
+inputs:
+- description: |-
+    Determines whether a D2 agent will be used to retrieve the file.
+    Options:
+    no (default)
+    yes
+  key: UseD2
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: Hostname of the machine on which the file is located.
+  key: Hostname
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: |
+    The path of the file to retrieve.
+    For example:
+    C:\users\folder\file.txt
+  key: Path
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: The ID of the agent, or of the endpoint, in the relevant integration
+    (such as EDR).
+  key: Agent_ID
+  playbookInputQuery: null
+  required: false
+  value: {}
+name: Get File Sample From Path - Generic V2
+outputs:
+- contextPath: File.Size
+  description: The size of the file.
+  type: number
+- contextPath: File.Type
+  description: The type of the file.
+  type: string
+- contextPath: File.Info
+  description: General information of the file.
+  type: string
+- contextPath: File.MD5
+  description: The MD5 hash of the file.
+  type: string
+- contextPath: File.SHA1
+  description: The SHA1 hash of the file.
+  type: string
+- contextPath: File.SHA256
+  description: The SHA256 hash of the file.
+  type: string
+- contextPath: File.SHA512
+  description: The SHA512 hash of the file.
+  type: string
+- contextPath: File.EntryID
+  description: The file entry ID.
+  type: string
+- contextPath: File.Extension
+  description: The file extension.
+  type: string
+- contextPath: File.Name
+  description: The file name.
+  type: string
+- contextPath: File.SSDeep
+  description: File SSDeep.
+  type: string
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "1"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 5d887731-fb71-4226-872c-a9e8dbddac42
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: 5d887731-fb71-4226-872c-a9e8dbddac42
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 50
+        }
+      }
+  "1":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: inputs.UseD2
+          operator: isEqualString
+          right:
+            value:
+              simple: "yes"
+      label: "yes"
+    continueonerrortype: ""
+    id: "1"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "11"
+      "yes":
+      - "10"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      left:
+        simple: ${inputs.UseD2}
+      right:
+        simple: "True"
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Yes if we want to use D2 agent to get the file
+      id: 8adb1ff3-5400-4f88-8a2b-4511ae8303f5
+      iscommand: false
+      name: Use D2 agent?
+      type: condition
+      version: -1
+    taskid: 8adb1ff3-5400-4f88-8a2b-4511ae8303f5
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 195
+        }
+      }
+  "8":
+    continueonerrortype: ""
+    id: "8"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: f81d6908-8ce9-452b-8dde-689f44256933
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: f81d6908-8ce9-452b-8dde-689f44256933
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 690
+        }
+      }
+  "10":
+    continueonerrortype: ""
+    id: "10"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 0
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "8"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      Credentials:
+        simple: Admin
+      Hostname:
+        simple: ${inputs.Hostname}
+      Path:
+        simple: ${inputs.Path}
+    separatecontext: false
+    skipunavailable: true
+    task:
+      brand: ""
+      description: |-
+        Returns a file sample to the War Room from a path on an endpoint using Demisto Dissolvable Agent (D2).
+
+        Input:
+        * Credentials - credentials to use when trying to deploy Demisto Dissolvable Agent (D2)  (default: Admin)
+        * ${Endpoint.Hostname} - deploy agent on target endpoint
+        * ${File.Path} - file's path to collect
+      id: acf75e5f-0da0-483e-82e2-2dbf09a0362c
+      iscommand: false
+      name: Get File Sample From Path - D2
+      playbookName: Get File Sample From Path - D2
+      type: playbook
+      version: -1
+    taskid: acf75e5f-0da0-483e-82e2-2dbf09a0362c
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": -9,
+          "y": 370
+        }
+      }
+  "11":
+    continueonerrortype: ""
+    id: "11"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "12"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 906138a1-e3ee-4711-889a-4ebcc8c2a1c6
+      iscommand: false
+      name: Use VMware Carbon Black EDR (Live Response API)
+      type: title
+      version: -1
+    taskid: 906138a1-e3ee-4711-889a-4ebcc8c2a1c6
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 370
+        }
+      }
+  "12":
+    continueonerrortype: ""
+    id: "12"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "8"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      Path:
+        complex:
+          root: inputs.Path
+      Sensor_ID:
+        complex:
+          root: inputs.Agent_ID
+    separatecontext: true
+    skipunavailable: true
+    task:
+      brand: ""
+      description: |-
+        This playbook retrieves a file from a path on an endpoint using VMware Carbon Black EDR (Live Response API).
+        Make sure to provide the Carbon Black sensor ID of the endpoint from which you want to retrieve the file.
+      id: 03fe6fe7-8aa7-4329-8c0b-6cf3847128d7
+      iscommand: false
+      name: Get File Sample From Path - VMware Carbon Black EDR - Live Response API
+      playbookName: Get File Sample From Path - VMware Carbon Black EDR - Live Response
+        API
+      type: playbook
+      version: -1
+    taskid: 03fe6fe7-8aa7-4329-8c0b-6cf3847128d7
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 510
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 705,
+        "width": 869,
+        "x": -9,
+        "y": 50
+      }
+    }
+  }
