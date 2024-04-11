@@ -1,0 +1,51 @@
+args:
+- default: true
+  description: The array to count it's size
+  isArray: true
+  name: array
+  required: true
+- description: The Context key to place result in, default is ArraySize
+  name: contextKey
+comment: Count an array size
+commonfields:
+  id: CountArraySize
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: CountArraySize
+outputs:
+- contextPath: ArraySize
+  description: Array size
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  // pack version: 1.14.2
+  var arr = args.array;
+  if (Array.isArray(arr)) {
+      var key = 'ArraySize';
+      if ((args.contextKey) && (args.contextKey.length > 0 )) {
+          key = args.contextKey;
+      }
+      setContext(key,arr.length);
+      return arr.length;
+  }
+  return 'Given input is not an array';
+scripttarget: 0
+system: true
+tags:
+- Utility
+type: javascript
