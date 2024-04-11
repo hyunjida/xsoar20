@@ -1,0 +1,40 @@
+{
+	"autorun": true,
+	"cacheVersn": 0,
+	"closureScript": "",
+	"color": "#03B0FF",
+	"days": 3,
+	"daysR": 0,
+	"default": true,
+	"definitionId": "",
+	"detached": false,
+	"disabled": false,
+	"extractSettings": {
+		"fieldCliNameToExtractSettings": {},
+		"mode": "All"
+	},
+	"fromServerVersion": "",
+	"hours": 0,
+	"hoursR": 0,
+	"id": "Unclassified",
+	"itemVersion": "",
+	"layout": "",
+	"locked": false,
+	"name": "Unclassified",
+	"onChangeRepAlg": 1,
+	"packID": "",
+	"packName": "",
+	"playbookId": "playbook0",
+	"preProcessingScript": "",
+	"propagationLabels": [
+		"all"
+	],
+	"readonly": true,
+	"reputationCalc": 0,
+	"sla": 240,
+	"system": false,
+	"toServerVersion": "",
+	"version": -1,
+	"weeks": 1,
+	"weeksR": 0
+}
