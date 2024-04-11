@@ -1,0 +1,61 @@
+args:
+- description: The Threat Intel Report object to unpublish.
+  name: object
+  required: true
+comment: Sets a Threat Intel Report as unpublished.
+commonfields:
+  id: UnpublishThreatIntelReport
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.5.0
+    itemVersion: 1.0.13
+    packID: ThreatIntelReports
+    packName: Threat Intel Reports (BETA)
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.86272
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: UnpublishThreatIntelReport
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('UnpublishThreatIntelReport', 'start', __line__())
+  ### pack version: 1.0.13
+
+
+
+
+  def unpublish():
+      object_id = demisto.getArg('object.id')
+
+      execute_command(
+          'setThreatIntelReport',
+          {
+              'id': object_id,
+              'xsoarReadOnlyRoles': '',
+              'reportstatus': 'Draft',
+              'published': '',
+          },
+      )
+
+      demisto.results('ok')
+
+
+  if __name__ in ('__main__', '__builtin__', 'builtins'):
+      unpublish()
+
+  register_module_line('UnpublishThreatIntelReport', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- threatIntelReport-action-button
+type: python
