@@ -1,0 +1,46 @@
+comment: Sends email to incident owner when selected field is triggered.
+commonfields:
+  id: emailFieldTriggered
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dependson:
+  must:
+  - send-mail
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: emailFieldTriggered
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  // pack version: 1.14.2
+  var users = executeCommand('getUsers', {});
+  var email;
+  for (var i = 0; i < users[0].Contents.length; i++) {
+      if (incidents[0].owner === users[0].Contents[i].name) {
+          email = users[0].Contents[i].email;
+          break;
+      }
+  }
+  if (email) {
+      var body = 'Hello,\nField ' + args.name + ' was changed from ' + args.old + ' to ' + args.new + ' in incident ' + incidents[0].name + '.\n--DBot';
+      var subject = 'Field ' + args.name + ' was triggered';
+      executeCommand('send-mail', {'to':email, 'subject':subject, 'body':body});
+  }
+scripttarget: 0
+system: true
+tags:
+- field-change-triggered
+type: javascript
