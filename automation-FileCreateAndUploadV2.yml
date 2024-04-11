@@ -1,0 +1,84 @@
+args:
+- default: true
+  description: The name of the file to be created.
+  name: filename
+  required: true
+- description: Input data to write to the file.
+  name: data
+- description: Entry ID contents to write in the file.
+  name: entryId
+- auto: PREDEFINED
+  defaultValue: raw
+  description: Encoding type of the input data or contents.
+  name: data_encoding
+  predefined:
+  - raw
+  - base64
+comment: |
+  Creates a file (using the given data input or entry ID) and uploads it to the current investigation War Room.
+commonfields:
+  id: FileCreateAndUploadV2
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.2.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.83255
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: FileCreateAndUploadV2
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('FileCreateAndUploadV2', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+  import base64
+
+
+  def main():
+      args = demisto.args()
+      filename = args.get('filename', '')
+      data = args.get('data', '')
+      data_encoding = args.get('data_encoding', 'raw')
+      entdy_id = args.get('entryId')
+
+      try:
+          if entdy_id:
+              res = demisto.executeCommand('getEntry', {'id': entdy_id})
+              if is_error(res):
+                  raise DemistoException(get_error(res))
+
+              data = demisto.get(res[0], 'Contents')
+
+          if data_encoding == 'base64':
+              data = base64.b64decode(data)
+          elif data_encoding != 'raw':
+              raise ValueError(f'Invalid data encoding name: {data_encoding}')
+
+          return_results(fileResult(filename, data))
+      except Exception as e:
+          return_error(str(e) + "\n\nTrace:\n" + traceback.format_exc())
+
+
+  if __name__ in ('__builtin__', 'builtins', '__main__'):
+      main()
+
+  register_module_line('FileCreateAndUploadV2', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- Utility
+type: python
