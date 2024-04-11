@@ -1,0 +1,120 @@
+{
+	"author": "Cortex XSOAR",
+	"authorImage": "content/packs/Base/Author_image.png",
+	"beta": false,
+	"cacheVersn": 0,
+	"categories": [
+		"Utilities"
+	],
+	"certification": "certified",
+	"contentItemTypes": [
+		"integration"
+	],
+	"contentItems": {
+		"automation": null,
+		"classifier": null,
+		"dashboard": null,
+		"genericfield": null,
+		"generictype": null,
+		"incidentfield": null,
+		"incidenttype": null,
+		"indicatorfield": null,
+		"integration": [
+			{
+				"category": "Utilities",
+				"commands": [
+					{
+						"description": "Gets a specific lock. If the lock doesn't exist, it creates one. If the lock is already in use, the command waits until the lock is released or until timeout is reached. If timeout is reached and the lock hasn't been released, the command fails to get the lock.",
+						"name": "demisto-lock-get"
+					},
+					{
+						"description": "Release all locks",
+						"name": "demisto-lock-release-all"
+					},
+					{
+						"description": "Release a lock",
+						"name": "demisto-lock-release"
+					},
+					{
+						"description": "Show information on locks",
+						"name": "demisto-lock-info"
+					}
+				],
+				"description": "Locking mechanism that prevents concurrent execution of different tasks",
+				"id": "Demisto Lock",
+				"name": "Demisto Lock"
+			}
+		],
+		"layoutscontainer": null,
+		"list": null,
+		"playbook": null,
+		"report": null,
+		"reputation": null,
+		"widget": null,
+		"wizard": null
+	},
+	"currentVersion": "1.0.8",
+	"definitionId": "",
+	"dependencies": {
+		"Base": {
+			"author": "Cortex XSOAR",
+			"certification": "certified",
+			"mandatory": true,
+			"minVersion": "1.33.19",
+			"name": "Base"
+		}
+	},
+	"deprecated": false,
+	"description": "Locking mechanism that prevents concurrent execution of different tasks",
+	"disabledMonthly": false,
+	"downloads": 10914,
+	"eulaLink": "https://github.com/demisto/content/blob/master/LICENSE",
+	"fromServerVersion": "5.0.0",
+	"general": [
+		"generalFieldCertified",
+		"generalFieldByCortexXSOAR",
+		"generalFieldFree",
+		"generalFieldSupportIncluded"
+	],
+	"id": "DemistoLocking",
+	"installMessage": "",
+	"integrations": [
+		{
+			"imagePath": "content/packs/DemistoLocking/DemistoLock_image.png",
+			"name": "Demisto Lock"
+		}
+	],
+	"itemVersion": "1.0.8",
+	"keywords": [
+		"Demisto Lock",
+		"Core Lock"
+	],
+	"legacy": true,
+	"name": "Cortex Lock",
+	"packID": "DemistoLocking",
+	"packName": "",
+	"premium": false,
+	"previewOnly": false,
+	"price": 0,
+	"propagationLabels": [
+		"all"
+	],
+	"rawKeywords": null,
+	"rawTags": null,
+	"rawUseCases": null,
+	"searchRank": 10,
+	"serverMaxVersion": "",
+	"serverMinVersion": "5.0.0",
+	"support": "xsoar",
+	"supportDetails": {
+		"email": "",
+		"url": "https://www.paloaltonetworks.com/cortex"
+	},
+	"tags": [],
+	"toServerVersion": "",
+	"updated": "2024-01-23T06:43:11+09:00",
+	"useCases": [],
+	"version": -1,
+	"versionInfo": "778227",
+	"videos": []
+}
