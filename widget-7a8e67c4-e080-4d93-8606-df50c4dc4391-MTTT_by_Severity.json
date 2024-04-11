@@ -1,0 +1,46 @@
+{
+	"Cache": null,
+	"cacheVersn": 0,
+	"category": "",
+	"dataType": "incidents",
+	"dateRange": {
+		"fromDate": "0001-01-01T00:00:00Z",
+		"fromDateLicense": "0001-01-01T00:00:00Z",
+		"period": {
+			"by": "",
+			"byFrom": "days",
+			"byTo": "",
+			"field": "",
+			"fromValue": 7,
+			"toValue": null
+		},
+		"toDate": "0001-01-01T00:00:00Z"
+	},
+	"definitionId": "",
+	"fromServerVersion": "6.5.0",
+	"id": "7a8e67c4-e080-4d93-8606-df50c4dc4391",
+	"isPredefined": true,
+	"itemVersion": "1.2.48",
+	"name": "MTTT by Severity",
+	"packID": "CommonWidgets",
+	"packName": "Common Widgets",
+	"packPropagationLabels": [
+		"all"
+	],
+	"params": {
+		"groupBy": [
+			"occurred(d)",
+			"severity"
+		],
+		"keys": [
+			"avg|triagesla.totalDuration / 60"
+		],
+		"timeFrame": "days",
+		"valuesFormat": "abbreviated"
+	},
+	"propagationLabels": [],
+	"query": "-category:job and triagesla.runStatus:ended",
+	"toServerVersion": "",
+	"version": -1,
+	"widgetType": "line"
+}
