@@ -1,0 +1,764 @@
+{
+	"cacheVersn": 0,
+	"definitionId": "",
+	"fromDate": "0001-01-01T00:00:00Z",
+	"fromDateLicense": "0001-01-01T00:00:00Z",
+	"fromServerVersion": "5.5.0",
+	"hidePivot": false,
+	"hideSearch": false,
+	"id": "Threat Intelligence Management",
+	"isCommon": true,
+	"itemVersion": "1.1.9",
+	"layout": [
+		{
+			"forceRange": false,
+			"h": 2,
+			"i": "a78dd890-36d0-11ea-bac2-cb1342f8efbb",
+			"id": "a78dd890-36d0-11ea-bac2-cb1342f8efbb",
+			"reflectDimensions": false,
+			"w": 9,
+			"widget": {
+				"Cache": null,
+				"cacheVersn": 0,
+				"category": "",
+				"commitMessage": "",
+				"created": "0001-01-01T00:00:00Z",
+				"dataType": "indicators",
+				"dateRange": {
+					"fromDate": "0001-01-01T00:00:00Z",
+					"fromDateLicense": "0001-01-01T00:00:00Z",
+					"period": {
+						"by": "",
+						"byFrom": "days",
+						"byTo": "",
+						"field": "",
+						"fromValue": 7,
+						"toValue": null
+					},
+					"toDate": "0001-01-01T00:00:00Z"
+				},
+				"definitionId": "",
+				"fromServerVersion": "",
+				"id": "14e61cc5-3584-43d4-893b-16f9db4ef87f",
+				"isPredefined": false,
+				"itemVersion": "",
+				"modified": "2020-01-14T22:20:34.180114532+09:00",
+				"name": "Active Indicator Volumes by Feed",
+				"packID": "",
+				"packName": "",
+				"params": {
+					"groupBy": [
+						"calculatedTime(d)",
+						"sourceBrands"
+					],
+					"tableColumns": [
+						{
+							"isDefault": true,
+							"key": "indicator_type",
+							"position": 1,
+							"width": 120
+						},
+						{
+							"isDefault": true,
+							"key": "value",
+							"position": 2,
+							"width": 300
+						},
+						{
+							"isDefault": true,
+							"key": "score",
+							"position": 4,
+							"width": 120
+						},
+						{
+							"isDefault": true,
+							"key": "firstSeen",
+							"position": 5,
+							"width": 275
+						},
+						{
+							"isDefault": true,
+							"key": "lastSeen",
+							"position": 6,
+							"width": 275
+						},
+						{
+							"isDefault": true,
+							"key": "modifiedTime",
+							"position": 7,
+							"width": 180
+						},
+						{
+							"isDefault": true,
+							"key": "timestamp",
+							"position": 8,
+							"width": 190
+						},
+						{
+							"isDefault": true,
+							"key": "investigationIDs",
+							"position": 9,
+							"width": 150
+						},
+						{
+							"isDefault": true,
+							"key": "comment",
+							"position": 10,
+							"width": 175
+						},
+						{
+							"isDefault": true,
+							"key": "expirationStatus",
+							"position": 14,
+							"width": 175
+						},
+						{
+							"isDefault": true,
+							"key": "expiration",
+							"position": 15,
+							"width": 190
+						}
+					]
+				},
+				"prevName": "",
+				"query": "expirationStatus:active",
+				"shouldCommit": false,
+				"sizeInBytes": 0,
+				"toServerVersion": "",
+				"vcShouldIgnore": false,
+				"vcShouldKeepItemLegacyProdMachine": false,
+				"version": 1,
+				"widgetType": "line"
+			},
+			"x": 3,
+			"y": 0
+		},
+		{
+			"forceRange": false,
+			"h": 1,
+			"i": "195929c0-36d1-11ea-bac2-cb1342f8efbb",
+			"id": "195929c0-36d1-11ea-bac2-cb1342f8efbb",
+			"reflectDimensions": false,
+			"w": 3,
+			"widget": {
+				"Cache": null,
+				"cacheVersn": 0,
+				"category": "",
+				"commitMessage": "",
+				"created": "0001-01-01T00:00:00Z",
+				"dataType": "indicators",
+				"dateRange": {
+					"fromDate": "0001-01-01T00:00:00Z",
+					"fromDateLicense": "0001-01-01T00:00:00Z",
+					"period": {
+						"by": "",
+						"byFrom": "days",
+						"byTo": "",
+						"field": "",
+						"fromValue": 7,
+						"toValue": null
+					},
+					"toDate": "0001-01-01T00:00:00Z"
+				},
+				"definitionId": "",
+				"fromServerVersion": "",
+				"id": "1c789a4b-d000-4439-85bb-b113dafbfac9",
+				"isPredefined": false,
+				"itemVersion": "",
+				"modified": "2020-01-14T22:23:27.49284693+09:00",
+				"name": "Number of Active Indicators",
+				"packID": "",
+				"packName": "",
+				"params": {
+					"tableColumns": [
+						{
+							"isDefault": true,
+							"key": "indicator_type",
+							"position": 1,
+							"width": 120
+						},
+						{
+							"isDefault": true,
+							"key": "value",
+							"position": 2,
+							"width": 300
+						},
+						{
+							"isDefault": true,
+							"key": "score",
+							"position": 4,
+							"width": 120
+						},
+						{
+							"isDefault": true,
+							"key": "firstSeen",
+							"position": 5,
+							"width": 275
+						},
+						{
+							"isDefault": true,
+							"key": "lastSeen",
+							"position": 6,
+							"width": 275
+						},
+						{
+							"isDefault": true,
+							"key": "modifiedTime",
+							"position": 7,
+							"width": 180
+						},
+						{
+							"isDefault": true,
+							"key": "timestamp",
+							"position": 8,
+							"width": 190
+						},
+						{
+							"isDefault": true,
+							"key": "investigationIDs",
+							"position": 9,
+							"width": 150
+						},
+						{
+							"isDefault": true,
+							"key": "comment",
+							"position": 10,
+							"width": 175
+						},
+						{
+							"isDefault": true,
+							"key": "expirationStatus",
+							"position": 14,
+							"width": 175
+						},
+						{
+							"isDefault": true,
+							"key": "expiration",
+							"position": 15,
+							"width": 190
+						}
+					]
+				},
+				"prevName": "",
+				"query": "expirationStatus:active",
+				"shouldCommit": false,
+				"sizeInBytes": 0,
+				"toServerVersion": "",
+				"vcShouldIgnore": false,
+				"vcShouldKeepItemLegacyProdMachine": false,
+				"version": 1,
+				"widgetType": "trend"
+			},
+			"x": 0,
+			"y": 0
+		},
+		{
+			"forceRange": false,
+			"h": 1,
+			"i": "4614e260-36d1-11ea-bac2-cb1342f8efbb",
+			"id": "4614e260-36d1-11ea-bac2-cb1342f8efbb",
+			"reflectDimensions": false,
+			"w": 3,
+			"widget": {
+				"Cache": null,
+				"cacheVersn": 0,
+				"category": "",
+				"commitMessage": "",
+				"created": "0001-01-01T00:00:00Z",
+				"dataType": "indicators",
+				"dateRange": {
+					"fromDate": "0001-01-01T00:00:00Z",
+					"fromDateLicense": "0001-01-01T00:00:00Z",
+					"period": {
+						"by": "",
+						"byFrom": "days",
+						"byTo": "",
+						"field": "",
+						"fromValue": 7,
+						"toValue": null
+					},
+					"toDate": "0001-01-01T00:00:00Z"
+				},
+				"definitionId": "",
+				"fromServerVersion": "",
+				"id": "530fa858-2e59-4ef9-8b44-f47db1011b36",
+				"isPredefined": false,
+				"itemVersion": "",
+				"modified": "2020-01-14T22:24:57.840603414+09:00",
+				"name": "Number of Expired Indicators",
+				"packID": "",
+				"packName": "",
+				"params": {
+					"tableColumns": [
+						{
+							"isDefault": true,
+							"key": "indicator_type",
+							"position": 1,
+							"width": 120
+						},
+						{
+							"isDefault": true,
+							"key": "value",
+							"position": 2,
+							"width": 300
+						},
+						{
+							"isDefault": true,
+							"key": "score",
+							"position": 4,
+							"width": 120
+						},
+						{
+							"isDefault": true,
+							"key": "firstSeen",
+							"position": 5,
+							"width": 275
+						},
+						{
+							"isDefault": true,
+							"key": "lastSeen",
+							"position": 6,
+							"width": 275
+						},
+						{
+							"isDefault": true,
+							"key": "modifiedTime",
+							"position": 7,
+							"width": 180
+						},
+						{
+							"isDefault": true,
+							"key": "timestamp",
+							"position": 8,
+							"width": 190
+						},
+						{
+							"isDefault": true,
+							"key": "investigationIDs",
+							"position": 9,
+							"width": 150
+						},
+						{
+							"isDefault": true,
+							"key": "comment",
+							"position": 10,
+							"width": 175
+						},
+						{
+							"isDefault": true,
+							"key": "expirationStatus",
+							"position": 14,
+							"width": 175
+						},
+						{
+							"isDefault": true,
+							"key": "expiration",
+							"position": 15,
+							"width": 190
+						}
+					]
+				},
+				"prevName": "",
+				"query": "expirationStatus:expired",
+				"shouldCommit": false,
+				"sizeInBytes": 0,
+				"toServerVersion": "",
+				"vcShouldIgnore": false,
+				"vcShouldKeepItemLegacyProdMachine": false,
+				"version": 1,
+				"widgetType": "trend"
+			},
+			"x": 0,
+			"y": 1
+		},
+		{
+			"forceRange": false,
+			"h": 2,
+			"i": "0295b860-36d2-11ea-bac2-cb1342f8efbb",
+			"id": "0295b860-36d2-11ea-bac2-cb1342f8efbb",
+			"reflectDimensions": false,
+			"w": 3,
+			"widget": {
+				"Cache": null,
+				"cacheVersn": 0,
+				"category": "",
+				"commitMessage": "",
+				"created": "0001-01-01T00:00:00Z",
+				"dataType": "indicators",
+				"dateRange": {
+					"fromDate": "0001-01-01T00:00:00Z",
+					"fromDateLicense": "0001-01-01T00:00:00Z",
+					"period": {
+						"by": "",
+						"byFrom": "days",
+						"byTo": "",
+						"field": "",
+						"fromValue": 7,
+						"toValue": null
+					},
+					"toDate": "0001-01-01T00:00:00Z"
+				},
+				"definitionId": "",
+				"fromServerVersion": "",
+				"id": "e0aded97-34a1-45f3-8b5b-a54b43c13f5f",
+				"isPredefined": false,
+				"itemVersion": "",
+				"modified": "2020-01-14T22:30:13.387314353+09:00",
+				"name": "Active Indicators by Reputation",
+				"packID": "",
+				"packName": "",
+				"params": {
+					"groupBy": [
+						"score"
+					],
+					"tableColumns": [
+						{
+							"isDefault": true,
+							"key": "indicator_type",
+							"position": 1,
+							"width": 120
+						},
+						{
+							"isDefault": true,
+							"key": "value",
+							"position": 2,
+							"width": 300
+						},
+						{
+							"isDefault": true,
+							"key": "score",
+							"position": 4,
+							"width": 120
+						},
+						{
+							"isDefault": true,
+							"key": "firstSeen",
+							"position": 5,
+							"width": 275
+						},
+						{
+							"isDefault": true,
+							"key": "lastSeen",
+							"position": 6,
+							"width": 275
+						},
+						{
+							"isDefault": true,
+							"key": "modifiedTime",
+							"position": 7,
+							"width": 180
+						},
+						{
+							"isDefault": true,
+							"key": "timestamp",
+							"position": 8,
+							"width": 190
+						},
+						{
+							"isDefault": true,
+							"key": "investigationIDs",
+							"position": 9,
+							"width": 150
+						},
+						{
+							"isDefault": true,
+							"key": "comment",
+							"position": 10,
+							"width": 175
+						},
+						{
+							"isDefault": true,
+							"key": "expirationStatus",
+							"position": 14,
+							"width": 175
+						},
+						{
+							"isDefault": true,
+							"key": "expiration",
+							"position": 15,
+							"width": 190
+						}
+					]
+				},
+				"prevName": "",
+				"query": "(expirationStatus:active or expirationStatus:\"\")",
+				"shouldCommit": false,
+				"sizeInBytes": 0,
+				"toServerVersion": "",
+				"vcShouldIgnore": false,
+				"vcShouldKeepItemLegacyProdMachine": false,
+				"version": 1,
+				"widgetType": "pie"
+			},
+			"x": 3,
+			"y": 2
+		},
+		{
+			"forceRange": false,
+			"h": 2,
+			"i": "4d24a260-36d2-11ea-bac2-cb1342f8efbb",
+			"id": "4d24a260-36d2-11ea-bac2-cb1342f8efbb",
+			"reflectDimensions": false,
+			"w": 12,
+			"widget": {
+				"Cache": null,
+				"cacheVersn": 0,
+				"category": "",
+				"commitMessage": "",
+				"created": "0001-01-01T00:00:00Z",
+				"dataType": "indicators",
+				"dateRange": {
+					"fromDate": "0001-01-01T00:00:00Z",
+					"fromDateLicense": "0001-01-01T00:00:00Z",
+					"period": {
+						"by": "",
+						"byFrom": "days",
+						"byTo": "",
+						"field": "",
+						"fromValue": 7,
+						"toValue": null
+					},
+					"toDate": "0001-01-01T00:00:00Z"
+				},
+				"definitionId": "",
+				"fromServerVersion": "",
+				"id": "8dd2c47e-84ec-4309-8ec7-8216c88aa004",
+				"isPredefined": false,
+				"itemVersion": "",
+				"modified": "2020-01-14T22:32:18.782752002+09:00",
+				"name": "Indicators by Expiration Status",
+				"packID": "",
+				"packName": "",
+				"params": {
+					"groupBy": [
+						"calculatedTime(d)",
+						"expirationStatus"
+					],
+					"tableColumns": [
+						{
+							"isDefault": true,
+							"key": "indicator_type",
+							"position": 1,
+							"width": 120
+						},
+						{
+							"isDefault": true,
+							"key": "value",
+							"position": 2,
+							"width": 300
+						},
+						{
+							"isDefault": true,
+							"key": "score",
+							"position": 4,
+							"width": 120
+						},
+						{
+							"isDefault": true,
+							"key": "firstSeen",
+							"position": 5,
+							"width": 275
+						},
+						{
+							"isDefault": true,
+							"key": "lastSeen",
+							"position": 6,
+							"width": 275
+						},
+						{
+							"isDefault": true,
+							"key": "modifiedTime",
+							"position": 7,
+							"width": 180
+						},
+						{
+							"isDefault": true,
+							"key": "timestamp",
+							"position": 8,
+							"width": 190
+						},
+						{
+							"isDefault": true,
+							"key": "investigationIDs",
+							"position": 9,
+							"width": 150
+						},
+						{
+							"isDefault": true,
+							"key": "comment",
+							"position": 10,
+							"width": 175
+						},
+						{
+							"isDefault": true,
+							"key": "expirationStatus",
+							"position": 14,
+							"width": 175
+						},
+						{
+							"isDefault": true,
+							"key": "expiration",
+							"position": 15,
+							"width": 190
+						}
+					]
+				},
+				"prevName": "",
+				"query": "",
+				"shouldCommit": false,
+				"sizeInBytes": 0,
+				"toServerVersion": "",
+				"vcShouldIgnore": false,
+				"vcShouldKeepItemLegacyProdMachine": false,
+				"version": 1,
+				"widgetType": "line"
+			},
+			"x": 0,
+			"y": 4
+		},
+		{
+			"forceRange": false,
+			"h": 2,
+			"i": "878dcd60-36d6-11ea-bac2-cb1342f8efbb",
+			"id": "878dcd60-36d6-11ea-bac2-cb1342f8efbb",
+			"reflectDimensions": false,
+			"w": 3,
+			"widget": {
+				"Cache": null,
+				"cacheVersn": 0,
+				"category": "",
+				"commitMessage": "",
+				"created": "0001-01-01T00:00:00Z",
+				"dataType": "indicators",
+				"dateRange": {
+					"fromDate": "0001-01-01T00:00:00Z",
+					"fromDateLicense": "0001-01-01T00:00:00Z",
+					"period": {
+						"by": "",
+						"byFrom": "days",
+						"byTo": "",
+						"field": "",
+						"fromValue": 7,
+						"toValue": null
+					},
+					"toDate": "0001-01-01T00:00:00Z"
+				},
+				"definitionId": "",
+				"fromServerVersion": "",
+				"id": "0aaa7c20-668c-4cda-86d5-8e0744f9db1d",
+				"isPredefined": false,
+				"itemVersion": "",
+				"modified": "2020-01-14T23:02:22.181828299+09:00",
+				"name": "Active Indicators by Type",
+				"packID": "",
+				"packName": "",
+				"params": {
+					"groupBy": [
+						"type"
+					],
+					"tableColumns": [
+						{
+							"isDefault": true,
+							"key": "indicator_type",
+							"position": 1,
+							"width": 120
+						},
+						{
+							"isDefault": true,
+							"key": "value",
+							"position": 2,
+							"width": 300
+						},
+						{
+							"isDefault": true,
+							"key": "score",
+							"position": 4,
+							"width": 120
+						},
+						{
+							"isDefault": true,
+							"key": "firstSeen",
+							"position": 5,
+							"width": 275
+						},
+						{
+							"isDefault": true,
+							"key": "lastSeen",
+							"position": 6,
+							"width": 275
+						},
+						{
+							"isDefault": true,
+							"key": "modifiedTime",
+							"position": 7,
+							"width": 180
+						},
+						{
+							"isDefault": true,
+							"key": "timestamp",
+							"position": 8,
+							"width": 190
+						},
+						{
+							"isDefault": true,
+							"key": "investigationIDs",
+							"position": 9,
+							"width": 150
+						},
+						{
+							"isDefault": true,
+							"key": "comment",
+							"position": 10,
+							"width": 175
+						},
+						{
+							"isDefault": true,
+							"key": "expirationStatus",
+							"position": 14,
+							"width": 175
+						},
+						{
+							"isDefault": true,
+							"key": "expiration",
+							"position": 15,
+							"width": 190
+						}
+					]
+				},
+				"prevName": "",
+				"query": "(expirationStatus:active or expirationStatus:\"\")",
+				"shouldCommit": false,
+				"sizeInBytes": 0,
+				"toServerVersion": "",
+				"vcShouldIgnore": false,
+				"vcShouldKeepItemLegacyProdMachine": false,
+				"version": 1,
+				"widgetType": "pie"
+			},
+			"x": 0,
+			"y": 2
+		}
+	],
+	"locked": false,
+	"modulePage": false,
+	"name": "Threat Intel Management",
+	"owner": "",
+	"packID": "ThreatIntelligenceManagement",
+	"packName": "Threat Intelligence Management",
+	"packPropagationLabels": [
+		"all"
+	],
+	"period": {
+		"by": "",
+		"byFrom": "days",
+		"byTo": "",
+		"field": "",
+		"fromValue": 30,
+		"toValue": null
+	},
+	"propagationLabels": [],
+	"system": true,
+	"toDate": "0001-01-01T00:00:00Z",
+	"toServerVersion": "",
+	"version": -1
+}
