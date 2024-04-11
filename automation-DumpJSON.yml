@@ -1,0 +1,57 @@
+args:
+- default: true
+  description: The context path to the json object.
+  name: key
+  required: true
+comment: Dumps a json from context key input, and returns a json object string result
+commonfields:
+  id: DumpJSON
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.86272
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: DumpJSON
+outputs:
+- contextPath: JsonStr
+  description: The JSON object as string.
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('DumpJSON', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+  import json
+
+
+  def main():
+      key = demisto.args()['key']
+      obj_str = json.dumps(demisto.get(demisto.context(), key))
+      demisto.setContext('JsonStr', obj_str)
+      return_results(obj_str)
+
+
+  if __name__ in ('__main__', '__builtin__', 'builtins'):
+      main()
+
+  register_module_line('DumpJSON', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- Utility
+type: python
