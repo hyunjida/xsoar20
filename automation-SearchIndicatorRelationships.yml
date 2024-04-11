@@ -1,0 +1,345 @@
+args:
+- description: 'A comma-separated list of entities for which to search for relationships.
+    For example: 192.168.1.1,192.168.1.2. The search applies to both entity A or entity
+    B values. This argument can be used in conjunction with the entityType and the
+    relationship arguments and all arguments will be treated with the AND operator.'
+  isArray: true
+  name: entities
+- auto: PREDEFINED
+  description: 'A comma-separated list of entity types for which to search for relationships.
+    For example: IP,URL. This argument can be used in conjunction with the entities
+    and the relationship arguments and all arguments will be treated with the AND
+    operator.'
+  isArray: true
+  name: entities_types
+  predefined:
+  - IP
+  - Domain
+  - URL
+  - CVE
+  - DomainGlob
+  - Email
+  - FILE
+  - Host
+  - CIDR
+  - IPv6
+  - IPv6CIDR
+  - Registry Key
+  - ssdeep
+  - accountRep
+  - CIDR
+  - Attack Pattern
+  - Malware
+  - Report
+  - Threat Actor
+  - Tool
+  - Intrusion Set
+  - Campaign
+  - Course of Action
+  - Infrastructure.
+- auto: PREDEFINED
+  description: 'A comma-separated list of relationship types for which to search for
+    relationships. For example: related-to,contains. This argument can be used in
+    conjunction with the entities and the entitiesTypes arguments and all arguments
+    will be treated with the AND operator.'
+  isArray: true
+  name: relationships
+  predefined:
+  - applied
+  - attachment-of
+  - attaches
+  - attribute-of
+  - attributed-by
+  - attributed-to
+  - authored-by
+  - beacons-to
+  - bundled-in
+  - bundles
+  - communicated-with
+  - communicated-by
+  - communicates-with
+  - compromises
+  - contains
+  - controls
+  - created-by
+  - creates
+  - delivered-by
+  - delivers
+  - downloads
+  - downloads-from
+  - dropped-by
+  - drops
+  - duplicate-of
+  - embedded-in
+  - embeds
+  - executed
+  - executed-by
+  - exfiltrates-to
+  - exploits
+  - has
+  - hosted-on
+  - hosts
+  - impersonates
+  - indicated-by
+  - indicator-of
+  - injected-from
+  - injects-into
+  - investigates
+  - is-also
+  - located-at
+  - mitigated-by
+  - mitigates
+  - originated-from
+  - owned-by
+  - owns
+  - part-of
+  - related-to
+  - remediates
+  - resolved-by
+  - resolved-from
+  - resolves-to
+  - seen-on
+  - sent
+  - sent-by
+  - sent-from
+  - sent-to
+  - similar-to
+  - sub-domain-of
+  - supra-domain-of
+  - subtechnique-of
+  - parent-technique-of
+  - targeted-by
+  - targets
+  - Types
+  - uploaded-to
+  - used-by
+  - used-on
+  - uses
+  - variant-of
+  - detects
+  - detected-by
+- defaultValue: "20"
+  description: The number of results to return. Default is 20.
+  name: limit
+- auto: PREDEFINED
+  defaultValue: "false"
+  description: Whether all of the relationships attributes will be returned or just
+    the basic attributes. Default is false and the returned values will be name, entity
+    A value, entity A type, entity B value, entity B type, relationships type. If
+    true, all attributes will be returned.
+  name: verbose
+  predefined:
+  - "true"
+  - "false"
+- auto: PREDEFINED
+  defaultValue: "false"
+  description: The status of the relationships to return. Default is false.
+  name: revoked
+  predefined:
+  - "true"
+  - "false"
+comment: This automation outputs the indicator relationships to context according
+  to the provided query, using the entities, entityTypes, and relationships arguments.
+  All arguments will use the AND operator. For example, using the following arguments
+  entities=8.8.8.8 entities_types=Domain will provide only relationships that the
+  8.8.8.8 indicator has with indicators of type domain.
+commonfields:
+  id: SearchIndicatorRelationships
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.2.0
+    itemVersion: 1.33.35
+    packID: Base
+    packName: Base
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.86272
+engineinfo: {}
+mainengineinfo: {}
+name: SearchIndicatorRelationships
+outputs:
+- contextPath: Relationships.EntityA
+  description: The source of the relationship.
+  type: String
+- contextPath: Relationships.EntityB
+  description: The destination of the relationship.
+  type: string
+- contextPath: Relationships.Relationship
+  description: The name of the relationship.
+  type: string
+- contextPath: Relationships.Reverse
+  description: The name of the reverse relationship.
+  type: string
+- contextPath: Relationships.EntityAType
+  description: The type of the source of the relationship.
+  type: string
+- contextPath: Relationships.EntityBType
+  description: The type of the destination of the relationship.
+  type: string
+- contextPath: Relationships.ID
+  description: The ID of the relationship.
+  type: string
+- contextPath: Relationships.Reliability
+  description: The reliability of the relationship.
+  type: string
+- contextPath: Relationships.Brand
+  description: The brand of the relationship.
+  type: string
+- contextPath: Relationships.Revoked
+  description: True if the relationship is revoked.
+  type: string
+- contextPath: Relationships.FirstSeenBySource
+  description: The first time seen by the source of the relationship.
+  type: string
+- contextPath: Relationships.LastSeenBySource
+  description: The last time seen by the source of the relationship.
+  type: string
+- contextPath: Relationships.Description
+  description: The description of the relationship.
+  type: string
+- contextPath: Relationships.Type
+  description: The type of the relationship.
+  type: string
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('SearchIndicatorRelationships', 'start', __line__())
+  ### pack version: 1.33.35
+
+
+
+  import re
+
+
+  # --------------------------------------------------- Helper functions---------------------------------------------
+
+
+  def to_context(relationships: list, verbose: bool) -> List[dict]:
+      """
+      Create context entries from the relationships returned from the searchRelationships command.
+
+      :type relationships: ``list``
+      :param relationships: list of dict of relationships from the searchRelationships command.
+
+      :type verbose: ``bool``
+      :param verbose: True if extended context should return, False for basic.
+
+      :return: list of context for each relationship.
+      :rtype: ``list``
+      """
+      context_list = []
+      for relationship in relationships:
+          relationships_context = {'EntityA': relationship['entityA'],
+                                   'EntityAType': relationship['entityAType'],
+                                   'EntityB': relationship['entityB'],
+                                   'EntityBType': relationship['entityBType'],
+                                   'Relationship': relationship['name'],
+                                   'Reverse': relationship['reverseName'],
+                                   'ID': relationship['id']}
+          if verbose:
+              relationships_context['Type'] = relationship.get('type', '')
+
+              sources = relationship.get('sources')
+              if sources:
+                  relationships_context['Reliability'] = sources[0].get('reliability', '')
+                  relationships_context['Brand'] = sources[0].get('brand', '')
+
+              custom_fields = relationship.get('CustomFields', {})
+              if custom_fields:
+                  relationships_context['Revoked'] = custom_fields.get('revoked', '')
+                  relationships_context['FirstSeenBySource'] = custom_fields.get('firstseenbysource', '')
+                  relationships_context['LastSeenBySource'] = custom_fields.get('lastseenbysource', '')
+                  relationships_context['Description'] = custom_fields.get('description', '')
+
+          context_list.append(relationships_context)
+
+      return context_list
+
+
+  def handle_stix_types(entities_types: str) -> str:
+      entities_types = argToList(entities_types)
+      for e_type in entities_types:
+          FeedIndicatorType.indicator_type_by_server_version(e_type)
+      return ','.join(str(x) for x in entities_types).replace(', ', ',')
+
+
+  def search_relationships_fromversion_6_6_0(args: dict) -> List[dict]:
+      for list_arg in ['entities', 'entityTypes', 'relationshipNames']:
+          args[list_arg] = argToList(args[list_arg]) if args[list_arg] else None
+      res = demisto.searchRelationships(args)
+      return res.get('data', [])
+
+
+  def search_relationships_toversion_6_5_0(args: dict) -> List[dict]:
+      res = demisto.executeCommand("searchRelationships", args)
+      if is_error(res[0]):
+          raise Exception("Error in searchRelationships command - {}".format(res[0]["Contents"]))
+      return res[0].get('Contents', {}).get('data', [])
+
+
+  def search_relationships(
+      entities: Optional[str] = None,
+      entities_types: Optional[str] = None,
+      relationships: Optional[str] = None,
+      limit: Optional[int] = None,
+      query: Optional[str] = None
+  ) -> List[dict]:
+      args = {
+          'entities': entities,
+          'entityTypes': entities_types,
+          'relationshipNames': relationships,
+          'size': limit,
+          'query': query
+      }
+      if is_demisto_version_ge('6.6.0'):
+          return search_relationships_fromversion_6_6_0(args)
+      return search_relationships_toversion_6_5_0(args)
+
+
+  ''' MAIN FUNCTION '''
+
+
+  def main():  # pragma: no cover
+      try:
+          args = demisto.args()
+          entities = args.get('entities', '')
+          entities_types = args.get('entities_types', '')
+          relationships = args.get('relationships', '')
+          limit = int(args.get('limit', '20'))
+          verbose = argToBoolean(args.get('verbose', 'false'))
+          revoked = argToBoolean(args.get('revoked', 'false'))
+          query = 'revoked:T' if revoked else 'revoked:F'
+          handle_stix_types(entities_types)
+
+          if relationships := search_relationships(entities, entities_types, relationships, limit, query):
+              context = to_context(relationships, verbose)
+          else:
+              context = []
+          hr = tableToMarkdown('Relationships', context,
+                               headers=['EntityA', 'EntityAType', 'EntityB', 'EntityBType', 'Relationship'],
+                               headerTransform=lambda header: re.sub(r"\B([A-Z])", r" \1", header))
+          return_results(
+              CommandResults(readable_output=hr, outputs_prefix='Relationships', outputs=context, outputs_key_field='ID'))
+
+      except Exception as e:
+          return_error(f'Failed to execute SearchIndicatorRelationships automation. Error: {str(e)}')
+
+
+  ''' ENTRY POINT '''
+
+  if __name__ in ('__main__', '__builtin__', 'builtins'):
+      main()
+
+  register_module_line('SearchIndicatorRelationships', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- basescript
+type: python
