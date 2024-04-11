@@ -1,0 +1,61 @@
+args:
+- default: true
+  description: Value to convert.
+  name: value
+  required: true
+- description: String to convert to.
+  name: convertTo
+  required: true
+- description: Comma separated list of exceptions.
+  isArray: true
+  name: except
+comment: Convert all chosen values but exceptions.
+commonfields:
+  id: ConvertAllExcept
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.2.61
+    packID: FiltersAndTransformers
+    packName: Filters And Transformers
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.86272
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: ConvertAllExcept
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('ConvertAllExcept', 'start', __line__())
+  ### pack version: 1.2.61
+
+
+
+
+  def main(args):
+      value = args.get('value')
+      convert_to = args.get('convertTo')
+      exceptions = argToList(args.get('except'))
+
+      return value if value in exceptions else convert_to
+
+
+  if __name__ in ('builtins', '__builtin__'):
+      result = main(demisto.args())
+      demisto.results(result)
+
+  register_module_line('ConvertAllExcept', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- transformer
+type: python
