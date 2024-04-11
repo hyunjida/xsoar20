@@ -1,0 +1,83 @@
+args:
+- description: The base context path under which to find the fields. For example Test.Results.
+  name: key
+  required: true
+- description: The list of fields to retrieve from context. The list can contain comma
+    seperated values. For example key1,key1
+  isArray: true
+  name: list
+  required: true
+- description: The value to set in context for the key.
+  name: value
+comment: |-
+  The script receives a list of fields and a context key base path. For example, Key=Test.result List=username,user and will get all of the values from Test.result.username and Test.result.user.
+  The Get field of the task must have the value ${.=[]}.
+commonfields:
+  id: GetValuesOfMultipleFields
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.2.61
+    packID: FiltersAndTransformers
+    packName: Filters And Transformers
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.86272
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: GetValuesOfMultipleFields
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('GetValuesOfMultipleFields', 'start', __line__())
+  ### pack version: 1.2.61
+
+
+  from typing import List, Dict
+
+
+  def update_list(_list: List, update_with):
+      if isinstance(update_with, list):
+          _list.extend(update_with)
+      else:
+          _list.append(update_with)
+
+
+  def main():
+      args: Dict = demisto.args()
+      root = args.get('key')
+      if root:
+          if not isinstance(root, list):
+              root = [root]
+          keys: List = args.get('list', '').split(',')
+
+          t: List = []
+          for obj in root:
+              for _key in keys:
+                  temp = obj.get(_key) if obj else None
+                  if temp:
+                      update_list(t, temp)
+
+          initial_value = args.get('value')
+          if initial_value:
+              update_list(t, initial_value)
+          demisto.results(t)
+
+
+  if __name__ in ('builtins', '__builtin__'):
+      main()
+
+  register_module_line('GetValuesOfMultipleFields', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- transformer
+type: python
