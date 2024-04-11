@@ -1,0 +1,97 @@
+{
+	"cacheVersn": 0,
+	"definitionId": "",
+	"fromDate": "0001-01-01T00:00:00Z",
+	"fromDateLicense": "0001-01-01T00:00:00Z",
+	"fromServerVersion": "",
+	"hidePivot": false,
+	"hideSearch": false,
+	"id": "b48601c2-7b70-440f-8a4f-49e9a280b2b7",
+	"isCommon": true,
+	"itemVersion": "",
+	"layout": [
+		{
+			"forceRange": false,
+			"h": 2,
+			"i": "a15b0630-f7c1-11ee-97cc-efed1a9f62b1",
+			"id": "a15b0630-f7c1-11ee-97cc-efed1a9f62b1",
+			"reflectDimensions": true,
+			"w": 2,
+			"widget": {
+				"Cache": null,
+				"cacheVersn": 0,
+				"category": "",
+				"commitMessage": "",
+				"created": "2024-04-11T11:36:05.438857553+09:00",
+				"dataType": "incidents",
+				"dateRange": {
+					"fromDate": "0001-01-01T00:00:00Z",
+					"fromDateLicense": "0001-01-01T00:00:00Z",
+					"period": {
+						"by": "",
+						"byFrom": "days",
+						"byTo": "",
+						"field": "",
+						"fromValue": 7,
+						"toValue": null
+					},
+					"toDate": "0001-01-01T00:00:00Z"
+				},
+				"definitionId": "",
+				"fromServerVersion": "5.0.0",
+				"id": "average-incident-duration-by-role",
+				"isPredefined": true,
+				"itemVersion": "1.2.48",
+				"modified": "2024-04-11T11:36:08.442807987+09:00",
+				"name": "Average Incident Duration by Role (Avg)",
+				"packID": "CommonWidgets",
+				"packName": "Common Widgets",
+				"packPropagationLabels": [
+					"all"
+				],
+				"params": {
+					"groupBy": [
+						"roles"
+					],
+					"keys": [
+						"avg|openDuration / (3600*24)"
+					]
+				},
+				"prevName": "Average Incident Duration by Role (Avg)",
+				"propagationLabels": [],
+				"query": "status:closed",
+				"shouldCommit": false,
+				"size": 5,
+				"sizeInBytes": 0,
+				"toServerVersion": "",
+				"vcShouldIgnore": false,
+				"vcShouldKeepItemLegacyProdMachine": false,
+				"version": 1,
+				"widgetType": "column"
+			},
+			"x": 0,
+			"y": 0
+		}
+	],
+	"locked": false,
+	"modulePage": false,
+	"name": "c",
+	"owner": "",
+	"packID": "",
+	"packName": "",
+	"period": {
+		"by": "",
+		"byFrom": "days",
+		"byTo": "",
+		"field": "",
+		"fromValue": 7,
+		"toValue": null
+	},
+	"propagationLabels": [
+		"all"
+	],
+	"system": false,
+	"toDate": "0001-01-01T00:00:00Z",
+	"toServerVersion": "",
+	"version": -1
+}
