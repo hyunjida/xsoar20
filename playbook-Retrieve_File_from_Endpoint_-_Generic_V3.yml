@@ -1,0 +1,252 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.0.0
+    itemVersion: 2.6.15
+    packID: CommonPlaybooks
+    packName: Common Playbooks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: |-
+  'This playbook retrieves a file sample from an endpoint using the following playbooks:'
+  - Get File Sample From Path - Generic v2.
+  - Get File Sample By Hash - Generic v3.
+id: Retrieve File from Endpoint - Generic V3
+inputs:
+- description: The MD5 hash value for the file to retrieve.
+  key: MD5
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: The SHA256 hash value for the file to retrieve.
+  key: SHA256
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: Hostname of the machine on which the file is located for PS remote
+    it can also be an IP address.
+  key: Host
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: |-
+    The path of the file to retrieve.
+    For example:
+    C:\users\folder\file.txt
+  key: Path
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: The ID of the agent in the relevant integration (such as EDR).
+  key: Agent_ID
+  playbookInputQuery: null
+  required: false
+  value: {}
+name: Retrieve File from Endpoint - Generic V3
+outputs:
+- contextPath: File.Size
+  description: The size of the file.
+  type: number
+- contextPath: File.Type
+  description: The type of the file.
+  type: string
+- contextPath: File.Info
+  description: General information of the file.
+  type: string
+- contextPath: File.MD5
+  description: The MD5 hash of the file.
+  type: string
+- contextPath: File.SHA1
+  description: The SHA1 hash of the file.
+  type: string
+- contextPath: File.SHA256
+  description: The SHA256 hash of the file.
+  type: string
+- contextPath: File.SHA512
+  description: The SHA512 hash of the file.
+  type: string
+- contextPath: File.EntryID
+  description: File entry ID.
+  type: string
+- contextPath: File.Extension
+  description: The file extension.
+  type: string
+- contextPath: File.Name
+  description: The file name.
+  type: string
+- contextPath: File.SSDeep
+  description: The file SSDeep.
+  type: string
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "4"
+      - "5"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: aafd2bad-97ae-4462-85cb-8ef1cad54fc5
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: aafd2bad-97ae-4462-85cb-8ef1cad54fc5
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 50
+        }
+      }
+  "3":
+    continueonerrortype: ""
+    id: "3"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 21df4e3f-565e-48ca-8937-7106ed312e6e
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 21df4e3f-565e-48ca-8937-7106ed312e6e
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 370
+        }
+      }
+  "4":
+    continueonerrortype: ""
+    id: "4"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "3"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      MD5:
+        complex:
+          root: inputs.MD5
+      SHA256:
+        complex:
+          root: inputs.SHA256
+    separatecontext: true
+    skipunavailable: false
+    task:
+      brand: ""
+      description: |-
+        'This playbook returns a file sample from a specified path and host that you input in the following playbooks:'
+        - Get binary file by MD5 hash from Carbon Black telemetry data - VMware Carbon Black EDR v2.
+        - Get the threat (file) attached to a specific SHA256 hash - Cylance Protect v2.
+      id: 912761f3-e299-4ff5-86f2-33e81bb75178
+      iscommand: false
+      name: Get File Sample By Hash - Generic v3
+      playbookId: Get File Sample By Hash - Generic v3
+      type: playbook
+      version: -1
+    taskid: 912761f3-e299-4ff5-86f2-33e81bb75178
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 515,
+          "y": 195
+        }
+      }
+  "5":
+    continueonerrortype: ""
+    id: "5"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "3"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      Agent_ID:
+        complex:
+          root: inputs.Agent_ID
+      Host:
+        complex:
+          root: inputs.Host
+      Path:
+        complex:
+          root: inputs.Path
+    separatecontext: true
+    skipunavailable: false
+    task:
+      brand: ""
+      description: |
+        This playbook returns a file sample from a specified path and host that you input in the following playbooks:
+        1) PS Remote Get File Sample From Path.
+        2) Get File Sample From Path - VMware Carbon Black EDR (Live Response API).
+      id: c5571a25-f1e3-4bd1-84eb-b72477be826b
+      iscommand: false
+      name: Get File Sample From Path - Generic V3
+      playbookId: Get File Sample From Path - Generic V3
+      type: playbook
+      version: -1
+    taskid: c5571a25-f1e3-4bd1-84eb-b72477be826b
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 30,
+          "y": 195
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 385,
+        "width": 865,
+        "x": 30,
+        "y": 50
+      }
+    }
+  }
