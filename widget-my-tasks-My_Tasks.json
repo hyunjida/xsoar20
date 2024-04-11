@@ -1,0 +1,44 @@
+{
+	"Cache": null,
+	"cacheVersn": 0,
+	"category": "",
+	"dataType": "tasks",
+	"dateRange": {
+		"fromDate": "0001-01-01T00:00:00Z",
+		"fromDateLicense": "0001-01-01T00:00:00Z",
+		"period": {
+			"by": "",
+			"byFrom": "days",
+			"byTo": "",
+			"field": "",
+			"fromValue": null,
+			"toValue": null
+		},
+		"toDate": "0001-01-01T00:00:00Z"
+	},
+	"definitionId": "",
+	"fromServerVersion": "5.0.0",
+	"id": "my-tasks",
+	"isPredefined": true,
+	"itemVersion": "1.2.48",
+	"name": "My Tasks",
+	"packID": "CommonWidgets",
+	"packName": "Common Widgets",
+	"packPropagationLabels": [
+		"all"
+	],
+	"params": null,
+	"propagationLabels": [],
+	"query": "assignee:\"{me}\" and (state:Waiting or state:inprogress or state:error)",
+	"size": 10,
+	"sort": [
+		{
+			"asc": true,
+			"field": "dueDate",
+			"fieldType": ""
+		}
+	],
+	"toServerVersion": "",
+	"version": -1,
+	"widgetType": "list"
+}
