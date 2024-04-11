@@ -1,0 +1,357 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.5.0
+    itemVersion: 2.6.17
+    packID: VirusTotal
+    packName: VirusTotal
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: Detonate URL through VirusTotal (API v3) integration.
+id: Detonate URL - VirusTotal (API v3)
+inputs:
+- description: Entry ID of the file to detonate
+  key: URL
+  playbookInputQuery: null
+  required: false
+  value:
+    complex:
+      accessor: Data
+      root: URL
+name: Detonate URL - VirusTotal (API v3)
+outputs:
+- contextPath: VirusTotal.Analysis.data.attributes.stats.harmless
+  description: Number of engines found the indicator harmless.
+  type: number
+- contextPath: VirusTotal.Analysis.data.attributes.stats.malicious
+  description: Number of engines found the indicator malicious.
+  type: number
+- contextPath: VirusTotal.Analysis.data.attributes.stats.suspicious
+  description: Number of engines found the indicator suspicious.
+  type: number
+- contextPath: VirusTotal.Analysis.data.attributes.stats.timeout
+  description: Number of engines found the indicator timeout.
+  type: number
+- contextPath: VirusTotal.Analysis.data.attributes.stats.undetected
+  description: Number of engines found the indicator undetected.
+  type: number
+- contextPath: VirusTotal.Analysis.data.attributes.date
+  description: Date of the analysis in epoch
+  type: number
+- contextPath: VirusTotal.Analysis.data.attributes.status
+  description: Status of the analysis
+  type: string
+- contextPath: VirusTotal.Analysis.data.id
+  description: ID of the analysis.
+  type: string
+- contextPath: VirusTotal.Analysis.data.type
+  description: Type of object (analysis)
+  type: string
+- contextPath: VirusTotal.Analysis.meta.url_info.id
+  description: ID of the url
+  type: string
+- contextPath: VirusTotal.Analysis.meta.url_info.url
+  description: The URL
+  type: string
+- contextPath: VirusTotal.Analysis.id
+  description: The analysis ID.
+  type: string
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "1"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 86e2dc19-6b2a-4c94-8564-7014fb0e2da8
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: 86e2dc19-6b2a-4c94-8564-7014fb0e2da8
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 275,
+          "y": 40
+        }
+      }
+  "1":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: brand
+                filters:
+                - - left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: VirusTotal (API v3)
+                - - left:
+                      iscontext: true
+                      value:
+                        simple: modules.state
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: active
+                root: modules
+          operator: isExists
+      label: "yes"
+    continueonerrortype: ""
+    id: "1"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "7"
+      "yes":
+      - "2"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 17262ca9-15d6-4d3b-85a1-4f5d91128b2b
+      iscommand: false
+      name: Is VirusTotal (API v3) enabled?
+      type: condition
+      version: -1
+    taskid: 17262ca9-15d6-4d3b-85a1-4f5d91128b2b
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 275,
+          "y": 195
+        }
+      }
+  "2":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.URL
+          operator: isExists
+      label: "yes"
+    continueonerrortype: ""
+    id: "2"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "7"
+      "yes":
+      - "3"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 7cf30ee8-4521-460c-8c42-aa0ece81265b
+      iscommand: false
+      name: Is there a URL to detonate?
+      type: condition
+      version: -1
+    taskid: 7cf30ee8-4521-460c-8c42-aa0ece81265b
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 160,
+          "y": 370
+        }
+      }
+  "3":
+    continueonerrortype: ""
+    id: "3"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "5"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      url:
+        complex:
+          root: inputs.URL
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: VirusTotal (API v3)
+      description: Scans a specified URL. Use vt-analysis-get to get the scan results.
+      id: fa9b4bec-d46a-498e-8da9-b89518218731
+      iscommand: true
+      name: Send URL to VirusTotal
+      script: VirusTotal (API v3)|||url-scan
+      type: regular
+      version: -1
+    taskid: fa9b4bec-d46a-498e-8da9-b89518218731
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 545
+        }
+      }
+  "5":
+    continueonerrortype: ""
+    id: "5"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "6"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      Ids:
+        complex:
+          accessor: id
+          root: VirusTotal.Submission
+      Interval:
+        simple: "1"
+      PollingCommandArgName:
+        simple: id
+      PollingCommandName:
+        simple: vt-analysis-get
+      Timeout:
+        simple: "10"
+      dt:
+        simple: VirusTotal.Analysis.data(val.attributes.status != 'completed').id
+    separatecontext: true
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 4c8c6c5e-28d9-4843-8031-57596a5f2504
+      iscommand: false
+      name: GenericPolling
+      playbookId: GenericPolling
+      type: playbook
+      version: -1
+    taskid: 4c8c6c5e-28d9-4843-8031-57596a5f2504
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 720
+        }
+      }
+  "6":
+    continueonerrortype: ""
+    id: "6"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "7"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      id:
+        complex:
+          accessor: id
+          root: VirusTotal.Submission
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: VirusTotal (API v3)
+      description: Retrives resolutions of the given ip.
+      id: 99077345-9d21-4d96-88bd-d8003b009cf7
+      iscommand: true
+      name: Get analysis from VirusTotal
+      script: VirusTotal (API v3)|||vt-analysis-get
+      type: regular
+      version: -1
+    taskid: 99077345-9d21-4d96-88bd-d8003b009cf7
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 895
+        }
+      }
+  "7":
+    continueonerrortype: ""
+    id: "7"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: b8f2766b-7395-4a9a-8577-40502aa55ceb
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: b8f2766b-7395-4a9a-8577-40502aa55ceb
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 275,
+          "y": 1070
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 1095,
+        "width": 605,
+        "x": 50,
+        "y": 40
+      }
+    }
+  }
