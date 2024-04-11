@@ -1,0 +1,45 @@
+args:
+- default: true
+  description: The command to schedule
+  name: command
+  required: true
+- description: The scheduled time to run
+  name: cron
+  required: true
+- description: When should we end the schedule. Will be only relevant if times is
+    not provided. Optional. Format is 'Mon, 02 Jan 2006 15:04:05 MST'
+  name: endDate
+- description: The number of times to run. Optional.
+  name: times
+- description: The GUID of the scheduled entry that runs the polling command.
+  name: scheduledEntryGuid
+comment: Schedule a command to run inside the war room at a future time (once or reoccurring)
+commonfields:
+  id: ScheduleCommand
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+engineinfo: {}
+mainengineinfo: {}
+name: ScheduleCommand
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  // pack version: 1.14.2
+  return executeCommand("scheduleEntry", args);
+scripttarget: 0
+system: true
+tags:
+- Utility
+type: javascript
