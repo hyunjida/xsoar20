@@ -1,0 +1,97 @@
+args:
+- description: The file entry ID.
+  name: entryId
+  required: true
+- description: The list name in which to store the file. The list must exist in Demisto.
+  name: listName
+  required: true
+- auto: PREDEFINED
+  defaultValue: "false"
+  description: Whether to zip the file before storing it in the list.
+  name: zipFile
+  predefined:
+  - "true"
+  - "false"
+comment: |
+  Encode a file as base64 and store it in a Demisto list.
+commonfields:
+  id: FileToBase64List
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.83255
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: FileToBase64List
+pswd: ""
+runas: DBotWeakRole
+runonce: true
+script: |
+  register_module_line('FileToBase64List', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+
+  import base64
+  import zlib
+
+
+  def get_file_data(file_path, zip=False):
+      with open(file_path, 'rb') as f:
+          data = f.read()
+          if zip:
+              data = zlib.compress(data)
+
+      return base64.b64encode(data).decode('utf-8')
+
+
+  def main():
+      LIST_NAME = demisto.args()['listName']
+      TO_ZIP = (demisto.args()['zipFile'] == 'true')
+
+      entry_id = demisto.args()['entryId']
+      res = demisto.getFilePath(entry_id)
+      if not res:
+          return_error("Entry {} not found".format(entry_id))
+      file_path = res['path']
+
+      file_base64 = get_file_data(file_path, TO_ZIP)
+
+      res = demisto.executeCommand("createList", {"listName": LIST_NAME, "listData": file_base64})
+      if isError(res):
+          return res
+
+      return {
+          'Contents': file_base64,
+          'ContentsFormat': formats['text'],
+          'HumanReadable': tableToMarkdown('Success store file in list', {
+              'File Entry ID': entry_id,
+              'List Name': LIST_NAME,
+              'Size': len(file_base64)
+          }),
+          'HumanReadableFormat': formats['markdown'],
+      }
+
+
+  if __name__ in ('__main__', '__builtin__', 'builtins'):
+      demisto.results(main())
+
+  register_module_line('FileToBase64List', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- Utility
+- list
+type: python
