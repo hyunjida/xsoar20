@@ -1,0 +1,52 @@
+{
+	"cacheVersn": 0,
+	"close": null,
+	"definitionId": "",
+	"description": "",
+	"detached": false,
+	"details": null,
+	"detailsV2": null,
+	"edit": {
+		"sections": [
+			{
+				"description": "",
+				"fields": [
+					{
+						"fieldId": "incident_name",
+						"isVisible": true
+					},
+					{
+						"fieldId": "incident_playbookid",
+						"isVisible": true
+					}
+				],
+				"isVisible": true,
+				"name": "Basic Information",
+				"query": null,
+				"queryType": "",
+				"readOnly": false,
+				"type": ""
+			}
+		]
+	},
+	"fromServerVersion": "6.0.0",
+	"group": "incident",
+	"id": "Indicator Feed",
+	"indicatorsDetails": null,
+	"indicatorsQuickView": null,
+	"itemVersion": "3.4.1",
+	"locked": false,
+	"mobile": null,
+	"name": "Indicator Feed Incident",
+	"packID": "CommonTypes",
+	"packName": "Common Types",
+	"packPropagationLabels": [
+		"all"
+	],
+	"propagationLabels": [],
+	"quickView": null,
+	"quickViewV2": null,
+	"system": true,
+	"toServerVersion": "99.99.99",
+	"version": -1
+}
