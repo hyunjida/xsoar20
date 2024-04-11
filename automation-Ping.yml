@@ -1,0 +1,96 @@
+args:
+- default: true
+  description: Address to ping
+  name: address
+  required: true
+comment: Pings an IP or url address, to verify it's up
+commonfields:
+  id: Ping
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/netutils:1.0.0.86390
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: Ping
+outputs:
+- contextPath: Ping.ret_code
+  description: Ping return code
+  type: number
+- contextPath: Ping.destination
+  description: Ping destination address
+  type: string
+- contextPath: Ping.max_rtt
+  description: Ping max round trip time
+  type: number
+- contextPath: Ping.avg_rtt
+  description: Ping average round trip time
+  type: number
+- contextPath: Ping.min_rtt
+  description: Ping minimum round trip time
+  type: number
+- contextPath: Ping.destination_ip
+  description: Ping destination IP
+  type: string
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('Ping', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+  import subprocess
+  import re
+
+
+  def main():
+      try:
+          dest = demisto.args()['address']
+          ping_out = subprocess.check_output(
+              ['ping', '-c', '3', '-q', dest], stderr=subprocess.STDOUT, universal_newlines=True
+          )
+          s = re.search(r"PING.*?\((.+?)\)", ping_out)
+          res = {}
+          if s:
+              res['destination_ip'] = s.group(1)
+          s = re.search(r"rtt min/avg/max/mdev = (.+)/(.+)/(.+)/(.+)\s+ms", ping_out)
+          if not s:
+              raise ValueError("Couldn't parse ping statistics:\n" + ping_out)
+          res['ret_code'] = '0'
+          res['destination'] = dest
+          res['min_rtt'] = s.group(1)
+          res['avg_rtt'] = s.group(2)
+          res['max_rtt'] = s.group(3)
+          res['mdev_rtt'] = s.group(4)
+          return_outputs(readable_output=tableToMarkdown("Ping Results", res), outputs={"Ping": res}, raw_response=res)
+      except Exception as e:
+          if isinstance(e, subprocess.CalledProcessError):
+              msg = e.output  # pylint: disable=no-member
+          else:
+              msg = str(e)
+          return_error(msg)
+
+
+  # python2 uses __builtin__ python3 uses builtins
+  if __name__ == "__builtin__" or __name__ == "builtins":
+      main()
+
+  register_module_line('Ping', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- Utility
+type: python
