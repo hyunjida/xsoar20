@@ -1,0 +1,1062 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.9.0
+    itemVersion: 2.1.22
+    packID: PAN-OS
+    packName: PAN-OS by Palo Alto Networks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: |
+  This playbook is designed to enhance the security level in PAN-OS firewalls by safely adding an Anti-Spyware security profile to a security rule.
+  The playbook provides control over the behavior when a a rule:
+  - Already has an Anti-Spyware profile
+  - Uses a security profile group, with or without an Anti-Spyware profile
+
+  The output of the playbook is the Anti-Spyware profile configured for the rule upon playbook completion. This can be:
+  - The initial profile, if untouched
+  - A newly overwritten profile
+  - A newly added profile
+id: PAN-OS - Add Anti-Spyware Security Profile To Rule
+inputs:
+- description: The name of the rule to which the Security Profile should be added.
+  key: RuleName
+  playbookInputQuery: null
+  required: true
+  value: {}
+- description: The name of the Security Profile that should be added to the rule.
+    If it doesn't exit, one will be created with the name specified here.
+  key: SecurityProfileName
+  playbookInputQuery: null
+  required: true
+  value: {}
+- description: |-
+    Whether to overwrite an existing Anti-Spyware Security Profile.
+    If an Anti-Spyware Security Profile is configured to the rule through a group of profiles and not a single profile, setting this input's value to True will overwrite the existing profile within the group instead of applying the profile and overwriting the whole group.
+
+    Possible values are: True to overwrite, False to keep existing.
+  key: OverwriteProfileIfExists
+  playbookInputQuery: null
+  required: true
+  value:
+    simple: "False"
+name: PAN-OS - Add Anti-Spyware Security Profile To Rule
+outputs:
+- contextPath: AntiSpywareProfileNameApplied
+  description: The name of the Anti-Spyware Security Profile that is applied to the
+    rule. The value could be the name of the profile that was added, overwritten with,
+    or left untouched - for the specified rule.
+  type: unknown
+starttaskid: "0"
+system: true
+tags:
+- PAN-OS
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "2"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 03fa6d8d-2cb3-459e-800d-4ab89475bc4d
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: 03fa6d8d-2cb3-459e-800d-4ab89475bc4d
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 70
+        }
+      }
+  "1":
+    conditions:
+    - condition:
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              simple: inputs.OverwriteProfileIfExists
+          operator: isEqualString
+          right:
+            value:
+              simple: "True"
+        - left:
+            iscontext: true
+            value:
+              simple: Panorama.SecurityRule.SecurityProfile.spyware
+          operator: isEmpty
+      - - left:
+            iscontext: true
+            value:
+              simple: Panorama.SecurityRule.SecurityProfileGroup
+          operator: isEmpty
+      label: Yes, add/overwrite profile
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: Panorama.SecurityRule.SecurityProfileGroup
+          operator: isNotEmpty
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              simple: inputs.OverwriteProfileIfExists
+          operator: isEqualString
+          right:
+            value:
+              simple: "True"
+      label: Yes, edit group
+    - condition:
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              simple: inputs.OverwriteProfileIfExists
+          operator: isEqualString
+          right:
+            value:
+              simple: "False"
+      - - left:
+            iscontext: true
+            value:
+              simple: Panorama.SecurityRule.SecurityProfileGroup
+          operator: isEmpty
+      label: No, profile exists
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: Panorama.SecurityRule.SecurityProfileGroup
+          operator: isNotEmpty
+      label: Maybe, if group is empty
+    continueonerrortype: ""
+    id: "1"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      Maybe, if group is empty:
+      - "35"
+      No, profile exists:
+      - "27"
+      Yes, add/overwrite profile:
+      - "18"
+      Yes, edit group:
+      - "29"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: |-
+        Checks whether the rule can have the anti spyware profile applied to it.
+        There are 4 different possible scenarios:
+        1. It has no profile, so the specified profile can be applied.
+        2. It has a profile, but it should not be overwritten with a new anti spyware profile.
+        3. It has a security profile group, and the anti-spyware profile specified can be added to that group.
+        4. It has a security profile group, but the anti-spyware profile can be applied only if the group doesn't already have an anti spyware profile in it.
+      id: 23837a9f-eb83-4e85-8dec-6fa7d71f43d6
+      iscommand: false
+      name: Can a new anti-spyware profile be applied?
+      type: condition
+      version: -1
+    taskid: 23837a9f-eb83-4e85-8dec-6fa7d71f43d6
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": -460,
+          "y": 870
+        }
+      }
+  "2":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.RuleName
+          operator: isNotEmpty
+          right:
+            value: {}
+      label: "yes"
+    continueonerrortype: ""
+    id: "2"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "7"
+      "yes":
+      - "4"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks whether a rule to add the profile to was specified in the
+        playbook inputs.
+      id: f6aeed27-6fdd-4f51-823c-f6023d67c200
+      iscommand: false
+      name: Is there a rule input?
+      type: condition
+      version: -1
+    taskid: f6aeed27-6fdd-4f51-823c-f6023d67c200
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 240
+        }
+      }
+  "4":
+    continueonerrortype: ""
+    id: "4"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "5"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      rulename:
+        complex:
+          root: inputs.RuleName
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Returns a list of predefined Security Rules.
+      id: cf2d7fb4-3d5a-4241-8209-7b481032df34
+      iscommand: true
+      name: Get rule information
+      script: '|||pan-os-list-rules'
+      type: regular
+      version: -1
+    taskid: cf2d7fb4-3d5a-4241-8209-7b481032df34
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -410,
+          "y": 420
+        }
+      }
+  "5":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: Name
+                root: Panorama.SecurityRule
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "5"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "7"
+      "yes":
+      - "1"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks whether a rule was found.
+      id: 386fd178-e596-4999-8a5d-8f22b4456d49
+      iscommand: false
+      name: Was a rule found?
+      type: condition
+      version: -1
+    taskid: 386fd178-e596-4999-8a5d-8f22b4456d49
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": -230,
+          "y": 610
+        }
+      }
+  "7":
+    continueonerrortype: ""
+    id: "7"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 03d79fe8-1a4a-4ab6-8011-d296c4deab0b
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 03d79fe8-1a4a-4ab6-8011-d296c4deab0b
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 250,
+          "y": 2780
+        }
+      }
+  "13":
+    continueonerrortype: ""
+    id: "13"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "33"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Please modify the security profile group, and add the Anti-Spyware
+        security profile called ${inputs.SecurityProfileName}. If there's already
+        an anti-spyware security profile configured there, please overwrite it.
+      id: 345b0c42-ac77-4ffc-8b5e-1db0146cbbc0
+      iscommand: false
+      name: Overwrite with / Add our profile to the security profile group
+      type: regular
+      version: -1
+    taskid: 345b0c42-ac77-4ffc-8b5e-1db0146cbbc0
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -750,
+          "y": 2075
+        }
+      }
+  "14":
+    continueonerrortype: ""
+    id: "14"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "37"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      profile_name:
+        complex:
+          root: inputs.SecurityProfileName
+      profile_type:
+        simple: spyware
+      rule_name:
+        complex:
+          root: inputs.RuleName
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Applies a security profile to specific rules or rules with a specific
+        tag.
+      id: 92d9b23c-c0a9-4db3-82e1-2e081a8fd02e
+      iscommand: true
+      name: Apply security profile to rule
+      script: '|||pan-os-apply-security-profile'
+      type: regular
+      version: -1
+    taskid: 92d9b23c-c0a9-4db3-82e1-2e081a8fd02e
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -2340,
+          "y": 2100
+        }
+      }
+  "18":
+    continueonerrortype: ""
+    id: "18"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "21"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: b9218ad4-b712-4a6a-8339-0569809cf8e1
+      iscommand: false
+      name: Apply Profile
+      type: title
+      version: -1
+    taskid: b9218ad4-b712-4a6a-8339-0569809cf8e1
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": -2340,
+          "y": 1355
+        }
+      }
+  "20":
+    continueonerrortype: ""
+    id: "20"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "14"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      profile_name:
+        complex:
+          root: inputs.SecurityProfileName
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Creates an Anti-Spyware best practice profile.
+      id: f36c5e96-35f7-4966-8682-b7e762838e8f
+      iscommand: true
+      name: Create new anti-spyware security profile
+      script: '|||pan-os-create-anti-spyware-best-practice-profile'
+      type: regular
+      version: -1
+    taskid: f36c5e96-35f7-4966-8682-b7e762838e8f
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -2610,
+          "y": 1890
+        }
+      }
+  "21":
+    continueonerrortype: ""
+    id: "21"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "22"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      security_profile:
+        simple: spyware
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Gets information for the specified security profile.
+      id: 5f9b1397-3912-4fcd-8ea1-2ca1925f2434
+      iscommand: true
+      name: Get existing anti-spyware profiles
+      script: '|||pan-os-get-security-profiles'
+      type: regular
+      version: -1
+    taskid: 5f9b1397-3912-4fcd-8ea1-2ca1925f2434
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -2340,
+          "y": 1495
+        }
+      }
+  "22":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                filters:
+                - - left:
+                      iscontext: true
+                      value:
+                        simple: Panorama.Spyware.Name
+                    operator: isEqualString
+                    right:
+                      iscontext: true
+                      value:
+                        simple: inputs.SecurityProfileName
+                root: Panorama.Spyware.Name
+          operator: isNotEmpty
+          right:
+            value: {}
+      label: "Yes"
+    continueonerrortype: ""
+    id: "22"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "20"
+      "Yes":
+      - "14"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks whether the profile we want to apply already exists or needs
+        to be created.
+      id: b7663e7d-ba72-409c-8cfb-6be52619e5f1
+      iscommand: false
+      name: Does the profile we are applying already exist?
+      type: condition
+      version: -1
+    taskid: b7663e7d-ba72-409c-8cfb-6be52619e5f1
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": -2340,
+          "y": 1675
+        }
+      }
+  "27":
+    continueonerrortype: ""
+    id: "27"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "39"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 0902b5c4-5a83-42ec-8ca6-b1902ec58d54
+      iscommand: false
+      name: Do Nothing
+      type: title
+      version: -1
+    taskid: 0902b5c4-5a83-42ec-8ca6-b1902ec58d54
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": -1570,
+          "y": 1355
+        }
+      }
+  "29":
+    continueonerrortype: ""
+    id: "29"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "31"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: e4d61cca-500e-4b11-8a57-68cfcef10d32
+      iscommand: false
+      name: Apply Profile
+      type: title
+      version: -1
+    taskid: e4d61cca-500e-4b11-8a57-68cfcef10d32
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": -750,
+          "y": 1355
+        }
+      }
+  "30":
+    continueonerrortype: ""
+    id: "30"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "13"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      profile_name:
+        complex:
+          root: inputs.SecurityProfileName
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Creates an Anti-Spyware best practice profile.
+      id: c9079b3c-d507-4899-8bfc-858a775d12ee
+      iscommand: true
+      name: Create new anti-spyware security profile
+      script: '|||pan-os-create-anti-spyware-best-practice-profile'
+      type: regular
+      version: -1
+    taskid: c9079b3c-d507-4899-8bfc-858a775d12ee
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -1000,
+          "y": 1875
+        }
+      }
+  "31":
+    continueonerrortype: ""
+    id: "31"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "32"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      security_profile:
+        simple: spyware
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Gets information for the specified security profile.
+      id: 0dec981d-ff76-4e43-859f-37d806eaef19
+      iscommand: true
+      name: Get existing anti-spyware profiles
+      script: '|||pan-os-get-security-profiles'
+      type: regular
+      version: -1
+    taskid: 0dec981d-ff76-4e43-859f-37d806eaef19
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -750,
+          "y": 1485
+        }
+      }
+  "32":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                filters:
+                - - left:
+                      iscontext: true
+                      value:
+                        simple: Panorama.Spyware.Name
+                    operator: isEqualString
+                    right:
+                      iscontext: true
+                      value:
+                        simple: inputs.SecurityProfileName
+                root: Panorama.Spyware.Name
+          operator: isNotEmpty
+          right:
+            value: {}
+      label: "Yes"
+    continueonerrortype: ""
+    id: "32"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "30"
+      "Yes":
+      - "13"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks whether the profile we want to apply already exists or needs
+        to be created.
+      id: 37bf8e38-7218-42cd-8ab3-36615c3aa051
+      iscommand: false
+      name: Does the profile we are applying already exist?
+      type: condition
+      version: -1
+    taskid: 37bf8e38-7218-42cd-8ab3-36615c3aa051
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": -750,
+          "y": 1685
+        }
+      }
+  "33":
+    continueonerrortype: ""
+    id: "33"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "7"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      key:
+        simple: AntiSpywareProfileNameApplied
+      value:
+        complex:
+          root: inputs.SecurityProfileName
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: |-
+        Set a value in context under the key you entered. If no value is entered, the script doesn't do anything.
+
+        This automation runs using the default Limited User role, unless you explicitly change the permissions.
+        For more information, see the section about permissions here:
+        https://docs-cortex.paloaltonetworks.com/r/Cortex-XSOAR/6.10/Cortex-XSOAR-Administrator-Guide/Automations
+      id: 58454e43-1836-4f61-88af-5efbcd950336
+      iscommand: false
+      name: Save the input profile to outputs
+      script: SetAndHandleEmpty
+      type: regular
+      version: -1
+    taskid: 58454e43-1836-4f61-88af-5efbcd950336
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -750,
+          "y": 2555
+        }
+      }
+  "34":
+    continueonerrortype: ""
+    form:
+      description: ""
+      expired: false
+      questions:
+      - defaultrows: []
+        fieldassociated: ""
+        gridcolumns: []
+        id: "0"
+        label: ""
+        labelarg:
+          simple: What is the name of the anti-spyware profile of the security group
+            called ${Panorama.SecurityRule.SecurityProfileGroup}?
+        options: []
+        optionsarg: []
+        placeholder: ""
+        readonly: false
+        required: true
+        tooltip: ""
+        type: shortText
+      sender: ""
+      title: PAN-OS - Adding an Anti-Spyware Profile to a Group
+      totalanswers: 0
+    id: "34"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    message:
+      bcc: null
+      body:
+        simple: Please provide the name of the existing anti-spyware profile for proper
+          execution of the playbook.
+      cc: null
+      format: ""
+      methods: []
+      subject: null
+      timings:
+        completeafterreplies: 1
+        completeaftersla: false
+        completeafterv2: true
+        retriescount: 2
+        retriesinterval: 360
+      to: null
+    nexttasks:
+      '#none#':
+      - "36"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Please review the the security profile group described below in
+        your PAN-OS firewall instance which is configured in XSOAR, and answer the
+        question.
+      id: d5aa2d6b-bcb1-4a4f-8fce-98bd7dba3894
+      iscommand: false
+      name: Provide the name of the existing anti-spyware profile
+      type: collection
+      version: -1
+    taskid: d5aa2d6b-bcb1-4a4f-8fce-98bd7dba3894
+    timertriggers: []
+    type: collection
+    view: |-
+      {
+        "position": {
+          "x": 10,
+          "y": 1755
+        }
+      }
+  "35":
+    continueonerrortype: ""
+    id: "35"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      Group does not have an anti-spyware profile:
+      - "29"
+      Group has an anti-spyware profile:
+      - "34"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Please check the security profile group ${Panorama.SecurityRule.SecurityProfileGroup}
+        in your PAN-OS firewall instance and see whether it has an anti-spyware security
+        profile at the moment.
+      id: a38481ee-42bc-49eb-8a90-2d79dbc86d87
+      iscommand: false
+      name: Check if the group has an anti-spyware profile
+      type: condition
+      version: -1
+    taskid: a38481ee-42bc-49eb-8a90-2d79dbc86d87
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": -200,
+          "y": 1100
+        }
+      }
+  "36":
+    continueonerrortype: ""
+    id: "36"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "7"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      key:
+        simple: AntiSpywareProfileNameApplied
+      value:
+        complex:
+          accessor: "0"
+          root: PAN-OS - Adding a Security Profile to a Group.Answers
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: |-
+        Set a value in context under the key you entered. If no value is entered, the script doesn't do anything.
+
+        This automation runs using the default Limited User role, unless you explicitly change the permissions.
+        For more information, see the section about permissions here:
+        https://docs-cortex.paloaltonetworks.com/r/Cortex-XSOAR/6.10/Cortex-XSOAR-Administrator-Guide/Automations
+      id: 28f54f2d-4730-4237-8262-45e47586db1a
+      iscommand: false
+      name: Save the existing profile to outputs
+      script: SetAndHandleEmpty
+      type: regular
+      version: -1
+    taskid: 28f54f2d-4730-4237-8262-45e47586db1a
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 10,
+          "y": 2555
+        }
+      }
+  "37":
+    continueonerrortype: ""
+    id: "37"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "7"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      key:
+        simple: AntiSpywareProfileNameApplied
+      value:
+        complex:
+          root: inputs.SecurityProfileName
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: |-
+        Set a value in context under the key you entered. If no value is entered, the script doesn't do anything.
+
+        This automation runs using the default Limited User role, unless you explicitly change the permissions.
+        For more information, see the section about permissions here:
+        https://docs-cortex.paloaltonetworks.com/r/Cortex-XSOAR/6.10/Cortex-XSOAR-Administrator-Guide/Automations
+      id: d74566b1-bcfb-406e-8779-d17292b2c83d
+      iscommand: false
+      name: Save the input profile to outputs
+      script: SetAndHandleEmpty
+      type: regular
+      version: -1
+    taskid: d74566b1-bcfb-406e-8779-d17292b2c83d
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -2340,
+          "y": 2555
+        }
+      }
+  "39":
+    continueonerrortype: ""
+    id: "39"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "7"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      key:
+        simple: AntiSpywareProfileNameApplied
+      value:
+        complex:
+          accessor: spyware
+          root: Panorama.SecurityRule.SecurityProfile
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: |-
+        Set a value in context under the key you entered. If no value is entered, the script doesn't do anything.
+
+        This automation runs using the default Limited User role, unless you explicitly change the permissions.
+        For more information, see the section about permissions here:
+        https://docs-cortex.paloaltonetworks.com/r/Cortex-XSOAR/6.10/Cortex-XSOAR-Administrator-Guide/Automations
+      id: d7d0bdf1-e375-4e69-867c-795283ff7fdf
+      iscommand: false
+      name: Save the existing profile to outputs
+      script: SetAndHandleEmpty
+      type: regular
+      version: -1
+    taskid: d7d0bdf1-e375-4e69-867c-795283ff7fdf
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -1570,
+          "y": 2555
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {
+      "1_18_Yes, add/overwrite profile": 0.89,
+      "1_27_No, profile exists": 0.82,
+      "1_29_Yes, edit group": 0.3,
+      "22_14_Yes": 0.43,
+      "22_20_#default#": 0.49,
+      "2_7_#default#": 0.1,
+      "32_13_Yes": 0.46,
+      "35_29_Group does not have an anti-spyware profile": 0.54,
+      "35_34_Group has an anti-spyware profile": 0.35,
+      "5_7_#default#": 0.12
+    },
+    "paper": {
+      "dimensions": {
+        "height": 2775,
+        "width": 3240,
+        "x": -2610,
+        "y": 70
+      }
+    }
+  }
