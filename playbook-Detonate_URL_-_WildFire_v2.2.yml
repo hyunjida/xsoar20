@@ -1,0 +1,428 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.10.0
+    itemVersion: 2.1.42
+    packID: Palo_Alto_Networks_WildFire
+    packName: WildFire by Palo Alto Networks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: |-
+  Detonate a webpage or remote file using the WildFire v2 integration. This playbook returns relevant reports to the War Room and file reputations to the context data.
+  The detonation supports the following file types:
+  APK, JAR, DOC, DOCX, RTF, OOXLS, XLSX, PPT, PPTX, XML, PE32, PDF, DMG, PKG, RAR, 7Z, JS.
+id: Detonate URL - WildFire v2.2
+inputs:
+- description: URL of the webpage or file url to detonate. The URL is taken from the
+    context.
+  key: URL
+  playbookInputQuery: null
+  required: false
+  value:
+    complex:
+      accessor: Data
+      root: URL
+      transformers:
+      - operator: uniq
+- description: Duration for executing the polling (in seconds).
+  key: Interval
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: "60"
+- description: The duration after which to stop polling and to resume the playbook
+    (in seconds).
+  key: Timeout
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: "600"
+- description: The resource type to download. Default is PDF. XML is also possible.
+  key: ReportFileType
+  playbookInputQuery: null
+  required: false
+  value: {}
+name: Detonate URL - WildFire v2.2
+outputs:
+- contextPath: DBotScore
+  description: The DBotScore object.
+  type: unknown
+- contextPath: DBotScore.Score
+  description: The actual score.
+  type: number
+- contextPath: File.Size
+  description: File size.
+  type: number
+- contextPath: File.MD5
+  description: MD5 hash.
+  type: string
+- contextPath: File.SHA1
+  description: SHA1 hash.
+  type: string
+- contextPath: File.Type
+  description: File type e.g. "PE".
+  type: string
+- contextPath: File.SHA256
+  description: SHA256 hash.
+  type: string
+- contextPath: File.EntryID
+  description: The Entry ID of the sample.
+  type: string
+- contextPath: File.Malicious.Vendor
+  description: For malicious files, the vendor that determined that the file is malicious.
+  type: string
+- contextPath: File.Name
+  description: Filename.
+  type: string
+- contextPath: File.Malicious.Description
+  description: For malicious files, the reason the vendor determined that the file
+    is malicious.
+  type: string
+- contextPath: DBotScore.Indicator
+  description: The indicator we tested.
+  type: string
+- contextPath: DBotScore.Type
+  description: The type of indicator.
+  type: string
+- contextPath: DBotScore.Vendor
+  description: Vendor used to calculate the score.
+  type: string
+- contextPath: IP.Address
+  description: IPs relevant to the sample.
+  type: string
+- contextPath: File
+  description: The File object.
+  type: unknown
+- contextPath: InfoFile
+  description: The report file object.
+  type: unknown
+- contextPath: InfoFile.EntryID
+  description: The EntryID of the report file.
+  type: string
+- contextPath: InfoFile.Extension
+  description: The extension of the report file.
+  type: string
+- contextPath: InfoFile.Name
+  description: The name of the report file.
+  type: string
+- contextPath: InfoFile.Info
+  description: The info of the report file.
+  type: string
+- contextPath: InfoFile.Size
+  description: The size of the report file.
+  type: number
+- contextPath: InfoFile.Type
+  description: The type of the report file.
+  type: string
+- contextPath: File.Malicious
+  description: The malicious object.
+  type: unknown
+- contextPath: WildFire.Report
+  description: The submission object.
+  type: unknown
+- contextPath: WildFire.Report.MD5
+  description: MD5 of the submission.
+  type: string
+- contextPath: WildFire.Report.SHA256
+  description: SHA256 of the submission.
+  type: string
+- contextPath: WildFire.Report.FileType
+  description: The type of the submission.
+  type: string
+- contextPath: WildFire.Report.Status
+  description: The status of the submission.
+  type: string
+- contextPath: WildFire.Report.Size
+  description: The size of the submission.
+  type: number
+- contextPath: WildFire.Report.URL
+  description: URL of the submission.
+  type: string
+- contextPath: WildFire.Report.detection_reasons
+  description: The detection reasons object.
+  type: unknown
+- contextPath: WildFire.Report.detection_reasons.description
+  description: Reason for the detection verdict.
+  type: string
+- contextPath: WildFire.Report.detection_reasons.name
+  description: Name of the detection.
+  type: string
+- contextPath: WildFire.Report.detection_reasons.type
+  description: Type of the detection.
+  type: string
+- contextPath: WildFire.Report.detection_reasons.verdict
+  description: Verdict of the detection.
+  type: string
+- contextPath: WildFire.Report.detection_reasons.artifacts
+  description: Artifacts for the detection reasons.
+  type: string
+- contextPath: WildFire.Report.iocs
+  description: Associated IOCs.
+  type: string
+- contextPath: WildFire.Report.ExtractedURL.URL
+  description: The extracted URL.
+  type: string
+- contextPath: WildFire.Report.ExtractedURL.Verdict
+  description: The extracted verdict.
+  type: number
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "7"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 1b1b3125-d39b-4930-89fc-c9ff36ac559c
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: 1b1b3125-d39b-4930-89fc-c9ff36ac559c
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 30
+        }
+      }
+  "5":
+    continueonerrortype: ""
+    id: "5"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 74b54d79-9464-4112-824b-e836cbce4dbc
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 74b54d79-9464-4112-824b-e836cbce4dbc
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 880
+        }
+      }
+  "6":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: inputs.URL
+          operator: isExists
+      label: "yes"
+    continueonerrortype: ""
+    id: "6"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "5"
+      "yes":
+      - "18"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Look for file URLs to detonate
+      id: d4449595-5c9b-4dfd-8960-35f1d1dc309b
+      iscommand: false
+      name: Is there a URL to detonate?
+      type: condition
+      version: -1
+    taskid: d4449595-5c9b-4dfd-8960-35f1d1dc309b
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 490,
+          "y": 360
+        }
+      }
+  "7":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                filters:
+                - - left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: WildFire-v2
+                root: modules
+                transformers:
+                - args:
+                    field:
+                      value:
+                        simple: state
+                  operator: getField
+          operator: isEqualString
+          right:
+            value:
+              simple: active
+      label: "yes"
+    continueonerrortype: ""
+    id: "7"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "5"
+      "yes":
+      - "6"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Check if integration instance is enabled.
+      id: 8089eb7a-a9e8-4efd-8c2e-74a4583af22e
+      iscommand: false
+      name: Is WildFire-v2 enabled?
+      type: condition
+      version: -1
+    taskid: 8089eb7a-a9e8-4efd-8c2e-74a4583af22e
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 185
+        }
+      }
+  "8":
+    continueonerrortype: ""
+    id: "8"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "5"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      url:
+        complex:
+          accessor: Report.URL
+          root: WildFire
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: WildFire-v2
+      description: Retrieves results for a file hash using WildFire.
+      id: 2a424489-4f53-47f0-8504-6b71550d8bc7
+      iscommand: true
+      name: WildFire Get Report
+      script: WildFire-v2|||wildfire-report
+      type: regular
+      version: -1
+    taskid: 2a424489-4f53-47f0-8504-6b71550d8bc7
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 700,
+          "y": 710
+        }
+      }
+  "18":
+    continueonerrortype: ""
+    id: "18"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "8"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      interval_in_seconds:
+        complex:
+          root: inputs.Interval
+      polling:
+        simple: "true"
+      timeout_in_seconds:
+        complex:
+          root: inputs.Timeout
+      upload:
+        complex:
+          root: inputs.URL
+          transformers:
+          - operator: uniq
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Uploads a URL of a webpage to WildFire for analysis.
+      id: c43f0095-ea2f-4aaf-85ee-41ea5ba54e6c
+      iscommand: true
+      name: WildFire Upload File URL
+      script: '|||wildfire-upload-url'
+      type: regular
+      version: -1
+    taskid: c43f0095-ea2f-4aaf-85ee-41ea5ba54e6c
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 700,
+          "y": 530
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {
+      "7_5_#default#": 0.7
+    },
+    "paper": {
+      "dimensions": {
+        "height": 915,
+        "width": 815,
+        "x": 265,
+        "y": 30
+      }
+    }
+  }
