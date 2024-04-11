@@ -1,0 +1,54 @@
+{
+	"Cache": null,
+	"cacheVersn": 0,
+	"category": "",
+	"dataType": "tasks",
+	"dateRange": {
+		"fromDate": "0001-01-01T00:00:00Z",
+		"fromDateLicense": "0001-01-01T00:00:00Z",
+		"period": {
+			"by": "",
+			"byFrom": "days",
+			"byTo": "",
+			"field": "",
+			"fromValue": 7,
+			"toValue": null
+		},
+		"toDate": "0001-01-01T00:00:00Z"
+	},
+	"definitionId": "",
+	"description": "Task executions",
+	"fromServerVersion": "6.2.0",
+	"id": "task-execution-count",
+	"isPredefined": true,
+	"itemVersion": "1.2.48",
+	"name": "Task executions",
+	"packID": "CommonWidgets",
+	"packName": "Common Widgets",
+	"packPropagationLabels": [
+		"all"
+	],
+	"params": {
+		"groupBy": [
+			"taskName"
+		],
+		"keys": [
+			"sum|1"
+		],
+		"limitType": "top",
+		"valuesFormat": "abbreviated"
+	},
+	"propagationLabels": [],
+	"query": "",
+	"size": 5,
+	"sort": [
+		{
+			"asc": false,
+			"field": "taskName",
+			"fieldType": ""
+		}
+	],
+	"toServerVersion": "",
+	"version": -1,
+	"widgetType": "pie"
+}
