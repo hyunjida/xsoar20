@@ -1,0 +1,114 @@
+args:
+- default: true
+  description: CVE ID
+  name: input
+  required: true
+comment: Provides the severity of the CVE based on the CVSS score where available.
+commonfields:
+  id: cveReputationV2
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.5.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dependson:
+  must:
+  - cve
+dockerimage: demisto/python3:3.10.13.86272
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: cveReputationV2
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('cveReputationV2', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+
+
+  def get_dbot_score(resCmd: list[dict[str, Any]]) -> list[dict[str, Any]]:
+      """
+      Gets the CVE and returns its reputation according to its CVSS score.
+
+      Args:
+          resCmd (list[CommandResults]): A CVE indicator
+
+      Returns:
+          int: either 0,1,2 or 3 depending on the CVSS
+      """
+
+      results = []
+      for cve in resCmd:
+          if 'Contents' in cve:
+              data = cve.get('Contents', {})
+              cvss = data.get('cvss', -1)
+
+              if not cvss:
+                  cvss = -1
+
+              elif isinstance(cvss, dict):
+                  score = data.get('cvss').get('Score', -1)
+                  cvss = float(score) if score else -1
+
+              if cvss == -1:
+                  res = 0
+              elif cvss < 3:
+                  res = 1
+              elif cvss < 7:
+                  res = 2
+              else:
+                  res = 3
+
+              results.append({
+                  'Type': entryTypes['note'],
+                  'ContentsFormat': formats['json'],
+                  'Contents': res,
+                  'EntryContext': {
+                      'DBotScore': {
+                          'Indicator': data.get('id'),
+                          'Type': 'CVE',
+                          'Score': res,
+                          'Vendor': 'DBot'
+                      }
+                  }
+              })
+
+      return results
+
+
+  def main():
+      cves = argToList(demisto.args().get('input'))
+      resCmd = demisto.executeCommand('cve', {'cve': cves})
+      results = get_dbot_score(resCmd)
+
+      if len(results) == 0:
+          # resCmd is expected to be empty result
+          return_results(resCmd)
+
+      else:
+          return_results(results)
+
+
+  if __name__ in ('__main__', 'builtin', 'builtins'):
+      main()
+
+  register_module_line('cveReputationV2', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- cve
+- reputation
+timeout: 2.4µs
+type: python
