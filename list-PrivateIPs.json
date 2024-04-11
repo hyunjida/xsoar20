@@ -1,0 +1,29 @@
+{
+	"allRead": true,
+	"allReadWrite": true,
+	"cacheVersn": 0,
+	"data": "10.0.0.0/8, IANA_Private_Address\n172.16.0.0/12, IANA_Private_Address\n192.168.0.0/16, IANA_Private_Address",
+	"definitionId": "",
+	"description": "",
+	"detached": false,
+	"fromServerVersion": "6.5.0",
+	"id": "PrivateIPs",
+	"itemVersion": "1.14.2",
+	"locked": false,
+	"name": "PrivateIPs",
+	"nameLocked": false,
+	"packID": "CommonScripts",
+	"packName": "Common Scripts",
+	"packPropagationLabels": [
+		"all"
+	],
+	"previousAllRead": true,
+	"previousAllReadWrite": true,
+	"propagationLabels": [],
+	"system": true,
+	"tags": null,
+	"toServerVersion": "",
+	"truncated": false,
+	"type": "plain_text",
+	"version": -1
+}
