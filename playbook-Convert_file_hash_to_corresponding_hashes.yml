@@ -1,0 +1,866 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 2.6.15
+    packID: CommonPlaybooks
+    packName: Common Playbooks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: |
+  The playbook enables you to get all of the corresponding file hashes for a file even if there is only one hash type available.
+  For example, if we have only the SHA256 hash, the playbook will get the SHA1 and MD5 hashes as long as the
+  original searched hash is recognized by any our the threat intelligence integrations.
+id: Convert file hash to corresponding hashes
+inputs:
+- description: The SHA256 hash on which to search.
+  key: SHA256
+  playbookInputQuery: null
+  required: false
+  value:
+    complex:
+      accessor: SHA256
+      root: File
+- description: The SHA1 hash on which to search.
+  key: SHA1
+  playbookInputQuery: null
+  required: false
+  value:
+    complex:
+      accessor: SHA1
+      root: File
+- description: The MD5 hash on which to search.
+  key: MD5
+  playbookInputQuery: null
+  required: false
+  value:
+    complex:
+      accessor: MD5
+      root: File
+name: Convert file hash to corresponding hashes
+outputs:
+- contextPath: File.SHA256
+  description: Output for detected SHA256 hash.
+  type: string
+- contextPath: File.SHA1
+  description: Output for detected SHA1 hash.
+  type: string
+- contextPath: File.MD5
+  description: Output for detected MD5 hash.
+  type: string
+- contextPath: Indicators.Value
+  description: Output for detected hashes.
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "35"
+      - "36"
+      - "37"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Start
+      id: f3d44d02-1482-4dd0-8055-34128346e4ec
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: f3d44d02-1482-4dd0-8055-34128346e4ec
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 520,
+          "y": -100
+        }
+      }
+  "2":
+    continueonerrortype: ""
+    id: "2"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Done
+      id: d0c581d2-789c-4a12-8940-37f17a47b4f6
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: d0c581d2-789c-4a12-8940-37f17a47b4f6
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 530,
+          "y": 950
+        }
+      }
+  "4":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.SHA256
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "4"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "2"
+      "yes":
+      - "44"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Does SHA256 hash exist?
+      id: b797fdc7-1704-442a-8605-ee06bfb0bf54
+      iscommand: false
+      name: Does SHA256 hash exist?
+      type: condition
+      version: -1
+    taskid: b797fdc7-1704-442a-8605-ee06bfb0bf54
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 1080,
+          "y": 200
+        }
+      }
+  "9":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.MD5
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "9"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "2"
+      "yes":
+      - "46"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Does MD5 hash exist?
+      id: f7142eb2-9483-4546-8d07-a828d636d0ad
+      iscommand: false
+      name: Does MD5 hash exist?
+      type: condition
+      version: -1
+    taskid: f7142eb2-9483-4546-8d07-a828d636d0ad
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": -40,
+          "y": 190
+        }
+      }
+  "10":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.SHA1
+          operator: isNotEmpty
+          right:
+            value: {}
+      label: "yes"
+    continueonerrortype: ""
+    id: "10"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "2"
+      "yes":
+      - "45"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Does SHA1 hash exist?
+      id: eff5d9b7-ea36-4310-8650-5e26fa38209e
+      iscommand: false
+      name: Does SHA1 hash exist?
+      type: condition
+      version: -1
+    taskid: eff5d9b7-ea36-4310-8650-5e26fa38209e
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 520,
+          "y": 190
+        }
+      }
+  "15":
+    continueonerror: true
+    continueonerrortype: ""
+    id: "15"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "2"
+    note: false
+    quietmode: 0
+    reputationcalc: 2
+    scriptarguments:
+      file:
+        complex:
+          root: inputs.SHA1
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Uses the SHA1 hash as a reference to check for other corresponding
+        hashes of the same file.
+      id: 65ff1c51-6bc1-4171-8bde-eb6ecb862f4e
+      iscommand: true
+      name: Get hashes by SHA1
+      script: '|||file'
+      type: regular
+      version: -1
+    taskid: 65ff1c51-6bc1-4171-8bde-eb6ecb862f4e
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 300,
+          "y": 750
+        }
+      }
+  "16":
+    continueonerror: true
+    continueonerrortype: ""
+    id: "16"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "2"
+    note: false
+    quietmode: 0
+    reputationcalc: 2
+    scriptarguments:
+      file:
+        complex:
+          root: inputs.MD5
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Uses the MD5 hash as a reference to check for other corresponding
+        hashes of the same file.
+      id: 9e3c8b51-dbc6-464a-8af7-f5d43b663bd4
+      iscommand: true
+      name: Get hashes by MD5
+      script: '|||file'
+      type: regular
+      version: -1
+    taskid: 9e3c8b51-dbc6-464a-8af7-f5d43b663bd4
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -550,
+          "y": 750
+        }
+      }
+  "18":
+    continueonerror: true
+    continueonerrortype: ""
+    id: "18"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "2"
+    note: false
+    quietmode: 0
+    reputationcalc: 2
+    scriptarguments:
+      file:
+        complex:
+          root: inputs.SHA256
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Uses the SHA256 hash as a reference to check for other corresponding
+        hashes of the same file.
+      id: 29ef7703-de75-4ff3-844c-a852e333bdbe
+      iscommand: true
+      name: Get Hashes by SHA256
+      script: '|||file'
+      type: regular
+      version: -1
+    taskid: 29ef7703-de75-4ff3-844c-a852e333bdbe
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 1180,
+          "y": 750
+        }
+      }
+  "35":
+    continueonerrortype: ""
+    id: "35"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "9"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: MD5
+      id: fdfd1cd9-3095-455b-8481-072b140ee5de
+      iscommand: false
+      name: MD5
+      type: title
+      version: -1
+    taskid: fdfd1cd9-3095-455b-8481-072b140ee5de
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": -40,
+          "y": 60
+        }
+      }
+  "36":
+    continueonerrortype: ""
+    id: "36"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "10"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: SHA1
+      id: a75bc19c-d514-44ab-885d-fb6664dd0b29
+      iscommand: false
+      name: SHA1
+      type: title
+      version: -1
+    taskid: a75bc19c-d514-44ab-885d-fb6664dd0b29
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 520,
+          "y": 60
+        }
+      }
+  "37":
+    continueonerrortype: ""
+    id: "37"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "4"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: SHA256
+      id: a2d56e80-d468-46a0-891d-3792a6bf0bd9
+      iscommand: false
+      name: SHA256
+      type: title
+      version: -1
+    taskid: a2d56e80-d468-46a0-891d-3792a6bf0bd9
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 1080,
+          "y": 60
+        }
+      }
+  "39":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: foundIndicators.value
+          operator: isNotEmpty
+          right:
+            value: {}
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: value
+                root: foundIndicators
+          operator: stringHasLength
+          right:
+            value:
+              simple: "64"
+      label: "yes"
+    continueonerrortype: ""
+    id: "39"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "18"
+      "yes":
+      - "40"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 336d7e69-334b-490c-81c4-4b48788a56be
+      iscommand: false
+      name: Have the hashes been retrieved?
+      type: condition
+      version: -1
+    taskid: 336d7e69-334b-490c-81c4-4b48788a56be
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 1350,
+          "y": 540
+        }
+      }
+  "40":
+    continueonerrortype: ""
+    id: "40"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "2"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      indicatorsValues:
+        complex:
+          accessor: value
+          root: foundIndicators
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: Builtin
+      description: commands.local.cmd.enrich.indicators
+      id: 4cbe3c2a-dc3d-46fc-8b6a-b589accfdba3
+      iscommand: true
+      name: Enrich indicators
+      script: Builtin|||enrichIndicators
+      type: regular
+      version: -1
+    taskid: 4cbe3c2a-dc3d-46fc-8b6a-b589accfdba3
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 1600,
+          "y": 750
+        }
+      }
+  "44":
+    continueonerrortype: ""
+    id: "44"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "39"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      query:
+        simple: value:${inputs.SHA256}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: |-
+        Searches Cortex XSOAR indicators.
+
+        Searches for Cortex XSOAR indicators and returns the id, indicator_type, value, and score/verdict.
+
+        You can add additional fields from the indicators using the add_field_to_context argument.
+      id: b27dc11a-1b9f-4056-8288-776eaa57bd63
+      iscommand: false
+      name: Search indicators
+      script: SearchIndicator
+      type: regular
+      version: -1
+    taskid: b27dc11a-1b9f-4056-8288-776eaa57bd63
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 1350,
+          "y": 370
+        }
+      }
+  "45":
+    continueonerrortype: ""
+    id: "45"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "47"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      query:
+        simple: value:${inputs.SHA1}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: |-
+        Searches Cortex XSOAR indicators.
+
+        Searches for Cortex XSOAR Indicators and returns the id, indicator_type, value, and score/verdict.
+
+        You can add additional fields from the indicators using the add_field_to_context argument.
+      id: 1b49a035-86f4-4e1d-81ac-add593725d88
+      iscommand: false
+      name: Search indicators
+      script: SearchIndicator
+      type: regular
+      version: -1
+    taskid: 1b49a035-86f4-4e1d-81ac-add593725d88
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 520,
+          "y": 370
+        }
+      }
+  "46":
+    continueonerrortype: ""
+    id: "46"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "48"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      query:
+        simple: value:${inputs.MD5}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: |-
+        Searches Cortex XSOAR indicators.
+
+        Searches for Cortex XSOAR Indicators and returns the id, indicator_type, value, and score/verdict.
+
+        You can add additional fields from the indicators using the add_field_to_context argument.
+      id: f9974076-074f-4bf4-82a5-0c804fb7875b
+      iscommand: false
+      name: Search indicators
+      script: SearchIndicator
+      type: regular
+      version: -1
+    taskid: f9974076-074f-4bf4-82a5-0c804fb7875b
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -330,
+          "y": 370
+        }
+      }
+  "47":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: foundIndicators.value
+          operator: isNotEmpty
+          right:
+            value: {}
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: value
+                root: foundIndicators
+          operator: stringHasLength
+          right:
+            value:
+              simple: "40"
+      label: "yes"
+    continueonerrortype: ""
+    id: "47"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "15"
+      "yes":
+      - "49"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 0161e3d5-ca7c-4e0e-86d4-f767f1c7b64c
+      iscommand: false
+      name: Have the hashes been retrieved?
+      type: condition
+      version: -1
+    taskid: 0161e3d5-ca7c-4e0e-86d4-f767f1c7b64c
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 520,
+          "y": 540
+        }
+      }
+  "48":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: foundIndicators.value
+          operator: isNotEmpty
+          right:
+            value: {}
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: value
+                root: foundIndicators
+          operator: stringHasLength
+          right:
+            value:
+              simple: "32"
+      label: "yes"
+    continueonerrortype: ""
+    id: "48"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "16"
+      "yes":
+      - "50"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 9fb9988f-d614-4a30-8eb9-09c8a05ad461
+      iscommand: false
+      name: Have the hashes been retrieved?
+      type: condition
+      version: -1
+    taskid: 9fb9988f-d614-4a30-8eb9-09c8a05ad461
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": -330,
+          "y": 540
+        }
+      }
+  "49":
+    continueonerrortype: ""
+    id: "49"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "2"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      indicatorsValues:
+        complex:
+          accessor: value
+          root: foundIndicators
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: Builtin
+      description: commands.local.cmd.enrich.indicators
+      id: 620476dc-83d3-40fe-8d2f-8f978fcdfa23
+      iscommand: true
+      name: Enrich indicators
+      script: Builtin|||enrichIndicators
+      type: regular
+      version: -1
+    taskid: 620476dc-83d3-40fe-8d2f-8f978fcdfa23
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 750,
+          "y": 750
+        }
+      }
+  "50":
+    continueonerrortype: ""
+    id: "50"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "2"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      indicatorsValues:
+        complex:
+          accessor: value
+          root: foundIndicators
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: Builtin
+      description: commands.local.cmd.enrich.indicators
+      id: e4213b2e-29ba-40d3-8ae3-6deec5436549
+      iscommand: true
+      name: Enrich indicators
+      script: Builtin|||enrichIndicators
+      type: regular
+      version: -1
+    taskid: e4213b2e-29ba-40d3-8ae3-6deec5436549
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -120,
+          "y": 750
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {
+      "10_2_#default#": 0.39,
+      "10_45_yes": 0.46,
+      "47_15_#default#": 0.44,
+      "47_49_yes": 0.41,
+      "48_16_#default#": 0.57,
+      "48_50_yes": 0.61,
+      "4_2_#default#": 0.15,
+      "9_2_#default#": 0.19,
+      "9_46_yes": 0.51
+    },
+    "paper": {
+      "dimensions": {
+        "height": 1115,
+        "width": 2530,
+        "x": -550,
+        "y": -100
+      }
+    }
+  }
