@@ -1,0 +1,79 @@
+args:
+- default: true
+  description: A list for which to sum the list values.
+  isArray: true
+  name: value
+  required: true
+comment: "Sums a List\ne.g. [\"25\", \"10\", \"25\"] =>  \"60\"\n\nThis is an example
+  for number transformer.\n "
+commonfields:
+  id: SumList
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.2.61
+    packID: FiltersAndTransformers
+    packName: Filters And Transformers
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.86272
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: SumList
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('SumList', 'start', __line__())
+  ### pack version: 1.2.61
+
+
+
+  def sum_value(value):
+      if isinstance(value, float):
+          return value
+
+      if isinstance(value, str):
+          try:
+              value = [float(item) for item in value.split(',')]
+          except ValueError:
+              return 'error', 'error'
+
+      elif isinstance(value, list):
+          try:
+              value = [float(item) for item in value]
+          except ValueError:
+              return 'error', 'error'
+
+      result = sum(value)
+      return result, 'ok'
+
+
+  def main():
+      value = demisto.args()['value']
+      result, return_type = sum_value(value)
+
+      if return_type == 'error':
+          return_error('This transformer applies only to list of numbers.')
+      demisto.results(result)
+
+
+  # python2 uses __builtin__ python3 uses builtins
+  if __name__ == "__builtin__" or __name__ == "builtins":
+      main()
+
+  register_module_line('SumList', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- transformer
+- number
+- entirelist
+type: python
