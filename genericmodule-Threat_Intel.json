@@ -1,0 +1,372 @@
+{
+	"cacheVersn": 0,
+	"definitionId": "",
+	"definitionIds": [
+		"ThreatIntelReport"
+	],
+	"fromServerVersion": "6.5.0",
+	"id": "threatIntel",
+	"itemVersion": "1.0.13",
+	"locked": false,
+	"name": "Threat Intel",
+	"packID": "ThreatIntelReports",
+	"packName": "Threat Intel Reports (BETA)",
+	"packPropagationLabels": [
+		"all"
+	],
+	"system": true,
+	"toServerVersion": "",
+	"version": -1,
+	"views": [
+		{
+			"icon": "icon-widget-infinity-24-s",
+			"id": "Threat Intel",
+			"name": "Threat Intel",
+			"tabs": [
+				{
+					"dashboard": {
+						"cacheVersn": 0,
+						"commitMessage": "",
+						"created": "0001-01-01T00:00:00Z",
+						"definitionId": "",
+						"fromDate": "0001-01-01T00:00:00Z",
+						"fromDateLicense": "0001-01-01T00:00:00Z",
+						"fromServerVersion": "",
+						"hidePivot": false,
+						"hideSearch": false,
+						"id": "Threat Intel Dashboard",
+						"isCommon": false,
+						"itemVersion": "",
+						"layout": [
+							{
+								"forceRange": false,
+								"h": 2,
+								"i": "2f7354b0-065f-11ec-ba99-5f74d3ffb017",
+								"id": "2f7354b0-065f-11ec-ba99-5f74d3ffb017",
+								"reflectDimensions": true,
+								"w": 6,
+								"widget": {
+									"Cache": null,
+									"cacheVersn": 0,
+									"category": "",
+									"commitMessage": "",
+									"created": "0001-01-01T00:00:00Z",
+									"dataType": "generics",
+									"dateRange": {
+										"fromDate": "0001-01-01T00:00:00Z",
+										"fromDateLicense": "0001-01-01T00:00:00Z",
+										"period": {
+											"by": "",
+											"byFrom": "days",
+											"byTo": "",
+											"field": "",
+											"fromValue": 7,
+											"toValue": null
+										},
+										"toDate": "0001-01-01T00:00:00Z"
+									},
+									"definitionId": "ThreatIntelReport",
+									"fromServerVersion": "",
+									"id": "221c23c9-beff-4ccb-8ccc-dc920876c6fa",
+									"isPredefined": false,
+									"itemVersion": "",
+									"modified": "2021-08-26T20:17:16.626236871+09:00",
+									"name": "Reports Published",
+									"packID": "",
+									"packName": "",
+									"params": {
+										"groupBy": [
+											"published(m)",
+											"type"
+										],
+										"showOthers": false,
+										"timeFrame": "months",
+										"valuesFormat": "abbreviated"
+									},
+									"prevName": "Reports Published",
+									"propagationLabels": [
+										"all"
+									],
+									"query": "",
+									"shouldCommit": false,
+									"sizeInBytes": 0,
+									"toServerVersion": "",
+									"vcShouldIgnore": false,
+									"vcShouldKeepItemLegacyProdMachine": false,
+									"version": 1,
+									"widgetType": "column"
+								},
+								"x": 0,
+								"y": 0
+							},
+							{
+								"forceRange": false,
+								"h": 2,
+								"i": "9cb8f6b0-065f-11ec-ba99-5f74d3ffb017",
+								"id": "9cb8f6b0-065f-11ec-ba99-5f74d3ffb017",
+								"reflectDimensions": true,
+								"w": 3,
+								"widget": {
+									"Cache": null,
+									"cacheVersn": 0,
+									"category": "",
+									"commitMessage": "",
+									"created": "0001-01-01T00:00:00Z",
+									"dataType": "generics",
+									"dateRange": {
+										"fromDate": "0001-01-01T00:00:00Z",
+										"fromDateLicense": "0001-01-01T00:00:00Z",
+										"period": {
+											"by": "",
+											"byFrom": "days",
+											"byTo": "",
+											"field": "",
+											"fromValue": 0,
+											"toValue": null
+										},
+										"toDate": "0001-01-01T00:00:00Z"
+									},
+									"definitionId": "ThreatIntelReport",
+									"fromServerVersion": "",
+									"id": "773ad9fb-064c-41e3-855e-fff8f97164e4",
+									"isPredefined": false,
+									"itemVersion": "",
+									"modified": "2021-08-26T20:20:16.953712785+09:00",
+									"name": "Unpublished Reports by type",
+									"packID": "",
+									"packName": "",
+									"params": {
+										"groupBy": [
+											"type"
+										],
+										"valuesFormat": "abbreviated"
+									},
+									"prevName": "Reports by type",
+									"propagationLabels": [
+										"all"
+									],
+									"query": "reportstatus:(Review or Draft)",
+									"shouldCommit": false,
+									"sizeInBytes": 0,
+									"toServerVersion": "",
+									"vcShouldIgnore": false,
+									"vcShouldKeepItemLegacyProdMachine": false,
+									"version": 1,
+									"widgetType": "pie"
+								},
+								"x": 6,
+								"y": 0
+							},
+							{
+								"forceRange": false,
+								"h": 2,
+								"i": "c370c490-065f-11ec-ba99-5f74d3ffb017",
+								"id": "c370c490-065f-11ec-ba99-5f74d3ffb017",
+								"reflectDimensions": true,
+								"w": 3,
+								"widget": {
+									"Cache": null,
+									"cacheVersn": 0,
+									"category": "",
+									"commitMessage": "",
+									"created": "0001-01-01T00:00:00Z",
+									"dataType": "generics",
+									"dateRange": {
+										"fromDate": "0001-01-01T00:00:00Z",
+										"fromDateLicense": "0001-01-01T00:00:00Z",
+										"period": {
+											"by": "",
+											"byFrom": "days",
+											"byTo": "",
+											"field": "",
+											"fromValue": 30,
+											"toValue": null
+										},
+										"toDate": "0001-01-01T00:00:00Z"
+									},
+									"definitionId": "ThreatIntelReport",
+									"fromServerVersion": "",
+									"id": "5f6fa3bd-ddde-404a-875e-46d137b5b0b1",
+									"isPredefined": false,
+									"itemVersion": "",
+									"modified": "2021-08-26T20:21:25.122186055+09:00",
+									"name": "Report by Status",
+									"packID": "",
+									"packName": "",
+									"params": {
+										"groupBy": [
+											"reportstatus"
+										],
+										"valuesFormat": "abbreviated"
+									},
+									"prevName": "Report by Status",
+									"propagationLabels": [
+										"all"
+									],
+									"query": "",
+									"shouldCommit": false,
+									"sizeInBytes": 0,
+									"toServerVersion": "",
+									"vcShouldIgnore": false,
+									"vcShouldKeepItemLegacyProdMachine": false,
+									"version": 1,
+									"widgetType": "pie"
+								},
+								"x": 9,
+								"y": 0
+							},
+							{
+								"forceRange": false,
+								"h": 7,
+								"i": "5490f900-14a1-11ec-8115-a339b813ec6b",
+								"id": "5490f900-14a1-11ec-8115-a339b813ec6b",
+								"reflectDimensions": true,
+								"w": 12,
+								"widget": {
+									"Cache": null,
+									"cacheVersn": 0,
+									"category": "",
+									"commitMessage": "",
+									"created": "0001-01-01T00:00:00Z",
+									"dataType": "generics",
+									"dateRange": {
+										"fromDate": "0001-01-01T00:00:00Z",
+										"fromDateLicense": "0001-01-01T00:00:00Z",
+										"period": {
+											"by": "",
+											"byFrom": "days",
+											"byTo": "",
+											"field": "",
+											"fromValue": 7,
+											"toValue": null
+										},
+										"toDate": "0001-01-01T00:00:00Z"
+									},
+									"definitionId": "ThreatIntelReport",
+									"fromServerVersion": "",
+									"id": "4ba41bed-cd8a-4562-8daf-5bee6ce5cff6",
+									"isPredefined": false,
+									"itemVersion": "",
+									"modified": "2021-09-13T23:46:04.690602+09:00",
+									"name": "Threat Intel Reports",
+									"packID": "",
+									"packName": "",
+									"params": {
+										"tableColumns": [
+											{
+												"displayed": true,
+												"isDefault": true,
+												"key": "id",
+												"position": 0,
+												"width": 110
+											},
+											{
+												"displayed": true,
+												"isDefault": true,
+												"key": "name",
+												"position": 1,
+												"width": 120
+											},
+											{
+												"displayed": true,
+												"isDefault": true,
+												"key": "Report Status",
+												"position": 2,
+												"width": 120
+											},
+											{
+												"displayed": true,
+												"isDefault": true,
+												"key": "Creator",
+												"position": 3,
+												"width": 300
+											},
+											{
+												"displayed": true,
+												"isDefault": true,
+												"key": "Traffic Light Protocol",
+												"position": 4,
+												"width": 300
+											},
+											{
+												"displayed": true,
+												"isDefault": true,
+												"key": "created",
+												"position": 5,
+												"width": 275
+											},
+											{
+												"displayed": true,
+												"isDefault": true,
+												"key": "Tags",
+												"position": 6,
+												"width": 275
+											}
+										]
+									},
+									"prevName": "Threat Intel Reports",
+									"propagationLabels": [
+										"all"
+									],
+									"query": "",
+									"shouldCommit": false,
+									"sizeInBytes": 0,
+									"toServerVersion": "",
+									"vcShouldIgnore": false,
+									"vcShouldKeepItemLegacyProdMachine": false,
+									"version": 1,
+									"widgetType": "table"
+								},
+								"x": 0,
+								"y": 2
+							}
+						],
+						"locked": false,
+						"modified": "0001-01-01T00:00:00Z",
+						"modulePage": false,
+						"name": "Threat Intel Dashboard",
+						"owner": "",
+						"packID": "",
+						"packName": "",
+						"period": {
+							"by": "",
+							"byFrom": "days",
+							"byTo": "",
+							"field": "",
+							"fromValue": 7,
+							"toValue": null
+						},
+						"prevName": "",
+						"shouldCommit": false,
+						"sizeInBytes": 0,
+						"system": false,
+						"toDate": "0001-01-01T00:00:00Z",
+						"toServerVersion": "",
+						"vcShouldIgnore": false,
+						"vcShouldKeepItemLegacyProdMachine": false,
+						"version": -1
+					},
+					"name": "Threat Intel Reports",
+					"newButtonDefinitionId": "ThreatIntelReport",
+					"tableView": true,
+					"tableViewColumns": [
+						"id",
+						"name",
+						"reportstatus",
+						"creator",
+						"trafficlightprotocol",
+						"created",
+						"tags"
+					],
+					"tableViewWidgetGroups": [
+						"type",
+						"reportstatus",
+						"trafficlightprotocol",
+						"dbotCreatedBy"
+					]
+				}
+			],
+			"title": "Threat Intel View"
+		}
+	]
+}
