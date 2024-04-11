@@ -1,0 +1,62 @@
+args:
+- default: true
+  description: The string to convert to an array of that string.
+  isArray: true
+  name: value
+comment: Converts a single string to an array of that string.
+commonfields:
+  id: ConvertToSingleElementArray
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.2.61
+    packID: FiltersAndTransformers
+    packName: Filters And Transformers
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.83255
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: ConvertToSingleElementArray
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('ConvertToSingleElementArray', 'start', __line__())
+  ### pack version: 1.2.61
+
+
+
+
+
+
+  def main():
+      args = demisto.args()
+      value = args.get("value")
+      if value and isinstance(value, list):
+          demisto.results(value)
+      elif value:
+          demisto.results([value])
+      else:
+          demisto.results([])
+
+
+
+
+  if __name__ in ('__main__', '__builtin__', 'builtins'):
+      main()
+
+  register_module_line('ConvertToSingleElementArray', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- transformer
+- entirelist
+type: python
