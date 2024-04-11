@@ -1,0 +1,78 @@
+args:
+- description: IP/CIDR, e.g. 192.168.0.0/24.
+  name: left
+  required: true
+- description: The number of addresses to be greater from.
+  name: right
+  required: true
+comment: Check if number of availble addresses in IPv4 or IPv6 CIDR is greater than
+  given number.
+commonfields:
+  id: GreaterCidrNumAddresses
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.2.61
+    packID: FiltersAndTransformers
+    packName: Filters And Transformers
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.83255
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: GreaterCidrNumAddresses
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('GreaterCidrNumAddresses', 'start', __line__())
+  ### pack version: 1.2.61
+  # STD packages
+  import ipaddress
+  # Local imports
+
+
+  # The following script check if given IPv4 or IPv6 CIDR availble addresses is greater from a given number
+
+
+  def cidr_network_addresses_greater_from_const(ip_cidr: str, min_num_addresses: str) -> bool:
+      """ Decide if num_adddresses const is greater than availble addresses in IPv4 or IPv6 cidr
+
+      Args:
+          ip_cidr(str): IP/CIDR, e.g. 192.168.0.0/24, 2002::1234:abcd:ffff:c0a8:101/127 # disable-secrets-detection
+          min_num_addresses(str): number of addresses to be lower than.
+
+      Returns:
+          bool: True if num of availbe addresses is greater than const num_addresses
+      """
+      ip_cidr_obj = ipaddress.ip_network(address=ip_cidr, strict=False)
+      if ip_cidr_obj.num_addresses > int(min_num_addresses):
+          return True
+      return False
+
+
+  def main():
+      ip_cidrs = argToList(demisto.args()['left'])
+      min_num_addresses = demisto.args()['right']
+      for cidr in ip_cidrs:
+          is_lower = cidr_network_addresses_greater_from_const(ip_cidr=cidr,
+                                                               min_num_addresses=min_num_addresses)
+          demisto.results(is_lower)
+
+
+  if __name__ == "__builtin__" or __name__ == "builtins":
+      main()
+
+  register_module_line('GreaterCidrNumAddresses', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- filter
+type: python
