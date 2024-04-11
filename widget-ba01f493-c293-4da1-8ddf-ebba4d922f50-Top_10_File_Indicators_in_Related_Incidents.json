@@ -1,0 +1,78 @@
+{
+	"Cache": null,
+	"cacheVersn": 0,
+	"category": "",
+	"dataType": "indicators",
+	"dateRange": {
+		"fromDate": "0001-01-01T00:00:00Z",
+		"fromDateLicense": "0001-01-01T00:00:00Z",
+		"period": {
+			"by": "",
+			"byFrom": "days",
+			"byTo": "",
+			"field": "",
+			"fromValue": 180,
+			"toValue": null
+		},
+		"toDate": "0001-01-01T00:00:00Z"
+	},
+	"definitionId": "",
+	"fromServerVersion": "6.2.0",
+	"id": "ba01f493-c293-4da1-8ddf-ebba4d922f50",
+	"isPredefined": true,
+	"itemVersion": "1.2.48",
+	"name": "Top 10 File Indicators in Related Incidents",
+	"packID": "CommonWidgets",
+	"packName": "Common Widgets",
+	"packPropagationLabels": [
+		"all"
+	],
+	"params": {
+		"enablePagination": true,
+		"tableColumns": [
+			{
+				"displayed": true,
+				"isDefault": true,
+				"key": "indicator_type",
+				"width": 120
+			},
+			{
+				"displayed": true,
+				"isDefault": true,
+				"key": "value",
+				"width": 300
+			},
+			{
+				"displayed": true,
+				"isDefault": true,
+				"key": "score",
+				"width": 120
+			},
+			{
+				"displayed": true,
+				"isDefault": true,
+				"key": "relatedIncCount",
+				"width": 150
+			},
+			{
+				"displayed": true,
+				"isDefault": true,
+				"key": "sourceInstances",
+				"width": 175
+			}
+		]
+	},
+	"propagationLabels": [],
+	"query": "type:File and (verdict:Malicious or verdict:Suspicious) and incident.id:*",
+	"size": 10,
+	"sort": [
+		{
+			"asc": false,
+			"field": "relatedIncCount",
+			"fieldType": ""
+		}
+	],
+	"toServerVersion": "",
+	"version": -1,
+	"widgetType": "table"
+}
