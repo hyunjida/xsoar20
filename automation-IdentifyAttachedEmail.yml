@@ -1,0 +1,140 @@
+args:
+- description: Specific entryid to check if it is an email attachment. If not specified
+    will check all entries of the incident.
+  isArray: true
+  name: entryid
+comment: Identify whether the incident includes an email message attached as an eml
+  or msg file and return the answer to playbook. Also saves the identified entry ID
+  to context for use for later. Commonly used in automated playbooks that handle phishing
+  reports sent to a special phishing mailbox set up by the security team.
+commonfields:
+  id: IdentifyAttachedEmail
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.87159
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: IdentifyAttachedEmail
+outputs:
+- contextPath: "yes"
+  description: If incident contains an email attachment. Will also set reportedemailentryid
+    with the entry id.
+- contextPath: "no"
+  description: If incident does not contain an email attachment.
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('IdentifyAttachedEmail', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+
+
+  # file info types which identify emails
+  CONFIDENT_EMAIL_INFOS = [
+      'cdfv2 microsoft outlook message',
+      'rfc 822 mail',
+      'smtp mail',
+      'multipart/signed',
+      'news or mail text',
+  ]
+
+
+  # IMPORTANT: If you modify the logic here make sure to update ParseEmailFiles too
+  def is_email(file_info, file_name):
+      if not file_info:
+          demisto.info(f"IdentifyAttachedEmail: No file info for file: {file_name}. Returning false.")
+          return False
+      file_info = file_info.lower().strip()
+      for info in CONFIDENT_EMAIL_INFOS:
+          if info in file_info:
+              return True
+      file_name = file_name.lower().strip() if file_name else ''
+      if file_name.endswith('.eml') and ('text' in file_info or file_info == 'data'):
+          return True
+      if file_name.endswith('.msg') and 'composite document file v2 document' in file_info:
+          return True
+      return False
+
+
+  def is_entry_email(entry):
+      """
+      Return entry ID if this is an email entry otherwise None
+
+      Arguments:
+          entry {dict} -- Entry object as returned from getEntries or getEntry
+      """
+      info = demisto.get(entry, 'FileMetadata.info')
+      name = demisto.get(entry, 'File')
+      if is_email(info, name):
+          return demisto.get(entry, 'ID')
+      return None
+
+
+  def identify_attached_mail(args):
+      entry_ids = args.get('entryid')
+      if entry_ids:
+          if isinstance(entry_ids, STRING_TYPES):
+              # playbook inputs may be in the form: [\"23@2\",\"24@2\"] if passed as a string and not array
+              entry_ids = entry_ids.strip().replace(r'\"', '"')  # type:ignore
+          entry_ids = argToList(entry_ids)
+          entries = []  # type: List[str]
+
+          if is_xsiam_or_xsoar_saas():
+              entry_ids_str = ",".join(entry_ids)
+              entries = demisto.executeCommand('getEntriesByIDs', {'entryIDs': entry_ids_str})
+          else:
+              for ent_id in entry_ids:
+                  res = demisto.executeCommand('getEntry', {'id': ent_id})
+                  if not is_error(res):
+                      id = is_entry_email(res[0])
+                      if id:
+                          # return the first email entry that we find.
+                          return 'yes', {'reportedemailentryid': id}
+      else:
+          entries = demisto.executeCommand('getEntries', {"filter": {"categories": ["attachments"]}})
+
+      if not entries:
+          return 'no', None
+
+      for e in entries:
+          id = is_entry_email(e)
+          if id:
+              # leave the following comment as server used it to detect the additional context path used beyond the condition values
+              # demisto.setContext('reportedemailentryid', id)
+              return 'yes', {'reportedemailentryid': id}
+
+      return 'no', None
+
+
+  def main():
+      args = demisto.args()
+      result, outputs = identify_attached_mail(args)
+      return_outputs(result, outputs, result)
+
+
+  if __name__ in ['__main__', 'builtin', 'builtins']:
+      main()
+
+  register_module_line('IdentifyAttachedEmail', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- phishing
+- email
+- Condition
+type: python
