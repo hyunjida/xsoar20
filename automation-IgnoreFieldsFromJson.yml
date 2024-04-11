@@ -1,0 +1,74 @@
+args:
+- description: The primary value of the JSON object.
+  name: value
+- description: The value of the JSON object.
+  name: json_object
+- description: Comma-separated list of fields/keys (without any whitespaces) that
+    needs to be ignored from the JSON object.
+  name: fields
+comment: Removed selected fields from the JSON object.
+commonfields:
+  id: IgnoreFieldsFromJson
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.5.0
+    itemVersion: 1.2.61
+    packID: FiltersAndTransformers
+    packName: Filters And Transformers
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.83255
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: IgnoreFieldsFromJson
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('IgnoreFieldsFromJson', 'start', __line__())
+  ### pack version: 1.2.61
+
+
+
+
+  def ignore_fields(value, fields):
+      fields = argToList(fields)
+      if not isinstance(value, dict):
+          try:
+              value = json.loads(value)
+          except (json.decoder.JSONDecodeError, AttributeError):
+              demisto.debug(f"Could not parse {value} to Json. Please insert a valid json format.")
+              return value
+
+      for key_value in fields:
+          value.pop(key_value, None)
+      return value
+
+
+  def main():   # pragma: no cover
+      try:
+          args = demisto.args()
+          json_obj = args.get("value") or args.get("json_object")
+          fields_to_ignore = args.get("fields")
+          return_results(ignore_fields(json_obj, fields_to_ignore))
+      except Exception as e:
+          return_error(str(e), e)
+
+
+  if __name__ in ('__main__', '__builtin__', 'builtins'):   # pragma: no cover
+      main()
+
+  register_module_line('IgnoreFieldsFromJson', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- transformer
+- General
+type: python
