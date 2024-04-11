@@ -1,0 +1,74 @@
+args:
+- description: The input url.
+  name: value
+  required: true
+comment: |-
+  Converts
+  https:%2F%2Fexample.com
+  into
+  https://example.com
+commonfields:
+  id: URLDecode
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.2.61
+    packID: FiltersAndTransformers
+    packName: Filters And Transformers
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.83255
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: URLDecode
+outputs:
+- contextPath: DecodedURL
+  description: Parsed url as key/value.
+  type: string
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('URLDecode', 'start', __line__())
+  ### pack version: 1.2.61
+
+
+
+  from urllib.parse import unquote
+
+
+  def main():
+      value = demisto.args()["value"]
+      processed_value = unquote(value)
+
+      eContext = {
+          'DecodedURL': processed_value
+      }
+
+      entry = {'Type': entryTypes['note'],
+               'Contents': eContext,
+               'ContentsFormat': formats['json'],
+               'HumanReadable': processed_value,
+               'ReadableContentsFormat': formats['markdown'],
+               'EntryContext': eContext}
+
+      demisto.results(entry)
+
+
+  # python2 uses __builtin__ python3 uses builtins
+  if __name__ == "__builtin__" or __name__ == "builtins":
+      main()
+
+  register_module_line('URLDecode', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- transformer
+type: python
