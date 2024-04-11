@@ -1,0 +1,209 @@
+{
+	"cacheVersn": 0,
+	"contextPath": "",
+	"contextValue": "",
+	"defaultMapping": {
+		"accounttype": {
+			"complex": {
+				"accessor": "Type",
+				"filters": [],
+				"root": "Account",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"associations": {
+			"complex": {
+				"accessor": "Associations",
+				"filters": [],
+				"root": "Account",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"blocked": {
+			"complex": {
+				"accessor": "Blocked",
+				"filters": [],
+				"root": "Account",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"displayname": {
+			"complex": {
+				"accessor": "DisplayName",
+				"filters": [],
+				"root": "Account",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"domainname": {
+			"complex": {
+				"accessor": "Domain",
+				"filters": [],
+				"root": "Account",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"emailaddress": {
+			"complex": {
+				"accessor": "Email.Address",
+				"filters": [],
+				"root": "Account",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"groups": {
+			"complex": {
+				"accessor": "Groups",
+				"filters": [],
+				"root": "Account",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"indicatoridentification": {
+			"complex": {
+				"accessor": "ID",
+				"filters": [],
+				"root": "Account",
+				"transformers": [
+					{
+						"operator": "toUpperCase"
+					},
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"organizationalunitou": {
+			"complex": {
+				"accessor": "OrganizationUnit",
+				"filters": [],
+				"root": "Account",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"reportedby": {
+			"complex": {
+				"accessor": "ReportedBy",
+				"filters": [],
+				"root": "Account",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"tags": {
+			"complex": {
+				"accessor": "Tags",
+				"filters": [],
+				"root": "Account",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"threattypes": {
+			"complex": {
+				"accessor": "ThreatTypes",
+				"filters": [],
+				"root": "Account",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"trafficlightprotocol": {
+			"complex": {
+				"accessor": "TrafficLightProtocol",
+				"filters": [],
+				"root": "Account",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"username": {
+			"complex": {
+				"accessor": "Username",
+				"filters": [],
+				"root": "Account",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		}
+	},
+	"definitionId": "",
+	"details": "Account",
+	"disabled": false,
+	"enhancementScriptNames": [],
+	"excludedBrands": [],
+	"expiration": 0,
+	"file": false,
+	"fileHashesPriority": null,
+	"formatScript": "",
+	"fromServerVersion": "5.5.0",
+	"id": "accountRep",
+	"itemVersion": "3.4.1",
+	"layout": "accountRep",
+	"legacyNames": null,
+	"locked": false,
+	"manualMapping": null,
+	"mergeContext": false,
+	"packID": "CommonTypes",
+	"packName": "Common Types",
+	"packPropagationLabels": [
+		"all"
+	],
+	"propagationLabels": [],
+	"regex": "",
+	"reputationCommand": "",
+	"reputationScriptName": "",
+	"shouldShareComments": false,
+	"system": true,
+	"toServerVersion": "",
+	"updateAfter": 0,
+	"version": -1
+}
