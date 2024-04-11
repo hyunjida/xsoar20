@@ -1,0 +1,43 @@
+{
+	"Cache": null,
+	"cacheVersn": 0,
+	"category": "",
+	"dataType": "metrics",
+	"dateRange": {
+		"fromDate": "0001-01-01T00:00:00Z",
+		"fromDateLicense": "0001-01-01T00:00:00Z",
+		"period": {
+			"by": "",
+			"byFrom": "days",
+			"byTo": "",
+			"field": "",
+			"fromValue": 7,
+			"toValue": null
+		},
+		"toDate": "0001-01-01T00:00:00Z"
+	},
+	"definitionId": "",
+	"description": "Average runtime for Playbooks",
+	"fromServerVersion": "6.2.0",
+	"id": "total-average-playbook-runtime-in-seconds",
+	"isPredefined": true,
+	"itemVersion": "1.2.48",
+	"name": "Average runtime for Playbooks",
+	"packID": "CommonWidgets",
+	"packName": "Common Widgets",
+	"packPropagationLabels": [
+		"all"
+	],
+	"params": {
+		"keys": [
+			"avg|duration"
+		],
+		"tableColumns": [],
+		"valuesFormat": "minutes"
+	},
+	"propagationLabels": [],
+	"query": "type:playbook",
+	"toServerVersion": "",
+	"version": -1,
+	"widgetType": "duration"
+}
