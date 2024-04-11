@@ -1,0 +1,558 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.0.0
+    itemVersion: 2.6.15
+    packID: CommonPlaybooks
+    packName: Common Playbooks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: |-
+  This playbook returns a file sample from a specified path and host that you input in the following playbooks:
+  - PS Remote Get File Sample From Path
+  - Get File Sample From Path - VMware Carbon Black EDR (Live Response API)
+  - CrowdStrike Falcon - Retrieve File
+  - MDE - Retrieve File
+  - Cortex XDR - Retrieve File V2
+id: Get File Sample From Path - Generic V3
+inputs:
+- description: Hostname of the machine on which the file is located, for PS remote
+    it can also be an IP address.
+  key: Host
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: |
+    The path of the file to retrieve.
+    For example:
+    C:\users\folder\file.txt
+  key: Path
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: The ID of the agent, or of the endpoint, in the relevant integration
+    (such as EDR).
+  key: Agent_ID
+  playbookInputQuery: null
+  required: false
+  value: {}
+name: Get File Sample From Path - Generic V3
+outputs:
+- contextPath: File.Size
+  description: The size of the file.
+  type: number
+- contextPath: File.Type
+  description: The type of the file.
+  type: string
+- contextPath: File.Info
+  description: General information of the file.
+  type: string
+- contextPath: File.MD5
+  description: The MD5 hash of the file.
+  type: string
+- contextPath: File.SHA1
+  description: The SHA1 hash of the file.
+  type: string
+- contextPath: File.SHA256
+  description: The SHA256 hash of the file.
+  type: string
+- contextPath: File.SHA512
+  description: The SHA512 hash of the file.
+  type: string
+- contextPath: File.EntryID
+  description: The file entry ID.
+  type: string
+- contextPath: File.Extension
+  description: The file extension.
+  type: string
+- contextPath: File.Name
+  description: The file name.
+  type: string
+- contextPath: File.SSDeep
+  description: File SSDeep.
+  type: string
+- contextPath: AcquiredFile
+  description: The acquired file details.
+  type: Unknown
+- contextPath: ExtractedFiles
+  description: A list of file names that were extracted from the ZIP file.
+  type: string
+- contextPath: NonRetrievedFiles
+  description: A list of files that were not retrieved.
+  type: string
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "11"
+      - "14"
+      - "15"
+      - "16"
+      - "17"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 5d887731-fb71-4226-872c-a9e8dbddac42
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: 5d887731-fb71-4226-872c-a9e8dbddac42
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 50
+        }
+      }
+  "8":
+    continueonerrortype: ""
+    id: "8"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: f81d6908-8ce9-452b-8dde-689f44256933
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: f81d6908-8ce9-452b-8dde-689f44256933
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 515
+        }
+      }
+  "11":
+    continueonerrortype: ""
+    id: "11"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "12"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 906138a1-e3ee-4711-889a-4ebcc8c2a1c6
+      iscommand: false
+      name: Use VMware Carbon Black EDR (Live Response API)
+      type: title
+      version: -1
+    taskid: 906138a1-e3ee-4711-889a-4ebcc8c2a1c6
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 60,
+          "y": 195
+        }
+      }
+  "12":
+    continueonerrortype: ""
+    id: "12"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "8"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      Path:
+        simple: ${inputs.Path}
+      Sensor_ID:
+        simple: ${inputs.Agent_ID}
+    separatecontext: true
+    skipunavailable: true
+    task:
+      brand: ""
+      description: |-
+        This playbook retrieves a file from a path on an endpoint using VMware Carbon Black EDR (Live Response API).
+        Make sure to provide the Carbon Black sensor ID of the endpoint from which you want to retrieve the file.
+      id: 6d73fcbe-5c0f-4dec-8fa4-9f0c1dd70a8d
+      iscommand: false
+      name: Get File Sample From Path - VMware Carbon Black EDR - Live Response API
+      playbookName: Get File Sample From Path - VMware Carbon Black EDR - Live Response
+        API
+      type: playbook
+      version: -1
+    taskid: 6d73fcbe-5c0f-4dec-8fa4-9f0c1dd70a8d
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 60,
+          "y": 340
+        }
+      }
+  "13":
+    continueonerrortype: ""
+    id: "13"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "8"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      AddHostNameToFile:
+        simple: "true"
+      FilePath:
+        simple: ${inputs.Path}
+      Host:
+        simple: ${inputs.Host}
+      ZipFile:
+        simple: "true"
+    separatecontext: true
+    skipunavailable: true
+    task:
+      brand: ""
+      description: This playbook leverages the Windows built-in PowerShell and WinRM
+        capabilities to connect to a Windows host to acquire a file as forensic evidence
+        for further analysis.
+      id: 9c4ed95f-7e7e-4dcc-8c09-29a421593849
+      iscommand: false
+      name: PS Remote Get File Sample From Path
+      playbookName: PS Remote Get File Sample From Path
+      type: playbook
+      version: -1
+    taskid: 9c4ed95f-7e7e-4dcc-8c09-29a421593849
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 340
+        }
+      }
+  "14":
+    continueonerrortype: ""
+    id: "14"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "13"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 4ae1d82e-3106-42b4-848e-67f64641dd08
+      iscommand: false
+      name: Use Powershell Remoting
+      type: title
+      version: -1
+    taskid: 4ae1d82e-3106-42b4-848e-67f64641dd08
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 195
+        }
+      }
+  "15":
+    continueonerrortype: ""
+    id: "15"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "20"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: true
+    task:
+      brand: ""
+      id: c12382b6-414b-4613-8ba2-3a686f22ba19
+      iscommand: false
+      name: Use Microsoft Defender for Endpoint
+      type: title
+      version: -1
+    taskid: c12382b6-414b-4613-8ba2-3a686f22ba19
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 900,
+          "y": 195
+        }
+      }
+  "16":
+    continueonerrortype: ""
+    id: "16"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "19"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: true
+    task:
+      brand: ""
+      id: dd5f9bca-f2d6-4d83-8188-372acf9aafc5
+      iscommand: false
+      name: Use CrowdStrike Falcon
+      type: title
+      version: -1
+    taskid: dd5f9bca-f2d6-4d83-8188-372acf9aafc5
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": -360,
+          "y": 195
+        }
+      }
+  "17":
+    continueonerrortype: ""
+    id: "17"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "18"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: true
+    task:
+      brand: ""
+      id: 9abf10fa-2f9e-4714-83ce-94f1e9388e92
+      iscommand: false
+      name: Use Cortex XDR
+      type: title
+      version: -1
+    taskid: 9abf10fa-2f9e-4714-83ce-94f1e9388e92
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 1310,
+          "y": 195
+        }
+      }
+  "18":
+    continueonerrortype: ""
+    id: "18"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "8"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      endpoint_ids:
+        complex:
+          root: inputs.Agent_ID
+          transformers:
+          - operator: uniq
+      file_path:
+        complex:
+          root: inputs.Path
+          transformers:
+          - operator: uniq
+    separatecontext: true
+    skipunavailable: true
+    task:
+      brand: ""
+      description: |-
+        This playbook retrieves files from selected endpoints. You can retrieve up to 20 files, from 10 endpoints.
+        Inputs for this playbook are:
+        - A comma-separated list of endpoint IDs.
+        - A comma-separated list of file paths for your operating system, either Windows, Linux, or Mac. At least one file path is required.
+      id: 291977e7-1951-462c-8875-7a8f13ad4636
+      iscommand: false
+      name: Cortex XDR - Retrieve File v2
+      playbookName: Cortex XDR - Retrieve File v2
+      type: playbook
+      version: -1
+    taskid: 291977e7-1951-462c-8875-7a8f13ad4636
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 1310,
+          "y": 340
+        }
+      }
+  "19":
+    continueonerrortype: ""
+    id: "19"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "8"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      HostId:
+        complex:
+          root: inputs.Agent_ID
+          transformers:
+          - operator: uniq
+      PathsToGet:
+        complex:
+          root: inputs.Path
+          transformers:
+          - operator: uniq
+      ZipPassword:
+        simple: infected
+    separatecontext: true
+    skipunavailable: true
+    task:
+      brand: ""
+      description: |-
+        This playbook is part of the 'Malware Investigation And Response' pack. For more information, refer to https://xsoar.pan.dev/docs/reference/packs/malware-investigation-and-response.
+        This playbook retrieves and unzips files from CrowdStrike Falcon and returns a list of the files that were and were not retrieved.
+      id: 093a8aa7-07c9-45e3-85de-b08c39983dce
+      iscommand: false
+      name: CrowdStrike Falcon - Retrieve File
+      playbookName: CrowdStrike Falcon - Retrieve File
+      type: playbook
+      version: -1
+    taskid: 093a8aa7-07c9-45e3-85de-b08c39983dce
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": -360,
+          "y": 340
+        }
+      }
+  "20":
+    continueonerrortype: ""
+    id: "20"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "8"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      MachineID:
+        complex:
+          root: inputs.Agent_ID
+          transformers:
+          - operator: uniq
+      paths:
+        complex:
+          root: inputs.Path
+          transformers:
+          - operator: uniq
+    separatecontext: true
+    skipunavailable: true
+    task:
+      brand: ""
+      description: |-
+        This playbook is part of the 'Malware Investigation And Response' pack. For more information, refer to https://xsoar.pan.dev/docs/reference/packs/malware-investigation-and-response.
+        This playbook uses the Live Response feature to retrieve a file from an endpoint./nNote that the endpoint ID will be set from the incident field "DeviceID".
+      id: 8232fa6d-94a4-4d02-8ea4-dd0d3144fcaa
+      iscommand: false
+      name: MDE - Retrieve File
+      playbookName: MDE - Retrieve File
+      type: playbook
+      version: -1
+    taskid: 8232fa6d-94a4-4d02-8ea4-dd0d3144fcaa
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 900,
+          "y": 340
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 530,
+        "width": 2050,
+        "x": -360,
+        "y": 50
+      }
+    }
+  }
