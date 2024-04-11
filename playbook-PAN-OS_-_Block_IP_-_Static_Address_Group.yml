@@ -1,0 +1,605 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 2.1.22
+    packID: PAN-OS
+    packName: PAN-OS by Palo Alto Networks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: |-
+  This playbook blocks IP addresses using Static Address Groups in Palo Alto Networks Panorama or Firewall.
+  The playbook receives malicious IP addresses and an address group name as inputs, verifies that the addresses are not already a part of the address group, adds them and commits the configuration.
+
+  ***Note - The playbook does not block the address group communication using a policy block rule. This step will be taken once outside of the playbook.
+id: PAN-OS - Block IP - Static Address Group
+inputs:
+- description: IP address to block
+  key: IP
+  playbookInputQuery: null
+  required: false
+  value:
+    complex:
+      accessor: Address
+      filters:
+      - - left:
+            iscontext: true
+            value:
+              simple: IP.Malicious
+          operator: isExists
+      root: IP
+      transformers:
+      - operator: uniq
+- description: Static address group name
+  key: AddressGroupName
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: Demisto Remediation - Static Address Group
+- description: |-
+    This input establishes whether to commit the configuration automatically.
+    Yes - Commit automatically.
+    No - Commit manually.
+  key: AutoCommit
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: "No"
+name: PAN-OS - Block IP - Static Address Group
+outputs: []
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "1"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 190b5447-4f35-40e2-83f3-8dd9753b0708
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: 190b5447-4f35-40e2-83f3-8dd9753b0708
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 50
+        }
+      }
+  "1":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: brand
+                filters:
+                - - left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: Panorama
+                - - left:
+                      iscontext: true
+                      value:
+                        simple: modules.state
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: active
+                root: modules
+          operator: isExists
+      label: "yes"
+    continueonerrortype: ""
+    id: "1"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "3"
+      "yes":
+      - "2"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 480942ef-335c-4e66-87f7-dc2b3ada2048
+      iscommand: false
+      name: Palo Alto Networks PAN-OS enabled?
+      type: condition
+      version: -1
+    taskid: 480942ef-335c-4e66-87f7-dc2b3ada2048
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 190
+        }
+      }
+  "2":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: inputs.IP
+          operator: isExists
+      label: "yes"
+    continueonerrortype: ""
+    id: "2"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "3"
+      "yes":
+      - "4"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 1ecb1e3c-a84b-40ce-8975-79f309bd0b07
+      iscommand: false
+      name: Is there an IP to block?
+      type: condition
+      version: -1
+    taskid: 1ecb1e3c-a84b-40ce-8975-79f309bd0b07
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 770,
+          "y": 360
+        }
+      }
+  "3":
+    continueonerrortype: ""
+    id: "3"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 36d25b97-4e69-4936-86da-72333275ad79
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 36d25b97-4e69-4936-86da-72333275ad79
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 1750
+        }
+      }
+  "4":
+    continueonerrortype: ""
+    id: "4"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "5"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      name:
+        complex:
+          root: inputs.AddressGroupName
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Get details for the specified address group
+      id: e5deb437-498e-4e8a-8b9e-d1d79579f6a2
+      iscommand: true
+      name: PAN-OS - Get address group
+      script: '|||pan-os-get-address-group'
+      type: regular
+      version: -1
+    taskid: e5deb437-498e-4e8a-8b9e-d1d79579f6a2
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 970,
+          "y": 530
+        }
+      }
+  "5":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: Panorama.AddressGroups.Addresses
+          operator: containsGeneral
+          right:
+            iscontext: true
+            value:
+              simple: inputs.IP
+      label: "yes"
+    continueonerrortype: ""
+    id: "5"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "7"
+      "yes":
+      - "3"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 435dfd22-d2d5-4ccb-8116-20e0c9dab09f
+      iscommand: false
+      name: Check if the malicious IPs already exist in the address group
+      type: condition
+      version: -1
+    taskid: 435dfd22-d2d5-4ccb-8116-20e0c9dab09f
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 970,
+          "y": 710
+        }
+      }
+  "6":
+    continueonerrortype: ""
+    id: "6"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "11"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      element_to_add:
+        complex:
+          root: inputs.IP
+          transformers:
+          - args:
+              separator:
+                value:
+                  simple: ','
+            operator: join
+      name:
+        complex:
+          root: inputs.AddressGroupName
+      type:
+        simple: static
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Add IP addresses to a static or dynamic address group.
+      id: ec1a0c5b-7017-4503-8ee3-c582418808c3
+      iscommand: true
+      name: PAN OS - Add IP addresses to address group
+      script: '|||pan-os-edit-address-group'
+      type: regular
+      version: -1
+    taskid: ec1a0c5b-7017-4503-8ee3-c582418808c3
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 920,
+          "y": 1395
+        }
+      }
+  "7":
+    continueonerrortype: ""
+    id: "7"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "12"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      ip_netmask:
+        simple: 255.255.255.255
+      name:
+        complex:
+          root: inputs.IP
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Creates an address object
+      id: c27672c3-546c-4a5b-8b16-31729a029798
+      iscommand: true
+      name: PAN-OS - Create address objects
+      script: '|||pan-os-create-address'
+      type: regular
+      version: -1
+    taskid: c27672c3-546c-4a5b-8b16-31729a029798
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 1190,
+          "y": 880
+        }
+      }
+  "10":
+    continueonerrortype: ""
+    id: "10"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "6"
+    note: false
+    quietmode: 0
+    separatecontext: true
+    skipunavailable: false
+    task:
+      brand: ""
+      id: af6b5eb3-b5d1-4bed-81c6-28ca8d6ec194
+      iscommand: false
+      name: PAN-OS Commit Configuration
+      playbookId: PAN-OS Commit Configuration
+      type: playbook
+      version: -1
+    taskid: af6b5eb3-b5d1-4bed-81c6-28ca8d6ec194
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 920,
+          "y": 1220
+        }
+      }
+  "11":
+    continueonerrortype: ""
+    id: "11"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "3"
+    note: false
+    quietmode: 0
+    separatecontext: true
+    skipunavailable: false
+    task:
+      brand: ""
+      id: e910a8ff-52dd-40db-8fe2-e39b357b4c15
+      iscommand: false
+      name: PAN-OS Commit Configuration
+      playbookId: PAN-OS Commit Configuration
+      type: playbook
+      version: -1
+    taskid: e910a8ff-52dd-40db-8fe2-e39b357b4c15
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 920,
+          "y": 1580
+        }
+      }
+  "12":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.AutoCommit
+          operator: isEqualString
+          right:
+            value:
+              simple: "Yes"
+      label: "yes"
+    continueonerrortype: ""
+    id: "12"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "13"
+      "yes":
+      - "10"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 52739aac-151a-484e-8ca0-cb85200d4a9b
+      iscommand: false
+      name: AutoCommit defined?
+      type: condition
+      version: -1
+    taskid: 52739aac-151a-484e-8ca0-cb85200d4a9b
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 1190,
+          "y": 1050
+        }
+      }
+  "13":
+    continueonerrortype: ""
+    id: "13"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "14"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 32cbe912-af9b-416f-8c8a-e54b58a88558
+      iscommand: false
+      name: Commit PAN-OS Instance manually
+      type: regular
+      version: -1
+    taskid: 32cbe912-af9b-416f-8c8a-e54b58a88558
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 1440,
+          "y": 1220
+        }
+      }
+  "14":
+    continueonerrortype: ""
+    id: "14"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "15"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      element_to_add:
+        complex:
+          root: inputs.IP
+          transformers:
+          - args:
+              separator:
+                value:
+                  simple: ','
+            operator: join
+      name:
+        complex:
+          root: inputs.AddressGroupName
+      type:
+        simple: static
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Add IP addresses to a static or dynamic address group.
+      id: 9a28e55c-f29e-4a61-8659-beac27c60f74
+      iscommand: true
+      name: PAN OS - Add IP addresses to address group
+      script: '|||pan-os-edit-address-group'
+      type: regular
+      version: -1
+    taskid: 9a28e55c-f29e-4a61-8659-beac27c60f74
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 1440,
+          "y": 1395
+        }
+      }
+  "15":
+    continueonerrortype: ""
+    id: "15"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "3"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 8a034a0d-ebea-401c-8b9d-e7e708d94fdb
+      iscommand: false
+      name: Commit PAN-OS Instance manually
+      type: regular
+      version: -1
+    taskid: 8a034a0d-ebea-401c-8b9d-e7e708d94fdb
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 1440,
+          "y": 1580
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {
+      "1_3_#default#": 0.16,
+      "2_3_#default#": 0.17,
+      "5_3_yes": 0.29
+    },
+    "paper": {
+      "dimensions": {
+        "height": 1765,
+        "width": 1370,
+        "x": 450,
+        "y": 50
+      }
+    }
+  }
