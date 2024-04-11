@@ -1,0 +1,40 @@
+{
+	"autorun": true,
+	"cacheVersn": 0,
+	"closureScript": "",
+	"color": "#9FA8DA",
+	"days": 0,
+	"daysR": 0,
+	"default": false,
+	"definitionId": "",
+	"detached": false,
+	"disabled": false,
+	"extractSettings": {
+		"fieldCliNameToExtractSettings": {},
+		"mode": "Specific"
+	},
+	"fromServerVersion": "6.6.0",
+	"hours": 0,
+	"hoursR": 0,
+	"id": "Generic Export Indicators Service Change",
+	"itemVersion": "3.2.20",
+	"layout": "EDL Change Layout",
+	"locked": false,
+	"name": "Generic Export Indicators Service Change",
+	"onChangeRepAlg": 0,
+	"packID": "EDL",
+	"packName": "Generic Export Indicators Service",
+	"packPropagationLabels": [
+		"all"
+	],
+	"playbookId": "Modify EDL",
+	"preProcessingScript": "",
+	"propagationLabels": [],
+	"readonly": false,
+	"reputationCalc": 0,
+	"system": true,
+	"toServerVersion": "",
+	"version": -1,
+	"weeks": 0,
+	"weeksR": 0
+}
