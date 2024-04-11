@@ -1,0 +1,77 @@
+args:
+- description: The end date for searching indicators.
+  name: to
+- description: The start date for searching indicators.
+  name: from
+comment: This is a widget script returning MITRE indicators information for top indicators
+  shown in incidents.
+commonfields:
+  id: MITREIndicatorsByOpenIncidentsV2
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.5.0
+    itemVersion: 1.1.29
+    packID: FeedMitreAttackv2
+    packName: MITRE ATT&CK
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.83255
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: MITREIndicatorsByOpenIncidentsV2
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('MITREIndicatorsByOpenIncidentsV2', 'start', __line__())
+  ### pack version: 1.1.29
+
+
+  import traceback
+
+
+  def main():
+      try:
+          from_date = demisto.args().get('from', '')
+          to_date = demisto.args().get('to', '')
+          query = 'type:"Attack Pattern" and investigationsCount:>0 and -incident.type:"MITRE ATT&CK CoA"'
+          search_indicators = IndicatorsSearcher()
+
+          res = search_indicators.search_indicators_by_version(query=query, from_date=from_date, to_date=to_date)
+
+          indicators = []
+          iocs = res.get('iocs') if res.get('iocs') is not None else []
+          for ind in iocs:
+              indicators.append({
+                  'Value': dict_safe_get(ind, ['value']),
+                  'Name': dict_safe_get(ind, ['CustomFields', 'mitreid']),
+                  'Phase Name': dict_safe_get(ind, ['CustomFields', 'killchainphases']),
+                  'Description': dict_safe_get(ind, ['CustomFields', 'description']),
+
+              })
+
+          incidents_table = tableToMarkdown('MITRE ATT&CK techniques by related Incidents', indicators,
+                                            headers=['Value', 'Name', 'Phase Name', 'Description'])
+
+          return_outputs(incidents_table)
+      except Exception:
+          demisto.error(traceback.format_exc())  # print the traceback
+          return_error(f'Failed to execute MITREIndicatorsByOpenIncidents script. Error: {traceback.format_exc()}')
+
+
+  if __name__ in ('__main__', '__builtin__', 'builtins'):
+      main()
+
+  register_module_line('MITREIndicatorsByOpenIncidentsV2', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- widget
+type: python
