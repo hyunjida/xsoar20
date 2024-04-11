@@ -1,0 +1,83 @@
+comment: Returns a table widget of enabled feed integration instances that errors
+  out on indicators fetch.
+commonfields:
+  id: FeedIntegrationErrorWidget
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.1.0
+    itemVersion: 1.2.48
+    packID: CommonWidgets
+    packName: Common Widgets
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.83255
+engineinfo: {}
+mainengineinfo: {}
+name: FeedIntegrationErrorWidget
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('FeedIntegrationErrorWidget', 'start', __line__())
+  ### pack version: 1.2.48
+
+
+  from dateparser import parse
+
+
+  def get_feed_integration_errors() -> TableOrListWidget:
+      integration_search_res = demisto.internalHttpRequest(
+          'POST',
+          '/settings/integration/search',
+          '{}',
+      )
+
+      table = TableOrListWidget()
+
+      if integration_search_res.get('statusCode') == 200:
+          integrations = json.loads(integration_search_res.get('body', '{}'))
+          instances = integrations.get('instances', [])
+          enabled_instances = {instance.get('name') for instance in instances if instance.get('enabled') == 'true'}
+          instances_health = integrations.get('health', {})
+          for instance in instances_health.values():
+              if 'feed' in (brand := instance.get('brand', '')).lower() and \
+                  (error := instance.get('lastError', '')) and \
+                      (instance_name := instance.get('instance')) in enabled_instances:
+                  if modified := instance.get('modified', ''):
+                      modified_dt = parse(modified)
+                      assert modified_dt is not None, f'could not parse {modified}'
+                      modified = modified_dt.strftime('%Y-%m-%d %H:%M:%S%z')
+                  table.add_row({
+                      'Brand': brand,
+                      'Instance': instance_name,
+                      'Instance Last Modified Time': modified,
+                      'Error Information': error,
+                  })
+      else:
+          demisto.error(f'Failed running POST query to /settings/integration/search.\n{str(integration_search_res)}')
+
+      return table
+
+
+  def main():
+      try:
+          return_results(get_feed_integration_errors())
+      except Exception as e:
+          return_error(f'Failed to execute FeedIntegrationErrorWidget Script. Error: {str(e)}', e)
+
+
+  if __name__ in ('__main__', '__builtin__', 'builtins'):
+      main()
+
+  register_module_line('FeedIntegrationErrorWidget', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- widget
+type: python
