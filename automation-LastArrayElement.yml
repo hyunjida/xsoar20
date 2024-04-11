@@ -1,0 +1,48 @@
+args:
+- default: true
+  description: An array for which to return the last value.
+  isArray: true
+  name: value
+  required: true
+comment: Returns the last element of an array. If the value passed is not an array,
+  it returns the original value that was passed.
+commonfields:
+  id: LastArrayElement
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.2.61
+    packID: FiltersAndTransformers
+    packName: Filters And Transformers
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: LastArrayElement
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  // pack version: 1.2.61
+  let value = args.value;
+
+  if (Array.isArray(value) && value.length > 0) {
+      value = value[value.length - 1];
+  } else if (value === null) {
+      value = [];
+  }
+
+  return value;
+scripttarget: 0
+system: true
+tags:
+- general
+- transformer
+- entirelist
+type: javascript
