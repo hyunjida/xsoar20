@@ -1,0 +1,55 @@
+args:
+- description: The URL to transform.
+  name: value
+  required: true
+comment: "Converts string to array. \nFor example: `http://example.com/?score:1,4,time:55`
+  will be transformed to `[\"http://example.com/?score:1,4,time:55\"]`."
+commonfields:
+  id: StringToArray
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.0.0
+    itemVersion: 1.2.61
+    packID: FiltersAndTransformers
+    packName: Filters And Transformers
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.83255
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: StringToArray
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('StringToArray', 'start', __line__())
+  ### pack version: 1.2.61
+
+
+
+
+  def main(args):
+      value = args.get('value')
+      json_value = [value]
+      return json.dumps(json_value)
+
+
+  if __name__ in ('__main__', '__builtin__', 'builtins'):
+      try:
+          return_results(main(demisto.args()))
+      except Exception as exc:
+          return_error(str(exc), error=exc)
+
+  register_module_line('StringToArray', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- transformer
+type: python
