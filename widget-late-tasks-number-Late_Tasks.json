@@ -1,0 +1,52 @@
+{
+	"Cache": null,
+	"cacheVersn": 0,
+	"category": "",
+	"dataType": "tasks",
+	"dateRange": {
+		"fromDate": "0001-01-01T00:00:00Z",
+		"fromDateLicense": "0001-01-01T00:00:00Z",
+		"period": {
+			"by": "",
+			"byFrom": "days",
+			"byTo": "",
+			"field": "",
+			"fromValue": 7,
+			"toValue": null
+		},
+		"toDate": "0001-01-01T00:00:00Z"
+	},
+	"definitionId": "",
+	"fromServerVersion": "5.0.0",
+	"id": "late-tasks-number",
+	"isPredefined": true,
+	"itemVersion": "1.2.48",
+	"name": "Late Tasks",
+	"packID": "CommonWidgets",
+	"packName": "Common Widgets",
+	"packPropagationLabels": [
+		"all"
+	],
+	"params": {
+		"colors": {
+			"isEnabled": true,
+			"items": {
+				"#00CD33": {
+					"value": 0
+				},
+				"#FAC100": {
+					"value": 10
+				},
+				"#FF1B15": {
+					"value": 25
+				}
+			},
+			"type": "above"
+		}
+	},
+	"propagationLabels": [],
+	"query": "replaced:f and dueDate:\u003cnow",
+	"toServerVersion": "",
+	"version": -1,
+	"widgetType": "number"
+}
