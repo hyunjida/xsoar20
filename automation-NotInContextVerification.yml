@@ -1,0 +1,66 @@
+args:
+- default: true
+  description: Command or Automation script to execute each while loop iteration.
+  name: cmdToRun
+  required: true
+- description: 'A comma separated list of command/automation arguments and values
+    to run: key=val,key=val,key=val'
+  name: cmdArguments
+  required: true
+- description: Watch this key, if it is equal to value argument (${key}==value) then
+    exit while loop, otherwise continue to next loop iteration (will run command again).
+  name: keyToWatch
+  required: true
+comment: "Not in context verification is a script that executes the given command
+  and verifies that the specified field is not in the context after execution. \n"
+commonfields:
+  id: NotInContextVerification
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: NotInContextVerification
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |+
+  // pack version: 1.14.2
+  var val = invContext.keyToWatch;
+  var argumentsVal = args.cmdArguments;
+  var argsArr = argumentsVal.split(",");
+
+  var argsToCmd = {};
+  for (i = 0; i < argsArr.length ; i++) {
+      var keyval = argsArr[i].split("=");
+      if (keyval.length == 2) {
+          argsToCmd[keyval[0].trim()] = keyval[1];
+      }
+  }
+
+  var entry = executeCommand(args.cmdToRun, argsToCmd);
+  if(!entry[0].EntryContext[args.keyToWatch]){
+      return entry;
+  }
+  else{
+      throw args.keyToWatch + ' in context is not empty';
+  }
+
+
+scripttarget: 0
+system: true
+tags:
+- Utility
+timeout: 900ns
+type: javascript
