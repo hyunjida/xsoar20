@@ -1,0 +1,73 @@
+comment: Get the Server URL.
+commonfields:
+  id: GetServerURL
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.83255
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: GetServerURL
+outputs:
+- contextPath: ServerURL.Host
+  description: The server host name.
+  type: String
+- contextPath: ServerURL.Port
+  description: The server port.
+  type: Number
+- contextPath: ServerURL.Scheme
+  description: The server scheme.
+  type: String
+- contextPath: ServerURL.URL
+  description: The server full URL.
+  type: String
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('GetServerURL', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+  from urllib.parse import urlparse, ParseResult
+
+
+  def main():
+      urls = demisto.demistoUrls()
+      server_url = urls.get('server', '')
+
+      server_url_parts: ParseResult = urlparse(server_url)
+      host_name = server_url_parts.hostname
+      port = server_url_parts.port
+      scheme = server_url_parts.scheme
+
+      server_address = {
+          'Scheme': scheme,
+          'Host': host_name,
+          'Port': port,
+          'URL': server_url
+      }
+
+      return_outputs(server_url, {'ServerURL': server_address}, server_url)
+
+
+  if __name__ in ('__builtin__', 'builtins'):
+      main()
+
+  register_module_line('GetServerURL', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags: []
+type: python
