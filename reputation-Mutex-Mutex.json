@@ -1,0 +1,50 @@
+{
+	"cacheVersn": 0,
+	"contextPath": "",
+	"contextValue": "",
+	"defaultMapping": null,
+	"definitionId": "",
+	"details": "Mutex",
+	"disabled": false,
+	"enhancementScriptNames": null,
+	"excludedBrands": null,
+	"expiration": 0,
+	"file": false,
+	"fileHashesPriority": null,
+	"formatScript": "",
+	"fromServerVersion": "6.5.0",
+	"id": "Mutex",
+	"itemVersion": "3.4.1",
+	"layout": "Mutex",
+	"legacyNames": null,
+	"locked": false,
+	"manualMapping": {
+		"description": {
+			"simple": "Mutex.Description"
+		},
+		"stixid": {
+			"simple": "Mutex.StixID"
+		},
+		"tags": {
+			"simple": "Mutex.Tags"
+		},
+		"trafficlightprotocol": {
+			"simple": "Mutex.TrafficLightProtocol"
+		}
+	},
+	"mergeContext": false,
+	"packID": "CommonTypes",
+	"packName": "Common Types",
+	"packPropagationLabels": [
+		"all"
+	],
+	"propagationLabels": [],
+	"regex": "",
+	"reputationCommand": "",
+	"reputationScriptName": "",
+	"shouldShareComments": false,
+	"system": true,
+	"toServerVersion": "",
+	"updateAfter": 0,
+	"version": -1
+}
