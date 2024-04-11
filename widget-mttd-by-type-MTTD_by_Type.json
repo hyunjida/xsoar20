@@ -1,0 +1,45 @@
+{
+	"Cache": null,
+	"cacheVersn": 0,
+	"category": "",
+	"dataType": "incidents",
+	"dateRange": {
+		"fromDate": "0001-01-01T00:00:00Z",
+		"fromDateLicense": "0001-01-01T00:00:00Z",
+		"period": {
+			"by": "",
+			"byFrom": "days",
+			"byTo": "",
+			"field": "",
+			"fromValue": 7,
+			"toValue": null
+		},
+		"toDate": "0001-01-01T00:00:00Z"
+	},
+	"definitionId": "",
+	"description": "A widget that shows the Mean Time to Detection, by incident type.",
+	"fromServerVersion": "5.0.0",
+	"id": "mttd-by-type",
+	"isPredefined": true,
+	"itemVersion": "1.2.48",
+	"name": "MTTD by Type",
+	"packID": "CommonWidgets",
+	"packName": "Common Widgets",
+	"packPropagationLabels": [
+		"all"
+	],
+	"params": {
+		"groupBy": [
+			"occurred(d)",
+			"rawType"
+		],
+		"keys": [
+			"avg|detectionsla.totalDuration / 3600"
+		]
+	},
+	"propagationLabels": [],
+	"query": "-category:job and detectionsla.runStatus:ended",
+	"toServerVersion": "",
+	"version": -1,
+	"widgetType": "line"
+}
