@@ -1,0 +1,189 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 2.6.15
+    packID: CommonPlaybooks
+    packName: Common Playbooks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+deprecated: true
+description: Deprecated. Use 'Block Email - Generic v2' instead. This playbook will
+  block emails at your mail relay integration.
+id: Block Email - Generic
+inputs:
+- description: The email address that will be blocked.
+  key: EmailToBlock
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: The name of the Mimecast block group to add emails to.
+  key: MimecastBlockGroup
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: The query source of Mimecast, please input "cloud" or "ldap".
+  key: MimecastQuerySource
+  playbookInputQuery: null
+  required: false
+  value: {}
+name: Block Email - Generic
+outputs: []
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "3"
+      - "4"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: true
+    task:
+      brand: ""
+      id: e4cf2a65-fab2-48c9-8d52-479632660700
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: e4cf2a65-fab2-48c9-8d52-479632660700
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 50
+        }
+      }
+  "2":
+    continueonerrortype: ""
+    id: "2"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: true
+    task:
+      brand: ""
+      id: 335f96a3-ea62-4a3f-8808-873c57caa695
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 335f96a3-ea62-4a3f-8808-873c57caa695
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 370
+        }
+      }
+  "3":
+    continueonerrortype: ""
+    id: "3"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "2"
+    note: false
+    quietmode: 0
+    separatecontext: true
+    skipunavailable: true
+    task:
+      brand: ""
+      id: 3ba3c401-b5ae-4213-83a4-1d9b0f3de689
+      iscommand: false
+      name: Symantec block Email
+      playbookName: Symantec block Email
+      type: playbook
+      version: -1
+    taskid: 3ba3c401-b5ae-4213-83a4-1d9b0f3de689
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 195
+        }
+      }
+  "4":
+    continueonerrortype: ""
+    id: "4"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "2"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      BlockGroup:
+        complex:
+          root: inputs.MimecastBlockGroup
+      QuerySource:
+        complex:
+          root: inputs.MimecastQuerySource
+      SenderEmail:
+        complex:
+          root: inputs.EmailToBlock
+    separatecontext: true
+    skipunavailable: true
+    task:
+      brand: ""
+      id: bae7d267-da68-49d4-8e25-be3f454c8608
+      iscommand: false
+      name: Mimecast - Block Sender Email
+      playbookName: Mimecast - Block Sender Email
+      type: playbook
+      version: -1
+    taskid: bae7d267-da68-49d4-8e25-be3f454c8608
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 195
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 385,
+        "width": 810,
+        "x": 50,
+        "y": 50
+      }
+    }
+  }
