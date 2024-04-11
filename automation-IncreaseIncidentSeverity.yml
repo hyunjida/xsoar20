@@ -1,0 +1,75 @@
+args:
+- auto: PREDEFINED
+  description: The incident severity to increase the incident to. Can be "Unknown",
+    "Informational", "Low", "Medium", "High", "Critical", "0", "0.5", "1", "2", "3",
+    or "4".
+  name: severity
+  predefined:
+  - Unknown
+  - Informational
+  - Low
+  - Medium
+  - High
+  - Critical
+  - "0"
+  - "0.5"
+  - "1"
+  - "2"
+  - "3"
+  - "4"
+  required: true
+comment: Optionally increases the incident severity to the new value if it is greater
+  than the existing severity.
+commonfields:
+  id: IncreaseIncidentSeverity
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: IncreaseIncidentSeverity
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  // pack version: 1.14.2
+  const SEVERITY_VALUES = {
+    "unknown": 0,
+    "informational": 0.5,
+    "low": 1,
+    "medium": 2,
+    "high": 3,
+    "critical": 4,
+    "0": 0,
+    "0.5": 0.5,
+    "1": 1,
+    "2": 2,
+    "3": 3,
+    "4": 4
+  };
+
+  const severity_str = `${args.severity}`.toLowerCase();
+  const severity = SEVERITY_VALUES[severity_str];
+  const current_incident_severity = incidents[0].severity;
+
+  if (severity > current_incident_severity) {
+      executeCommand('setIncident', { severity } );
+      return `Severity increased to ${severity}`;
+  }
+
+  return "Severity not increased";
+scripttarget: 0
+system: true
+tags: []
+type: javascript
