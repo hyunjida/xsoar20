@@ -1,0 +1,43 @@
+{
+	"Cache": null,
+	"cacheVersn": 0,
+	"category": "",
+	"dataType": "indicators",
+	"dateRange": {
+		"fromDate": "0001-01-01T00:00:00Z",
+		"fromDateLicense": "0001-01-01T00:00:00Z",
+		"period": {
+			"by": "",
+			"byFrom": "days",
+			"byTo": "",
+			"field": "",
+			"fromValue": 30,
+			"toValue": null
+		},
+		"toDate": "0001-01-01T00:00:00Z"
+	},
+	"definitionId": "",
+	"fromServerVersion": "6.2.0",
+	"id": "5139168e-f555-442c-84a6-ee98aac55c1e",
+	"isPredefined": true,
+	"itemVersion": "1.2.48",
+	"name": "Malicious/Suspicious Indicators in Incidents",
+	"packID": "CommonWidgets",
+	"packName": "Common Widgets",
+	"packPropagationLabels": [
+		"all"
+	],
+	"params": {
+		"groupBy": [
+			"firstSeen(d)",
+			"score"
+		],
+		"timeFrame": "days",
+		"valuesFormat": "abbreviated"
+	},
+	"propagationLabels": [],
+	"query": "(verdict:Malicious or verdict:Suspicious) and incident.id:*",
+	"toServerVersion": "",
+	"version": -1,
+	"widgetType": "line"
+}
