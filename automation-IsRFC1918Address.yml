@@ -1,0 +1,72 @@
+args:
+- default: true
+  description: The IPv4 address to check.
+  name: value
+- description: The IPv4 address to check (can be used instead of the value argument).
+  name: left
+comment: A filter that determines whether an IPv4 address is in the private RFC-1918
+  address space (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16).  For more information,
+  see https://en.wikipedia.org/wiki/Private_network
+commonfields:
+  id: IsRFC1918Address
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.2.61
+    packID: FiltersAndTransformers
+    packName: Filters And Transformers
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/netutils:1.0.0.83404
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: IsRFC1918Address
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('IsRFC1918Address', 'start', __line__())
+  ### pack version: 1.2.61
+
+
+
+  from netaddr import IPAddress, IPNetwork
+
+
+  def main():
+      try:
+          args = demisto.args()
+          ip_address = args.get('value')
+          if not ip_address:
+              ip_address = args.get('left')
+          if not ip_address:
+              raise Exception('Please enter an IPv4 Address either in the value or in the left arguments.')
+
+          cidr_range_list = ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16']
+
+          for cidr in cidr_range_list:
+              if IPAddress(ip_address) in IPNetwork(cidr):
+                  demisto.results(True)
+                  return
+
+          demisto.results(False)
+      except Exception as err:
+          return_error(str(err))
+
+
+  if __name__ == "__builtin__" or __name__ == "builtins":
+      main()
+
+  register_module_line('IsRFC1918Address', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- filter
+type: python
