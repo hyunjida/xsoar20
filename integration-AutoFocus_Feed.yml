@@ -1,0 +1,720 @@
+category: Data Enrichment & Threat Intelligence
+commonfields:
+  id: AutoFocus Feed
+  version: -1
+configuration:
+- defaultvalue: "true"
+  display: Fetch indicators
+  name: feed
+  required: false
+  type: 8
+- display: Indicator Feed
+  name: indicator_feeds
+  options:
+  - Custom Feed
+  - Samples Feed
+  required: true
+  type: 16
+- display: ""
+  displaypassword: API Key
+  hiddenusername: true
+  name: credentials
+  required: false
+  type: 9
+- additionalinfo: TIM customers that upgraded to version 6.2 or above, can have this
+    value pre-configured in their main account so no additional input is needed. To
+    use this feature, upgrade your license so it includes the license key.
+  display: API Key
+  hidden: true
+  name: api_key
+  required: false
+  type: 4
+- additionalinfo: Only necessary in case a Custom Feed is fetched. Can also support
+    a CSV of Custom feed URLs.
+  display: The URL for the custom feed to fetch
+  name: custom_feed_urls
+  required: false
+  type: 0
+- additionalinfo: Only necessary in case a Samples Feed is fetched.
+  display: Samples Feed Scope Type
+  name: scope_type
+  options:
+  - public
+  - private
+  - global
+  required: false
+  type: 15
+- additionalinfo: Relevant only for sample feeds. JSON styled AutoFocus query, an
+    example can be found in the description (?) section. mandatory for Samples Feed.
+  display: Samples Feed Query
+  name: sample_query
+  required: false
+  type: 0
+- additionalinfo: Indicators from this integration instance will be marked with this
+    reputation
+  defaultvalue: Bad
+  display: Indicator Reputation
+  name: feedReputation
+  options:
+  - None
+  - Good
+  - Suspicious
+  - Bad
+  required: false
+  type: 18
+- additionalinfo: Reliability of the source providing the intelligence data
+  defaultvalue: A - Completely reliable
+  display: Source Reliability
+  name: feedReliability
+  options:
+  - A - Completely reliable
+  - B - Usually reliable
+  - C - Fairly reliable
+  - D - Not usually reliable
+  - E - Unreliable
+  - F - Reliability cannot be judged
+  required: true
+  type: 15
+- additionalinfo: The Traffic Light Protocol (TLP) designation to apply to indicators
+    fetched from the feed
+  display: Traffic Light Protocol Color
+  name: tlp_color
+  options:
+  - RED
+  - AMBER
+  - GREEN
+  - WHITE
+  required: false
+  type: 15
+- defaultvalue: suddenDeath
+  display: ""
+  name: feedExpirationPolicy
+  options:
+  - never
+  - interval
+  - indicatorType
+  - suddenDeath
+  required: false
+  type: 17
+- defaultvalue: "20160"
+  display: ""
+  name: feedExpirationInterval
+  required: false
+  type: 1
+- defaultvalue: "15"
+  display: Feed Fetch Interval
+  name: feedFetchInterval
+  required: false
+  type: 19
+- additionalinfo: When selected, the exclusion list is ignored for indicators from
+    this feed. This means that if an indicator from this feed is on the exclusion
+    list, the indicator might still be added to the system.
+  display: Bypass exclusion list
+  name: feedBypassExclusionList
+  required: false
+  type: 8
+- display: Trust any certificate (not secure)
+  name: insecure
+  required: false
+  type: 8
+- display: Use system proxy settings
+  name: proxy
+  required: false
+  type: 8
+- additionalinfo: Supports CSV values.
+  display: Tags
+  name: feedTags
+  required: false
+  type: 0
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.5.0
+    itemVersion: 2.2.0
+    packID: AutoFocus
+    packName: AutoFocus by Palo Alto Networks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: Use the AutoFocus Feeds integration to fetch indicators from AutoFocus.
+detaileddescription: "## AutoFocus Feed\nGets Custom and Sample feeds from AutoFocus.\n\n**Note:**
+  The `Daily Threat Feed` option is deprecated. No available replacement.\n\nFor more
+  information see the [AutoFocus documentation](https://docs.paloaltonetworks.com/autofocus/autofocus-admin/autofocus-feeds.html).\n\n####
+  Custom Feed info:\nTo connect a custom AutoFocus feed you need to provide the Custom
+  Feed URL.\n\nThe Custom Feed URL should be in this form:\nhttps://autofocus.paloaltonetworks.com/IOCFeed/{Output_Feed_ID}/{Output_Feed_Name}\n\nFor
+  more information about generating URL and adding filter options for custom feeds,
+  please read [here](https://docs.paloaltonetworks.com/autofocus/autofocus-admin/autofocus-feeds/create-custom-feeds)\n\n####
+  Samples Feed info:\nTo connect to a sample AutoFocus feed you need to provide the
+  following parameters:\n* Scope Type - Either **public**, **private** or **global**.\n*
+  Query - A JSON styled AutoFocus query. For example: \n```json\n{\n  \"operator\":\"all\",\n
+  \ \"children\":[{\n      \"field\":\"sample.create_date\",\n      \"operator\":\"is
+  in the range\",\n      \"value\":[\"2020-03-01T00:00:00\",\"2020-03-02T23:59:59\"]\n
+  \   }]\n}\n```\n\n\n---\n[View Integration Documentation](https://xsoar.pan.dev/docs/reference/integrations/auto-focus-feed)"
+display: AutoFocus Feed
+image: data:image/png;base64,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
+name: AutoFocus Feed
+script:
+  commands:
+  - arguments:
+    - defaultValue: "10"
+      description: The maximum number of indicators to return.
+      name: limit
+    - defaultValue: "0"
+      description: The index of the first indicator to fetch.
+      name: offset
+    description: Gets the indicators from AutoFocus.
+    name: autofocus-get-indicators
+  dockerimage: demisto/python3:3.10.13.83255
+  feed: true
+  runonce: false
+  script: |
+    register_module_line('AutoFocus Feed', 'start', __line__())
+    ### pack version: 2.2.0
+
+
+
+
+    # IMPORTS
+    import re
+    import requests
+    import urllib3
+    from typing import List, Optional
+    from datetime import datetime
+
+    # Disable insecure warnings
+    urllib3.disable_warnings()
+
+    # CONSTANTS
+    SOURCE_NAME = "AutoFocusFeed"
+    DAILY_FEED_BASE_URL = 'https://autofocus.paloaltonetworks.com/api/v1.0/output/threatFeedResult'
+    SAMPLE_FEED_BASE_URL = 'https://autofocus.paloaltonetworks.com/api/v1.0/samples/'
+    SAMPLE_FEED_REQUEST_BASE_URL = f'{SAMPLE_FEED_BASE_URL}search'
+    SAMPLE_FEED_RESPONSE_BASE_URL = f'{SAMPLE_FEED_BASE_URL}results/'
+
+    EPOCH_BASE = datetime.utcfromtimestamp(0)
+
+    af_indicator_type_to_demisto = {
+        'Domain': FeedIndicatorType.Domain,
+        'Url': FeedIndicatorType.URL,
+        'IPv4': FeedIndicatorType.IP
+    }
+
+    VERDICTS_TO_DBOTSCORE = {
+        '0': 1,
+        '1': 3,
+        '2': 2,
+        '4': 3,
+    }
+
+    VERDICTS_TO_TEXT = {
+        '0': 'benign',
+        '1': 'malware',
+        '2': 'grayware',
+        '4': 'phishing',
+    }
+
+    CONFIDENCE_TO_DBOTSCORE = {
+        'interesting': 2,
+        'suspect': 3,
+        'highly_suspect': 3
+    }
+
+
+    def datetime_to_epoch(dt_to_convert):
+        delta_from_epoch_base = dt_to_convert - EPOCH_BASE
+        return int(delta_from_epoch_base.total_seconds() * 1000)
+
+
+    class Client(BaseClient):
+        """Client for AutoFocus Feed - gets indicator lists from the Custom and Daily threat feeds
+
+        Attributes:
+            api_key(str): The API key for AutoFocus.
+            insecure(bool): Use SSH on http request.
+            proxy(str): Use system proxy.
+            indicator_feeds(List): A list of indicator feed types to bring from AutoFocus.
+            scope_type(str): The scope type of the AutoFocus samples feed.
+            sample_query(str): The query to use to fetch indicators from AutoFocus samples feed.
+            custom_feed_urls(str): The URLs of the custom feeds to fetch.
+        """
+
+        def __init__(self, api_key, insecure, proxy, indicator_feeds, custom_feed_urls=None,
+                     scope_type=None, sample_query=None):
+            self.api_key = api_key
+            self.indicator_feeds = indicator_feeds
+
+            if 'Custom Feed' in indicator_feeds and (custom_feed_urls is None or custom_feed_urls == ''):
+                return_error(f'{SOURCE_NAME} - Output Feed ID and Name are required for Custom Feed')
+
+            elif 'Custom Feed' in indicator_feeds:
+                url_list = []  # type:List
+                for url in custom_feed_urls.split(','):
+                    url_list.append(self.url_format(url))
+
+                self.custom_feed_url_list = url_list
+
+            if 'Samples Feed' in indicator_feeds:
+                self.scope_type = scope_type
+
+                if not sample_query:
+                    return_error(f'{SOURCE_NAME} - Samples Query can not be empty for Samples Feed')
+                try:
+                    self.sample_query = json.loads(sample_query)
+                except Exception:
+                    return_error(f'{SOURCE_NAME} - Samples Query is not a well formed JSON object')
+
+            self.verify = not insecure
+            if proxy:
+                handle_proxy()
+
+        def url_format(self, url):
+            """Make sure the URL is in the format:
+            https://autofocus.paloaltonetworks.com/api/v1.0/IOCFeed/{ID}/{Name}
+
+            Args:
+                url(str): The URL to format.
+
+            Returns:
+                str. The reformatted URL.
+            """
+            if "https://autofocus.paloaltonetworks.com/IOCFeed/" in url:
+                url = url.replace("https://autofocus.paloaltonetworks.com/IOCFeed/",
+                                  "https://autofocus.paloaltonetworks.com/api/v1.0/IOCFeed/")
+
+            elif "autofocus.paloaltonetworks.com/IOCFeed/" in url:
+                url = url.replace("autofocus.paloaltonetworks.com/IOCFeed/",
+                                  "https://autofocus.paloaltonetworks.com/api/v1.0/IOCFeed/")
+
+            return url
+
+        def daily_custom_http_request(self, feed_type) -> list:
+            """The HTTP request for daily and custom feeds.
+
+            Args:
+                feed_type(str): The feed type (Daily / Custom feed / Samples feed).
+
+            Returns:
+                list. A list of indicators fetched from the feed.
+            """
+            headers = {
+                "apiKey": self.api_key,
+                'Content-Type': "application/json"
+            }
+
+            # This option is deprecated. We only keep this for BC purpose.
+            if feed_type == "Daily Threat Feed":
+                urls = [DAILY_FEED_BASE_URL]
+
+            else:
+                urls = self.custom_feed_url_list
+
+            indicator_list = []  # type:List
+            for url in urls:
+                res = requests.request(
+                    method="GET",
+                    url=url,
+                    verify=self.verify,
+                    headers=headers
+                )
+                res.raise_for_status()
+                indicator_list.extend(res.text.split('\n'))
+
+            return indicator_list
+
+        def sample_http_request(self) -> list:
+            """The HTTP request for the samples feed.
+
+            Args:
+
+            Returns:
+                list. A list of indicators fetched from the feed.
+            """
+            request_body = {
+                'apiKey': self.api_key,
+                'artifactSource': 'af',
+                'scope': self.scope_type,
+                'query': self.sample_query,
+                'type': 'scan',
+            }
+
+            initiate_sample_res = requests.request(
+                method="POST",
+                headers={'Content-Type': "application/json"},
+                url=SAMPLE_FEED_REQUEST_BASE_URL,
+                verify=self.verify,
+                json=request_body
+            )
+            initiate_sample_res.raise_for_status()
+
+            af_cookie = initiate_sample_res.json()['af_cookie']
+            time.sleep(20)  # pylint: disable=sleep-exists
+
+            get_results_res = requests.request(
+                method="POST",
+                url=SAMPLE_FEED_RESPONSE_BASE_URL + af_cookie,
+                verify=self.verify,
+                json={'apiKey': self.api_key}
+            )
+            get_results_res.raise_for_status()
+
+            indicator_list = []  # type:List
+
+            for single_sample in get_results_res.json().get('hits'):
+                indicator_list.extend(self.create_indicators_from_single_sample_response(single_sample))
+
+            return indicator_list
+
+        @staticmethod
+        def get_basic_raw_json(single_sample: dict):
+            single_sample_data = single_sample.get('_source', {})
+            artifacts = single_sample_data.get('artifact', [])
+
+            raw_json_data = {
+                'autofocus_id': single_sample.get('_id'),
+                'autofocus_region': [single_region.upper() for single_region in single_sample_data.get('region', [])],
+                'autofocus_tags': single_sample_data.get('tag', []),
+                'autofocus_tags_groups': single_sample_data.get('tag_groups', []),
+                'autofocus_num_matching_artifacts': len(artifacts),
+                'service': 'AutoFocus Samples Feed'
+            }
+
+            create_date = single_sample_data.get('create_date', None)
+            if create_date is not None:
+                create_date = datetime.strptime(create_date, '%Y-%m-%dT%H:%M:%S')
+                raw_json_data['autofocus_create_date'] = datetime_to_epoch(create_date)
+
+            update_date = single_sample_data.get('update_date', None)
+            if update_date is not None:
+                update_date = datetime.strptime(update_date, '%Y-%m-%dT%H:%M:%S')
+                raw_json_data['autofocus_update_date'] = datetime_to_epoch(update_date)
+
+            return raw_json_data
+
+        @staticmethod
+        def create_indicators_for_file(raw_json_data: dict, full_sample_json: dict):
+            raw_json_data['type'] = FeedIndicatorType.File
+            raw_json_data['md5'] = full_sample_json.get('md5')
+            raw_json_data['size'] = full_sample_json.get('size')
+            raw_json_data['sha1'] = full_sample_json.get('sha1')
+            raw_json_data['value'] = full_sample_json.get('sha256')
+            raw_json_data['sha256'] = full_sample_json.get('sha256')
+            raw_json_data['ssdeep'] = full_sample_json.get('ssdeep')
+            raw_json_data['region'] = [single_region.upper() for single_region in full_sample_json.get('region', [])]
+            raw_json_data['imphash'] = full_sample_json.get('imphash')
+            raw_json_data['autofocus_filetype'] = full_sample_json.get('filetype')
+            raw_json_data['autofocus_malware'] = VERDICTS_TO_TEXT.get(full_sample_json.get('malware'))  # type: ignore
+
+            fields_mapping = {
+                'md5': full_sample_json.get('md5'),
+                'tags': full_sample_json.get('tag'),
+                'size': full_sample_json.get('size'),
+                'sha1': full_sample_json.get('sha1'),
+                'region': raw_json_data.get('region'),
+                'sha256': full_sample_json.get('sha256'),
+                'ssdeep': full_sample_json.get('ssdeep'),
+                'imphash': full_sample_json.get('imphash'),
+                'filetype': full_sample_json.get('filetype'),
+                'threattypes': [{'threatcategory': threat} for threat in full_sample_json.get('tag_groups', [])],
+                'creationdate': raw_json_data.get('autofocus_create_date'),
+            }
+
+            tlp_color = demisto.params().get('tlp_color')
+            if tlp_color:
+                fields_mapping['trafficlightprotocol'] = tlp_color
+
+            return [
+                {
+                    'value': raw_json_data['value'],
+                    'type': raw_json_data['type'],
+                    'rawJSON': raw_json_data,
+                    'fields': fields_mapping,
+                    'score': VERDICTS_TO_DBOTSCORE.get(full_sample_json.get('malware'), 0)  # type: ignore
+                }
+            ]
+
+        @staticmethod
+        def create_indicator_from_artifact(raw_json_data: dict, artifact: dict):
+            indicator_value = artifact.get('indicator', None)
+            if indicator_value is None:
+                return None
+
+            autofocus_indicator_type = artifact.get('indicator_type', None)
+            indicator_type = af_indicator_type_to_demisto.get(autofocus_indicator_type)
+            if not indicator_type:
+                return None
+
+            raw_json_data.update(
+                {
+                    'value': indicator_value,
+                    'type': indicator_type,
+                    'autofocus_confidence': artifact.get('confidence', ''),
+                    'autofocus_malware': artifact.get('m', 0),
+                    'autofocus_benign': artifact.get('b', 0),
+                    'autofocus_grayware': artifact.get('g', 0)
+                }
+            )
+
+            if indicator_type == FeedIndicatorType.IP and ':' in indicator_value:
+                indicator_value, port = indicator_value.split(':', 1)
+                raw_json_data['autofocus_port'] = port
+
+            fields_mapping = {
+                'firstseenbysource': raw_json_data.get('autofocus_create_date'),
+                'region': raw_json_data.get('autofocus_region'),
+                'tags': raw_json_data.get('autofocus_tags'),
+                'threattypes': [{'threatcategory': threat} for threat in raw_json_data.get('autofocus_tags_groups', [])],
+                'service': 'AutoFocus Samples Feed'
+            }
+
+            tlp_color = demisto.params().get('tlp_color')
+            if tlp_color:
+                fields_mapping['trafficlightprotocol'] = tlp_color
+
+            return {
+                'value': raw_json_data['value'],
+                'type': raw_json_data['type'],
+                'rawJSON': raw_json_data,
+                'fields': fields_mapping,
+                'score': CONFIDENCE_TO_DBOTSCORE.get(artifact.get('confidence'), 0),  # type: ignore
+            }
+
+        @staticmethod
+        def create_indicators_from_single_sample_response(single_sample):
+            single_sample_data = single_sample.get('_source', {})
+            if not single_sample_data:
+                return []
+
+            # When the user do not have access to sample's details a truncated sha256 is used.
+            if '...' in single_sample_data.get('sha256', '...'):
+                return []
+
+            indicators = Client.create_indicators_for_file(Client.get_basic_raw_json(single_sample), single_sample_data)
+
+            artifacts = single_sample_data.get('artifact', [])
+
+            for artifact in artifacts:
+                indicator_from_artifact = Client.create_indicator_from_artifact(Client.get_basic_raw_json(single_sample),
+                                                                                artifact)
+                if indicator_from_artifact:
+                    indicators.append(indicator_from_artifact)
+
+            return indicators
+
+        @staticmethod
+        def find_indicator_type(indicator: str) -> str:
+            """
+            Get the type of the indicator.
+
+            Args:
+                indicator (str): The indicator whose type we want to check.
+
+            Returns:
+                str: The type of the indicator.
+            """
+            if ip_type := FeedIndicatorType.ip_to_indicator_type(indicator):
+                return ip_type
+            elif re.match(urlRegex, indicator):
+                return FeedIndicatorType.URL
+            elif re.match(sha256Regex, indicator):
+                return FeedIndicatorType.File
+            else:
+                return FeedIndicatorType.Domain
+
+        def create_indicators_from_response(self, feed_type, response, feed_tags, tlp_color):
+            parsed_indicators = []  # type:List
+
+            for indicator in response:
+                if indicator:
+                    indicator_type = self.find_indicator_type(indicator)
+
+                    # catch ip of the form X.X.X.X:portNum and extract the IP without the port.
+                    if indicator_type in [FeedIndicatorType.IP, FeedIndicatorType.CIDR,
+                                          FeedIndicatorType.IPv6CIDR, FeedIndicatorType.IPv6] and ":" in indicator:
+                        indicator = indicator.split(":", 1)[0]
+
+                    indicator_obj = {
+                        "type": indicator_type,
+                        "value": indicator,
+                        "rawJSON": {
+                            'value': indicator,
+                            'type': indicator_type,
+                            'service': feed_type
+                        },
+                        'fields': {'service': feed_type, 'tags': feed_tags}
+                    }
+                    if tlp_color:
+                        indicator_obj['fields']['trafficlightprotocol'] = tlp_color
+
+                    parsed_indicators.append(indicator_obj)
+
+            return parsed_indicators
+
+        def build_iterator(self, feed_tags: List, tlp_color: Optional[str], limit=None, offset=None):
+            """Builds a list of indicators.
+
+            Returns:
+                list. A list of JSON objects representing indicators fetched from a feed.
+            """
+            parsed_indicators = []  # type:List
+
+            for service in ["Daily Threat Feed", "Custom Feed"]:
+                if service in self.indicator_feeds:
+                    response = self.daily_custom_http_request(feed_type=service)
+                    parsed_indicators.extend(self.create_indicators_from_response(service, response, feed_tags, tlp_color))
+
+            # for get_indicator_command only
+            if limit:
+                parsed_indicators = parsed_indicators[int(offset): int(offset) + int(limit)]
+
+            if "Samples Feed" in self.indicator_feeds:
+                parsed_indicators.extend(self.sample_http_request())
+
+            # for get_indicator_command only
+            if limit:
+                parsed_indicators = parsed_indicators[int(offset): int(offset) + int(limit)]
+
+            return parsed_indicators
+
+
+    def module_test_command(client: Client, args: dict, feed_tags: list, tlp_color: Optional[str]):
+        """
+        Returning 'ok' indicates that the integration works like it is supposed to. Connection to the service is successful.
+
+        Args:
+            client(Client): Autofocus Feed client
+            args(Dict): The instance parameters
+            feed_tags(List): The indicator tags
+            tlp_color(str): Traffic Light Protocol color
+
+        Returns:
+            'ok' if test passed, anything else will fail the test.
+        """
+        indicator_feeds = client.indicator_feeds
+        exception_list = []  # type:List
+        if 'Daily Threat Feed' in indicator_feeds:
+            raise Exception("Daily Feed is no longer supported by this feed,"
+                            " please configure the AutoFocus Daily Feed for this action")
+        if 'Custom Feed' in indicator_feeds:
+            client.indicator_feeds = ['Custom Feed']
+            url_list = client.custom_feed_url_list
+            for url in url_list:
+                client.custom_feed_url_list = [url]
+                try:
+                    client.build_iterator(feed_tags, tlp_color, 1, 0)
+                except Exception:
+                    exception_list.append(f"Could not fetch Custom Feed {url}\n"
+                                          f"\nCheck your API key the URL for the feed and Check "
+                                          f"if they are Enabled in AutoFocus.")
+
+        if 'Samples Feed' in indicator_feeds:
+            client.indicator_feeds = ['Samples Feed']
+            try:
+                client.build_iterator(feed_tags, tlp_color, 1, 0)
+            except Exception:
+                exception_list.append("Could not fetch Samples Feed\n"
+                                      "\nCheck your instance configuration and your connection to AutoFocus.")
+
+        if len(exception_list) > 0:
+            raise Exception("\n".join(exception_list))
+
+        return 'ok', {}, {}
+
+
+    def get_indicators_command(client: Client, args: dict, feed_tags, tlp_color):
+        """Initiate a single fetch-indicators
+
+        Args:
+            client(Client): The AutoFocus Client.
+            args(dict): Command arguments.
+            feed_tags: The indicator tags.
+            tlp_color: Traffic Light Protocol color.
+
+        Returns:
+            str, dict, list. the markdown table, context JSON and list of indicators
+        """
+        offset = int(args.get('offset', 0))
+        limit = int(args.get('limit', 100))
+        indicators = fetch_indicators_command(client, feed_tags, tlp_color, limit, offset)
+
+        hr_indicators = []
+        for indicator in indicators:
+            hr_indicators.append({
+                'Value': indicator.get('value'),
+                'Type': indicator.get('type'),
+                'rawJSON': indicator.get('rawJSON'),
+                'fields': indicator.get('fields'),
+            })
+
+        human_readable = tableToMarkdown("Indicators from AutoFocus:", hr_indicators,
+                                         headers=['Value', 'Type', 'rawJSON', 'fields'], removeNull=True)
+
+        if args.get('limit'):
+            human_readable = human_readable + f"\nTo bring the next batch of indicators run:\n!autofocus-get-indicators " \
+                                              f"limit={args.get('limit')} " \
+                                              f"offset={int(str(args.get('limit'))) + int(str(args.get('offset')))}"
+
+        return human_readable, {}, indicators
+
+
+    def fetch_indicators_command(client: Client, feed_tags: List, tlp_color: Optional[str], limit=None, offset=None):
+        """Fetch-indicators command from AutoFocus Feeds
+
+        Args:
+            client(Client): AutoFocus Feed client.
+            feed_tags: The indicator tags.
+            tlp_color: Traffic Light Protocol color.
+            limit: limit the amount of incidators fetched.
+            offset: the index of the first index to fetch.
+
+        Returns:
+            list. List of indicators.
+        """
+        indicators = client.build_iterator(feed_tags, tlp_color, limit, offset)
+
+        return indicators
+
+
+    def main():
+        params = demisto.params()
+        feed_tags = argToList(params.get('feedTags'))
+        tlp_color = params.get('tlp_color')
+
+        command = demisto.command()
+        demisto.info(f'Command being called is {command}')
+        # Switch case
+        commands = {
+            'test-module': module_test_command,
+            'autofocus-get-indicators': get_indicators_command
+        }
+        try:
+            auto_focus_key_retriever = AutoFocusKeyRetriever(params.get('credentials', {}).get('password') or params.get('api_key'))
+            client = Client(api_key=auto_focus_key_retriever.key,
+                            insecure=params.get('insecure'),
+                            proxy=params.get('proxy'),
+                            indicator_feeds=params.get('indicator_feeds'),
+                            custom_feed_urls=params.get('custom_feed_urls'),
+                            scope_type=params.get('scope_type'),
+                            sample_query=params.get('sample_query'))
+
+            if demisto.command() == 'fetch-indicators':
+                indicators = fetch_indicators_command(client, feed_tags, tlp_color)
+                # we submit the indicators in batches
+                for b in batch(indicators, batch_size=2000):
+                    demisto.createIndicators(b)
+            else:
+                readable_output, outputs, raw_response = commands[command](client, demisto.args(),
+                                                                           feed_tags, tlp_color)  # type: ignore
+                return_outputs(readable_output, outputs, raw_response)
+        except Exception as e:
+            raise Exception(f'Error in {SOURCE_NAME} Integration [{e}]')
+
+
+    if __name__ == '__builtin__' or __name__ == 'builtins':
+        main()
+
+    register_module_line('AutoFocus Feed', 'end', __line__())
+  subtype: python3
+  type: python
+system: true
