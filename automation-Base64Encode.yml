@@ -1,0 +1,45 @@
+args:
+- default: true
+  description: to encode in Base64 format
+  name: input
+  required: true
+comment: Will encode an input using Base64 format.
+commonfields:
+  id: Base64Encode
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: Base64Encode
+outputs:
+- contextPath: Base64.encoded
+  description: input encoded as Base64 format
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  // pack version: 1.14.2
+  var result = Base64.encode(args.input);
+  return {Type: entryTypes.note,
+      Contents: result,
+      ContentsFormat: formats.note,
+      HumanReadable: result,
+      EntryContext: {"Base64.encoded": result}
+  };
+scripttarget: 0
+system: true
+tags:
+- Utility
+type: javascript
