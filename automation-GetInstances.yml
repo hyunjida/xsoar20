@@ -1,0 +1,115 @@
+args:
+- description: Brand name to filter instances by.
+  isArray: true
+  name: brand
+- auto: PREDEFINED
+  defaultValue: active
+  description: Instance status to filter instances by. Can be "active", "disabled",
+    or "both". Default is "active".
+  name: instance_status
+  predefined:
+  - active
+  - both
+  - disabled
+comment: Returns integration instances configured in Cortex XSOAR. You can filter
+  by instance status and/or brand name (vendor).
+commonfields:
+  id: GetInstances
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.86272
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: GetInstances
+outputs:
+- contextPath: Modules.name
+  description: The instance name.
+  type: string
+- contextPath: Modules.category
+  description: The instance category.
+  type: string
+- contextPath: Modules.defaultIgnored
+  description: True if the instance avilable by default, otherwise false.
+  type: string
+- contextPath: Modules.state
+  description: True if the instance is enabled, otherwise false.
+  type: string
+- contextPath: Modules.brand
+  description: The instance brand.
+  type: string
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('GetInstances', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+  from typing import Dict, Iterator
+
+
+  INTERNAL_MODULES_BRANDS = ['Scripts', 'Builtin', 'testmodule']
+
+
+  def filter_config(module: Dict, filter_brand: Optional[List[str]] = None, instance_status: str = 'active'):
+      brand = module.get('brand')
+      if brand in INTERNAL_MODULES_BRANDS:
+          return False
+      elif filter_brand and brand not in filter_brand:
+          return False
+      elif instance_status != 'both' and module.get('state') != instance_status:
+          return False
+
+      return True
+
+
+  def prepare_args(args: Dict):
+      if 'brand' in args:
+          args['filter_brand'] = argToList(args.pop('brand'))
+
+      if args.get('instance_status') not in ['active', 'both', 'disabled']:
+          raise ValueError("instance_status should be one of the following 'active', 'both', 'disabled'")
+
+      return args
+
+
+  def filter_instances(modules: Dict, **kwargs) -> Iterator[Dict]:
+      for instance, config in modules.items():
+          if filter_config(config, **kwargs):
+              config['name'] = instance
+              yield config
+
+
+  def main():
+      try:
+          args = prepare_args(demisto.args())
+          context_config = list(filter_instances(demisto.getModules(), **args))
+          return_results(CommandResults(
+              outputs=context_config,
+              outputs_prefix='Modules',
+          ))
+      except Exception as error:
+          return_error(str(error), error)
+
+
+  if __name__ in ['__main__', 'builtins']:
+      main()
+
+  register_module_line('GetInstances', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags: []
+type: python
