@@ -1,0 +1,45 @@
+{
+	"autorun": false,
+	"cacheVersn": 0,
+	"closureScript": "",
+	"color": "#CFD0D0",
+	"days": 0,
+	"daysR": 0,
+	"default": false,
+	"definitionId": "",
+	"detached": false,
+	"disabled": false,
+	"extractSettings": {
+		"fieldCliNameToExtractSettings": {
+			"filehash": {
+				"extractAsIsIndicatorTypeId": "unifiedFileRep",
+				"extractIndicatorTypesIDs": [],
+				"isExtractingAllIndicatorTypes": false
+			}
+		},
+		"mode": "Specific"
+	},
+	"fromServerVersion": "5.5.0",
+	"hours": 0,
+	"hoursR": 0,
+	"id": "VirusTotal Intelligence LiveHunt Notification",
+	"itemVersion": "2.6.17",
+	"layout": "",
+	"locked": false,
+	"name": "VirusTotal Intelligence LiveHunt Notification",
+	"onChangeRepAlg": 0,
+	"packID": "VirusTotal",
+	"packName": "VirusTotal",
+	"packPropagationLabels": [
+		"all"
+	],
+	"preProcessingScript": "",
+	"propagationLabels": [],
+	"readonly": false,
+	"reputationCalc": 0,
+	"system": true,
+	"toServerVersion": "",
+	"version": -1,
+	"weeks": 0,
+	"weeksR": 0
+}
