@@ -1,0 +1,284 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 2.6.15
+    packID: CommonPlaybooks
+    packName: Common Playbooks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: |-
+  This playbook returns a file sample correlating to a hash in the War Room using the following sub-playbooks:
+  - Get binary file by MD5 hash from Carbon Black telemetry data - VMware Carbon Black EDR v2.
+  - Get the threat (file) associated with a specific SHA256 hash - Cylance Protect v2.
+  - Get the file associated with a specific MD5 or SHA256 hash - Code42.
+id: Get File Sample By Hash - Generic v3
+inputs:
+- description: The MD5 hash value for the file to retrieve.
+  key: MD5
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: The SHA256 hash value for the file to retrieve.
+  key: SHA256
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: A new name for the retrieved file. If left empty, the filename will
+    not change.
+  key: NewFilename
+  playbookInputQuery: null
+  required: false
+  value: {}
+name: Get File Sample By Hash - Generic v3
+outputs:
+- contextPath: File.Size
+  description: The size of the file.
+  type: number
+- contextPath: File.Type
+  description: The type of the file.
+  type: string
+- contextPath: File.Info
+  description: General information of the file.
+  type: string
+- contextPath: File.MD5
+  description: The MD5 hash of the file.
+  type: string
+- contextPath: File.SHA1
+  description: The SHA1 hash of the file.
+  type: string
+- contextPath: File.SHA256
+  description: The SHA256 hash of the file.
+  type: string
+- contextPath: File.SHA512
+  description: The SHA512 hash of the file.
+  type: string
+- contextPath: File.SSDeep
+  description: The SSDeep of the file.
+  type: string
+- contextPath: File.Extension
+  description: The file extension.
+  type: string
+- contextPath: File.EntryID
+  description: The file entry ID.
+  type: string
+- contextPath: File.Name
+  description: The file name.
+  type: string
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "5"
+      - "6"
+      - "7"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: e1c3bf5a-d7ba-4062-8877-ad2799d1db03
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: e1c3bf5a-d7ba-4062-8877-ad2799d1db03
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 50
+        }
+      }
+  "4":
+    continueonerrortype: ""
+    id: "4"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: b5e5705d-8e32-41bb-8c3b-63c78bd2d14f
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: b5e5705d-8e32-41bb-8c3b-63c78bd2d14f
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 370
+        }
+      }
+  "5":
+    continueonerrortype: ""
+    id: "5"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 0
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "4"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      SHA256:
+        complex:
+          root: inputs.SHA256
+          transformers:
+          - operator: uniq
+    separatecontext: true
+    skipunavailable: true
+    task:
+      brand: ""
+      description: This playbook returns a file sample to the War Room given the file's
+        SHA256 hash, using Cylance Protect v2 integration.
+      id: e912d085-264f-42f7-8a0f-b5aa82b96072
+      iscommand: false
+      name: Get File Sample By Hash - Cylance Protect v2
+      playbookName: Get File Sample By Hash - Cylance Protect v2
+      type: playbook
+      version: -1
+    taskid: e912d085-264f-42f7-8a0f-b5aa82b96072
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 195
+        }
+      }
+  "6":
+    continueonerrortype: ""
+    id: "6"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "4"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      MD5:
+        complex:
+          root: inputs.MD5
+          transformers:
+          - operator: uniq
+    separatecontext: true
+    skipunavailable: true
+    task:
+      brand: ""
+      description: This playbook retrieves a binary file by its MD5 hash from the
+        Carbon Black telemetry data.
+      id: 1ac553d1-5315-4391-8875-63c8ca4e9fa2
+      iscommand: false
+      name: Get the binary file from Carbon Black by its MD5 hash
+      playbookName: Get the binary file from Carbon Black by its MD5 hash
+      type: playbook
+      version: -1
+    taskid: 1ac553d1-5315-4391-8875-63c8ca4e9fa2
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": -185,
+          "y": 195
+        }
+      }
+  "7":
+    continueonerrortype: ""
+    id: "7"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "4"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      Filename:
+        complex:
+          root: inputs.NewFilename
+      MD5:
+        complex:
+          root: inputs.MD5
+          transformers:
+          - operator: uniq
+      SHA256:
+        complex:
+          root: inputs.SHA256
+          transformers:
+          - operator: uniq
+    separatecontext: true
+    skipunavailable: true
+    task:
+      brand: ""
+      description: This playbook downloads a file via Code42 by either MD5 or SHA256
+        hash.
+      id: 9c2c0ffb-724a-40eb-8069-a8beb5de0775
+      iscommand: false
+      name: Code42 File Download
+      playbookName: Code42 File Download
+      type: playbook
+      version: -1
+    taskid: 9c2c0ffb-724a-40eb-8069-a8beb5de0775
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 705,
+          "y": 195
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 385,
+        "width": 1270,
+        "x": -185,
+        "y": 50
+      }
+    }
+  }
