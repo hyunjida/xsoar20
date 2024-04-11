@@ -1,0 +1,185 @@
+args:
+- description: List of regex or text for the pattern match.
+  isArray: true
+  name: value
+- description: A regex pattern to search (in Python).
+  name: regex
+- description: A match target text.
+  name: text
+- description: The template text that will be returned for the output by doing backslash
+    substitution to the patterns matched.
+  name: template
+- auto: PREDEFINED
+  defaultValue: text
+  description: The data type of the template.
+  name: template_type
+  predefined:
+  - text
+  - json
+  - list
+- auto: PREDEFINED
+  defaultValue: text
+  description: Which type of value takes from the value argument, 'text' (match target)
+    or 'regex'.
+  name: value_takes
+  predefined:
+  - text
+  - regex
+- description: The comma separated flags for pattern matching in regex. "dotall" (s),
+    "multiline" (m), "ignorecase" (i) and "unicode" (u) are supported.
+  name: flags
+- defaultValue: "0"
+  description: The maximum limit for scanning patterns. (0 means unlimited).
+  name: search_limit
+comment: |-
+  Extract the strings matched to the patterns by doing backslash substitution on the template string.
+  This transformer allow to input multiple regex patterns and multiple match targets, and those can be given in the input value and the argument parameters.
+commonfields:
+  id: RegexExpand
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.5.0
+    itemVersion: 1.2.61
+    packID: FiltersAndTransformers
+    packName: Filters And Transformers
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.83255
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: RegexExpand
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('RegexExpand', 'start', __line__())
+  ### pack version: 1.2.61
+
+
+  import re
+  from typing import List
+
+
+  def concat_values(item1: Any, item2: Any) -> List[Any]:
+      """
+      Concatinate item1 and item2 into a list
+
+      :param item1: The leading values to be concatinated.
+      :param item2: The values to add to item1.
+      :return: The result in list.
+      """
+      item1 = item1 or []
+      item1 = item1 if isinstance(item1, list) else [item1]
+      item1 = [v for v in item1 if v is not None]
+      item2 = item2 or []
+      item2 = item2 if isinstance(item2, list) else [item2]
+      item2 = [v for v in item2 if v is not None]
+      return item1 + item2
+
+
+  def expand_template(match: re.Match, template: Any) -> Any:
+      """
+      Return the string obtained by doing backslash substitution on the template.
+
+      :param match: The match object.
+      :param template: The template.
+      :return: The template replaced with backslash substitution symbols.
+      """
+      if template is None:
+          return match.group(0)
+      elif isinstance(template, str):
+          return match.expand(template.replace(r'\0', r'\g<0>'))
+      elif isinstance(template, list):
+          return [expand_template(match, t) for t in template]
+      elif isinstance(template, dict):
+          return {expand_template(match, k): expand_template(match, v) for k, v in template.items()}
+      else:
+          return template
+
+
+  def main():
+      args = demisto.args()
+      try:
+          template = args.get('template')
+          template_type = args.get('template_type') or ''
+          if template_type == 'text':
+              pass
+          elif template_type == 'json':
+              template = json.loads(template)
+          elif template_type == 'list':
+              template = argToList(template)
+          else:
+              raise ValueError(f'Unknown template type: {template_type}')
+
+          regex_flags = 0
+          for flag in argToList(args.get('flags')):
+              if flag in ('dotall', 's'):
+                  regex_flags |= re.DOTALL
+              elif flag in ('multiline', 'm'):
+                  regex_flags |= re.MULTILINE
+              elif flag in ('ignorecase', 'i'):
+                  regex_flags |= re.IGNORECASE
+              elif flag in ('unicode', 'u'):
+                  regex_flags |= re.UNICODE
+              else:
+                  raise ValueError(f'Unknown flag: {flag}')
+
+          search_limit = int(args.get('search_limit') or 0)
+          if search_limit < 0:
+              raise ValueError(f'Bad search limit: {search_limit}')
+
+          results: List[Any] = []
+          value_takes = args.get('value_takes') or 'text'
+          if value_takes == 'text':
+              # Pattern matching for each text in the input order
+              regex_list = concat_values(args.get('regex'), [])
+              text_list = concat_values(args.get('value'), args.get('text'))
+
+              regexes = [re.compile(str(r), flags=regex_flags) for r in regex_list if isinstance(r, (str, int))]
+              for text in text_list:
+                  for regex in regexes:
+                      for i, match in enumerate(re.finditer(regex, str(text)), start=1):
+                          results = concat_values(results, expand_template(match, template))
+                          if search_limit != 0 and search_limit <= i:
+                              break
+
+          elif value_takes == 'regex':
+              # Pattern matching for each regex in the input order
+              regex_list = concat_values(args.get('value'), args.get('regex'))
+              text_list = concat_values(args.get('text'), [])
+
+              for regex_pattern in regex_list:
+                  if isinstance(regex_pattern, (str, int)):
+                      regex = re.compile(str(regex_pattern), flags=regex_flags)
+                      for text in text_list:
+                          for i, match in enumerate(re.finditer(regex, str(text)), start=1):
+                              results = concat_values(results, expand_template(match, template))
+                              if search_limit != 0 and search_limit <= i:
+                                  break
+          else:
+              raise ValueError(f'Unknown value_takes: {value_takes}')
+
+          return_results(results)
+      except Exception as err:
+          # Don't return an error by return_error() as this is transformer.
+          raise DemistoException(str(err))
+
+
+  if __name__ in ('__builtin__', 'builtins', '__main__'):
+      main()
+
+  register_module_line('RegexExpand', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- transformer
+- string
+- entirelist
+type: python
