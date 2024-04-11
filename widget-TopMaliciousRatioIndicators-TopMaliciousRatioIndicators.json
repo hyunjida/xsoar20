@@ -1,0 +1,69 @@
+{
+	"Cache": null,
+	"cacheVersn": 0,
+	"category": "",
+	"dataType": "scripts",
+	"dateRange": {
+		"fromDate": "0001-01-01T00:00:00Z",
+		"fromDateLicense": "0001-01-01T00:00:00Z",
+		"period": {
+			"by": "",
+			"byFrom": "days",
+			"byTo": "",
+			"field": "",
+			"fromValue": 180,
+			"toValue": null
+		},
+		"toDate": "0001-01-01T00:00:00Z"
+	},
+	"definitionId": "",
+	"description": "Malicious Ratio indicator widget shows indicator that appear in high ration at bad incidents",
+	"fromServerVersion": "5.0.0",
+	"id": "TopMaliciousRatioIndicators",
+	"isPredefined": true,
+	"itemVersion": "1.2.48",
+	"name": "TopMaliciousRatioIndicators",
+	"packID": "CommonWidgets",
+	"packName": "Common Widgets",
+	"packPropagationLabels": [
+		"all"
+	],
+	"params": {
+		"maxNumberOfIndicators": 10000,
+		"maximumNumberOfResults": 50,
+		"minimumNumberOfInvs": 3,
+		"tableColumns": [
+			{
+				"displayed": true,
+				"isDefault": true,
+				"key": "ID"
+			},
+			{
+				"displayed": true,
+				"isDefault": true,
+				"key": "Type"
+			},
+			{
+				"displayed": true,
+				"isDefault": true,
+				"key": "Value"
+			},
+			{
+				"displayed": true,
+				"isDefault": true,
+				"key": "Malicious Ratio"
+			},
+			{
+				"displayed": true,
+				"isDefault": true,
+				"key": "Last Seen"
+			}
+		]
+	},
+	"propagationLabels": [],
+	"query": "TopMaliciousRatioIndicators",
+	"size": 10,
+	"toServerVersion": "",
+	"version": -1,
+	"widgetType": "table"
+}
