@@ -1,0 +1,79 @@
+args:
+- description: The header value to decode.
+  name: value
+comment: Decode MIME base64 headers.
+commonfields:
+  id: DecodeMimeHeader
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.86272
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: DecodeMimeHeader
+outputs:
+- contextPath: DecodedMimeHeader
+  description: The result of decoded value.
+  type: string
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('DecodeMimeHeader', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+  from email.header import decode_header
+
+
+  def decode(s):
+      dh = decode_header(s.strip())
+      default_charset = 'ASCII'
+      res = ''.join([str(t[0], t[1] or default_charset) for t in dh])
+      return res
+
+
+  def main():     # pragma: no cover
+      s = demisto.args()['value']
+
+      if s.startswith('"'):
+          s = s[1:]
+
+      if s.endswith('"'):
+          s = s[:-1]
+
+      lines = []
+      for line in s.split("\n"):
+          try:
+              lines.append(decode(line))
+          except Exception:
+              lines.append(line)
+
+      res = "\n".join(lines)
+      demisto.results({'ContentsFormat': formats['text'],
+                       'Type': entryTypes['note'],
+                       'Contents': res,
+                       'EntryContext': {'DecodedMimeHeader': res}
+                       })
+
+
+  if __name__ in ['__main__', '__builtin__', 'builtins']:
+      main()
+
+  register_module_line('DecodeMimeHeader', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags: []
+type: python
