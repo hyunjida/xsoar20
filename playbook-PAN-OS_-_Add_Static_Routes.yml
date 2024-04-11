@@ -1,0 +1,554 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 2.1.22
+    packID: PAN-OS
+    packName: PAN-OS by Palo Alto Networks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: This playbook accepts a PAN-OS static route configuration and creates
+  it in the PAN-OS instance.
+id: PAN-OS - Add Static Routes
+inputs:
+- description: Name of the virtual router to configure the static routes for.
+  key: virtual_router_name
+  playbookInputQuery: null
+  required: true
+  value: {}
+- description: Enter a name to identify the static route (up to 31 characters). The
+    name is case-sensitive and must be unique. Use only letters, numbers, spaces,
+    hyphens, and underscores.
+  key: route_name
+  playbookInputQuery: null
+  required: true
+  value: {}
+- description: Interface name where the static route will be added.
+  key: interface_name
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: 'Enter an IP address and network mask in CIDR notation: ip_address/mask
+    (for example, 192.168.2.0/24 for IPv4 or 2001:db8::/32 for IPv6).'
+  key: destination
+  playbookInputQuery: null
+  required: true
+  value: {}
+- description: 'The type for the nexthop. Can be: "ip-address", "next-vr", "fqdn"
+    or "discard".'
+  key: nexthop_type
+  playbookInputQuery: null
+  required: true
+  value: {}
+- description: The next hop value.
+  key: nexthop_value
+  playbookInputQuery: null
+  required: true
+  value: {}
+- description: This input determines whether to auto-commit the configuration to PAN-OS.
+    Specify Yes/No.
+  key: AutoCommit
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: "No"
+name: PAN-OS - Add Static Routes
+outputs: []
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "30"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 4282a1cd-35ca-4031-88d9-111acf2a5cb2
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: 4282a1cd-35ca-4031-88d9-111acf2a5cb2
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 280,
+          "y": -430
+        }
+      }
+  "7":
+    continueonerrortype: ""
+    id: "7"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: Builtin
+      id: e6625b7f-fcb0-46cb-86d0-b57c20848d19
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: e6625b7f-fcb0-46cb-86d0-b57c20848d19
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 280,
+          "y": 620
+        }
+      }
+  "11":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.AutoCommit
+                transformers:
+                - operator: toLowerCase
+          operator: isEqualString
+          right:
+            value:
+              simple: "yes"
+      label: "yes"
+    continueonerrortype: ""
+    id: "11"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "29"
+      "yes":
+      - "35"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 038dc480-8b32-4550-8c6d-058d70737423
+      iscommand: false
+      name: Auto commit configuration?
+      type: condition
+      version: -1
+    taskid: 038dc480-8b32-4550-8c6d-058d70737423
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 870,
+          "y": 280
+        }
+      }
+  "26":
+    continueonerrortype: ""
+    id: "26"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "11"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      destination:
+        complex:
+          root: inputs.destination
+      interface:
+        complex:
+          root: inputs.interface_name
+      nexthop_type:
+        complex:
+          root: inputs.nexthop_type
+      nexthop_value:
+        complex:
+          root: inputs.nexthop_value
+      static_route:
+        complex:
+          root: inputs.route_name
+      virtual_router:
+        complex:
+          root: inputs.virtual_router_name
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Adds a static route.
+      id: 4eb055fe-49c6-4342-8433-052cf08a445d
+      iscommand: true
+      name: PAN-OS - add static route
+      script: '|||pan-os-add-static-route'
+      type: regular
+      version: -1
+    taskid: 4eb055fe-49c6-4342-8433-052cf08a445d
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 870,
+          "y": 110
+        }
+      }
+  "27":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: inputs.route_name
+          operator: isEqualString
+          right:
+            iscontext: true
+            value:
+              simple: Panorama.StaticRoutes.Name
+      - - left:
+            iscontext: true
+            value:
+              simple: inputs.destination
+          operator: isEqualString
+          right:
+            iscontext: true
+            value:
+              simple: Panorama.StaticRoutes.Destination
+      - - left:
+            iscontext: true
+            value:
+              simple: inputs.nexthop_value
+          operator: isEqualString
+          right:
+            iscontext: true
+            value:
+              simple: Panorama.StaticRoutes.NextHop
+      label: "yes"
+    continueonerrortype: ""
+    id: "27"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "26"
+      "yes":
+      - "31"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 70e27352-85ec-441a-8bfb-5f0a081be379
+      iscommand: false
+      name: Route already exists?
+      type: condition
+      version: -1
+    taskid: 70e27352-85ec-441a-8bfb-5f0a081be379
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 280,
+          "y": -100
+        }
+      }
+  "29":
+    continueonerrortype: ""
+    id: "29"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "7"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 5d3ddcff-fac4-4f3b-8b2f-6929ec9d7cdc
+      iscommand: false
+      name: Manually commit PAN-OS configuration
+      type: regular
+      version: -1
+    taskid: 5d3ddcff-fac4-4f3b-8b2f-6929ec9d7cdc
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 1120,
+          "y": 450
+        }
+      }
+  "30":
+    continueonerrortype: ""
+    id: "30"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "27"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      show_uncommitted:
+        simple: "true"
+      virtual_router:
+        complex:
+          root: inputs.virtual_router_name
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Lists the static routes for a virtual router.
+      id: e892374b-5d9a-4ee0-8c4d-1b0635a0cb3d
+      iscommand: true
+      name: PAN-OS - list static routes
+      script: '|||pan-os-list-static-routes'
+      type: regular
+      version: -1
+    taskid: e892374b-5d9a-4ee0-8c4d-1b0635a0cb3d
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 280,
+          "y": -280
+        }
+      }
+  "31":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: StaticRoutes.Name
+                filters:
+                - - left:
+                      iscontext: true
+                      value:
+                        simple: Panorama.StaticRoutes.Uncommitted
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: "true"
+                root: Panorama
+          operator: isExists
+      label: "yes"
+    continueonerrortype: ""
+    id: "31"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "33"
+      "yes":
+      - "7"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: b5380bb4-1443-429c-8527-953af1f9c9c2
+      iscommand: false
+      name: 'Is the static route committed? '
+      type: condition
+      version: -1
+    taskid: b5380bb4-1443-429c-8527-953af1f9c9c2
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 280,
+          "y": 110
+        }
+      }
+  "33":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.AutoCommit
+                transformers:
+                - operator: toLowerCase
+          operator: isEqualString
+          right:
+            value:
+              simple: "yes"
+      label: "yes"
+    continueonerrortype: ""
+    id: "33"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "34"
+      "yes":
+      - "36"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 2eca67d5-8fb7-4f23-8d90-d72df5cb0a06
+      iscommand: false
+      name: Auto commit configuration?
+      type: condition
+      version: -1
+    taskid: 2eca67d5-8fb7-4f23-8d90-d72df5cb0a06
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": -170,
+          "y": 280
+        }
+      }
+  "34":
+    continueonerrortype: ""
+    id: "34"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "7"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: a9c880bb-1b94-44bc-8fc5-73df62b9078e
+      iscommand: false
+      name: Manually commit PAN-OS configuration
+      type: regular
+      version: -1
+    taskid: a9c880bb-1b94-44bc-8fc5-73df62b9078e
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 70,
+          "y": 450
+        }
+      }
+  "35":
+    continueonerrortype: ""
+    id: "35"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "7"
+    note: false
+    quietmode: 0
+    separatecontext: true
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 29837cb1-15ca-46c5-8125-33c1ec5cca38
+      iscommand: false
+      name: PAN-OS Commit Configuration
+      playbookId: PAN-OS Commit Configuration
+      type: playbook
+      version: -1
+    taskid: 29837cb1-15ca-46c5-8125-33c1ec5cca38
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 630,
+          "y": 450
+        }
+      }
+  "36":
+    continueonerrortype: ""
+    id: "36"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "7"
+    note: false
+    quietmode: 0
+    separatecontext: true
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 1747d07c-17c1-4627-80cd-6f713a149085
+      iscommand: false
+      name: PAN-OS Commit Configuration
+      playbookId: PAN-OS Commit Configuration
+      type: playbook
+      version: -1
+    taskid: 1747d07c-17c1-4627-80cd-6f713a149085
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": -410,
+          "y": 450
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {
+      "11_28_yes": 0.57,
+      "11_29_#default#": 0.59,
+      "27_26_#default#": 0.49,
+      "27_31_yes": 0.63,
+      "31_33_#default#": 0.44,
+      "31_7_yes": 0.23
+    },
+    "paper": {
+      "dimensions": {
+        "height": 1115,
+        "width": 1910,
+        "x": -410,
+        "y": -430
+      }
+    }
+  }
