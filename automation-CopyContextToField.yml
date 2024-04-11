@@ -1,0 +1,101 @@
+args:
+- description: The context key from which to get the value.
+  name: sourceContextKey
+  required: true
+- description: The incident field to set with the value.
+  name: targetIncidentField
+  required: true
+- description: 'The incidents query on which to apply the copy process. For example,
+    to apply this to all incidents of type "Phishing", use the query: "type:Phishing".'
+  name: incidentsQuery
+  required: true
+- defaultValue: "1000"
+  description: The maximum number of incidents to edit. Default is 1,000.
+  name: limit
+- defaultValue: ' '
+  description: Concatenates list values.
+  name: listSeparator
+comment: |-
+  Copy a context key to an incident field of multiple incidents, based on an incident query.
+
+  This automation runs using the default Limited User role, unless you explicitly change the permissions.
+  For more information, see the section about permissions here:
+  https://docs-cortex.paloaltonetworks.com/r/Cortex-XSOAR/6.10/Cortex-XSOAR-Administrator-Guide/Automations
+commonfields:
+  id: CopyContextToField
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.86272
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: CopyContextToField
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('CopyContextToField', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+
+  def get_context(incident_id):
+      res = demisto.executeCommand("getContext", {'id': incident_id})
+      try:
+          return res[0]['Contents'].get('context') or {}
+      except Exception:
+          return {}
+
+
+  res = demisto.executeCommand("getIncidents", {"query": demisto.args()['incidentsQuery'],
+                                                'limit': int(demisto.args()['limit'])})
+  incidents = res[0]['Contents']['data']
+  src_context_key = demisto.args()['sourceContextKey']
+  target_incident_field = demisto.args()['targetIncidentField']
+  list_separator = demisto.args()['listSeparator']
+  success_count = 0
+  failed_count = 0
+  skipped_count = 0
+  for i in incidents:
+      incident_id = i['id']
+      context = get_context(incident_id)
+      value = demisto.dt(context, src_context_key)
+      if isinstance(value, list) and len(value) > 0:
+          if len(value) == 1:
+              value = value[0]
+          elif isinstance(value[0], STRING_TYPES):
+              value = list_separator.join(value)
+      if value and not isinstance(value, list) and not isinstance(value, dict):
+          res = demisto.executeCommand("setIncident", {target_incident_field: value, 'id': i['id']})
+          if isError(res[0]):
+              failed_count += 1
+          else:
+              success_count += 1
+      else:
+          skipped_count += 1
+
+  if success_count > 0:
+      return_results(f'Update incidents: {success_count} success')
+  if skipped_count > 0:
+      return_results(f'Skipped {skipped_count} incidents due to missing value')
+  if failed_count > 0:
+      return_results(f'Failed to update {failed_count} incidents with setIncident error')
+
+  register_module_line('CopyContextToField', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- Utility
+type: python
