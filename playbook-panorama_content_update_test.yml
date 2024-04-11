@@ -1,0 +1,401 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 2.1.22
+    packID: PAN-OS
+    packName: PAN-OS by Palo Alto Networks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: |-
+  This playbook pulls Panorama content update file from shared SMB folder, uploads it to the Panorama server and installs it. It also uploads the content file to SCP folder for future use of the Panorama Device Deployment content updates engine which can be scheduled to pull the files automatically from SCP server.
+  This playbook should run in "Air Gap internal network" and works together with "Air Gap - Panorama Content Update Sender - External" playbook that runs in "Air Gap external network".
+
+  This playbook should be run as part of a Job in the internal network.
+
+  Playbook inputs:
+  panorama_admin_email - email address of the panorama admin for sending the output of the update.
+  smbshare - the SMB share of the content update folder. Example: Folder
+  scpwildfire - scp folder for wildfire content update file. Example: /home/demisto/Folder/wildfire
+  scpcontents - scp folder for contents  (antivirus and apps) content update file. Example: /home/demisto/Folder/contents
+  scpantivirus - scp folder for Anti-Virus content update file. Example: /home/demisto/Folder/antivirus
+  smbpath - SMB path to the content files files. Example: Content
+id: panorama_content_update_test
+inputs:
+- description: Panorama Admin Email Address.
+  key: panorama_admin_email
+  playbookInputQuery: null
+  required: true
+  value: {}
+- description: SMB Shared folder name.
+  key: smbshare
+  playbookInputQuery: null
+  required: true
+  value: {}
+- description: SCP folder for wildfire content update file.
+  key: scpwildfire
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: SCP folder for contents content update file.
+  key: scpcontents
+  playbookInputQuery: null
+  required: true
+  value: {}
+- description: SCP folder for Anti-Virus content update file.
+  key: scpantivirus
+  playbookInputQuery: null
+  required: true
+  value: {}
+- description: SMB path to the content files files.
+  key: smbpath
+  playbookInputQuery: null
+  required: true
+  value: {}
+name: panorama_content_update_test
+outputs: []
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "3"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: ba197994-5975-468d-8185-373d3fe659ae
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: ba197994-5975-468d-8185-373d3fe659ae
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 162.5,
+          "y": 50
+        }
+      }
+  "3":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: brand
+                filters:
+                - - left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: containsGeneral
+                    right:
+                      value:
+                        simple: Panorama
+                - - left:
+                      iscontext: true
+                      value:
+                        simple: modules.state
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: active
+                root: modules
+          operator: isExists
+      label: "yes"
+    continueonerrortype: ""
+    id: "3"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "22"
+      "yes":
+      - "8"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Check whether the values provided in arguments are equal. If either
+        of the arguments are missing, no is returned.
+      id: de4a37f6-af95-43b4-8956-107dd5fac3ad
+      iscommand: false
+      name: Check if Panorama connected
+      type: condition
+      version: -1
+    taskid: de4a37f6-af95-43b4-8956-107dd5fac3ad
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 162.5,
+          "y": 195
+        }
+      }
+  "5":
+    continueonerrortype: ""
+    id: "5"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: af3ea720-6166-4943-8627-e69cbeacb706
+      iscommand: false
+      name: Playbook End
+      type: title
+      version: -1
+    taskid: af3ea720-6166-4943-8627-e69cbeacb706
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 162.5,
+          "y": 1245
+        }
+      }
+  "8":
+    continueonerrortype: ""
+    id: "8"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "15"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      category:
+        simple: content
+      entryID:
+        simple: ${File.EntryID}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Uploads content file to Panorama
+      id: ae1bd86a-d06a-4e0f-8d50-ce56d2221903
+      iscommand: true
+      name: Upload content update to Panorama
+      script: '|||pan-os-upload-content-update-file'
+      type: regular
+      version: -1
+    taskid: ae1bd86a-d06a-4e0f-8d50-ce56d2221903
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 370
+        }
+      }
+  "15":
+    continueonerrortype: ""
+    id: "15"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "26"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      category:
+        simple: content
+      skip_validity_check:
+        simple: "yes"
+      version_name:
+        simple: ${File.Name}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: |
+        Installs specific content update file. Please download the content update file for apps from https://support.paloaltonetworks.com/Updates/DynamicUpdates (choose apps from the dropdown menu , the file should be in similar structure :"panupv2-all-apps-8388-6599 " ).
+      id: 095ca753-c574-4683-810d-15bc71866e24
+      iscommand: true
+      name: Install content update
+      script: '|||pan-os-install-file-content-update'
+      type: regular
+      version: -1
+    taskid: 095ca753-c574-4683-810d-15bc71866e24
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 545
+        }
+      }
+  "18":
+    continueonerrortype: ""
+    id: "18"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "22"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      job_id:
+        simple: ${Panorama.Content.Install.JobID}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Gets the installation status of the PAN-OS software.
+      id: 33c840c8-54ac-46dc-8315-e00cdffe8956
+      iscommand: true
+      name: Get installation status
+      script: '|||pan-os-install-panos-status'
+      type: regular
+      version: -1
+    taskid: 33c840c8-54ac-46dc-8315-e00cdffe8956
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 895
+        }
+      }
+  "22":
+    continueonerrortype: ""
+    id: "22"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "5"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      closeNotes:
+        simple: 'Content update process completed with the following Staus: ${Panorama.PANOS.Install.Status}'
+      closeReason:
+        simple: Resolved
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: Builtin
+      description: commands.local.cmd.close.inv
+      id: bb1a85b4-659f-4ad7-8a61-5e2b1bf6e77e
+      iscommand: true
+      name: Close Incident
+      script: Builtin|||closeInvestigation
+      type: regular
+      version: -1
+    taskid: bb1a85b4-659f-4ad7-8a61-5e2b1bf6e77e
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 162.5,
+          "y": 1070
+        }
+      }
+  "26":
+    continueonerrortype: ""
+    id: "26"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "18"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      Ids:
+        complex:
+          accessor: JobID
+          root: Panorama.Content.Install
+      Interval:
+        simple: "3"
+      PollingCommandArgName:
+        simple: job_id
+      PollingCommandName:
+        simple: pan-os-install-panos-status
+      Timeout:
+        simple: "10"
+      dt:
+        simple: Panorama.PANOS.Install(val.Status !== 'Completed' && val.Status !==
+          'Failed').JobID
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: |-
+        Use this playbook as a sub-playbook to block execution of the master playbook until a remote action is complete.
+        This playbook implements polling by continuously running the command in Step \#2 until the operation completes.
+        The remote action should have the following structure:
+
+        1. Initiate the operation.
+        2. Poll to check if the operation completed.
+        3. (optional) Get the results of the operation.
+      id: e8e01ed4-9f9d-43d9-800a-08ec5132864d
+      iscommand: false
+      name: GenericPolling
+      playbookId: GenericPolling
+      type: playbook
+      version: -1
+    taskid: e8e01ed4-9f9d-43d9-800a-08ec5132864d
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 720
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 1260,
+        "width": 492.5,
+        "x": 50,
+        "y": 50
+      }
+    }
+  }
