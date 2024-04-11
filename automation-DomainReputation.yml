@@ -1,0 +1,72 @@
+args:
+- default: true
+  description: Domain to look up
+  name: domain
+  required: true
+comment: A context script for Domain entities
+commonfields:
+  id: DomainReputation
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.86272
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: DomainReputation
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('DomainReputation', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+
+
+  def domain_reputation():
+      results = demisto.executeCommand('domain', {'domain': demisto.get(demisto.args(), 'domain')})
+
+      for item in results:
+          if isError(item):
+              if is_offset_error(item):  # call to is_offset_error is a temporary fix to ignore offset 1 error
+                  results.remove(item)
+              else:
+                  item['Contents'] = item['Brand'] + ' returned an error.\n' + str(item['Contents'])
+
+      demisto.results(results)
+
+
+  def is_offset_error(item) -> bool:
+      '''error msg: 'Offset: 1' will not be displayed to Users
+         This method is temporary and will be removed
+         once XSUP-18208 issue is fixed.'''
+      if item['Contents'] and 'Offset' in item['Contents']:
+          return True
+      return False
+
+
+  def main():
+      domain_reputation()
+
+
+  if __name__ in ('__main__', '__builtin__', 'builtins'):  # pragma: no cover
+      main()
+
+  register_module_line('DomainReputation', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- enhancement
+type: python
