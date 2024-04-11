@@ -1,0 +1,256 @@
+{
+	"cacheVersn": 0,
+	"contextPath": "URL(val.Data \u0026\u0026 val.Data === obj.Data)",
+	"contextValue": "Data",
+	"defaultMapping": {
+		"asn": {
+			"complex": {
+				"accessor": "ASN",
+				"filters": [],
+				"root": "URL",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"asowner": {
+			"complex": {
+				"accessor": "ASOwner",
+				"filters": [],
+				"root": "URL",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"associations": {
+			"complex": {
+				"accessor": "Associations",
+				"filters": [],
+				"root": "URL",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"blocked": {
+			"complex": {
+				"accessor": "Blocked",
+				"filters": [],
+				"root": "URL",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"category": {
+			"complex": {
+				"accessor": "Category",
+				"filters": [],
+				"root": "URL",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"communitynotes": {
+			"complex": {
+				"accessor": "CommunityNotes",
+				"filters": [],
+				"root": "URL",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"detectionengines": {
+			"complex": {
+				"accessor": "DetectionEngines",
+				"filters": [],
+				"root": "URL",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"feedrelatedindicators": {
+			"complex": {
+				"accessor": "FeedRelatedIndicators",
+				"filters": [],
+				"root": "URL",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"geocountry": {
+			"complex": {
+				"accessor": "Country",
+				"filters": [],
+				"root": "URL.Geo",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"internal": {
+			"complex": {
+				"accessor": "Internal",
+				"filters": [],
+				"root": "URL",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"malwarefamily": {
+			"complex": {
+				"accessor": "MalwareFamily",
+				"filters": [],
+				"root": "URL",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"positivedetections": {
+			"complex": {
+				"accessor": "PositiveDetections",
+				"filters": [],
+				"root": "URL",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"publications": {
+			"complex": {
+				"accessor": "Publications",
+				"filters": [],
+				"root": "URL",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"reportedby": {
+			"complex": {
+				"accessor": "ReportedBy",
+				"filters": [],
+				"root": "URL",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"signed": {
+			"complex": {
+				"accessor": "Signed",
+				"filters": [],
+				"root": "URL",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"tags": {
+			"complex": {
+				"accessor": "Tags",
+				"filters": [],
+				"root": "URL",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"threattypes": {
+			"complex": {
+				"accessor": "ThreatTypes",
+				"filters": [],
+				"root": "URL",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"trafficlightprotocol": {
+			"complex": {
+				"accessor": "TrafficLightProtocol",
+				"filters": [],
+				"root": "URL",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		}
+	},
+	"definitionId": "",
+	"details": "URL",
+	"disabled": false,
+	"enhancementScriptNames": [
+		"URLReputation"
+	],
+	"excludedBrands": [],
+	"expiration": 43200,
+	"file": false,
+	"fileHashesPriority": null,
+	"formatScript": "FormatURL",
+	"fromServerVersion": "5.5.0",
+	"id": "urlRep",
+	"itemVersion": "3.4.1",
+	"layout": "urlRep",
+	"legacyNames": null,
+	"locked": false,
+	"manualMapping": null,
+	"mergeContext": false,
+	"packID": "CommonTypes",
+	"packName": "Common Types",
+	"packPropagationLabels": [
+		"all"
+	],
+	"propagationLabels": [],
+	"regex": "(?i)\\b(?:(?P\u003cfull_url\u003e(?P\u003cscheme\u003e(?:https?|hxxps?|s?ftps?|meows?)(?:%3A|\\[?[:-]]?)(?://|\\\\|3A__)|mailto:)?(?P\u003chost\u003e(?P\u003cusername\u003e[\\p{L}][-_\\p{L}\\d\\[\\]]+@)?(?P\u003csimple_domain\u003e(?:[-\\d\\p{L}]+\\[?\\.\\]?)+(?P\u003ctld\u003e[\\p{L}][-\\p{L}\\d\\[\\]]+)[.]?)|(?P\u003cIPv4\u003e(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))|(?P\u003cIPv6\u003e\\[?(?:(?:[0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|(?:[0-9a-fA-F]{1,4}:){1,7}:|(?:[0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|(?:[0-9a-fA-F]{1,4}:){1,5}(?::[0-9a-fA-F]{1,4}){1,2}|(?:[0-9a-fA-F]{1,4}:){1,4}(?::[0-9a-fA-F]{1,4}){1,3}|(?:[0-9a-fA-F]{1,4}:){1,3}(?::[0-9a-fA-F]{1,4}){1,4}|(?:[0-9a-fA-F]{1,4}:){1,2}(?::[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:(?:(?::[0-9a-fA-F]{1,4}){1,6})|:(?:(?::[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(?::[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(?:ffff(?::0{1,4}){0,1}:){0,1}(?:(?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9])|(?:[0-9a-fA-F]{1,4}:){1,4}:(?:(?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9]))(?:\\])?))(?P\u003cport\u003e:[\\d]+)?(?P\u003cpath\u003e[/*#?]+(?:[?\\d\\p{L}+\u0026@'#%=~_\\/$!:.;*–—―\\-|\\[\\]]*|[(][\\-\\d\\p{L}+\u0026@#\\/%=~_$?!:,;*–—―|\\[\\]]*[)])*))|(?P\u003cscheme_and_domain_only\u003e(?:(?:https?|hxxps?|s?ftps?|meows?)\\[?[:-]]?(?://|\\\\|3A__)|mailto:)(?:(?:[\\p{L}][-_\\p{L}\\d\\[\\]]+@)?(?:(?:[-\\d\\p{L}]+\\[?\\.\\]?)+(?:[\\p{L}][-\\p{L}\\d\\[\\]]+)[.]?)|(?:(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))|(?:\\[?(?:(?:[0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|(?:[0-9a-fA-F]{1,4}:){1,7}:|(?:[0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|(?:[0-9a-fA-F]{1,4}:){1,5}(?::[0-9a-fA-F]{1,4}){1,2}|(?:[0-9a-fA-F]{1,4}:){1,4}(?::[0-9a-fA-F]{1,4}){1,3}|(?:[0-9a-fA-F]{1,4}:){1,3}(?::[0-9a-fA-F]{1,4}){1,4}|(?:[0-9a-fA-F]{1,4}:){1,2}(?::[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:(?:(?::[0-9a-fA-F]{1,4}){1,6})|:(?:(?::[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(?::[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(?:ffff(?::0{1,4}){0,1}:){0,1}(?:(?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9])|(?:[0-9a-fA-F]{1,4}:){1,4}:(?:(?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(?:25[0-5]|(?:2[0-4]|1{0,1}[0-9]){0,1}[0-9]))(?:\\])?))))",
+	"reputationCommand": "url",
+	"reputationScriptName": "",
+	"shouldShareComments": false,
+	"system": true,
+	"toServerVersion": "",
+	"updateAfter": 0,
+	"version": -1
+}
