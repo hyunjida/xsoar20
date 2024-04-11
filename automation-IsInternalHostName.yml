@@ -1,0 +1,95 @@
+args:
+- default: true
+  description: A comma-separated list of hostnames to check.
+  isArray: true
+  name: hostName
+  required: true
+- description: The regex pattern for the organization's hostname for example \w\w\w\d$|\w\w\w$.
+    for hosts that look like pcx1 or pcx.
+  name: internalRegex
+- description: 'The domain name for the organization. For a single domain use this
+    format: "bla.com". For multiple domains use this format: (bla.com|blabla.com),
+    where the pipe and the brackets are the OR condition for regex.'
+  name: domainName
+  required: true
+comment: Checks if the supplied hostnames match either the organization's internal
+  naming convention or the domain suffix.
+commonfields:
+  id: IsInternalHostName
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.72123
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: IsInternalHostName
+outputs:
+- contextPath: Endpoint.Hostname
+  description: The hostname.
+  type: string
+- contextPath: Endpoint.IsInternal
+  description: Whether the supplied hostnames match the organization's naming convention.
+    Can be "true" or "false".
+  type: string
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('IsInternalHostName', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+  import re
+
+
+  def main():
+
+      args = demisto.args()
+      internalregex = args.get('internalRegex')
+      domainName = args.get('domainName')
+      hostName = argToList(args.get('hostName'))
+      human_readable = []
+      context_entry = []
+      for element in hostName:
+          if element:
+              if internalregex:
+                  internalRegexMatch = re.match(internalregex, element)
+              else:
+                  internalRegexMatch = None
+              internalDomainMatch = re.match(".*\." + domainName + "$", element)
+              context_entry.append({
+                  'Hostname': element,
+                  'IsInternal': True if internalRegexMatch or internalDomainMatch else False
+              })
+
+              if context_entry[-1]['IsInternal']:
+                  readable = element + ' is internal'
+              else:
+                  readable = element + ' is external'
+
+              human_readable.append(readable)
+
+      return_outputs('\n'.join(human_readable), {'Endpoint': context_entry})
+
+
+  if __name__ in ('builtins', '__builtin__'):
+      main()
+
+  register_module_line('IsInternalHostName', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- Utility
+type: python
