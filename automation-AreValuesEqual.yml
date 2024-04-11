@@ -1,0 +1,55 @@
+args:
+- default: true
+  description: First value for comparison
+  name: left
+- description: Second value for comparison
+  name: right
+comment: Check whether the values provided in arguments are equal. If either of the
+  arguments are missing, no is returned.
+commonfields:
+  id: AreValuesEqual
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+engineinfo: {}
+mainengineinfo: {}
+name: AreValuesEqual
+outputs:
+- contextPath: "yes"
+  description: if left is equal to right
+- contextPath: "no"
+  description: if left is not equal to right
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  // pack version: 1.14.2
+  if (args.left === undefined || args.right === undefined) {
+      return 'no';
+  }
+
+  var left = (typeof args.left === 'string') ? args.left : args.left + '';
+  var right = (typeof args.right === 'string') ? args.right : args.right + '';
+  var answer = 'no';
+  if (left === right) {
+    answer = 'yes';
+  }
+
+  setContext('AreValuesEqual', answer)
+  return answer;
+scripttarget: 0
+system: true
+tags:
+- Utility
+- Condition
+type: javascript
