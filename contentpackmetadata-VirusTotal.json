@@ -1,0 +1,448 @@
+{
+	"author": "VirusTotal",
+	"authorImage": "content/packs/VirusTotal/Author_image.png",
+	"beta": false,
+	"cacheVersn": 0,
+	"categories": [
+		"Data Enrichment \u0026 Threat Intelligence"
+	],
+	"certification": "certified",
+	"contentItemTypes": [
+		"integration",
+		"incidenttype",
+		"dashboard",
+		"playbook",
+		"classifier",
+		"widget"
+	],
+	"contentItems": {
+		"automation": null,
+		"classifier": [
+			{
+				"description": "A mapper of VirusTotal Intelligence LiveHunt Notification",
+				"id": "VirusTotal Intelligence LiveHunt Notification",
+				"name": "VirusTotal Intelligence LiveHunt Notification"
+			}
+		],
+		"dashboard": [
+			{
+				"name": "VirusTotal API Execution Metrics"
+			}
+		],
+		"genericfield": null,
+		"generictype": null,
+		"incidentfield": null,
+		"incidenttype": [
+			{
+				"closureScript": "",
+				"days": 0,
+				"hours": 0,
+				"name": "VirusTotal Intelligence LiveHunt Notification",
+				"playbook": "",
+				"weeks": 0
+			}
+		],
+		"indicatorfield": null,
+		"integration": [
+			{
+				"category": "Data Enrichment \u0026 Threat Intelligence",
+				"commands": [
+					{
+						"description": "Gets the matches from a given retrohunt job's id or the latest by default.",
+						"name": "vt-retrohunt-get-indicators"
+					},
+					{
+						"description": "This command will reset your fetch history.",
+						"name": "vt-retrohunt-reset-fetch-indicators"
+					}
+				],
+				"description": "Use this feed integration to fetch VirusTotal Retrohunt matches.",
+				"id": "VirusTotal Retrohunt Feed",
+				"name": "VirusTotal Retrohunt Feed (Partner Contribution)"
+			},
+			{
+				"category": "Data Enrichment \u0026 Threat Intelligence",
+				"commands": [
+					{
+						"description": "This command will reset your fetch history.",
+						"name": "vt-reset-fetch-indicators"
+					},
+					{
+						"description": "Gets the indicators from VirusTotal Livehunt.",
+						"name": "vt-livehunt-get-indicators"
+					}
+				],
+				"description": "Use this feed integration to fetch VirusTotal Livehunt notifications as indicators.",
+				"id": "VirusTotal Livehunt Feed",
+				"name": "VirusTotal Livehunt Feed (Partner Contribution)"
+			},
+			{
+				"category": "Data Enrichment \u0026 Threat Intelligence",
+				"commands": [
+					{
+						"description": "Retrieve VT Hunting livehunt rulesets.",
+						"name": "vt-private-livehunt-rules-get-by-id"
+					},
+					{
+						"description": "Retrieve matches for a retrohunt job matching file relationship.",
+						"name": "vt-private-retrohunt-jobs-get-matching-files"
+					},
+					{
+						"description": "Search for files.",
+						"name": "vt-private-intelligence-search"
+					},
+					{
+						"description": "Update a VT Hunting Livehunt ruleset.",
+						"name": "vt-private-livehunt-rules-update"
+					},
+					{
+						"description": "Delete a VT Hunting Livehunt ruleset.",
+						"name": "vt-private-livehunt-rules-delete"
+					},
+					{
+						"description": "Extracted PCAP from a sandbox analysis.",
+						"name": "vt-private-file-sandbox-pcap"
+					},
+					{
+						"description": "Creates a password-protected ZIP file containing files from VirusTotal.",
+						"name": "vt-private-zip-create"
+					},
+					{
+						"description": "Retrieve a retrohunt job.",
+						"name": "vt-private-retrohunt-jobs-get-by-id"
+					},
+					{
+						"description": "Search for files.",
+						"name": "vt-private-search-file"
+					},
+					{
+						"description": "Create a new retrohunt job.",
+						"name": "vt-private-retrohunt-jobs-create"
+					},
+					{
+						"description": "Create a new VT Hunting Livehunt ruleset.",
+						"name": "vt-private-livehunt-rules-create"
+					},
+					{
+						"description": "Get a VT Hunting Livehunt ruleset by hunting notification files relationship.",
+						"name": "vt-private-livehunt-rule-list-files"
+					},
+					{
+						"description": "Get a VT Hunting Livehunt ruleset by hunting notification files relationship.",
+						"name": "vt-private-retrohunt-jobs-list"
+					},
+					{
+						"description": "Download a ZIP file.",
+						"name": "vt-private-zip-download"
+					},
+					{
+						"description": "Downloads file from VirusTotal",
+						"name": "vt-private-download-file"
+					},
+					{
+						"description": "Retrieve VT Hunting Livehunt notifications.",
+						"name": "vt-private-livehunt-notifications-list"
+					},
+					{
+						"description": "Retrieve information about a ZIP file.",
+						"name": "vt-private-zip-get"
+					},
+					{
+						"description": "Retrieve VT Hunting livehunt rulesets.",
+						"name": "vt-private-livehunt-rules-list"
+					},
+					{
+						"description": "Retrieve user's API usage.",
+						"name": "vt-private-quota-limits-list"
+					},
+					{
+						"description": "Retrieve file objects for VT Hunting Livehunt notifications.",
+						"name": "vt-private-livehunt-notifications-files-get-by-hash"
+					},
+					{
+						"description": "Retrieve file objects for VT Hunting Livehunt notifications.",
+						"name": "vt-private-livehunt-notifications-files-list"
+					}
+				],
+				"description": "Analyse retro hunts, read live hunt notifications and download files from VirusTotal.",
+				"id": "VirusTotal - Premium (API v3)",
+				"name": "VirusTotal - Premium (API v3) (Partner Contribution)"
+			},
+			{
+				"category": "Data Enrichment \u0026 Threat Intelligence",
+				"commands": [
+					{
+						"description": "Adds comments to files and URLs.",
+						"name": "vt-comments-add"
+					},
+					{
+						"description": "Scans a specified URL.",
+						"name": "url-scan"
+					},
+					{
+						"description": "Private API. Retrieves comments for a given resource.",
+						"name": "vt-comments-get"
+					},
+					{
+						"description": "Checks the reputation of a domain.",
+						"name": "domain"
+					},
+					{
+						"description": "Checks the file reputation of the specified hash.",
+						"name": "file"
+					},
+					{
+						"description": "Checks the reputation of a URL.",
+						"name": "url"
+					},
+					{
+						"description": "Checks the reputation of an IP address.",
+						"name": "ip"
+					},
+					{
+						"description": "Re-scans an already submitted file. This avoids having to upload the file again.",
+						"name": "file-rescan"
+					},
+					{
+						"description": "Private API. Get a special URL for files larger than 32 MB.",
+						"name": "vt-file-scan-upload-url"
+					},
+					{
+						"description": "Submits a file for scanning.",
+						"name": "file-scan"
+					}
+				],
+				"description": "Deprecated. Use VirusTotalV3 integration instead.",
+				"id": "VirusTotal",
+				"name": "VirusTotal (Deprecated) (Partner Contribution)"
+			},
+			{
+				"category": "Data Enrichment \u0026 Threat Intelligence",
+				"commands": [
+					{
+						"description": "Adds comments to files and URLs.",
+						"name": "vt-comments-add"
+					},
+					{
+						"description": "Get analysis of a file submitted to VirusTotal.",
+						"name": "vt-analysis-get"
+					},
+					{
+						"description": "Returns passive DNS records by indicator.",
+						"name": "vt-passive-dns-data"
+					},
+					{
+						"description": "Submits a file for private scanning. Use the vt-privatescanning-analysis-get command to get the scan results.",
+						"name": "vt-privatescanning-file-scan"
+					},
+					{
+						"description": "Checks the reputation of an IP address.",
+						"name": "ip"
+					},
+					{
+						"description": "Checks the file reputation of the specified private hash.",
+						"name": "vt-privatescanning-file"
+					},
+					{
+						"description": "Retrieves a comment by comment ID.",
+						"name": "vt-comments-get-by-id"
+					},
+					{
+						"description": "Checks the reputation of a domain.",
+						"name": "domain"
+					},
+					{
+						"description": "Checks the file reputation of the specified hash.",
+						"name": "file"
+					},
+					{
+						"description": "Delete a comment.",
+						"name": "vt-comments-delete"
+					},
+					{
+						"description": "Result of the last Sigma analysis in markdown format.",
+						"name": "vt-file-sigma-analysis"
+					},
+					{
+						"description": "Rescans an already submitted file. This avoids having to upload the file again. Use the vt-analysis-get command to get the scan results.",
+						"name": "file-rescan"
+					},
+					{
+						"description": "Retrieves a behavioral relationship of the given file hash.",
+						"name": "vt-file-sandbox-report"
+					},
+					{
+						"description": "Checks the reputation of a URL.",
+						"name": "url"
+					},
+					{
+						"description": "Scans a specified URL. Use the vt-analysis-get command to get the scan results.",
+						"name": "url-scan"
+					},
+					{
+						"description": "Get analysis of a private file submitted to VirusTotal.",
+						"name": "vt-privatescanning-analysis-get"
+					},
+					{
+						"description": "Submits a file for scanning. Use the vt-analysis-get command to get the scan results.",
+						"name": "file-scan"
+					},
+					{
+						"description": "Premium API. Get a special URL for files larger than 32 MB.",
+						"name": "vt-file-scan-upload-url"
+					},
+					{
+						"description": "Search for an indicator in Virus Total.",
+						"name": "vt-search"
+					},
+					{
+						"description": "Retrieves comments for a given resource.",
+						"name": "vt-comments-get"
+					}
+				],
+				"description": "Analyzes suspicious hashes, URLs, domains, and IP addresses.",
+				"id": "VirusTotal (API v3)",
+				"name": "VirusTotal (API v3) (Partner Contribution)"
+			}
+		],
+		"layoutscontainer": null,
+		"list": null,
+		"playbook": [
+			{
+				"description": "Get file information using the Virus Total API integration.",
+				"name": "File Enrichment - Virus Total (API v3)"
+			},
+			{
+				"description": "Creates a zip from given hashes exists in VirusTotal",
+				"name": "Create Zip from VirusTotal"
+			},
+			{
+				"description": "Detonate URL through VirusTotal (API v3) integration.",
+				"name": "Detonate URL - VirusTotal (API v3)"
+			},
+			{
+				"description": "Detonate one or more files using the VirusTotal integration. This playbook returns relevant reports to the War Room and file reputations to the context data.",
+				"name": "Detonate File - VirusTotal"
+			},
+			{
+				"description": "Detonate a file through VirusTotal (API v3)",
+				"name": "Detonate File - VirusTotal (API v3)"
+			},
+			{
+				"description": "Detonate a private file through VirusTotal Private Scanning service",
+				"name": "Detonate Private File - VirusTotal Private Scanning"
+			}
+		],
+		"report": null,
+		"reputation": null,
+		"widget": [
+			{
+				"name": "API Call Results for VirusTotal"
+			}
+		],
+		"wizard": null
+	},
+	"currentVersion": "2.6.17",
+	"definitionId": "",
+	"dependencies": {
+		"Base": {
+			"author": "Cortex XSOAR",
+			"certification": "certified",
+			"mandatory": true,
+			"minVersion": "1.33.28",
+			"name": "Base"
+		},
+		"CommonPlaybooks": {
+			"author": "Cortex XSOAR",
+			"certification": "certified",
+			"mandatory": true,
+			"minVersion": "2.6.13",
+			"name": "Common Playbooks"
+		},
+		"CommonScripts": {
+			"author": "Cortex XSOAR",
+			"certification": "certified",
+			"mandatory": true,
+			"minVersion": "1.13.38",
+			"name": "Common Scripts"
+		},
+		"CommonTypes": {
+			"author": "Cortex XSOAR",
+			"certification": "certified",
+			"mandatory": false,
+			"minVersion": "3.4.1",
+			"name": "Common Types"
+		}
+	},
+	"deprecated": false,
+	"description": "Analyze suspicious hashes, URLs, domains and IP addresses",
+	"disabledMonthly": false,
+	"downloads": 37241,
+	"eulaLink": "https://github.com/demisto/content/blob/master/LICENSE",
+	"fromServerVersion": "5.0.0",
+	"general": [
+		"generalFieldCertified",
+		"generalFieldByPartner",
+		"generalFieldFree",
+		"generalFieldSupportIncluded"
+	],
+	"id": "VirusTotal",
+	"installMessage": "",
+	"integrations": [
+		{
+			"imagePath": "content/packs/VirusTotal/VirusTotal%28APIv3%29_image.png",
+			"name": "VirusTotal (API v3)"
+		},
+		{
+			"imagePath": "content/packs/VirusTotal/VirusTotal_image.png",
+			"name": "VirusTotal (Deprecated)"
+		},
+		{
+			"imagePath": "content/packs/VirusTotal/VirusTotal-Premium%28APIv3%29_image.png",
+			"name": "VirusTotal - Premium (API v3)"
+		},
+		{
+			"imagePath": "content/packs/VirusTotal/VirusTotalLivehuntFeed_image.png",
+			"name": "VirusTotal Livehunt Feed"
+		},
+		{
+			"imagePath": "content/packs/VirusTotal/VirusTotalRetrohuntFeed_image.png",
+			"name": "VirusTotal Retrohunt Feed"
+		}
+	],
+	"itemVersion": "2.6.17",
+	"keywords": [],
+	"legacy": true,
+	"name": "VirusTotal",
+	"packID": "VirusTotal",
+	"packName": "",
+	"premium": false,
+	"previewOnly": false,
+	"price": 0,
+	"propagationLabels": [
+		"all"
+	],
+	"rawKeywords": null,
+	"rawTags": null,
+	"rawUseCases": null,
+	"readme": "Note: Support for this pack moved to the partner on Oct 1, 2021. Please contact the partner directly via the support link on the right.\n\n**What**. VirusTotal is the richest and most actionable **_crowdsourced_** threat intelligence platform on the planet. It equips security teams with comprehensive context and cutting edge functionality to proactively protect their networks from cybersecurity threats.\n\n**Why**. Security teams are often confronted with an unknown file/URL/domain/IP address and asked to make sense of an attack. Without further context, it is virtually impossible to determine attribution, build effective defenses against other strains of the attack, or understand the impact of a given threat in your organization. Through API and web based interaction with VirusTotal, security analysts can rapidly build a picture of an incident and then use those insights to neutralize other attacks.\n\n**Outcome**. Faster, more confident, more accurate and more cost-effective security operations.\n\n**Where**. On-premise, in the cloud, in your hosting, in your corporate network, everywhere.\n\n**What we solve for leaders**.\n\nSecurity team challenges | Solving with VirusTotal + XSOAR\n------------------------ | ------------------------\n**Alert fatigue + quality \u0026 speed of IR handling.** PANW survey data shows that SOC analysts are only able to handle 14% of alerts generated by security tools. | **Eradicate analyst burnout through automation.** Automate false positive discarding and alert prioritization, optimize SOC resources. Malicious+Benign info.\n**Lack of context \u0026 missed threats.** Reliance on reactive threat feeds. Only information about internal systems and users, no in-the-wild contextual details. | **Improved and early detection.** Track threats going forward with [YARA](https://virustotal.github.io/yara/). Crowdsourced threat reputation for files/hashes, domains, IPs and URLs coming from over 90 security vendors.\n**Finding and maintaining security talent.** There is a shortage of qualified security candidates; recruiting + retaining these is an endemic challenge | **Juniors operating as advanced threat hunters.** Automate repetitive tasks with playbooks, elevate SOC Level 1 effectiveness. Faster, more confident and more accurate decisions. Greater productivity.\n**Budget constraints.** Cybersecurity isn’t top of mind at many organizations when budget line items are getting funded. Difficult to prove ROI. | **Condense \u0026 lower costs + Increase toolset ROI.** One-stop-shop for everything threat intelligence related (domains, IPs, URLs, files). Take your SIEM, IDS, EDR, Firewall, etc. to the next level.\n\n**Use cases.**\n\n- **_Automatic security telemetry enrichment._** Event contextualization. Alert prioritization. False positive discarding. True positive confirmation. Automated hunting.\n- **_Incident response \u0026 forensic analysis._** Blast radius identification. Generation of remediative IoCs. Context expansion beyond your internal network.\n- **_Threat Intelligence \u0026 advanced hunting._** Unknown threat discovery. Campaign \u0026 adversary monitoring. Preventative IoCs.\n- **_Brand \u0026 corporate infrastructure monitoring._** Phishing campaign tracking. Brand impersonation alerts. Attack surface compromise identification.\n- **_Vulnerability prioritization._** Smart risk-driven patching. Vulnerability weaponization monitoring. Vulnerability landscape exploration.\n- **_Red teaming \u0026 ethical hacking._** Automatic reconnaissance/passive fingerprinting operations. Breach \u0026 attack simulation. Security stack validation.\n\n**Example questions we answer.**\n\n- Is a given {file, hash, domain, IP, URL} malicious according to the security industry? How widely known and detected is it?\n- Has a given IP address been part of a given threat campaign? What domains have resolved historically to such IP (passive DNS)? Who owns the IP? etc.\n- Is a given domain part of a threat’s network infrastructure? Are there any other domains registered by the same threat actor? What types of threats are connected with the given domain? How does the industry categorize the domain (CnC, exploit, phishing, ...)? etc.\n- Is a given URL part of a phishing attack? Does it deliver malware? Does the server side setup exhibit any commonalities that allow me to pivot to other setups operated by the same attacker?\n- Are there any IoCs that can be used to block or hunt for a given malware file or variants of its family/campaign? What does the file do when executed in a sandbox? etc.\n- Is some fake/malicious mobile application making use of my logo/brand? What are the latest set of newly registered domains that seem to be typosquatting my site? Are there any potential phishing websites making use of my site’s title/favicon?\n- Is a vulnerability (CVE) that appeared in my environment being currently leveraged by malware? How popular is it?\n\n**Technical capabilities**\n- Threat reputation for {files, hashes, domains, IPs, URLs} coming from [over 90 security vendors](https://support.virustotal.com/hc/en-us/articles/115002146809-Contributors) (antivirus solutions, nextgen EDRs, domain blocklists, network perimeter solutions, etc.).\n- Multi-angular detection for files via crowdsourced {[YARA](https://virustotal.github.io/yara/), [SIGMA](https://blog.virustotal.com/2021/05/context-is-king-part-i-crowdsourced.html), [IDS](https://support.virustotal.com/hc/en-us/articles/360018436078-Crowdsourced-IDS-Rules)} rules.\n- Allowlist (benign) information through the [aggregation of goodware indicators and provenance details](https://blog.virustotal.com/2021/08/introducing-known-distributors.html).\n- Dynamic analysis for files through detonation in [multiple home-grown and 3rd-party partner](https://blog.virustotal.com/search/label/multisandbox) sandbox solutions.\n- Extended file context and metadata through static analysis tools such as sigcheck’s authenticode signature extractor, MS Office macro VBA dissectors, Didier Stevens’ PDF tools, etc.\n- Community comments and assessments coming from over 2M monthly users of the free [www.virustotal.com](https://www.virustotal.com/gui/) public site.\n- Threat graph schema tying together the files, domains, IPs and URLs in the dataset through relationships such as downloaded files, communicating files, passive DNS resolutions, etc.\n- Passive DNS information listing historical domains seen behind a given IP address and detailing all infrastructure changes for a given domain.\n- Whois lookup information for domains and IP addresses, including pivoting based on Whois properties such as registrant details (if available).\n- Historical SSL certificate information for domains and IPs.\n- Vulnerability intelligence by tagging files with CVEs that they might be exploiting and allowing searches and alerts based on CVEs.\n- Custom threat intelligence feeds (ransomware, APTs, first stage delivery vectors, OS X malware, IoT, etc.) by filtering VirusTotal’s real-time file flux with [VT HUNTING Livehunt](https://www.virustotal.com/gui/hunting-overview) YARA rules.\n- Operational and strategic intelligence through crowdsourcing of OSINT sources digging into threat campaigns and threat actors.\n- Advanced faceted/elastic searches over the {file, domain, IP, URL} corpus to identify IoCs that match certain criteria, e.g. list all MS Office documents that when opened launch a powershell script and end up exhibiting network communication.\n- Download any file in the VirusTotal corpus and reroute it to other analysis systems you own.\n\n\n**Popular tasks**\n- Enrich (context + reputation) IoCs (domains, IPs, URLs, attachments) found in suspicious emails entering your organization, escalate to the pertinent SOC function.\n- Scan suspicious files seen in your organization and get a second opinion that complements your corporate security stack.\n- Automatically discard false positive alerts recorded in your organization’s SIEM, sparing SOC resources.\n- Automatically confirm true positive alerts recorded in your organization’s SIEM.\n- Rank and prioritize SOC alerts based on severity and threat categories (trojan \u003e adware \u003e PUA).\n- Append an additional layer of context to your alert/incident tickets so that SOC analysts can perform faster and more confident decision making.\n- Feed your network perimeter defenses (Firewall, IDS, web proxy, etc.) with additional IoCs related to an incident or tracked via YARA rules.\n- Create custom IoC feeds (ransomware, APTs, IoT, etc.) with VT HUNTING Livehunt (YARA) and automatically match them against your security logs/SIEM/etc.\n- Cover blindspots in your EDR by feeding it lists of highly relevant and undetected threats identified through the use of YARA in VirusTotal.\n- Derive scores based on malicious observations and relationships for IPs transacting with your business.\n- Assign a severity score to issues identified in a vulnerability scan of your networks.\n\n\n**Additional information**\n- [Contact the VirusTotal team](https://www.virustotal.com/gui/contact-us)\n- [VirusTotal public website](https://www.virustotal.com/)\n- [VirusTotal API developer reference guide](https://developers.virustotal.com/v3.0/reference)\n- [VirusTotal 360 overview brief](https://www.virustotal.com/go/vt360)\n- [VirusTotal service catalog](http://www.virustotal.com/go/vt-services-catalog)\n- [VirusTotal webinars](https://www.brighttalk.com/search/?q=%22Google+Cloud+Security%22+%22VirusTotal%22)\n",
+	"searchRank": 20,
+	"serverMaxVersion": "",
+	"serverMinVersion": "5.0.0",
+	"support": "partner",
+	"supportDetails": {
+		"email": "contact@virustotal.com",
+		"url": "https://www.virustotal.com"
+	},
+	"tags": [
+		"Featured",
+		"TIM",
+		"Free Enricher"
+	],
+	"toServerVersion": "",
+	"updated": "2024-03-18T19:26:54+09:00",
+	"useCases": [],
+	"version": -1,
+	"versionInfo": "828628",
+	"videos": []
+}
