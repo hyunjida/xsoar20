@@ -1,0 +1,50 @@
+{
+	"brands": null,
+	"cacheVersn": 0,
+	"defaultIncidentType": "",
+	"definitionId": "",
+	"description": "Maps incoming Hello World alert fields.",
+	"feed": false,
+	"fromServerVersion": "6.8.0",
+	"id": "HelloWorld-mapper",
+	"incidentSamples": null,
+	"indicatorSamples": null,
+	"instanceIds": null,
+	"itemVersion": "3.0.7",
+	"keyTypeMap": null,
+	"locked": false,
+	"logicalVersion": 0,
+	"mapping": {
+		"Hello World Alert": {
+			"dontMapEventToLabels": false,
+			"internalMapping": {
+				"Hello World ID": {
+					"simple": "alert_id"
+				},
+				"Hello World Status": {
+					"simple": "alert_status"
+				},
+				"Hello World Type": {
+					"simple": "alert_type"
+				},
+				"details": {
+					"simple": "name"
+				}
+			}
+		}
+	},
+	"name": "Hello World - Incoming Mapper",
+	"nameRaw": "Hello World - Incoming Mapper",
+	"packID": "HelloWorld",
+	"packName": "HelloWorld",
+	"packPropagationLabels": [
+		"all"
+	],
+	"sourceClassifierId": "",
+	"system": true,
+	"toServerVersion": "",
+	"transformer": {},
+	"type": "mapping-incoming",
+	"unclassifiedCases": null,
+	"version": -1
+}
