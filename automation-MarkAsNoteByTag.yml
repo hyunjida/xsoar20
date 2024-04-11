@@ -1,0 +1,73 @@
+args:
+- default: true
+  description: Entries with the given tag will be marked as notes.
+  name: tag
+  required: true
+comment: Mark entries as notes if they are tagged with given tag.
+commonfields:
+  id: MarkAsNoteByTag
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.83255
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: MarkAsNoteByTag
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('MarkAsNoteByTag', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+
+
+  def mark_as_note(entries):
+      if isError(entries[0]):
+          demisto.results(
+              {'Type': entryTypes['error'], 'ContentsFormat': formats['text'], 'Contents': 'Unable to retrieve entries'})
+      else:
+          ids = ''
+          for e in entries:
+              tags = e.get('Metadata', {}).get('tags')
+              if not tags:
+                  tags = []
+              if demisto.getArg('tag') in tags:
+                  if ids == '':
+                      ids = e['Metadata']['id']
+                  else:
+                      ids += ',' + e['Metadata']['id']
+          if ids != '':
+              demisto.results(demisto.executeCommand('markAsNote', {'entryIDs': ids}))
+          else:
+              demisto.results({'Type': entryTypes['error'], 'ContentsFormat': formats['text'],
+                               'Contents': "No entries with '" + demisto.getArg('tag') + "' found"})
+
+
+  def main():
+      entries = demisto.executeCommand('getEntries', {})
+      mark_as_note(entries)
+
+
+  if __name__ in ('__main__', '__builtin__', 'builtins'):  # pragma: no cover
+      main()
+
+  register_module_line('MarkAsNoteByTag', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- Utility
+type: python
