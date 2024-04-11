@@ -1,0 +1,90 @@
+args:
+- description: A comma-separated list of domains.
+  isArray: true
+  name: domains
+  required: true
+- description: A comma-separated list of URLs.
+  isArray: true
+  name: urls
+  required: true
+comment: Checks if the supplied URLs are in the specified domains.
+commonfields:
+  id: IsUrlPartOfDomain
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.83255
+engineinfo: {}
+mainengineinfo: {}
+name: IsUrlPartOfDomain
+outputs:
+- contextPath: IsUrlPartOfDomain.URL
+  description: The path of the URLs.
+  type: String
+- contextPath: IsUrlPartOfDomain.Domain
+  description: The domain checked with the URL.
+  type: String
+- contextPath: IsUrlPartOfDomain.IsInternal
+  description: Whether the URL is in the domain.
+  type: Boolean
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('IsUrlPartOfDomain', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+  from typing import List, Dict
+
+
+
+
+  def main(domains: str, urls: str) -> CommandResults:
+      """Checks that the urls are in the domain in the domain name.
+
+      Args:
+          domains: A comma separated list of domains.
+          urls: A comma separated list of urls.
+
+      Returns:
+          Results to display in CortexXSOAR
+      """
+      urls = argToList(urls)
+      domains = set(argToList(domains))
+
+      outputs: List[Dict] = list()
+      for url in urls:
+          results = demisto.executeCommand('ExtractDomainFromUrlAndEmail', {'input': url.lower()})
+          if is_error(results):
+              demisto.debug(f'Could not get domain from url {url}')
+              return_error(get_error(results))
+          else:
+              domain_from_url = results[0]['Contents']
+              outputs.append({
+                  'URL': url,
+                  'Domain': domain_from_url,
+                  'IsInternal': (domain_from_url in domains) or url.startswith(('https://localhost', 'http://localhost'))
+              })
+      return CommandResults('IsUrlPartOfDomain', outputs=outputs)
+
+
+  if __name__ in ('builtins', '__builtin__'):
+      return_results(main(**demisto.args()))
+
+  register_module_line('IsUrlPartOfDomain', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags: []
+type: python
