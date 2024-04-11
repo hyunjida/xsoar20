@@ -1,0 +1,102 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.8.0
+    itemVersion: 3.0.7
+    packID: HelloWorld
+    packName: HelloWorld
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: This is a playbook which will handle the alerts coming from the Hello
+  World service
+id: Handle Hello World Alert
+inputs:
+- description: Alert ID to retrieve details for. By default retrieves from the HelloWorld
+    ID custom field in the HelloWorld incident type
+  key: AlertID
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: ${incident.helloworldid}
+name: Handle Hello World Alert
+outputs: []
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "1"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 1dbb6661-592f-4989-a712-afb1d3125c5b
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: 1dbb6661-592f-4989-a712-afb1d3125c5b
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 50
+        }
+      }
+  "1":
+    continueonerrortype: ""
+    id: "1"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    scriptarguments:
+      alert_id:
+        simple: ${inputs.AlertID}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Retrieve alert details for a HelloWorld alert by alert ID
+      id: 7a16e30b-cd8b-45ce-81cd-b19f9c603dc0
+      iscommand: true
+      name: Get alert details
+      script: '|||helloworld-alert-list'
+      type: regular
+      version: -1
+    taskid: 7a16e30b-cd8b-45ce-81cd-b19f9c603dc0
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 195
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 240,
+        "width": 380,
+        "x": 50,
+        "y": 50
+      }
+    }
+  }
