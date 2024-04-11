@@ -1,0 +1,506 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.5.0
+    itemVersion: 1.1.23
+    packID: TIM_Processing
+    packName: TIM - Indicator Auto-Processing
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: This playbook tags indicators ingested from high reliability feeds. The
+  playbook is triggered due to a Cortex XSOAR job. The indicators are tagged as approved_white,
+  approved_black, approved_watchlist. The tagged indicators will be ready for consumption
+  for 3rd party systems such as SIEM, EDR etc.
+id: TIM - Process Indicators - Fully Automated
+inputs:
+- description: ""
+  key: ""
+  playbookInputQuery:
+    daterange:
+      fromdate: "0001-01-01T00:00:00Z"
+      fromdatelicenseval: "0001-01-01T00:00:00Z"
+      period:
+        by: ""
+        byfrom: ""
+        byto: ""
+        field: ""
+        fromvalue: null
+        tovalue: null
+      todate: "0001-01-01T00:00:00Z"
+    query: ""
+    queryEntity: indicators
+    results: null
+    runFromLastJobTime: false
+  required: false
+  value: {}
+name: TIM - Process Indicators - Fully Automated
+outputs: []
+quiet: true
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "2"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: b59eeea0-db49-4725-8dac-8a7d383cef75
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: b59eeea0-db49-4725-8dac-8a7d383cef75
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": -340
+        }
+      }
+  "1":
+    continueonerrortype: ""
+    id: "1"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "3"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      field:
+        simple: tags
+      fieldValue:
+        simple: approved_black
+      indicatorsValues:
+        complex:
+          accessor: value}
+          filters:
+          - - left:
+                iscontext: true
+                value:
+                  simple: playbookQuery.score
+              operator: isEqualString
+              right:
+                value:
+                  simple: "3"
+          root: ${playbookQuery
+          transformers:
+          - operator: uniq
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: Builtin
+      description: Adds the 'approved_black' tag to the relevant indicators.
+      id: 9121339f-db6a-4838-841f-d104b50556c6
+      iscommand: true
+      name: Append approved black tag
+      script: Builtin|||appendIndicatorField
+      type: regular
+      version: -1
+    taskid: 9121339f-db6a-4838-841f-d104b50556c6
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 60,
+          "y": 340
+        }
+      }
+  "2":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: playbookQuery.value
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "2"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "3"
+      "yes":
+      - "8"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: e358b2c8-1452-4a9d-8b06-107577d83040
+      iscommand: false
+      name: Are there query results?
+      type: condition
+      version: -1
+    taskid: e358b2c8-1452-4a9d-8b06-107577d83040
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": -220
+        }
+      }
+  "3":
+    continueonerrortype: ""
+    id: "3"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 248ee366-c269-479e-8679-5fc5131fce23
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 248ee366-c269-479e-8679-5fc5131fce23
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 520
+        }
+      }
+  "5":
+    continueonerrortype: ""
+    id: "5"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "3"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      field:
+        simple: tags
+      fieldValue:
+        simple: approved_white
+      indicatorsValues:
+        complex:
+          accessor: value}
+          filters:
+          - - left:
+                iscontext: true
+                value:
+                  simple: playbookQuery.score
+              operator: isEqualString
+              right:
+                value:
+                  simple: "1"
+          root: ${playbookQuery
+          transformers:
+          - operator: uniq
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: Builtin
+      description: Adds the 'approved_white' tag to the relevant indicators.
+      id: 91ecd937-cdf1-4076-8245-09bb02f15826
+      iscommand: true
+      name: Append approved white tag
+      script: Builtin|||appendIndicatorField
+      type: regular
+      version: -1
+    taskid: 91ecd937-cdf1-4076-8245-09bb02f15826
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -460,
+          "y": 340
+        }
+      }
+  "7":
+    continueonerrortype: ""
+    id: "7"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "3"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      field:
+        simple: tags
+      fieldValue:
+        simple: approved_watchlist
+      indicatorsValues:
+        complex:
+          accessor: value}
+          filters:
+          - - left:
+                iscontext: true
+                value:
+                  simple: playbookQuery.score
+              operator: isEqualString
+              right:
+                value:
+                  simple: "2"
+          root: ${playbookQuery
+          transformers:
+          - operator: uniq
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: Builtin
+      description: Adds the 'approved_watchlist' tag to the relevant indicators.
+      id: c9441fd7-a3fa-4a62-87d8-34fa5292cf3b
+      iscommand: true
+      name: Append approved watch list tag
+      script: Builtin|||appendIndicatorField
+      type: regular
+      version: -1
+    taskid: c9441fd7-a3fa-4a62-87d8-34fa5292cf3b
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -980,
+          "y": 340
+        }
+      }
+  "8":
+    continueonerrortype: ""
+    id: "8"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "9"
+      - "10"
+      - "11"
+    note: false
+    quietmode: 0
+    separatecontext: true
+    skipunavailable: false
+    task:
+      brand: ""
+      description: This playbook uses several sub playbooks to process and tag indicators,
+        which are used to identify indicators that shouldn't be added to block list.
+        For example IP indicators that belong to business partners, or important hashes
+        we wish to not process. Additional sub playbooks can be added for improving
+        the business logic and tagging according to the user's needs. This playbook
+        doesn't have its own indicator query as it processes indicators provided by
+        the parent playbook query. To enable the playbook, provide the relevant list
+        names in the sub playbook indicators, such as the ApprovedHashList, OrganizationsExternalIPListName,
+        BusinessPartnersIPListName, etc. Also be sure to append the results of additional
+        sub playbooks to Set indicators to Process Indicators for the additional playbooks
+        results to be in the outputs.
+      id: 877ec936-86d1-4265-8782-3caae8f80987
+      iscommand: false
+      name: TIM - Indicator Auto Processing
+      playbookId: TIM - Indicator Auto Processing
+      type: playbook
+      version: -1
+    taskid: 877ec936-86d1-4265-8782-3caae8f80987
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": -230,
+          "y": -50
+        }
+      }
+  "9":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: value
+                filters:
+                - - left:
+                      iscontext: true
+                      value:
+                        simple: playbookQuery.score
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: "3"
+                root: playbookQuery
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "9"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "3"
+      "yes":
+      - "1"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 08ae1059-8ace-44a2-8576-d612344b5984
+      iscommand: false
+      name: Are there bad indicators?
+      type: condition
+      version: -1
+    taskid: 08ae1059-8ace-44a2-8576-d612344b5984
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 220,
+          "y": 170
+        }
+      }
+  "10":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: value
+                filters:
+                - - left:
+                      iscontext: true
+                      value:
+                        simple: playbookQuery.score
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: "1"
+                root: playbookQuery
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "10"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "3"
+      "yes":
+      - "5"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 2b06ab28-41d2-4801-8560-278bd100752f
+      iscommand: false
+      name: Are there good indicators?
+      type: condition
+      version: -1
+    taskid: 2b06ab28-41d2-4801-8560-278bd100752f
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": -300,
+          "y": 170
+        }
+      }
+  "11":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: value
+                filters:
+                - - left:
+                      iscontext: true
+                      value:
+                        simple: playbookQuery.score
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: "2"
+                root: playbookQuery
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "11"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "3"
+      "yes":
+      - "7"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: de946532-00b9-4ff6-8dc5-369d44aeee25
+      iscommand: false
+      name: Are there suspicious indicators?
+      type: condition
+      version: -1
+    taskid: de946532-00b9-4ff6-8dc5-369d44aeee25
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": -820,
+          "y": 170
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 925,
+        "width": 1810,
+        "x": -980,
+        "y": -340
+      }
+    }
+  }
