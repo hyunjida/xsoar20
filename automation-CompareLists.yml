@@ -1,0 +1,82 @@
+args:
+- description: Left list
+  isArray: true
+  name: left
+  required: true
+- description: Right list
+  isArray: true
+  name: right
+  required: true
+comment: Compare  two lists and put the differences in context.
+commonfields:
+  id: CompareLists
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.86272
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: CompareLists
+outputs:
+- contextPath: ListCompare.LeftOnly
+  description: Items only found within the list in the left argument
+- contextPath: ListCompare.RightOnly
+  description: Items only found within the list in the right argument
+- contextPath: ListCompare.Both
+  description: Common items that were found in both lists
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('CompareLists', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+
+
+  def compare(left, right):
+      return {
+          'ListCompare':
+              {
+                  'LeftOnly': [x for x in left if x not in right],
+                  'RightOnly': [x for x in right if x not in left],
+                  'Both': [x for x in left if x in right]
+              }
+      }
+
+
+  def main():
+      left = argToList(demisto.args().get('left'))
+      right = argToList(demisto.args().get('right'))
+
+      out = compare(left, right)
+
+      demisto.results({
+          'Type': entryTypes['note'],
+          'ContentsFormat': formats['json'],
+          'Contents': json.dumps(out),
+          'HumanReadable': 'Set comparisons in Context.',
+          'EntryContext': out
+      })
+
+
+  if __name__ in ('__main__', '__builtin__', 'builtins'):
+      main()
+
+  register_module_line('CompareLists', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags: []
+type: python
