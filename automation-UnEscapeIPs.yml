@@ -1,0 +1,54 @@
+args:
+- description: IP(s) to unescape.
+  isArray: true
+  name: input
+comment: |-
+  Remove escaping chars from IP
+  127[.]0[.]0[.]1 -> 127.0.0.1
+commonfields:
+  id: UnEscapeIPs
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: UnEscapeIPs
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  // pack version: 1.14.2
+  function format_ip(ip) {
+      return ip.replace(/\[\.\]/g,'.');
+  }
+
+  function format_ip_list(ip_list) {
+      var len = ip_list.length;
+      var formatted_ips = new Array(len);
+      ip_list.forEach(function(the_ip, index) {
+          formatted_ips[index] = format_ip(the_ip.trim());
+      });
+      return formatted_ips;
+  }
+
+  var ips;
+  // It is assumed that args.input is a string
+  var unformatted_ips = argToList(args.input);
+  ips = format_ip_list(unformatted_ips);
+  return ips;
+scripttarget: 0
+system: true
+tags:
+- indicator-format
+type: javascript
