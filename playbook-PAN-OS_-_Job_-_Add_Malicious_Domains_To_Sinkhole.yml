@@ -1,0 +1,1538 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.9.0
+    itemVersion: 2.1.22
+    packID: PAN-OS
+    packName: PAN-OS by Palo Alto Networks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: |-
+  This TIM playbook should be run as a job. The playbook runs on domain indicators and performs various checks to decide if they should be sinkholed.
+
+  If a domain is related to a campaign or a threat actor, or if it resolves to a malicious IP or has malware-related tags, the playbook will add a new tag to it in order to sinkhole that domain.
+
+  The playbook assumes that the user is exporting indicators with the sinkhole tag to an EDL (External Dynamic List) using the Export Generic Indicators Service integration in Cortex XSOAR. That EDL should be connected to PAN-OS. It also assumes that a DNS sinkhole is configured in the PAN-OS firewall. However, these are not required for the sole purpose of tagging the domains.
+
+  Note: This playbook has inputs from both the "From context data" tab and the "From indicators" tab.
+id: PAN-OS - Job - Add Malicious Domains To Sinkhole
+inputs:
+- description: All domain indicators. In the playbook, the domains will be filtered
+    by those used for malicious communication, and tagged to be sinkholed.
+  key: ""
+  playbookInputQuery:
+    daterange:
+      fromdate: "0001-01-01T00:00:00Z"
+      fromdatelicenseval: "0001-01-01T00:00:00Z"
+      period:
+        by: ""
+        byfrom: ""
+        byto: ""
+        field: ""
+        fromvalue: null
+        tovalue: null
+      todate: "0001-01-01T00:00:00Z"
+    query: type:Domain
+    queryEntity: indicators
+    results: null
+    runFromLastJobTime: true
+  required: false
+  value: {}
+- description: The tag that should be applied to the domain so that it will be exported
+    to the EDL using the Generic Export Indicators Service integration in Cortex XSOAR.
+  key: SinkholeTagForEDL
+  playbookInputQuery: null
+  required: true
+  value:
+    simple: to_sinkhole
+- description: |-
+    Whether to enrich unknown domains. Enriching domains can be useful to gain additional information regarding reputation for domains from your feed which will help identify domains used in C2 communication, but may consume more API quota from your threat intelligence integrations.
+    Can be True or False.
+  key: EnrichUnknownDomains
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: "False"
+- description: |-
+    Whether to enrich suspicious domains. Enriching domains can be useful to gain additional information regarding reputation for domains from your feed which will help identify domains used in C2 communication, but may consume more API quota from your threat intelligence integrations.
+    Can be True or False.
+  key: EnrichSuspiciousDomains
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: "False"
+name: PAN-OS - Job - Add Malicious Domains To Sinkhole
+outputs: []
+quiet: true
+starttaskid: "0"
+system: true
+tags:
+- Job
+- PAN-OS
+- Sinkhole
+- TIM
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "30"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 9d9d8637-a6b6-4b84-8419-a17c24bb6cbb
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: 9d9d8637-a6b6-4b84-8419-a17c24bb6cbb
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 35
+        }
+      }
+  "4":
+    conditions:
+    - condition:
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.EnrichUnknownDomains
+          operator: isEqualString
+          right:
+            value:
+              simple: "True"
+        - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.EnrichSuspiciousDomains
+          operator: isEqualString
+          right:
+            value:
+              simple: "True"
+      label: "yes"
+    continueonerrortype: ""
+    id: "4"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "14"
+      "yes":
+      - "23"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks whether to enrich unknown or suspicious domains.
+      id: 4f5db42a-566e-4942-80e1-e22b509c1cca
+      iscommand: false
+      name: Enrich domains with inconclusive verdict?
+      type: condition
+      version: -1
+    taskid: 4f5db42a-566e-4942-80e1-e22b509c1cca
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 425
+        }
+      }
+  "8":
+    continueonerrortype: ""
+    id: "8"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "26"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: c28fefe5-54d5-4992-8187-e8f6c47f8c1d
+      iscommand: false
+      name: Review Evidence
+      type: title
+      version: -1
+    taskid: c28fefe5-54d5-4992-8187-e8f6c47f8c1d
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 780,
+          "y": 2860
+        }
+      }
+  "9":
+    continueonerrortype: ""
+    id: "9"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "29"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      field:
+        simple: tags
+      fieldValue:
+        complex:
+          root: inputs.SinkholeTagForEDL
+      indicatorsValues:
+        complex:
+          root: DomainsRelatedToMaliciousIPs
+          transformers:
+          - args:
+              item:
+                iscontext: true
+                value:
+                  simple: DomainsRelatedToCampaigns
+              raw: {}
+            operator: AppendIfNotEmpty
+          - args:
+              item:
+                iscontext: true
+                value:
+                  simple: DomainsRelatedToThreatActors
+              raw: {}
+            operator: AppendIfNotEmpty
+          - args:
+              item:
+                iscontext: true
+                value:
+                  simple: DomainsWithMaliciousTags
+              raw: {}
+            operator: AppendIfNotEmpty
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: Builtin
+      description: Tags the malicious domains with a sinkhole tag to export them to
+        an EDL using the Generic Export Indicators Service.
+      id: c7e98784-57a4-4135-8245-787d6bdcbabc
+      iscommand: true
+      name: Add sinkhole tag (exports to EDL)
+      script: Builtin|||appendIndicatorField
+      type: regular
+      version: -1
+    taskid: c7e98784-57a4-4135-8245-787d6bdcbabc
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 1060,
+          "y": 3200
+        }
+      }
+  "10":
+    continueonerrortype: ""
+    id: "10"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "8"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      key:
+        simple: DomainsWithMaliciousTags
+      value:
+        complex:
+          accessor: value
+          filters:
+          - - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: playbookQuery.CustomFields.tags
+              operator: containsGeneral
+              right:
+                value:
+                  simple: c2
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: playbookQuery.CustomFields.tags
+              operator: containsGeneral
+              right:
+                value:
+                  simple: c&c
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: playbookQuery.CustomFields.tags
+              operator: containsGeneral
+              right:
+                value:
+                  simple: command and control
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: playbookQuery.CustomFields.tags
+              operator: containsGeneral
+              right:
+                value:
+                  simple: malicious-activity
+            - left:
+                iscontext: true
+                value:
+                  simple: playbookQuery.CustomFields.tags
+              operator: containsGeneral
+              right:
+                value:
+                  simple: malware
+          - - left:
+                iscontext: true
+                value:
+                  simple: playbookQuery.score
+              operator: isEqualString
+              right:
+                value:
+                  simple: "2"
+            - left:
+                iscontext: true
+                value:
+                  simple: playbookQuery.score
+              operator: isEqualString
+              right:
+                value:
+                  simple: "3"
+          root: playbookQuery
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Saves domains that have a "c2", "c&c" or "command and control"
+        tag, in a separate context key.
+      id: 4a600ff4-a8c9-4641-8b1a-2bc7a7a2bb65
+      iscommand: false
+      name: Save domains with tags
+      script: SetAndHandleEmpty
+      type: regular
+      version: -1
+    taskid: 4a600ff4-a8c9-4641-8b1a-2bc7a7a2bb65
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 1770,
+          "y": 1775
+        }
+      }
+  "14":
+    continueonerrortype: ""
+    id: "14"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "42"
+      - "45"
+      - "44"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: f44e61a7-9bb5-416e-858a-31eb8ba2a445
+      iscommand: false
+      name: Check Domains
+      type: title
+      version: -1
+    taskid: f44e61a7-9bb5-416e-858a-31eb8ba2a445
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 1460
+        }
+      }
+  "15":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: value
+                filters:
+                - - left:
+                      iscontext: true
+                      value:
+                        simple: playbookQuery.score
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: "2"
+                root: playbookQuery
+          operator: isNotEmpty
+          right:
+            value: {}
+      label: "yes"
+    continueonerrortype: ""
+    id: "15"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "14"
+      "yes":
+      - "24"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks whether there are domains with a score of 2 (suspicious).
+      id: 24318345-a6a8-471a-809e-381c6f5e0df3
+      iscommand: false
+      name: Are there suspicious domains?
+      type: condition
+      version: -1
+    taskid: 24318345-a6a8-471a-809e-381c6f5e0df3
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 1200,
+          "y": 770
+        }
+      }
+  "17":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: value
+                filters:
+                - - left:
+                      iscontext: true
+                      value:
+                        simple: playbookQuery.score
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: "0"
+                root: playbookQuery
+          operator: isNotEmpty
+          right:
+            value: {}
+      label: "yes"
+    continueonerrortype: ""
+    id: "17"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "14"
+      "yes":
+      - "18"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks whether there are domains with a score of 0 (unknown).
+      id: 1aa825ef-89e2-4462-898a-4fae4ea7dada
+      iscommand: false
+      name: Are there unknown domains?
+      type: condition
+      version: -1
+    taskid: 1aa825ef-89e2-4462-898a-4fae4ea7dada
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 760,
+          "y": 770
+        }
+      }
+  "18":
+    conditions:
+    - condition:
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.EnrichUnknownDomains
+          operator: isEqualString
+          right:
+            value:
+              simple: "True"
+      label: "yes"
+    continueonerrortype: ""
+    id: "18"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "14"
+      "yes":
+      - "19"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks whether domains with a score of 0 (unknown) should be enriched,
+        according to the playbook inputs.
+      id: 0916bfab-a760-49c1-80d0-60d083652675
+      iscommand: false
+      name: Enrich unknown domains?
+      type: condition
+      version: -1
+    taskid: 0916bfab-a760-49c1-80d0-60d083652675
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 760,
+          "y": 980
+        }
+      }
+  "19":
+    continueonerrortype: ""
+    id: "19"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "14"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      indicatorsValues:
+        complex:
+          accessor: value
+          filters:
+          - - left:
+                iscontext: true
+                value:
+                  simple: playbookQuery.score
+              operator: isEqualString
+              right:
+                value:
+                  simple: "0"
+          root: playbookQuery
+          transformers:
+          - operator: uniq
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: Builtin
+      description: Enriches domains with a score of 0.
+      id: 8f7c32a7-aa3f-463d-81ea-37cdf67bc84d
+      iscommand: true
+      name: Enrich unknown domains
+      script: Builtin|||enrichIndicators
+      type: regular
+      version: -1
+    taskid: 8f7c32a7-aa3f-463d-81ea-37cdf67bc84d
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 760,
+          "y": 1180
+        }
+      }
+  "20":
+    continueonerrortype: ""
+    id: "20"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "14"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      indicatorsValues:
+        complex:
+          accessor: value
+          filters:
+          - - left:
+                iscontext: true
+                value:
+                  simple: playbookQuery.score
+              operator: isEqualString
+              right:
+                value:
+                  simple: "2"
+          root: playbookQuery
+          transformers:
+          - operator: uniq
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: Builtin
+      description: Enriches domains with a score of 2.
+      id: 8b2768fa-0314-49dc-8519-1929a7a6cf5f
+      iscommand: true
+      name: Enrich suspicious domains
+      script: Builtin|||enrichIndicators
+      type: regular
+      version: -1
+    taskid: 8b2768fa-0314-49dc-8519-1929a7a6cf5f
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 1200,
+          "y": 1180
+        }
+      }
+  "23":
+    continueonerrortype: ""
+    id: "23"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "17"
+      - "15"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 1fe0d61d-484d-4240-83db-e351d48cc50c
+      iscommand: false
+      name: Domain Enrichment
+      type: title
+      version: -1
+    taskid: 1fe0d61d-484d-4240-83db-e351d48cc50c
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 980,
+          "y": 625
+        }
+      }
+  "24":
+    conditions:
+    - condition:
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.EnrichSuspiciousDomains
+          operator: isEqualString
+          right:
+            value:
+              simple: "True"
+      label: "yes"
+    continueonerrortype: ""
+    id: "24"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "14"
+      "yes":
+      - "20"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks whether domains with a score of 2 (suspicious) should be
+        enriched, according to the playbook inputs.
+      id: a4654cde-af5b-49ae-84e8-89392e42ea29
+      iscommand: false
+      name: Enrich suspicious domains?
+      type: condition
+      version: -1
+    taskid: a4654cde-af5b-49ae-84e8-89392e42ea29
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 1200,
+          "y": 980
+        }
+      }
+  "26":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: DomainsRelatedToMaliciousIPs
+          operator: isNotEmpty
+          right:
+            value: {}
+        - left:
+            iscontext: true
+            value:
+              simple: DomainsRelatedToCampaigns
+          operator: isNotEmpty
+        - left:
+            iscontext: true
+            value:
+              simple: DomainsRelatedToThreatActors
+          operator: isNotEmpty
+        - left:
+            iscontext: true
+            value:
+              simple: DomainsWithMaliciousTags
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "26"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "29"
+      "yes":
+      - "9"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks whether any domains should be sinkholed according to the
+        tags and relationships.
+      id: 74c8c67d-5934-496c-869b-dd9e6242c732
+      iscommand: false
+      name: Any domains to sinkhole?
+      type: condition
+      version: -1
+    taskid: 74c8c67d-5934-496c-869b-dd9e6242c732
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 780,
+          "y": 3000
+        }
+      }
+  "29":
+    continueonerrortype: ""
+    id: "29"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: eb2a3ed3-53d9-4380-8ac0-a125c7e507df
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: eb2a3ed3-53d9-4380-8ac0-a125c7e507df
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 680,
+          "y": 3370
+        }
+      }
+  "30":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: value
+                root: playbookQuery
+          operator: isNotEmpty
+          right:
+            value: {}
+      label: "yes"
+    continueonerrortype: ""
+    id: "30"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "31"
+      "yes":
+      - "4"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks whether there are new domains to check for whether they
+        should be sinkholed.
+      id: c3d17149-69cf-4860-897b-420823294552
+      iscommand: false
+      name: Are there domains to check?
+      type: condition
+      version: -1
+    taskid: c3d17149-69cf-4860-897b-420823294552
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 190
+        }
+      }
+  "31":
+    continueonerrortype: ""
+    id: "31"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "29"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 9d7ecc51-3594-48f6-87db-49fc0297ecf5
+      iscommand: false
+      name: No Domains
+      type: title
+      version: -1
+    taskid: 9d7ecc51-3594-48f6-87db-49fc0297ecf5
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": -990,
+          "y": 2135
+        }
+      }
+  "34":
+    continueonerrortype: ""
+    id: "34"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "35"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      entities:
+        complex:
+          accessor: value
+          root: playbookQuery
+      extend-context:
+        simple: RelationshipsWithIPs=
+      ignore-outputs:
+        simple: "true"
+      relationships:
+        simple: resolves-to
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Searches the relationships of the domains to check if any of them
+        resolves to a malicious IP address.
+      id: 89f224e9-5579-4c4b-8f1a-f1cbff179416
+      iscommand: false
+      name: Check for resolved IPs
+      script: SearchIndicatorRelationships
+      type: regular
+      version: -1
+    taskid: 89f224e9-5579-4c4b-8f1a-f1cbff179416
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -340,
+          "y": 1750
+        }
+      }
+  "35":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: RelationshipsWithIPs.EntityB
+          operator: isNotEmpty
+          right:
+            value: {}
+      label: "yes"
+    continueonerrortype: ""
+    id: "35"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "8"
+      "yes":
+      - "36"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks whether any IP addresses that the domains resolve to were
+        found.
+      id: d6a02cf5-a9ed-40d5-837a-8f3bf0c52d96
+      iscommand: false
+      name: Any IPs found?
+      type: condition
+      version: -1
+    taskid: d6a02cf5-a9ed-40d5-837a-8f3bf0c52d96
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": -340,
+          "y": 1930
+        }
+      }
+  "36":
+    continueonerrortype: ""
+    id: "36"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "37"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      value:
+        complex:
+          accessor: EntityB
+          root: RelationshipsWithIPs
+          transformers:
+          - operator: uniq
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Gets the DBotScores of the IP addresses that the domains resolve
+        to.
+      id: 236a5077-cf02-4331-8964-77c441c179fa
+      iscommand: false
+      name: Get IP scores
+      script: GetIndicatorDBotScoreFromCache
+      type: regular
+      version: -1
+    taskid: 236a5077-cf02-4331-8964-77c441c179fa
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -520,
+          "y": 2120
+        }
+      }
+  "37":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: Indicator
+                filters:
+                - - left:
+                      iscontext: true
+                      value:
+                        simple: DBotScoreCache.Score
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: "3"
+                root: DBotScoreCache
+          operator: isNotEmpty
+          right:
+            value: {}
+      label: "yes"
+    continueonerrortype: ""
+    id: "37"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "8"
+      "yes":
+      - "41"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks whether any IP found is malicious.
+      id: c732f3b0-c0b2-4650-81b9-f463c8d68f58
+      iscommand: false
+      name: Any malicious IPs?
+      type: condition
+      version: -1
+    taskid: c732f3b0-c0b2-4650-81b9-f463c8d68f58
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": -340,
+          "y": 2300
+        }
+      }
+  "40":
+    continueonerrortype: ""
+    id: "40"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "8"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      key:
+        simple: DomainsRelatedToMaliciousIPs
+      value:
+        complex:
+          accessor: EntityA
+          filters:
+          - - left:
+                iscontext: true
+                value:
+                  simple: RelationshipsWithIPs.EntityB
+              operator: in
+              right:
+                iscontext: true
+                value:
+                  simple: MaliciousIPs
+          root: RelationshipsWithIPs
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Saves the domains that resolved to the malicious IPs in a new key.
+      id: f0844f55-7269-48ce-8368-306957b45da7
+      iscommand: false
+      name: Save their corresponding domains in a new key
+      script: Set
+      type: regular
+      version: -1
+    taskid: f0844f55-7269-48ce-8368-306957b45da7
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -340,
+          "y": 2680
+        }
+      }
+  "41":
+    continueonerrortype: ""
+    id: "41"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "40"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      key:
+        simple: MaliciousIPs
+      value:
+        complex:
+          accessor: Indicator
+          filters:
+          - - left:
+                iscontext: true
+                value:
+                  simple: DBotScoreCache.Score
+              operator: isEqualString
+              right:
+                value:
+                  simple: "3"
+          root: DBotScoreCache
+          transformers:
+          - operator: uniq
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Saves the malicious IPs in a new key.
+      id: ecdcf14b-afbf-480d-80be-8ab3586e5e93
+      iscommand: false
+      name: Save malicious IPs in a new key
+      script: Set
+      type: regular
+      version: -1
+    taskid: ecdcf14b-afbf-480d-80be-8ab3586e5e93
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -520,
+          "y": 2500
+        }
+      }
+  "42":
+    continueonerrortype: ""
+    id: "42"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "34"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: de617776-2de6-43b8-841b-c91b9010ffc9
+      iscommand: false
+      name: Check Resolution to Malicious IPs
+      type: title
+      version: -1
+    taskid: de617776-2de6-43b8-841b-c91b9010ffc9
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": -340,
+          "y": 1615
+        }
+      }
+  "43":
+    continueonerrortype: ""
+    id: "43"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "46"
+      - "49"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      entities:
+        complex:
+          accessor: value
+          root: playbookQuery
+      extend-context:
+        simple: RelationshipsWithCampaigns=
+      ignore-outputs:
+        simple: "true"
+      relationships:
+        simple: indicated-by,part-of,related-to,attributed-to
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Searches the domains for relationships with threat actors or campaigns.
+      id: ec96c0d0-95fa-436b-8334-d74cacdcb475
+      iscommand: false
+      name: 'Check for related threat actors / campaigns '
+      script: SearchIndicatorRelationships
+      type: regular
+      version: -1
+    taskid: ec96c0d0-95fa-436b-8334-d74cacdcb475
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 770,
+          "y": 1775
+        }
+      }
+  "44":
+    continueonerrortype: ""
+    id: "44"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "10"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 38c32ca9-470f-47be-8973-c21e004ae23e
+      iscommand: false
+      name: Check Domain Tags
+      type: title
+      version: -1
+    taskid: 38c32ca9-470f-47be-8973-c21e004ae23e
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 1770,
+          "y": 1615
+        }
+      }
+  "45":
+    continueonerrortype: ""
+    id: "45"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "43"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 30a42f79-4e4f-4ac5-8966-af9095bcd943
+      iscommand: false
+      name: Check Relation To Threat Actors / Campaigns
+      type: title
+      version: -1
+    taskid: 30a42f79-4e4f-4ac5-8966-af9095bcd943
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 770,
+          "y": 1615
+        }
+      }
+  "46":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: EntityB
+                filters:
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: RelationshipsWithCampaigns.EntityBType
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: Campaign
+                root: RelationshipsWithCampaigns
+          operator: isNotEmpty
+          right:
+            value: {}
+      label: "yes"
+    continueonerrortype: ""
+    id: "46"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "8"
+      "yes":
+      - "48"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks whether any relationships to campaigns were found.
+      id: 40407e32-a7d7-4695-856b-1cc103213827
+      iscommand: false
+      name: Any campaigns found?
+      type: condition
+      version: -1
+    taskid: 40407e32-a7d7-4695-856b-1cc103213827
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 500,
+          "y": 1960
+        }
+      }
+  "48":
+    continueonerrortype: ""
+    id: "48"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "8"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      key:
+        simple: DomainsRelatedToCampaigns
+      value:
+        complex:
+          accessor: EntityA
+          filters:
+          - - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: RelationshipsWithCampaigns.EntityBType
+              operator: isEqualString
+              right:
+                value:
+                  simple: Campaign
+          root: RelationshipsWithCampaigns
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Saves the domains that have relationships to campaigns in a new
+        key.
+      id: b4d7e5ad-3c4c-49f1-80f8-db5550640f8e
+      iscommand: false
+      name: Save their corresponding domains in a new key
+      script: Set
+      type: regular
+      version: -1
+    taskid: b4d7e5ad-3c4c-49f1-80f8-db5550640f8e
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 330,
+          "y": 2150
+        }
+      }
+  "49":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: EntityB
+                filters:
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: RelationshipsWithCampaigns.EntityBType
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: Threat Actor
+                root: RelationshipsWithCampaigns
+          operator: isNotEmpty
+          right:
+            value: {}
+      label: "yes"
+    continueonerrortype: ""
+    id: "49"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "8"
+      "yes":
+      - "50"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks whether any relationships to threat actors were found.
+      id: da487d6f-a8b1-4f7a-8c79-e1e7caac3da9
+      iscommand: false
+      name: Any threat actors found?
+      type: condition
+      version: -1
+    taskid: da487d6f-a8b1-4f7a-8c79-e1e7caac3da9
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 1000,
+          "y": 1960
+        }
+      }
+  "50":
+    continueonerrortype: ""
+    id: "50"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "8"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      key:
+        simple: DomainsRelatedToThreatActors
+      value:
+        complex:
+          accessor: EntityA
+          filters:
+          - - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: RelationshipsWithCampaigns.EntityBType
+              operator: isEqualString
+              right:
+                value:
+                  simple: Threat Actor
+          root: RelationshipsWithCampaigns
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Saves the domains that have relationships to threat actors in a
+        new key.
+      id: 666a7f2c-1788-4595-8b56-04f9da182103
+      iscommand: false
+      name: Save their corresponding domains in a new key
+      script: Set
+      type: regular
+      version: -1
+    taskid: 666a7f2c-1788-4595-8b56-04f9da182103
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 1170,
+          "y": 2150
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {
+      "15_14_#default#": 0.2,
+      "15_24_yes": 0.35,
+      "17_14_#default#": 0.33,
+      "17_18_yes": 0.54,
+      "18_14_#default#": 0.44,
+      "24_14_#default#": 0.24,
+      "24_20_yes": 0.47,
+      "26_29_#default#": 0.16,
+      "30_31_#default#": 0.24,
+      "30_4_yes": 0.4,
+      "35_36_yes": 0.5,
+      "35_8_#default#": 0.16,
+      "37_41_yes": 0.47,
+      "37_8_#default#": 0.2,
+      "46_48_yes": 0.4,
+      "46_8_#default#": 0.1,
+      "49_50_yes": 0.35,
+      "49_8_#default#": 0.1,
+      "4_14_#default#": 0.1
+    },
+    "paper": {
+      "dimensions": {
+        "height": 3400,
+        "width": 3140,
+        "x": -990,
+        "y": 35
+      }
+    }
+  }
