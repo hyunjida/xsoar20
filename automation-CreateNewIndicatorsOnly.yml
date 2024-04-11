@@ -1,0 +1,198 @@
+args:
+- description: The indicator values.
+  isArray: true
+  name: indicator_values
+- auto: PREDEFINED
+  description: The indicator type of the indicators.
+  name: type
+  predefined:
+  - IP
+  - CIDR
+  - IPv6
+  - IPv6CIDR
+  - Domain
+  - Email
+  - URL
+  - File
+  - File MD5
+  - File SHA256
+  - File SHA1
+  - Account
+  - CVE
+  - Host
+  - ssdeep
+  - Registry Key
+- description: The indicator source.
+  name: source
+- auto: PREDEFINED
+  description: The indicator reputation.
+  name: verdict
+  predefined:
+  - Unknown
+  - Benign
+  - Suspicious
+  - Malicious
+- description: The tags to add to the new indicators.
+  isArray: true
+  name: tags
+- auto: PREDEFINED
+  description: Whether to output additional messages as readable output.
+  name: verbose
+  predefined:
+  - "true"
+  - "false"
+comment: Create indicators to the Threat Intel database only if they are not registered.
+  When using the script with many indicators, or when the Threat Intel Management
+  database is highly populated, this script may have low performance issue.
+commonfields:
+  id: CreateNewIndicatorsOnly
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.5.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.83255
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: CreateNewIndicatorsOnly
+outputs:
+- contextPath: CreateNewIndicatorsOnly.ID
+  description: The indicator ID.
+  type: string
+- contextPath: CreateNewIndicatorsOnly.Value
+  description: The indicator value.
+  type: string
+- contextPath: CreateNewIndicatorsOnly.Type
+  description: The indicator type.
+  type: string
+- contextPath: CreateNewIndicatorsOnly.Score
+  description: The indicator score.
+  type: number
+- contextPath: CreateNewIndicatorsOnly.CreationStatus
+  description: The status of the indicator requested to add. Value is either new,
+    existing, or unavailable.
+  type: string
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('CreateNewIndicatorsOnly', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+  from typing import Any
+
+
+  STATUS_NEW = 'new'
+  STATUS_EXISTING = 'existing'
+  STATUS_UNAVAILABLE = 'unavailable'
+
+  KEY_CREATION_STATUS = 'CreationStatus'
+
+
+  def normalize_indicator_value(indicator_value: Any) -> str:
+      if isinstance(indicator_value, int):
+          return str(indicator_value)
+      elif isinstance(indicator_value, str) and indicator_value:
+          return indicator_value
+      else:
+          raise DemistoException(f'Invalid indicator value: {str(indicator_value)}')
+
+
+  def add_new_indicator(indicator_value: Any,
+                        create_new_indicator_args: dict[str, Any]) -> dict[str, Any]:
+      indicator_value = normalize_indicator_value(indicator_value)
+      escaped_indicator_value = indicator_value.replace('"', r'\"')
+
+      if indicators := execute_command('findIndicators', {'value': escaped_indicator_value}):
+          indicator = indicators[0]
+          indicator[KEY_CREATION_STATUS] = STATUS_EXISTING
+      else:
+          args = dict(create_new_indicator_args, value=indicator_value)
+          indicator = execute_command('createNewIndicator', args)
+          if isinstance(indicator, dict):
+              indicator[KEY_CREATION_STATUS] = STATUS_NEW
+          elif isinstance(indicator, str):
+              # createNewIndicator has been successfully done, but the indicator
+              # wasn't created for some reasons.
+              if 'done - Indicator was not created' in indicator:
+                  demisto.debug(f'Indicator was not created. Make sure "{indicator_value}" is not excluded.')
+              else:
+                  demisto.debug(indicator)
+
+              indicator = {
+                  'value': indicator_value,
+                  'indicator_type': args.get('type', 'Unknown'),
+                  KEY_CREATION_STATUS: STATUS_UNAVAILABLE,
+              }
+          else:
+              raise DemistoException(f'Unknown response from createNewIndicator: str{indicator_value}')
+
+      return indicator
+
+
+  def add_new_indicators(indicator_values: list[Any] | None,
+                         create_new_indicator_args: dict[str, Any]) -> list[dict[str, Any]]:
+      return [add_new_indicator(indicator_value, create_new_indicator_args)
+              for indicator_value in indicator_values or []]
+
+
+  def main():
+      try:
+          args = assign_params(**demisto.args())
+
+          # Don't use argToList to make a list in order to accept an indicator including commas.
+          # The `indicator_values` parameter doesn't support a comma separated list.
+          if (indicator_values := args.get('indicator_values', [])) and not isinstance(indicator_values, list):
+              indicator_values = [indicator_values]
+
+          create_new_indicator_args = dict(args)
+          create_new_indicator_args.pop('indicator_values', None)
+          create_new_indicator_args.pop('verbose', None)
+          ents = add_new_indicators(indicator_values, create_new_indicator_args)
+
+          outputs = [assign_params(
+              ID=ent.get('id'),
+              Score=ent.get('score'),
+              CreationStatus=ent.get(KEY_CREATION_STATUS),
+              Type=ent.get('indicator_type'),
+              Value=ent.get('value'),
+          ) for ent in ents]
+
+          count_new = sum(1 for ent in ents if ent.get(KEY_CREATION_STATUS) == STATUS_NEW)
+          readable_output = f'{count_new} new indicators have been added.'
+          if argToBoolean(args.get('verbose', 'false')):
+              readable_output += '\n' + tblToMd('New Indicator Created', outputs,
+                                                ['ID', 'Score', 'CreationStatus', 'Type', 'Value'])
+
+          return_results(CommandResults(
+              outputs_prefix='CreateNewIndicatorsOnly',
+              outputs_key_field=['Value', 'Type'],
+              outputs=outputs,
+              raw_response=ents,
+              readable_output=readable_output
+          ))
+      except Exception as e:
+          return_error(
+              f'Failed to execute CreateNewIndicatorsOnly.\nError:\n{str(e)}')
+
+
+  if __name__ in ('__main__', '__builtin__', 'builtins'):
+      main()
+
+  register_module_line('CreateNewIndicatorsOnly', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- Utility
+type: python
