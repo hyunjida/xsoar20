@@ -1,0 +1,43 @@
+{
+	"Cache": null,
+	"cacheVersn": 0,
+	"category": "",
+	"dataType": "indicators",
+	"dateRange": {
+		"fromDate": "0001-01-01T00:00:00Z",
+		"fromDateLicense": "0001-01-01T00:00:00Z",
+		"period": {
+			"by": "",
+			"byFrom": "days",
+			"byTo": "",
+			"field": "",
+			"fromValue": 7,
+			"toValue": null
+		},
+		"toDate": "0001-01-01T00:00:00Z"
+	},
+	"definitionId": "",
+	"fromServerVersion": "6.2.0",
+	"id": "8166df3f-d62e-4f33-8930-ef665ab33d65",
+	"isPredefined": true,
+	"itemVersion": "1.2.48",
+	"name": "Active Indicators Volumes by Feed",
+	"packID": "CommonWidgets",
+	"packName": "Common Widgets",
+	"packPropagationLabels": [
+		"all"
+	],
+	"params": {
+		"groupBy": [
+			"firstSeen(d)",
+			"sourceBrands"
+		],
+		"timeFrame": "days",
+		"valuesFormat": "abbreviated"
+	},
+	"propagationLabels": [],
+	"query": "(expirationStatus:active or expirationStatus:\"\") and -sourceBrands:\"\"",
+	"toServerVersion": "",
+	"version": -1,
+	"widgetType": "line"
+}
