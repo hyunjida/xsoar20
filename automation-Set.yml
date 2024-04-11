@@ -1,0 +1,98 @@
+args:
+- default: true
+  description: The key to set. Can be a full path such as "Key.ID". If using append=true
+    can also use a DT selector such as "Data(val.ID == obj.ID)".
+  name: key
+  required: true
+- description: The value to set to the key. Can be an array (e.g. ["192.168.1.1","192.168.1.2"])
+    or JSON (e.g. {"key":"value"}).
+  isArray: true
+  name: value
+  required: true
+- auto: PREDEFINED
+  description: If false then the context key will be overwritten. If set to true then
+    the script will append to existing context key.
+  name: append
+  predefined:
+  - "true"
+  - "false"
+- auto: PREDEFINED
+  defaultValue: "false"
+  description: Whether the argument should be saved as a string.
+  name: stringify
+  predefined:
+  - "true"
+  - "false"
+comment: Set a value in context under the key you entered.
+commonfields:
+  id: Set
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: Set
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  // pack version: 1.14.2
+  var ec = {};
+  var value;
+  try {
+      if (args.stringify === 'true') {
+          if (typeof args.value === 'string') {
+              value = args.value
+          } else {
+              value = JSON.stringify(args.value)
+          }
+      } else {
+          if (!isNaN(args.value)) {
+              // This means that the value is a number
+              if (args.value.includes('.')) {
+                  // It is a decimal number
+                  value = JSON.parse(args.value);
+              }
+              else {
+                  // If the number is large
+                  value = BigInt(args.value);
+              }
+          }
+          else {
+              value = JSON.parse(args.value);
+          }
+      }
+  } catch (err) {
+      value = args.value;
+  }
+  ec[args.key] = value;
+  var result = {
+      Type: entryTypes.note,
+      Contents: ec,
+      ContentsFormat: formats.json,
+      HumanReadable: 'Key ' + args.key + ' set'
+  };
+
+  if (!args.append || args.append === 'false') {
+      setContext(args.key, value);
+  } else {
+      result.EntryContext = ec;
+  }
+  logDebug(`Setting ${JSON.stringify(result)}`)
+  return result;
+scripttarget: 0
+system: true
+tags:
+- Utility
+type: javascript
