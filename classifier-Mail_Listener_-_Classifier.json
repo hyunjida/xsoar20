@@ -1,0 +1,36 @@
+{
+	"brands": null,
+	"cacheVersn": 0,
+	"defaultIncidentType": "Phishing",
+	"definitionId": "",
+	"description": "Classifies phishing email messages.",
+	"feed": false,
+	"fromServerVersion": "6.0.0",
+	"id": "mail-listener",
+	"incidentSamples": null,
+	"indicatorSamples": null,
+	"instanceIds": null,
+	"itemVersion": "3.4.1",
+	"keyTypeMap": {
+		"mail-listener": "Phishing"
+	},
+	"locked": false,
+	"logicalVersion": 0,
+	"mapping": null,
+	"name": "Mail Listener - Classifier",
+	"nameRaw": "Mail Listener - Classifier",
+	"packID": "CommonTypes",
+	"packName": "Common Types",
+	"packPropagationLabels": [
+		"all"
+	],
+	"sourceClassifierId": "",
+	"system": true,
+	"toServerVersion": "",
+	"transformer": {
+		"simple": "brand"
+	},
+	"type": "classification",
+	"unclassifiedCases": null,
+	"version": -1
+}
