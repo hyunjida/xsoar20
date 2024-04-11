@@ -1,0 +1,57 @@
+args:
+- default: true
+  description: The table to convert to HTML
+  isArray: true
+  name: table
+- defaultValue: HTMLTable
+  description: 'The context key for the converted HTML table (default is: HTMLTable).'
+  name: context_key
+- description: The optional title for the table
+  name: title
+- description: The headers for the HTML table.
+  isArray: true
+  name: headers
+comment: Converts a given array to an HTML table
+commonfields:
+  id: ConvertTableToHTML
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: ConvertTableToHTML
+outputs:
+- contextPath: HTMLTable
+  description: The HTML table we created from the array
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  // pack version: 1.14.2
+  headers = args.headers ? args.headers.split(",") : [];
+  if (args.table) {
+      ec = {};
+      ec[args.context_key || 'HTMLTable'] = tableToHTML(args.title, args.table, headers);
+      return {
+          Type: entryTypes.note, Contents: '', ContentsFormat: formats.text,
+          HumanReadable: tableToMarkdown(args.title, args.table, headers),
+          EntryContext: ec
+      };
+  }
+  return 'Data does not exist';
+scripttarget: 0
+system: true
+tags:
+- Utility
+type: javascript
