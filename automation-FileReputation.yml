@@ -1,0 +1,72 @@
+args:
+- default: true
+  description: File hash to look up - supports MD5, SHA1 and SHA256.
+  name: file
+  required: true
+comment: A context script for hash entities.
+commonfields:
+  id: FileReputation
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.83255
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: FileReputation
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('FileReputation', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+
+
+  def file_reputation():
+      results = demisto.executeCommand('file', {'file': demisto.get(demisto.args(), 'file')})
+
+      for item in results:
+          if isError(item):
+              if is_offset_error(item):  # call to is_offset_error is a temporary fix to ignore offset 1 error
+                  results.remove(item)
+              else:
+                  item['Contents'] = item['Brand'] + ' returned an error.\n' + str(item['Contents'])
+
+      demisto.results(results)
+
+
+  def is_offset_error(item) -> bool:
+      '''error msg: 'Offset: 1' will not be displayed to Users
+         This method is temporary and will be removed
+         once XSUP-18208 issue is fixed.'''
+      if item['Contents'] and 'Offset' in item['Contents']:
+          return True
+      return False
+
+
+  def main():
+      file_reputation()
+
+
+  if __name__ in ('__main__', '__builtin__', 'builtins'):  # pragma: no cover
+      main()
+
+  register_module_line('FileReputation', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- enhancement
+type: python
