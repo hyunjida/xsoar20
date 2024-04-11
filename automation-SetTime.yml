@@ -1,0 +1,64 @@
+args:
+- default: true
+  description: Incident field name to set
+  name: fieldName
+  required: true
+comment: Fill the current time in a custom incident field
+commonfields:
+  id: SetTime
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.86272
+engineinfo: {}
+mainengineinfo: {}
+name: SetTime
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('SetTime', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+  from datetime import datetime
+
+
+  def set_time():
+
+      now = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S+00:00')
+
+      fieldName = demisto.args()['fieldName']
+
+      # Example format: '2018-02-02T22:58:21+02:00'
+
+      demisto.debug('[*] ' + fieldName + ' <- ' + now)
+
+      demisto.setContext(fieldName, now)
+
+      demisto.results(demisto.executeCommand("setIncident", {fieldName: now}))
+
+
+  def main():
+      set_time()
+
+
+  if __name__ in ('__main__', '__builtin__', 'builtins'):  # pragma: no cover
+      main()
+
+  register_module_line('SetTime', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags: []
+type: python
