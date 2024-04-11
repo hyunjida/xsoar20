@@ -1,0 +1,627 @@
+{
+	"cacheVersn": 0,
+	"definitionId": "",
+	"fromDate": "0001-01-01T00:00:00Z",
+	"fromDateLicense": "0001-01-01T00:00:00Z",
+	"fromServerVersion": "6.2.0",
+	"hidePivot": false,
+	"hideSearch": false,
+	"id": "Cost Optimization Playbooks",
+	"isCommon": true,
+	"itemVersion": "1.3.10",
+	"layout": [
+		{
+			"forceRange": false,
+			"h": 2,
+			"i": "4022a2d0-c36f-11eb-b24f-ffb4c998ecaa",
+			"id": "4022a2d0-c36f-11eb-b24f-ffb4c998ecaa",
+			"reflectDimensions": true,
+			"w": 3,
+			"widget": {
+				"Cache": null,
+				"cacheVersn": 0,
+				"category": "",
+				"commitMessage": "",
+				"created": "0001-01-01T00:00:00Z",
+				"dataType": "metrics",
+				"dateRange": {
+					"fromDate": "0001-01-01T00:00:00Z",
+					"fromDateLicense": "0001-01-01T00:00:00Z",
+					"period": {
+						"by": "",
+						"byFrom": "days",
+						"byTo": "",
+						"field": "",
+						"fromValue": 7,
+						"toValue": null
+					},
+					"toDate": "0001-01-01T00:00:00Z"
+				},
+				"definitionId": "",
+				"description": "Playbook runs",
+				"fromServerVersion": "",
+				"id": "number_of_used_playbooks",
+				"isPredefined": false,
+				"itemVersion": "",
+				"modified": "2021-05-20T19:57:26.164090289+09:00",
+				"name": "Playbook runs",
+				"packID": "",
+				"packName": "",
+				"params": {
+					"groupBy": [],
+					"keys": [
+						"sum|executionCount"
+					],
+					"tableColumns": []
+				},
+				"prevName": "Playbook runs",
+				"propagationLabels": [
+					"all"
+				],
+				"query": "type:playbook",
+				"shouldCommit": false,
+				"sizeInBytes": 0,
+				"toServerVersion": "",
+				"vcShouldIgnore": false,
+				"vcShouldKeepItemLegacyProdMachine": false,
+				"version": 5,
+				"widgetType": "trend"
+			},
+			"x": 6,
+			"y": 2
+		},
+		{
+			"forceRange": false,
+			"h": 2,
+			"i": "77b503f0-c36f-11eb-b24f-ffb4c998ecaa",
+			"id": "77b503f0-c36f-11eb-b24f-ffb4c998ecaa",
+			"reflectDimensions": true,
+			"w": 6,
+			"widget": {
+				"Cache": null,
+				"cacheVersn": 0,
+				"category": "",
+				"commitMessage": "",
+				"created": "0001-01-01T00:00:00Z",
+				"dataType": "metrics",
+				"dateRange": {
+					"fromDate": "0001-01-01T00:00:00Z",
+					"fromDateLicense": "0001-01-01T00:00:00Z",
+					"period": {
+						"by": "",
+						"byFrom": "days",
+						"byTo": "",
+						"field": "",
+						"fromValue": 7,
+						"toValue": null
+					},
+					"toDate": "0001-01-01T00:00:00Z"
+				},
+				"definitionId": "",
+				"fromServerVersion": "",
+				"id": "playbook-runs",
+				"isPredefined": false,
+				"itemVersion": "",
+				"modified": "2021-06-02T15:55:07.375417652+09:00",
+				"name": "Playbook runs",
+				"packID": "",
+				"packName": "",
+				"params": {
+					"groupBy": [
+						"name"
+					],
+					"keys": [
+						"sum|executionCount"
+					],
+					"limitType": "top",
+					"showOthers": true,
+					"tableColumns": [
+						{
+							"isDefault": true,
+							"key": "count",
+							"position": 0
+						},
+						{
+							"isDefault": true,
+							"key": "data",
+							"position": 1
+						},
+						{
+							"isDefault": true,
+							"key": "floatData",
+							"position": 2
+						},
+						{
+							"isDefault": true,
+							"key": "groups",
+							"position": 3
+						},
+						{
+							"isDefault": true,
+							"key": "name",
+							"position": 4
+						},
+						{
+							"isDefault": true,
+							"key": "pivot",
+							"position": 5
+						},
+						{
+							"isDefault": true,
+							"key": "color",
+							"position": 6
+						}
+					],
+					"valuesFormat": "abbreviated"
+				},
+				"prevName": "Playbook runs",
+				"propagationLabels": [
+					"all"
+				],
+				"query": "type:playbook",
+				"shouldCommit": false,
+				"size": 5,
+				"sizeInBytes": 0,
+				"toServerVersion": "",
+				"vcShouldIgnore": false,
+				"vcShouldKeepItemLegacyProdMachine": false,
+				"version": 6,
+				"widgetType": "pie"
+			},
+			"x": 0,
+			"y": 0
+		},
+		{
+			"forceRange": false,
+			"h": 2,
+			"i": "84883fc0-c36f-11eb-b24f-ffb4c998ecaa",
+			"id": "84883fc0-c36f-11eb-b24f-ffb4c998ecaa",
+			"reflectDimensions": true,
+			"w": 3,
+			"widget": {
+				"Cache": null,
+				"cacheVersn": 0,
+				"category": "",
+				"commitMessage": "",
+				"created": "0001-01-01T00:00:00Z",
+				"dataType": "metrics",
+				"dateRange": {
+					"fromDate": "0001-01-01T00:00:00Z",
+					"fromDateLicense": "0001-01-01T00:00:00Z",
+					"period": {
+						"by": "",
+						"byFrom": "days",
+						"byTo": "",
+						"field": "",
+						"fromValue": 7,
+						"toValue": null
+					},
+					"toDate": "0001-01-01T00:00:00Z"
+				},
+				"definitionId": "",
+				"description": "Average runtime for Playbooks",
+				"fromServerVersion": "",
+				"id": "total-average-playbook-runtime-in-seconds",
+				"isPredefined": false,
+				"itemVersion": "",
+				"modified": "2021-05-23T22:48:55.453348232+09:00",
+				"name": "Average runtime for Playbooks",
+				"packID": "",
+				"packName": "",
+				"params": {
+					"keys": [
+						"avg|duration"
+					],
+					"tableColumns": [],
+					"valuesFormat": "minutes"
+				},
+				"prevName": "Average runtime for Playbooks",
+				"propagationLabels": [
+					"all"
+				],
+				"query": "type:playbook",
+				"shouldCommit": false,
+				"sizeInBytes": 0,
+				"toServerVersion": "",
+				"vcShouldIgnore": false,
+				"vcShouldKeepItemLegacyProdMachine": false,
+				"version": 6,
+				"widgetType": "duration"
+			},
+			"x": 6,
+			"y": 0
+		},
+		{
+			"forceRange": false,
+			"h": 4,
+			"i": "a23bdb30-c36f-11eb-b24f-ffb4c998ecaa",
+			"id": "a23bdb30-c36f-11eb-b24f-ffb4c998ecaa",
+			"reflectDimensions": true,
+			"w": 3,
+			"widget": {
+				"Cache": null,
+				"cacheVersn": 0,
+				"category": "",
+				"commitMessage": "",
+				"created": "0001-01-01T00:00:00Z",
+				"dataType": "tasks",
+				"dateRange": {
+					"fromDate": "0001-01-01T00:00:00Z",
+					"fromDateLicense": "0001-01-01T00:00:00Z",
+					"period": {
+						"by": "",
+						"byFrom": "days",
+						"byTo": "",
+						"field": "",
+						"fromValue": 7,
+						"toValue": null
+					},
+					"toDate": "0001-01-01T00:00:00Z"
+				},
+				"definitionId": "",
+				"fromServerVersion": "",
+				"id": "top-users-closed-manual-tasks",
+				"isPredefined": false,
+				"itemVersion": "",
+				"modified": "2021-06-02T15:56:18.628090006+09:00",
+				"name": "Top Users Closed Manual Tasks",
+				"packID": "",
+				"packName": "",
+				"params": {
+					"groupBy": [
+						"completedBy"
+					],
+					"tableColumns": [
+						{
+							"isDefault": true,
+							"key": "count",
+							"position": 0
+						},
+						{
+							"isDefault": true,
+							"key": "data",
+							"position": 1
+						},
+						{
+							"isDefault": true,
+							"key": "floatData",
+							"position": 2
+						},
+						{
+							"isDefault": true,
+							"key": "groups",
+							"position": 3
+						},
+						{
+							"isDefault": true,
+							"key": "name",
+							"position": 4
+						},
+						{
+							"isDefault": true,
+							"key": "color",
+							"position": 5
+						},
+						{
+							"isDefault": true,
+							"key": "label",
+							"position": 6
+						}
+					],
+					"valuesFormat": "abbreviated"
+				},
+				"prevName": "Top Users Closed Manual Tasks",
+				"propagationLabels": [
+					"all"
+				],
+				"query": "automated:F",
+				"shouldCommit": false,
+				"sizeInBytes": 0,
+				"toServerVersion": "",
+				"vcShouldIgnore": false,
+				"vcShouldKeepItemLegacyProdMachine": false,
+				"version": 2,
+				"widgetType": "bar"
+			},
+			"x": 9,
+			"y": 0
+		},
+		{
+			"forceRange": false,
+			"h": 2,
+			"i": "22eddee0-c370-11eb-b24f-ffb4c998ecaa",
+			"id": "22eddee0-c370-11eb-b24f-ffb4c998ecaa",
+			"reflectDimensions": true,
+			"w": 6,
+			"widget": {
+				"Cache": null,
+				"cacheVersn": 0,
+				"category": "",
+				"commitMessage": "",
+				"created": "0001-01-01T00:00:00Z",
+				"dataType": "tasks",
+				"dateRange": {
+					"fromDate": "0001-01-01T00:00:00Z",
+					"fromDateLicense": "0001-01-01T00:00:00Z",
+					"period": {
+						"by": "",
+						"byFrom": "days",
+						"byTo": "",
+						"field": "",
+						"fromValue": 7,
+						"toValue": null
+					},
+					"toDate": "0001-01-01T00:00:00Z"
+				},
+				"definitionId": "",
+				"fromServerVersion": "",
+				"id": "task-execution-count",
+				"isPredefined": false,
+				"itemVersion": "",
+				"modified": "2021-06-02T15:59:50.499579051+09:00",
+				"name": "Task executions",
+				"packID": "",
+				"packName": "",
+				"params": {
+					"groupBy": [
+						"taskName"
+					],
+					"keys": [
+						"sum|1"
+					],
+					"limitType": "top",
+					"valuesFormat": "abbreviated"
+				},
+				"prevName": "Task executions",
+				"propagationLabels": [
+					"all"
+				],
+				"query": "",
+				"shouldCommit": false,
+				"size": 5,
+				"sizeInBytes": 0,
+				"sort": [
+					{
+						"asc": false,
+						"field": "taskName",
+						"fieldType": ""
+					}
+				],
+				"toServerVersion": "",
+				"vcShouldIgnore": false,
+				"vcShouldKeepItemLegacyProdMachine": false,
+				"version": 6,
+				"widgetType": "pie"
+			},
+			"x": 0,
+			"y": 2
+		},
+		{
+			"forceRange": false,
+			"h": 3,
+			"i": "7f5bd3d0-c370-11eb-b24f-ffb4c998ecaa",
+			"id": "7f5bd3d0-c370-11eb-b24f-ffb4c998ecaa",
+			"reflectDimensions": true,
+			"w": 6,
+			"widget": {
+				"Cache": null,
+				"cacheVersn": 0,
+				"category": "",
+				"commitMessage": "",
+				"created": "0001-01-01T00:00:00Z",
+				"dataType": "metrics",
+				"dateRange": {
+					"fromDate": "0001-01-01T00:00:00Z",
+					"fromDateLicense": "0001-01-01T00:00:00Z",
+					"period": {
+						"by": "",
+						"byFrom": "days",
+						"byTo": "",
+						"field": "",
+						"fromValue": 7,
+						"toValue": null
+					},
+					"toDate": "0001-01-01T00:00:00Z"
+				},
+				"definitionId": "",
+				"description": "Average runtime per Playbook (top 5)",
+				"fromServerVersion": "",
+				"id": "runtime-per-playbook",
+				"isPredefined": false,
+				"itemVersion": "",
+				"modified": "2021-05-23T22:52:07.959861189+09:00",
+				"name": "Average runtime per Playbook (top 5)",
+				"packID": "",
+				"packName": "",
+				"params": {
+					"groupBy": [
+						"name"
+					],
+					"keys": [
+						"avg|duration"
+					],
+					"limitType": "top",
+					"referenceLine": {
+						"type": "avg"
+					},
+					"showGraphValues": true,
+					"showOthers": false,
+					"tableColumns": [
+						{
+							"isDefault": true,
+							"key": "count",
+							"position": 0
+						},
+						{
+							"isDefault": true,
+							"key": "data",
+							"position": 1
+						},
+						{
+							"isDefault": true,
+							"key": "floatData",
+							"position": 2
+						},
+						{
+							"isDefault": true,
+							"key": "groups",
+							"position": 3
+						},
+						{
+							"isDefault": true,
+							"key": "name",
+							"position": 4
+						},
+						{
+							"isDefault": true,
+							"key": "color",
+							"position": 5
+						}
+					],
+					"valuesFormat": "days",
+					"xAxisLabel": "",
+					"yAxisLabel": ""
+				},
+				"prevName": "Average runtime per Playbook (top 5)",
+				"propagationLabels": [
+					"all"
+				],
+				"query": "type:playbook",
+				"shouldCommit": false,
+				"size": 5,
+				"sizeInBytes": 0,
+				"toServerVersion": "",
+				"vcShouldIgnore": false,
+				"vcShouldKeepItemLegacyProdMachine": false,
+				"version": 17,
+				"widgetType": "column"
+			},
+			"x": 0,
+			"y": 4
+		},
+		{
+			"forceRange": false,
+			"h": 3,
+			"i": "998d2650-c370-11eb-b24f-ffb4c998ecaa",
+			"id": "998d2650-c370-11eb-b24f-ffb4c998ecaa",
+			"reflectDimensions": true,
+			"w": 6,
+			"widget": {
+				"Cache": null,
+				"cacheVersn": 0,
+				"category": "",
+				"commitMessage": "",
+				"created": "0001-01-01T00:00:00Z",
+				"dataType": "metrics",
+				"dateRange": {
+					"fromDate": "0001-01-01T00:00:00Z",
+					"fromDateLicense": "0001-01-01T00:00:00Z",
+					"period": {
+						"by": "",
+						"byFrom": "days",
+						"byTo": "",
+						"field": "",
+						"fromValue": 7,
+						"toValue": null
+					},
+					"toDate": "0001-01-01T00:00:00Z"
+				},
+				"definitionId": "",
+				"fromServerVersion": "",
+				"id": "average-runtime-by-incident-type-per-playbook-top-5",
+				"isPredefined": false,
+				"itemVersion": "",
+				"modified": "2021-06-02T16:03:13.291852853+09:00",
+				"name": "Average runtime by Incident Type per Playbook (top 5)",
+				"packID": "",
+				"packName": "",
+				"params": {
+					"groupBy": [
+						"name",
+						"incidentType"
+					],
+					"keys": [
+						"avg|duration"
+					],
+					"referenceLine": {
+						"type": "avg"
+					},
+					"showGraphValues": true,
+					"showOthers": false,
+					"tableColumns": [
+						{
+							"isDefault": true,
+							"key": "count",
+							"position": 0
+						},
+						{
+							"isDefault": true,
+							"key": "data",
+							"position": 1
+						},
+						{
+							"isDefault": true,
+							"key": "floatData",
+							"position": 2
+						},
+						{
+							"isDefault": true,
+							"key": "groups",
+							"position": 3
+						},
+						{
+							"isDefault": true,
+							"key": "name",
+							"position": 4
+						},
+						{
+							"isDefault": true,
+							"key": "color",
+							"position": 5
+						}
+					],
+					"valuesFormat": "minutes",
+					"xAxisLabel": "Playbook name",
+					"yAxisLabel": ""
+				},
+				"prevName": "Average runtime by Incident Type per Playbook (top 5)",
+				"propagationLabels": [
+					"all"
+				],
+				"query": "type:playbook",
+				"shouldCommit": false,
+				"size": 5,
+				"sizeInBytes": 0,
+				"toServerVersion": "",
+				"vcShouldIgnore": false,
+				"vcShouldKeepItemLegacyProdMachine": false,
+				"version": 13,
+				"widgetType": "column"
+			},
+			"x": 6,
+			"y": 4
+		}
+	],
+	"locked": false,
+	"modulePage": false,
+	"name": "Cost Optimization Playbooks",
+	"owner": "",
+	"packID": "CommonDashboards",
+	"packName": "Common Dashboards",
+	"packPropagationLabels": [
+		"all"
+	],
+	"period": {
+		"by": "",
+		"byFrom": "days",
+		"byTo": "",
+		"field": "",
+		"fromValue": 7,
+		"toValue": null
+	},
+	"propagationLabels": [],
+	"system": true,
+	"toDate": "0001-01-01T00:00:00Z",
+	"toServerVersion": "",
+	"version": -1
+}
