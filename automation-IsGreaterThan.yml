@@ -1,0 +1,61 @@
+args:
+- default: true
+  description: First argument to compare.
+  name: first
+  required: true
+- description: Second argument to compare.
+  name: second
+  required: true
+comment: |-
+  Checks if one number(float) as bigger than the other(float)
+  Returns yes: if first > second
+  Returns no: if first <= second
+  Returns exception if one of the inputs is not a number
+commonfields:
+  id: IsGreaterThan
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: IsGreaterThan
+outputs:
+- contextPath: "yes"
+  description: if first > second
+- contextPath: "no"
+  description: if first <= second
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  // pack version: 1.14.2
+  first = parseFloat(args.first);
+  if (isNaN(first)) {
+      throw 'first is not valid: '+args.first;
+  }
+  second = parseFloat(args.second);
+  if (isNaN(second)) {
+      throw 'second is not valid: '+args.second;
+  }
+  if (first > second) {
+      return 'yes';
+  } else {
+      return 'no';
+  }
+scripttarget: 0
+system: true
+tags:
+- Utility
+- Condition
+type: javascript
