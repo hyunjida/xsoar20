@@ -1,0 +1,107 @@
+{
+	"cacheVersn": 0,
+	"close": null,
+	"definitionId": "",
+	"description": "",
+	"detached": false,
+	"details": null,
+	"detailsV2": null,
+	"edit": null,
+	"fromServerVersion": "",
+	"group": "indicator",
+	"id": "0967d75e-5adc-487f-8ade-7020fbdec59d",
+	"indicatorsDetails": {
+		"TypeName": "",
+		"tabs": null
+	},
+	"indicatorsQuickView": {
+		"TypeName": "",
+		"tabs": [
+			{
+				"id": "indicator-quick-view-info",
+				"name": "Info",
+				"sections": [
+					{
+						"h": 1,
+						"hideName": true,
+						"i": "indicator-quick-view-info-expirationStatus",
+						"maxW": 3,
+						"name": "Expiration Status",
+						"type": "expirationStatus",
+						"w": 1,
+						"x": 0,
+						"y": 0
+					},
+					{
+						"h": 2,
+						"i": "indicator-quick-view-info-reputationSources",
+						"maxW": 3,
+						"name": "Verdict",
+						"type": "reputationSources",
+						"w": 1,
+						"x": 0,
+						"y": 1
+					},
+					{
+						"displayType": "ROW",
+						"h": 2,
+						"hideItemTitleOnlyOne": true,
+						"i": "indicator-quick-view-info-tags-section",
+						"items": [
+							{
+								"endCol": 2,
+								"fieldId": "tags",
+								"height": 22,
+								"id": "indicator-quick-view-info-tags-field",
+								"index": 0,
+								"sectionItemType": "field",
+								"startCol": 0
+							}
+						],
+						"maxW": 3,
+						"minH": 1,
+						"name": "Tags",
+						"w": 1,
+						"x": 0,
+						"y": 3
+					},
+					{
+						"h": 2,
+						"i": "indicator-quick-view-info-relatedIncidents",
+						"maxW": 3,
+						"name": "Related Incidents",
+						"type": "relatedIncidents",
+						"w": 1,
+						"x": 0,
+						"y": 5
+					},
+					{
+						"h": 2,
+						"i": "indicator-quick-view-info-comments",
+						"maxW": 3,
+						"name": "Comments",
+						"type": "comments",
+						"w": 1,
+						"x": 0,
+						"y": 7
+					}
+				],
+				"type": "custom"
+			}
+		]
+	},
+	"itemVersion": "",
+	"locked": false,
+	"mobile": null,
+	"name": "e_e",
+	"packID": "",
+	"packName": "",
+	"propagationLabels": [
+		"all"
+	],
+	"quickView": null,
+	"quickViewV2": null,
+	"system": false,
+	"toServerVersion": "",
+	"version": -1
+}
