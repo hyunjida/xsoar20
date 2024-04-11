@@ -1,0 +1,272 @@
+{
+	"cacheVersn": 0,
+	"contextPath": "",
+	"contextValue": "",
+	"defaultMapping": {
+		"associations": {
+			"complex": {
+				"accessor": "Associations",
+				"filters": [],
+				"root": "Host",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"biosversion": {
+			"complex": {
+				"accessor": "BIOVersion",
+				"filters": [],
+				"root": "Host",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"blocked": {
+			"complex": {
+				"accessor": "Blocked",
+				"filters": [],
+				"root": "Host",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"devicemodel": {
+			"complex": {
+				"accessor": "Model",
+				"filters": [],
+				"root": "Host",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"dhcpserver": {
+			"complex": {
+				"accessor": "DHCPServer",
+				"filters": [],
+				"root": "Host",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"domainname": {
+			"complex": {
+				"accessor": "Domain",
+				"filters": [],
+				"root": "Host",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"indicatoridentification": {
+			"complex": {
+				"accessor": "ID",
+				"filters": [],
+				"root": "Host",
+				"transformers": [
+					{
+						"operator": "toUpperCase"
+					},
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"ipaddress": {
+			"complex": {
+				"accessor": "IP",
+				"filters": [],
+				"root": "Host",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"macaddress": {
+			"complex": {
+				"accessor": "MACAddress",
+				"filters": [],
+				"root": "Host",
+				"transformers": [
+					{
+						"operator": "toUpperCase"
+					},
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"memory": {
+			"complex": {
+				"accessor": "Memory",
+				"filters": [],
+				"root": "Host",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"operatingsystem": {
+			"complex": {
+				"accessor": "OS",
+				"filters": [],
+				"root": "Host",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"operatingsystemversion": {
+			"complex": {
+				"accessor": "OSVersion",
+				"filters": [],
+				"root": "Host",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"processor": {
+			"complex": {
+				"accessor": "Processor",
+				"filters": [],
+				"root": "Host",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"processors": {
+			"complex": {
+				"accessor": "Processors",
+				"filters": [],
+				"root": "Host",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"quarantined": {
+			"complex": {
+				"accessor": "Quarantined",
+				"filters": [],
+				"root": "Host",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"reportedby": {
+			"complex": {
+				"accessor": "ReportedBy",
+				"filters": [],
+				"root": "Host",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"tags": {
+			"complex": {
+				"accessor": "Tags",
+				"filters": [],
+				"root": "Host",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"threattypes": {
+			"complex": {
+				"accessor": "ThreatTypes",
+				"filters": [],
+				"root": "Host",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"trafficlightprotocol": {
+			"complex": {
+				"accessor": "TrafficLightProtocol",
+				"filters": [],
+				"root": "Host",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		}
+	},
+	"definitionId": "",
+	"details": "Host",
+	"disabled": false,
+	"enhancementScriptNames": [],
+	"excludedBrands": [],
+	"expiration": 0,
+	"file": false,
+	"fileHashesPriority": null,
+	"formatScript": "",
+	"fromServerVersion": "5.5.0",
+	"id": "hostRep",
+	"itemVersion": "3.4.1",
+	"layout": "hostRep",
+	"legacyNames": null,
+	"locked": false,
+	"manualMapping": null,
+	"mergeContext": false,
+	"packID": "CommonTypes",
+	"packName": "Common Types",
+	"packPropagationLabels": [
+		"all"
+	],
+	"propagationLabels": [],
+	"regex": "",
+	"reputationCommand": "",
+	"reputationScriptName": "",
+	"shouldShareComments": false,
+	"system": true,
+	"toServerVersion": "",
+	"updateAfter": 0,
+	"version": -1
+}
