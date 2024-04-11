@@ -1,0 +1,59 @@
+{
+	"Cache": null,
+	"cacheVersn": 0,
+	"category": "",
+	"dataType": "scripts",
+	"dateRange": {
+		"fromDate": "0001-01-01T00:00:00Z",
+		"fromDateLicense": "0001-01-01T00:00:00Z",
+		"period": {
+			"by": "",
+			"byFrom": "",
+			"byTo": "",
+			"field": "",
+			"fromValue": null,
+			"toValue": null
+		},
+		"toDate": "0001-01-01T00:00:00Z"
+	},
+	"definitionId": "",
+	"fromServerVersion": "6.2.0",
+	"id": "26bd7fe1-5ef1-45bf-809f-14048f89f917",
+	"isPredefined": true,
+	"itemVersion": "1.2.48",
+	"name": "Feeds Errors",
+	"packID": "CommonWidgets",
+	"packName": "Common Widgets",
+	"packPropagationLabels": [
+		"all"
+	],
+	"params": {
+		"tableColumns": [
+			{
+				"displayed": true,
+				"isDefault": true,
+				"key": "Brand"
+			},
+			{
+				"displayed": true,
+				"isDefault": true,
+				"key": "Instance"
+			},
+			{
+				"displayed": true,
+				"isDefault": true,
+				"key": "Instance Last Modified Time"
+			},
+			{
+				"displayed": true,
+				"isDefault": true,
+				"key": "Error Information"
+			}
+		]
+	},
+	"propagationLabels": [],
+	"query": "FeedIntegrationErrorWidget",
+	"toServerVersion": "",
+	"version": -1,
+	"widgetType": "table"
+}
