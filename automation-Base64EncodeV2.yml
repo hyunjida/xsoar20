@@ -1,0 +1,68 @@
+args:
+- description: The input to encode using Base64 format.
+  name: input
+  required: true
+comment: Encodes an input to Base64 format.
+commonfields:
+  id: Base64EncodeV2
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.86272
+engineinfo: {}
+mainengineinfo: {}
+name: Base64EncodeV2
+outputs:
+- contextPath: Base64.encoded
+  description: The input encoded as Base64 format.
+  type: string
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('Base64EncodeV2', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+
+
+  import base64
+
+
+  def encode(input):
+      input_bytes = input.encode('utf-8')
+      res = str(base64.b64encode(input_bytes))
+      res = res.split('\'')[1]
+      outputs = {
+          'Base64': {
+              'encoded': res
+          }
+      }
+      return res, outputs
+
+
+  if __name__ in ('__main__', 'builtins', '__builtin__'):
+      try:
+          input = demisto.args().get('input')
+          return_outputs(*encode(input))
+      except Exception as e:
+          return_error('Error occurred while running the command. Exception info:\n' + str(e))
+
+  register_module_line('Base64EncodeV2', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- Utility
+- incident-action-button
+type: python
