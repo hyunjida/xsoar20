@@ -1,0 +1,287 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 2.6.15
+    packID: CommonPlaybooks
+    packName: Common Playbooks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+deprecated: true
+description: |-
+  Deprecated. Use `Get File Sample From Path - Generic V3` instead. Returns a file sample to the war-room from a path on an endpoint using one or more integrations
+
+  inputs:
+  * UseD2 - if "True", use Demisto Dissolvable Agent (D2) to return the file (default: False)
+id: get_file_sample_from_path_-_generic
+inputs:
+- description: ""
+  key: UseD2
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: "no"
+- description: ""
+  key: Hostname
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: ${Endpoint.Hostname}
+- description: ""
+  key: Path
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: ${File.Path}
+name: Get File Sample From Path - Generic
+outputs:
+- contextPath: File
+  description: The file to sample.
+  type: unknown
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "1"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 5d887731-fb71-4226-872c-a9e8dbddac42
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: 5d887731-fb71-4226-872c-a9e8dbddac42
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 50
+        }
+      }
+  "1":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: inputs.UseD2
+          operator: isEqualString
+          right:
+            value:
+              simple: "yes"
+      label: "yes"
+    continueonerrortype: ""
+    id: "1"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "11"
+      "yes":
+      - "10"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      left:
+        simple: ${inputs.UseD2}
+      right:
+        simple: "True"
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Yes if we want to use D2 agent to get the file
+      id: 8adb1ff3-5400-4f88-8a2b-4511ae8303f5
+      iscommand: false
+      name: Use D2 agent?
+      type: condition
+      version: -1
+    taskid: 8adb1ff3-5400-4f88-8a2b-4511ae8303f5
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 195
+        }
+      }
+  "8":
+    continueonerrortype: ""
+    id: "8"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: f81d6908-8ce9-452b-8dde-689f44256933
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: f81d6908-8ce9-452b-8dde-689f44256933
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 690
+        }
+      }
+  "10":
+    continueonerrortype: ""
+    id: "10"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 0
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "8"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      Credentials:
+        simple: Admin
+      Hostname:
+        simple: ${Endpoint.Hostname}
+      Path:
+        simple: ${File.Path}
+    separatecontext: false
+    skipunavailable: true
+    task:
+      brand: ""
+      description: |-
+        Returns a file sample to the war-room from a path on an endpoint using Demisto Dissolvable Agent (D2)
+
+        Input:
+        * Credentials - credentials to use when trying to deploy Demisto Dissolvable Agent (D2)  (default: Admin)
+        * ${Endpoint.Hostname} - deploy agent on target endpoint
+        * ${File.Path} - file's path to collect
+      id: 0245733c-b0c2-418e-8d68-a58a2c7ffe1a
+      iscommand: false
+      name: Get File Sample From Path - D2
+      playbookName: Get File Sample From Path - D2
+      type: playbook
+      version: -1
+    taskid: 0245733c-b0c2-418e-8d68-a58a2c7ffe1a
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 1,
+          "y": 355
+        }
+      }
+  "11":
+    continueonerrortype: ""
+    id: "11"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "12"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 33162da0-6e16-4324-8e6e-bcbd0e74f463
+      iscommand: false
+      name: Use 3rd party products
+      type: title
+      version: -1
+    taskid: 33162da0-6e16-4324-8e6e-bcbd0e74f463
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 370
+        }
+      }
+  "12":
+    continueonerrortype: ""
+    id: "12"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 0
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "8"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      Hostname:
+        simple: ${inputs.Hostname}
+      Path:
+        simple: ${inputs.Path}
+    separatecontext: true
+    skipunavailable: true
+    task:
+      brand: ""
+      description: Returns a file sample to the war-room from a path on an endpoint
+        using Carbon Black Enterprise Response
+      id: bad94136-3f5d-49d7-800d-e21389ae1baa
+      iscommand: false
+      name: Get File Sample From Path - Carbon Black Enterprise Response
+      playbookName: Get File Sample From Path - Carbon Black Enterprise Response
+      type: playbook
+      version: -1
+    taskid: bad94136-3f5d-49d7-800d-e21389ae1baa
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 516
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 705,
+        "width": 859,
+        "x": 1,
+        "y": 50
+      }
+    }
+  }
