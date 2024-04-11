@@ -1,0 +1,43 @@
+{
+	"Cache": null,
+	"cacheVersn": 0,
+	"category": "",
+	"dataType": "incidents",
+	"dateRange": {
+		"fromDate": "0001-01-01T00:00:00Z",
+		"fromDateLicense": "0001-01-01T00:00:00Z",
+		"period": {
+			"by": "",
+			"byFrom": "days",
+			"byTo": "",
+			"field": "",
+			"fromValue": 7,
+			"toValue": null
+		},
+		"toDate": "0001-01-01T00:00:00Z"
+	},
+	"definitionId": "",
+	"fromServerVersion": "5.0.0",
+	"id": "mttr-by-type-occurred",
+	"isPredefined": true,
+	"itemVersion": "1.2.48",
+	"name": "MTTR Occurred by Type",
+	"packID": "CommonWidgets",
+	"packName": "Common Widgets",
+	"packPropagationLabels": [
+		"all"
+	],
+	"params": {
+		"groupBy": [
+			"rawType"
+		],
+		"keys": [
+			"avg|(closed - occurred) / 3600"
+		]
+	},
+	"propagationLabels": [],
+	"query": "-category:job and status:closed",
+	"toServerVersion": "",
+	"version": -1,
+	"widgetType": "bar"
+}
