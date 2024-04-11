@@ -1,0 +1,399 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 2.6.15
+    packID: CommonPlaybooks
+    packName: Common Playbooks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: Pauses execution until the date and time that was specified in the plabyook
+  input is reached.
+id: Wait Until Datetime
+inputs:
+- description: 'The date and time to wait until before finishing the playbook. Should
+    be in ISO-8601 format. For example: 2019-11-13T15:33:10.314406457Z'
+  key: DatetimeToWaitUntil
+  playbookInputQuery: null
+  required: true
+  value: {}
+name: Wait Until Datetime
+outputs: []
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "1"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 5fbf5212-c63a-4baa-8a87-2d92e2943aa0
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: 5fbf5212-c63a-4baa-8a87-2d92e2943aa0
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 50
+        }
+      }
+  "1":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.DatetimeToWaitUntil
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "1"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "2"
+      "yes":
+      - "11"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks whether the DateTimeToWaitUntil input was configured.
+      id: d21be7af-0944-4dad-8329-76a247d3bcae
+      iscommand: false
+      name: Were a future date and time configured?
+      type: condition
+      version: -1
+    taskid: d21be7af-0944-4dad-8329-76a247d3bcae
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 180
+        }
+      }
+  "2":
+    continueonerrortype: ""
+    id: "2"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "8"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: cdcaeadb-f4d9-4faa-8b5a-3bf0ed91ff6d
+      iscommand: false
+      name: No Future Datetime
+      type: title
+      version: -1
+    taskid: cdcaeadb-f4d9-4faa-8b5a-3bf0ed91ff6d
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 970,
+          "y": 960
+        }
+      }
+  "3":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.DatetimeToWaitUntil
+          operator: isAfter
+          right:
+            iscontext: true
+            value:
+              complex:
+                root: DatetimeToWaitFrom
+      label: Future
+    continueonerrortype: ""
+    id: "3"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "2"
+      Future:
+      - "6"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Determines if the datetime to wait until is now, in the future
+        or in the past.
+      id: dfa02b41-5472-4879-8259-fec9aeacbe53
+      iscommand: false
+      name: For when is the datetime specified?
+      type: condition
+      version: -1
+    taskid: dfa02b41-5472-4879-8259-fec9aeacbe53
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 710
+        }
+      }
+  "6":
+    continueonerrortype: ""
+    id: "6"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "7"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      end_time:
+        complex:
+          root: inputs.DatetimeToWaitUntil
+          transformers:
+          - operator: Stringify
+          - args:
+              limit: {}
+              replaceWith: {}
+              toReplace:
+                value:
+                  simple: Z
+            operator: replace
+      start_time:
+        complex:
+          root: DatetimeToWaitFrom
+          transformers:
+          - operator: Stringify
+          - args:
+              limit: {}
+              replaceWith: {}
+              toReplace:
+                value:
+                  simple: Z
+            operator: replace
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Calculates the amount of time, in minutes, to wait until the datetime
+        is reached.
+      id: bb5fa066-c4a9-40ab-8281-7b552f83ff4a
+      iscommand: false
+      name: Calculate time to wait
+      script: CalculateTimeDifference
+      type: regular
+      version: -1
+    taskid: bb5fa066-c4a9-40ab-8281-7b552f83ff4a
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 945
+        }
+      }
+  "7":
+    continueonerrortype: ""
+    id: "7"
+    ignoreworker: true
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "8"
+    note: false
+    quietmode: 0
+    reputationcalc: 1
+    scriptarguments:
+      seconds:
+        complex:
+          accessor: Difference
+          root: Time
+          transformers:
+          - args:
+              by:
+                value:
+                  simple: "60"
+            operator: multiply
+          - operator: round
+          - operator: Stringify
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Pauses the execution for the necessary amount of time.
+      id: 4cb07489-19f4-4756-8c0b-e9fac2d97124
+      iscommand: false
+      name: Wait the time needed
+      script: Sleep
+      type: regular
+      version: -1
+    taskid: 4cb07489-19f4-4756-8c0b-e9fac2d97124
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 1110
+        }
+      }
+  "8":
+    continueonerrortype: ""
+    id: "8"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 72b956fc-c67d-49a2-8b74-faac5b59574c
+      iscommand: false
+      name: Continue
+      type: title
+      version: -1
+    taskid: 72b956fc-c67d-49a2-8b74-faac5b59574c
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 1290
+        }
+      }
+  "11":
+    continueonerrortype: ""
+    id: "11"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "12"
+    note: false
+    quietmode: 0
+    reputationcalc: 1
+    scriptarguments:
+      dateFormat:
+        simple: ISO
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Retrieves the current date and time.
+      id: 2a4b6cf6-c4fc-44dd-818f-b2f7d53ac3a1
+      iscommand: false
+      name: Get current time
+      script: GetTime
+      type: regular
+      version: -1
+    taskid: 2a4b6cf6-c4fc-44dd-818f-b2f7d53ac3a1
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 360
+        }
+      }
+  "12":
+    continueonerrortype: ""
+    id: "12"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "3"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      key:
+        simple: DatetimeToWaitFrom
+      value:
+        complex:
+          root: TimeNow
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Saves the current time as the time to start waiting from.
+      id: 250a61da-b6ee-4489-89b7-8a4e76495f05
+      iscommand: false
+      name: Set the from-time to the current time
+      script: Set
+      type: regular
+      version: -1
+    taskid: 250a61da-b6ee-4489-89b7-8a4e76495f05
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 530
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {
+      "1_11_yes": 0.48,
+      "1_2_#default#": 0.27,
+      "3_2_#default#": 0.52,
+      "3_6_Future": 0.58
+    },
+    "paper": {
+      "dimensions": {
+        "height": 1305,
+        "width": 900,
+        "x": 450,
+        "y": 50
+      }
+    }
+  }
