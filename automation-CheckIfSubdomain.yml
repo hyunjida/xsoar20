@@ -1,0 +1,81 @@
+args:
+- description: A list of domains to check if they are subdomains of the internal assets.
+  isArray: true
+  name: left
+  required: true
+- description: A list of internal assets (for example, mycompany.com)
+  isArray: true
+  name: right
+  required: true
+comment: Checks whether a given domain is a subdomain of one of the listed domains.
+commonfields:
+  id: CheckIfSubdomain
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.5.0
+    itemVersion: 1.2.61
+    packID: FiltersAndTransformers
+    packName: Filters And Transformers
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.86272
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: CheckIfSubdomain
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('CheckIfSubdomain', 'start', __line__())
+  ### pack version: 1.2.61
+
+
+  import tldextract
+
+
+  def main():
+      """
+      Checks if a given domain (or domains) are subdomains of the specified internal domains.
+
+      Args:
+          internal_domains: List of domains defined by the user as internal
+          domains: List of domains to check if they are subdomains of the internal ones.
+
+      Returns:
+          Bool: True if domain is a subdomain of one of the internal domains
+      """
+
+      internal_domains = argToList(demisto.args()['right'])
+      domains = argToList(demisto.args()['left'])
+
+      try:
+
+          no_fetch_extract = tldextract.TLDExtract(suffix_list_urls=None, cache_dir=None)
+
+          for domain in domains:
+              ext = no_fetch_extract(domain)
+              top_domain_found = any(ext.registered_domain == internal_domain.replace('*.', '')
+                                     for internal_domain in internal_domains)
+
+              demisto.results(top_domain_found)
+
+      except Exception as e:
+          return_error(f'Failed to execute CheckIfSubdomain. Error: {str(e)}')
+
+
+  if __name__ == "__builtin__" or __name__ == "builtins":
+      main()
+
+  register_module_line('CheckIfSubdomain', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- filter
+type: python
