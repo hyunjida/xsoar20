@@ -1,0 +1,134 @@
+{
+	"cacheVersn": 0,
+	"contextPath": "",
+	"contextValue": "",
+	"defaultMapping": {
+		"associations": {
+			"complex": {
+				"accessor": "Associations",
+				"filters": [],
+				"root": "RegistryKey",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"namefield": {
+			"complex": {
+				"accessor": "Name",
+				"filters": [],
+				"root": "RegistryKey",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"path": {
+			"complex": {
+				"accessor": "Path",
+				"filters": [],
+				"root": "RegistryKey",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"registryvalue": {
+			"complex": {
+				"accessor": "Value",
+				"filters": [],
+				"root": "RegistryKey",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"reportedby": {
+			"complex": {
+				"accessor": "ReportedBy",
+				"filters": [],
+				"root": "RegistryKey",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"tags": {
+			"complex": {
+				"accessor": "Tags",
+				"filters": [],
+				"root": "RegistryKey",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"threattypes": {
+			"complex": {
+				"accessor": "ThreatTypes",
+				"filters": [],
+				"root": "RegistryKey",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"trafficlightprotocol": {
+			"complex": {
+				"accessor": "TrafficLightProtocol",
+				"filters": [],
+				"root": "RegistryKey",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		}
+	},
+	"definitionId": "",
+	"details": "Registry Key",
+	"disabled": false,
+	"enhancementScriptNames": [],
+	"excludedBrands": [],
+	"expiration": 0,
+	"file": false,
+	"fileHashesPriority": null,
+	"formatScript": "",
+	"fromServerVersion": "5.5.0",
+	"id": "registryKey",
+	"itemVersion": "3.4.1",
+	"layout": "registryKey",
+	"legacyNames": null,
+	"locked": false,
+	"manualMapping": null,
+	"mergeContext": false,
+	"packID": "CommonTypes",
+	"packName": "Common Types",
+	"packPropagationLabels": [
+		"all"
+	],
+	"propagationLabels": [],
+	"regex": "",
+	"reputationCommand": "",
+	"reputationScriptName": "",
+	"shouldShareComments": false,
+	"system": true,
+	"toServerVersion": "",
+	"updateAfter": 0,
+	"version": -1
+}
