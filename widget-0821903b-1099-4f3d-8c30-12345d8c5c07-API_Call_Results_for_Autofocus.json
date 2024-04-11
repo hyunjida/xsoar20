@@ -1,0 +1,106 @@
+{
+	"Cache": null,
+	"cacheVersn": 0,
+	"category": "",
+	"dataType": "metrics",
+	"dateRange": {
+		"fromDate": "0001-01-01T00:00:00Z",
+		"fromDateLicense": "0001-01-01T00:00:00Z",
+		"period": {
+			"by": "",
+			"byFrom": "hours",
+			"byTo": "days",
+			"field": "",
+			"fromValue": 3,
+			"toValue": 0
+		},
+		"toDate": "0001-01-01T00:00:00Z"
+	},
+	"definitionId": "",
+	"fromServerVersion": "6.10.0",
+	"id": "0821903b-1099-4f3d-8c30-12345d8c5c07",
+	"isPredefined": true,
+	"itemVersion": "2.2.0",
+	"name": "API Call Results for Autofocus",
+	"packID": "AutoFocus",
+	"packName": "AutoFocus by Palo Alto Networks",
+	"packPropagationLabels": [
+		"all"
+	],
+	"params": {
+		"customGroupBy": [
+			null,
+			{
+				"ConnectionError": {
+					"conditions": [
+						[
+							{
+								"field": "apiResponseType",
+								"operator": "isEqualCaseString",
+								"right": "ConnectionError",
+								"type": "string"
+							}
+						]
+					],
+					"name": "ConnectionError"
+				},
+				"General Error": {
+					"conditions": [
+						[
+							{
+								"field": "apiResponseType",
+								"operator": "isEqualCaseString",
+								"right": "GeneralError",
+								"type": "string"
+							}
+						]
+					],
+					"name": "General Error"
+				},
+				"Quota Error": {
+					"conditions": [
+						[
+							{
+								"field": "apiResponseType",
+								"operator": "isEqualCaseString",
+								"right": "QuotaError",
+								"type": "string"
+							}
+						]
+					],
+					"name": "Quota Error"
+				},
+				"Success": {
+					"conditions": [
+						[
+							{
+								"field": "apiResponseType",
+								"operator": "isEqualCaseString",
+								"right": "Successful",
+								"type": "string"
+							}
+						]
+					],
+					"name": "Success"
+				}
+			}
+		],
+		"groupBy": [
+			"modified(h)",
+			"apiResponseType"
+		],
+		"keys": [
+			"sum|totalAPICalls"
+		],
+		"referenceLine": {},
+		"timeFrame": "hours",
+		"valuesFormat": "abbreviated",
+		"xAxisLabel": "Time",
+		"yAxisLabel": "Request Counts"
+	},
+	"propagationLabels": [],
+	"query": "type:integration and name:\"AutoFocus V2\"",
+	"toServerVersion": "",
+	"version": -1,
+	"widgetType": "line"
+}
