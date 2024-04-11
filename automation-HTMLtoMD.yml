@@ -1,0 +1,89 @@
+args:
+- default: true
+  description: HTML to convert to Markdown.
+  name: html
+  required: true
+comment: Converts HTML to Markdown.
+commonfields:
+  id: HTMLtoMD
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/btfl-soup:1.0.1.86352
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: HTMLtoMD
+outputs:
+- contextPath: HTMLtoMD.Original
+  description: The original HTML that was converted to Markdown.
+  type: String
+- contextPath: HTMLtoMD.Result
+  description: The Markdown that was converted from the passed HTML.
+  type: String
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('HTMLtoMD', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+  from markdownify import markdownify as md
+
+
+  def html_to_md_command(args):
+      """
+      Converts HTML to MD formatted string.
+      :type args: ``dict``
+      :param args: Demisto args object.
+
+      :rtype: ``tuple``
+      :return: Tuple of Demisto response parts.
+      """
+      html = str(args.get('html', ''))
+      markdown = md(html)
+      result = {
+          "Original": html,
+          "Result": str(markdown)
+      }
+      outputs = {
+          "HTMLtoMD(val.Original == obj.Original)": result
+      }
+      return result, markdown, outputs
+
+
+  def main():
+      try:
+          args = demisto.args()
+          result, markdown, outputs = html_to_md_command(args)
+          demisto.results({
+              'Type': entryTypes['note'],
+              'ContentsFormat': formats['markdown'],
+              'Contents': result,
+              'HumanReadable': markdown,
+              'EntryContext': outputs
+          })
+      except Exception as expt:
+          return_error(f'Failed to execute HTMLtoMD script. Error: {str(expt)}')
+
+
+  if __name__ in ('__main__', '__builtin__', 'builtins'):
+      main()
+
+  register_module_line('HTMLtoMD', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags: []
+type: python
