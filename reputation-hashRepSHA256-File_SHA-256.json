@@ -1,0 +1,39 @@
+{
+	"cacheVersn": 0,
+	"contextPath": "File(val.SHA256 \u0026\u0026 val.SHA256 === obj.SHA256)",
+	"contextValue": "SHA256",
+	"defaultMapping": null,
+	"definitionId": "",
+	"details": "File SHA-256",
+	"disabled": true,
+	"enhancementScriptNames": [
+		"FileReputation"
+	],
+	"excludedBrands": null,
+	"expiration": 0,
+	"file": false,
+	"fileHashesPriority": null,
+	"formatScript": "",
+	"fromServerVersion": "5.0.0",
+	"id": "hashRepSHA256",
+	"itemVersion": "3.4.1",
+	"layout": "",
+	"legacyNames": null,
+	"locked": false,
+	"manualMapping": null,
+	"mergeContext": false,
+	"packID": "CommonTypes",
+	"packName": "Common Types",
+	"packPropagationLabels": [
+		"all"
+	],
+	"propagationLabels": [],
+	"regex": "\\b[a-fA-F\\d]{64}\\b",
+	"reputationCommand": "file",
+	"reputationScriptName": "",
+	"shouldShareComments": false,
+	"system": true,
+	"toServerVersion": "",
+	"updateAfter": 0,
+	"version": -1
+}
