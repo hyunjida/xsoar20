@@ -1,0 +1,109 @@
+args:
+- description: First array of strings to compare.
+  isArray: true
+  name: string_A
+  required: true
+- description: Second array of strings to compare.
+  isArray: true
+  name: string_B
+  required: true
+- defaultValue: "0.1"
+  description: The similarity threshold to show results for, a value between 0 < x
+    >1.
+  name: similarity_threshold
+comment: This automation calculates the similarity ratio between every string in 2
+  different arrays and outputs a decimal value between 0.0 and 1.0 (1.0 if the sequences
+  are identical, and 0.0 if they don't have anything in common).
+commonfields:
+  id: StringSimilarity
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.9.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.78960
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: StringSimilarity
+outputs:
+- contextPath: StringSimilarity.SimilarityScore
+  description: Similarity score - a value between 1.0 if the sequences are identical,
+    and 0.0 if they have nothing in common.
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('StringSimilarity', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+  import difflib
+
+
+  def stringSimilarity(first_array: str, second_array: str, similarity_threshold: float):
+      """
+      Calculate the similarity score between two strings using the SequenceMatcher.
+
+      The function calculates the similarity ratio between the provided 'first_string' and 'second_string'
+      using the SequenceMatcher from the 'difflib' library. If the similarity ratio is greater than or equal
+      to the specified 'similarity_threshold', a CommandResults object containing the similarity score
+      and the input strings is returned.
+
+      Args:
+          first_string (str): The first string to compare.
+          second_string (str): The second string to compare.
+          similarity_threshold (float): The minimum similarity threshold required for a match.
+
+      Returns:
+          CommandResults: A CommandResults object with the similarity score and input strings if the
+                          similarity ratio is greater than or equal to the 'similarity_threshold'.
+
+      Raises:
+          ValueError: If the similarity ratio is below the 'similarity_threshold', a ValueError is raised
+                      with a message indicating that no similarity score is calculated.
+      """
+
+      results = []
+      for string_a in first_array:
+          for string_b in second_array:
+              similarity_ratio = difflib.SequenceMatcher(None, string_a, string_b).ratio()
+              if similarity_ratio >= float(similarity_threshold):
+                  results.append({
+                      "StringA": string_a,
+                      "StringB": string_b,
+                      "SimilarityScore": similarity_ratio
+                  })
+      if not results:
+          return None
+      return CommandResults("StringSimilarity", ["StringA", "StringB"], results)
+
+
+  def main():
+      similarity_threshold = demisto.getArg('similarity_threshold')
+      first_array = argToList(demisto.getArg('string_A'))
+      second_array = argToList(demisto.getArg('string_B'))
+      try:
+          results = stringSimilarity(first_array, second_array, similarity_threshold)
+          return_results(results)
+      except Exception as e:
+          return_error(f'Failed to check string similarity. Problem: {str(e)}')
+
+
+  if __name__ in ["__builtin__", "builtins", '__main__']:
+      main()
+
+  register_module_line('StringSimilarity', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags: []
+type: python
