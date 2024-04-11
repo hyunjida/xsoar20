@@ -1,0 +1,88 @@
+args:
+- description: Value to split
+  name: value
+  required: true
+- description: Delimiter to cut the string by. Pass '' to set delimiter to be empty
+    string
+  name: delimiter
+  required: true
+- description: 'Comma separated field numbers (e.g.: 1,5,7)'
+  isArray: true
+  name: fields
+  required: true
+comment: |
+  Cut a string by delimiter and return specific fields.
+  Example
+  =================
+  input: "A-B-C-D-E"
+  delimiter: "-"
+  fields: "1,5"
+
+  return: "A-E"
+commonfields:
+  id: Cut
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.2.61
+    packID: FiltersAndTransformers
+    packName: Filters And Transformers
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.86272
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: Cut
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('Cut', 'start', __line__())
+  ### pack version: 1.2.61
+
+
+
+
+  def cut(value, fields, delim):
+
+      if delim == "''":
+          delim = ""
+
+      data = value.split(delim)
+      fields = [int(_) for _ in fields.split(",")]
+
+      max_index = max(fields)
+      if len(data) < max_index:
+          raise Exception("Invalid field index {}, should be between 1 to {}.".format(max_index, len(data)))
+
+      return delim.join([str(data[i - 1]) for i in fields])
+
+
+  def main():
+      try:
+          args = demisto.args()
+          value = args.get("value")
+          fields = args.get("fields")
+          delim = args.get("delimiter")
+          return_results(cut(value, fields, delim))
+      except Exception as e:
+          return_error(f'Failed to execute Cut. Error: {str(e)}', e)
+
+
+  if __name__ in ('__main__', '__builtin__', 'builtins'):
+      main()
+
+  register_module_line('Cut', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- transformer
+- string
+type: python
