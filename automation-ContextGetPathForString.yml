@@ -1,0 +1,65 @@
+args:
+- description: Path in context to search the string in. If path is not given, search
+    will be in the whole context.
+  name: path
+- description: String to search for in context
+  name: str
+  required: true
+comment: Searches for string in context and returns context path, returns null if
+  not found.
+commonfields:
+  id: ContextGetPathForString
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: ContextGetPathForString
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |+
+  // pack version: 1.14.2
+  var path = args.path
+  var str = args.str;
+  var flat = {};
+
+  function searchString(obj) {
+      flattenFields(obj,undefined,flat);
+      keysArr = Object.keys(flat);
+      for (i = 0; i < keysArr.length; i++) {
+          if (flat[keysArr[i]] === str) {
+              return keysArr[i]
+          }
+      }
+      return null;
+  }
+
+  if (!path) {
+      return searchString(invContext);
+  }
+
+  var contextObject = dq(invContext, path);
+
+  if (!contextObject) {
+      throw 'Path ' + path + ' is not in the context.';
+  }
+
+  return searchString(contextObject);
+
+
+scripttarget: 0
+system: true
+tags: []
+type: javascript
