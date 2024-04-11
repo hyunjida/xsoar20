@@ -1,0 +1,794 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.5.0
+    itemVersion: 2.6.15
+    packID: CommonPlaybooks
+    packName: Common Playbooks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: |-
+  This playbook searches for failed logon on a specific user by querying logs from different sources.
+
+  Supported Integrations:
+  -Splunk
+  -QRadar
+  -Azure Log Analytics.
+id: SIEM - Search for Failed logins
+inputs:
+- description: Splunk's index name in which to search. Default is "*" - All.
+  key: SplunkIndex
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: '*'
+- description: The earliest time for the Splunk search query.
+  key: SplunkEarliestTime
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: -1d
+- description: The latest time for the Splunk search query.
+  key: SplunkLatestTime
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: now
+- description: 'The Search Time for the QRadar search query. for example:  Last 1
+    days'
+  key: QRadarSearchTime
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: Last 1 days
+- description: 'The Search Time for the Azure Log Analytics search query. for example:
+    ago(1d)'
+  key: AzureSearchTime
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: ago(1d)
+- description: User name.
+  key: Username
+  playbookInputQuery: null
+  required: false
+  value: {}
+name: SIEM - Search for Failed logins
+outputs:
+- contextPath: NumOfSiemFailedLogon
+  description: Number of failed login from Siem.
+  type: unknown
+- contextPath: QRadar.SearchEvents
+  description: The result of the QRadar search.
+- contextPath: Splunk.Result
+  description: The results of the Splunk search. The results are a JSON array, in
+    which each item is a Splunk event.
+- contextPath: AzureFailedLogonLogs
+  description: The result of the Azure Log Analytics search.
+  type: unknown
+quiet: true
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "3"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: ffe1835b-ae14-4728-88fb-2feb4bbfcf2c
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: ffe1835b-ae14-4728-88fb-2feb4bbfcf2c
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": -810,
+          "y": 170
+        }
+      }
+  "1":
+    continueonerrortype: ""
+    id: "1"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "5"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: db1d4f2f-0320-4836-8f7b-9bc2af367ca3
+      iscommand: false
+      name: Splunk
+      type: title
+      version: -1
+    taskid: db1d4f2f-0320-4836-8f7b-9bc2af367ca3
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 230,
+          "y": 550
+        }
+      }
+  "2":
+    continueonerrortype: ""
+    id: "2"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "24"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: a56e6b38-5c88-4401-83b8-56fa0c6c1fb7
+      iscommand: false
+      name: QRadar
+      type: title
+      version: -1
+    taskid: a56e6b38-5c88-4401-83b8-56fa0c6c1fb7
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": -440,
+          "y": 550
+        }
+      }
+  "3":
+    conditions:
+    - condition:
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                accessor: state
+                filters:
+                - - left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: inList
+                    right:
+                      value:
+                        simple: QRadar,QRadar_v2,QRadar v3
+                root: modules
+          operator: isEqualString
+          right:
+            value:
+              simple: active
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.Username
+          operator: isNotEmpty
+      label: QRadar
+    - condition:
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                accessor: state
+                filters:
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: SplunkPy
+                root: modules
+          operator: isEqualString
+          right:
+            value:
+              simple: active
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.Username
+          operator: isNotEmpty
+      label: Splunk
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: state
+                filters:
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: Azure Log Analytics
+                root: modules
+          operator: isEqualString
+          right:
+            value:
+              simple: active
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.Username
+          operator: isNotEmpty
+      label: Azure Log Analytics
+    continueonerrortype: ""
+    id: "3"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "22"
+      Azure Log Analytics:
+      - "7"
+      QRadar:
+      - "2"
+      Splunk:
+      - "1"
+    note: false
+    quietmode: 2
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Returns 'yes' if integration brand is available and the user name
+        is defined. Otherwise returns 'no'
+      id: a5b9a9a6-679c-4513-89a8-3d9b2e4c735c
+      iscommand: false
+      name: Is SIEM enabled and the user name is defined?
+      type: condition
+      version: -1
+    taskid: a5b9a9a6-679c-4513-89a8-3d9b2e4c735c
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": -810,
+          "y": 320
+        }
+      }
+  "5":
+    continueonerrortype: ""
+    id: "5"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "17"
+    note: false
+    quietmode: 2
+    scriptarguments:
+      earliest_time:
+        complex:
+          root: inputs.SplunkEarliestTime
+      extend-context:
+        simple: SplunkFailedLogonLogs=
+      ignore-outputs:
+        simple: "true"
+      latest_time:
+        complex:
+          root: inputs.SplunkLatestTime
+      query:
+        simple: index=${inputs.SplunkIndex} user=${inputs.Username} (sourcetype="WinEventLog"
+          source="WinEventLog:Security" (EventCode=4771 OR (EventCode=4624 (Logon_Type=2
+          OR Logon_Type=7 OR Logon_Type=10)))) OR (sourcetype=syslog  (( _raw="*Failed
+          password*" OR _raw="*FAILED LOGIN*" OR _raw="*Invalid user*" )))
+    separatecontext: false
+    skipunavailable: true
+    task:
+      brand: ""
+      description: Search for failed logon events
+      id: 945c3b67-2b94-4ac9-8c41-91e440bc38be
+      iscommand: true
+      name: Search for failed logon attempts using Splunk
+      script: '|||splunk-search'
+      type: regular
+      version: -1
+    taskid: 945c3b67-2b94-4ac9-8c41-91e440bc38be
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 230,
+          "y": 690
+        }
+      }
+  "7":
+    continueonerrortype: ""
+    id: "7"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "8"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 60e4a74a-763f-41bf-8720-28b90269be6b
+      iscommand: false
+      name: Azure Log Analytics
+      type: title
+      version: -1
+    taskid: 60e4a74a-763f-41bf-8720-28b90269be6b
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 820,
+          "y": 550
+        }
+      }
+  "8":
+    continueonerrortype: ""
+    id: "8"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "18"
+    note: false
+    quietmode: 2
+    scriptarguments:
+      extend-context:
+        simple: AzureFailedLogonLogs=
+      ignore-outputs:
+        simple: "true"
+      query:
+        simple: |-
+          SecurityEvent
+          | where EventID == 4771 or EventID == 4625 and (LogonType ==  2 or LogonType == 7 or LogonType == 10)
+          | where TargetAccount == '${inputs.Username}'
+          | where TimeGenerated > ${inputs.AzureSearchTime}
+    separatecontext: false
+    skipunavailable: true
+    task:
+      brand: ""
+      description: Executes an Analytics query for failed logon events.
+      id: b701829c-66f0-4962-8b7f-c681f482d7ac
+      iscommand: true
+      name: Search for failed logon attempts using Azure Log Analytics
+      script: '|||azure-log-analytics-execute-query'
+      type: regular
+      version: -1
+    taskid: b701829c-66f0-4962-8b7f-c681f482d7ac
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 820,
+          "y": 690
+        }
+      }
+  "9":
+    continueonerror: true
+    continueonerrortype: ""
+    id: "9"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "22"
+    note: false
+    quietmode: 2
+    scriptarguments:
+      array:
+        complex:
+          accessor: rows
+          root: AzureFailedLogonLogs.tables
+      contextKey:
+        simple: NumOfSiemFailedLogon
+      ignore-outputs:
+        simple: "false"
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Count an array size
+      id: a48173f0-6482-4f1e-8105-decc6ce27ba7
+      iscommand: false
+      name: Count failed logon from Azure Log Analytics logs
+      script: CountArraySize
+      type: regular
+      version: -1
+    taskid: a48173f0-6482-4f1e-8105-decc6ce27ba7
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 730,
+          "y": 1090
+        }
+      }
+  "11":
+    continueonerror: true
+    continueonerrortype: ""
+    id: "11"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "22"
+    note: false
+    quietmode: 2
+    scriptarguments:
+      array:
+        complex:
+          accessor: Events
+          root: QRadar.SearchEvents
+      contextKey:
+        simple: NumOfSiemFailedLogon
+      extend-context:
+        simple: NoOfFailedLogon=
+      ignore-outputs:
+        simple: "true"
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Count an array size
+      id: 925c94af-5475-4dae-8405-3a05818c4780
+      iscommand: false
+      name: Count failed logon from QRadar logs
+      script: CountArraySize
+      type: regular
+      version: -1
+    taskid: 925c94af-5475-4dae-8405-3a05818c4780
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -500,
+          "y": 1080
+        }
+      }
+  "12":
+    continueonerror: true
+    continueonerrortype: ""
+    id: "12"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "22"
+    note: false
+    quietmode: 2
+    scriptarguments:
+      array:
+        complex:
+          root: SplunkFailedLogonLogs
+      contextKey:
+        simple: NumOfSiemFailedLogon
+      ignore-outputs:
+        simple: "false"
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Count an array size
+      id: 5e96a88c-e9aa-45ff-8c6b-e0f346d34f83
+      iscommand: false
+      name: Count failed logon from Splunk logs
+      script: CountArraySize
+      type: regular
+      version: -1
+    taskid: 5e96a88c-e9aa-45ff-8c6b-e0f346d34f83
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 170,
+          "y": 1080
+        }
+      }
+  "16":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: Events
+                root: QRadar.SearchEvents
+          operator: isExists
+          right:
+            value: {}
+      label: "yes"
+    continueonerrortype: ""
+    id: "16"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "23"
+      "yes":
+      - "11"
+    note: false
+    quietmode: 2
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Check if there are results from QRadar
+      id: 7d988d75-6a3d-4e33-8702-aaa6219d0cb8
+      iscommand: false
+      name: Found results from QRadar?
+      type: condition
+      version: -1
+    taskid: 7d988d75-6a3d-4e33-8702-aaa6219d0cb8
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": -440,
+          "y": 890
+        }
+      }
+  "17":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: _raw
+                root: SplunkFailedLogonLogs
+          operator: isExists
+          right:
+            value: {}
+      label: "yes"
+    continueonerrortype: ""
+    id: "17"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "23"
+      "yes":
+      - "12"
+    note: false
+    quietmode: 2
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Check if there are results from Splunk
+      id: 0a3cbbfa-f864-4557-87e4-58461a1e96ff
+      iscommand: false
+      name: Found results from Splunk?
+      type: condition
+      version: -1
+    taskid: 0a3cbbfa-f864-4557-87e4-58461a1e96ff
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 230,
+          "y": 890
+        }
+      }
+  "18":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: '[0]'
+                root: AzureFailedLogonLogs.tables.rows.[0]
+          operator: isExists
+          right:
+            value: {}
+      label: "yes"
+    continueonerrortype: ""
+    id: "18"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "23"
+      "yes":
+      - "9"
+    note: false
+    quietmode: 2
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Check if there are results from Azure Log Analytics
+      id: 7229fa12-5d3d-4287-83d4-e641a9773069
+      iscommand: false
+      name: Found results from Azure Log Analytics?
+      type: condition
+      version: -1
+    taskid: 7229fa12-5d3d-4287-83d4-e641a9773069
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 820,
+          "y": 890
+        }
+      }
+  "22":
+    continueonerrortype: ""
+    id: "22"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 3f65bbaf-fa67-4cc7-84a7-49d625b95bef
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 3f65bbaf-fa67-4cc7-84a7-49d625b95bef
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": -810,
+          "y": 1470
+        }
+      }
+  "23":
+    continueonerrortype: ""
+    id: "23"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "22"
+    note: false
+    quietmode: 2
+    scriptarguments:
+      key:
+        simple: NumOfSiemFailedLogon
+      value:
+        simple: "0"
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Set a value in context under the key you entered.
+      id: 97dd0ada-f3d2-4dd8-8152-3d8349706c7d
+      iscommand: false
+      name: Set Number Of SIEM Failed Logon to Zero
+      script: Set
+      type: regular
+      version: -1
+    taskid: 97dd0ada-f3d2-4dd8-8152-3d8349706c7d
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 1370,
+          "y": 1090
+        }
+      }
+  "24":
+    continueonerrortype: ""
+    id: "24"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "16"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      interval_in_seconds:
+        simple: "1"
+      query_expression:
+        simple: select * from events WHERE LogSourceTypeName(deviceType) = 'Microsoft
+          Windows Security Event Log' and username='${inputs.Username}' and "EventID"='4771'  or
+          "EventID"='4625' and "Logon Type"='2' OR "Logon Type"='7' OR "Logon Type"='10'
+          ${inputs.QRadarSearchTime}
+    separatecontext: false
+    skipunavailable: true
+    task:
+      brand: ""
+      description: Polling command to search for events of a specific offense.
+      id: f8fa6689-2d97-4d84-895d-5c923b1b6751
+      iscommand: true
+      name: Run Qradar Search
+      script: '|||qradar-search-retrieve-events'
+      type: regular
+      version: -1
+    taskid: f8fa6689-2d97-4d84-895d-5c923b1b6751
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -440,
+          "y": 690
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {
+      "16_23_#default#": 0.1,
+      "17_23_#default#": 0.1,
+      "18_23_#default#": 0.21,
+      "18_9_yes": 0.71,
+      "3_22_#default#": 0.17
+    },
+    "paper": {
+      "dimensions": {
+        "height": 1365,
+        "width": 2560,
+        "x": -810,
+        "y": 170
+      }
+    }
+  }
