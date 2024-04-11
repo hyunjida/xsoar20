@@ -1,0 +1,178 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 2.1.22
+    packID: PAN-OS
+    packName: PAN-OS by Palo Alto Networks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: 'Network operations playbook that upgrades the firewall. You must have
+  Superuser permissions to update the PAN-OS version. Note: This playbook should only
+  be used for minor version upgrades. Major version upgrades will not work due to
+  a change in the API key.'
+id: NetOps - Upgrade PAN-OS Firewall Device
+inputs:
+- description: Target PAN-OS version to upgrade.
+  key: target_version
+  playbookInputQuery: null
+  required: true
+  value: {}
+name: NetOps - Upgrade PAN-OS Firewall Device
+outputs: []
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "1"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: ad1b6cae-2f83-4d07-8dba-6fb036ac4ae9
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: ad1b6cae-2f83-4d07-8dba-6fb036ac4ae9
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": -115,
+          "y": -45
+        }
+      }
+  "1":
+    continueonerrortype: ""
+    fieldMapping:
+    - incidentfield: Current Firewall Version
+      output:
+        complex:
+          accessor: Device.Info.Version
+          root: Panorama
+    - incidentfield: Firewall Model
+      output:
+        complex:
+          accessor: Device.Info.Model
+          root: Panorama
+    id: "1"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "36"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: Panorama
+      description: Shows firewall device software version
+      id: cec94b27-c3e0-4792-8f62-ec5c6704c884
+      iscommand: true
+      name: Show Current Device Version
+      script: Panorama|||pan-os-show-device-version
+      type: regular
+      version: -1
+    taskid: cec94b27-c3e0-4792-8f62-ec5c6704c884
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -115,
+          "y": 130
+        }
+      }
+  "36":
+    continueonerrortype: ""
+    id: "36"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 0
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "37"
+    note: false
+    quietmode: 0
+    separatecontext: true
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Runs the NetOps - Firewall Version and Content Upgrade playbook.
+      id: da298286-0c26-42e1-81ca-0ec9a67b952e
+      iscommand: false
+      name: Trigger NetOps - Firewall Version and Content Upgrade Playbook
+      playbookId: NetOps - Firewall Version and Content Upgrade
+      type: playbook
+      version: -1
+    taskid: da298286-0c26-42e1-81ca-0ec9a67b952e
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": -115,
+          "y": 350
+        }
+      }
+  "37":
+    continueonerrortype: ""
+    id: "37"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: An Engineer should manually review PAN-OS.
+      id: 5cb04387-365a-4c01-8fa9-0f0e31cbb2a8
+      iscommand: false
+      name: Engineer Review
+      type: regular
+      version: -1
+    taskid: 5cb04387-365a-4c01-8fa9-0f0e31cbb2a8
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -115,
+          "y": 580
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 720,
+        "width": 380,
+        "x": -115,
+        "y": -45
+      }
+    }
+  }
