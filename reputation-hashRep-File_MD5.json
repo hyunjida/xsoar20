@@ -1,0 +1,39 @@
+{
+	"cacheVersn": 0,
+	"contextPath": "File(val.MD5 \u0026\u0026 val.MD5 === obj.MD5)",
+	"contextValue": "MD5",
+	"defaultMapping": null,
+	"definitionId": "",
+	"details": "File MD5",
+	"disabled": true,
+	"enhancementScriptNames": [
+		"FileReputation"
+	],
+	"excludedBrands": null,
+	"expiration": 0,
+	"file": false,
+	"fileHashesPriority": null,
+	"formatScript": "",
+	"fromServerVersion": "5.0.0",
+	"id": "hashRep",
+	"itemVersion": "3.4.1",
+	"layout": "",
+	"legacyNames": null,
+	"locked": false,
+	"manualMapping": null,
+	"mergeContext": false,
+	"packID": "CommonTypes",
+	"packName": "Common Types",
+	"packPropagationLabels": [
+		"all"
+	],
+	"propagationLabels": [],
+	"regex": "\\b[a-fA-F\\d]{32}\\b",
+	"reputationCommand": "file",
+	"reputationScriptName": "",
+	"shouldShareComments": false,
+	"system": true,
+	"toServerVersion": "",
+	"updateAfter": 0,
+	"version": -1
+}
