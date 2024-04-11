@@ -1,0 +1,80 @@
+args:
+- description: Value to check if it has a substring that is equal to an element in
+    the right side. Can be a single value or a comma-separated list.
+  isArray: true
+  name: left
+  required: true
+- description: Value to check if it is equal to an element or to a substring of an
+    element from the left. Can be a single value or a comma-separated list.
+  isArray: true
+  name: right
+  required: true
+comment: |-
+  Returns all elements from the left side that have a substring that is equal to an element from the right side. Note: This filter is case-insensitive.
+  E.g -AnyMatch left=baby right=A will return baby. For more examples see the filter's Readme.
+commonfields:
+  id: AnyMatch
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.9.0
+    itemVersion: 1.2.61
+    packID: FiltersAndTransformers
+    packName: Filters And Transformers
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.83255
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: AnyMatch
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('AnyMatch', 'start', __line__())
+  ### pack version: 1.2.61
+
+
+
+
+  def is_substring_in_list(single_str: str, str_list: list[str]) -> bool:
+      """
+      This function checks if a string is in a list of strings, fully or partially, case insensitive.
+      Args:
+         single_str: A string to check if it exists in the list.
+         str_list: A list of strings to check if the single_str is in it, fully or partially.
+      Returns:
+          True or False
+      """
+      lower_list = [x.lower() for x in str_list]
+      return any(i in single_str.lower() for i in lower_list)
+
+
+  def main():
+      args = demisto.args()
+      leftArg = args.get("left")
+      rightArg = args.get("right")
+
+      left_list = argToList(str(leftArg))
+      right_list = argToList(str(rightArg))
+
+      for left_val in left_list:
+          return_results(is_substring_in_list(left_val, right_list))
+
+
+  if __name__ in ('__main__', '__builtin__', 'builtins'):
+      main()
+
+  register_module_line('AnyMatch', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- filter
+- general
+type: python
