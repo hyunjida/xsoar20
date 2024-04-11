@@ -1,0 +1,131 @@
+args:
+- description: The incident type for which to return incident field names.
+  name: incident_type
+  required: true
+- auto: PREDEFINED
+  defaultValue: "false"
+  description: Whether to shorten the incident field names. If "true", will cause
+    output to use shortened field names. The default value is "false".
+  name: short_names
+  predefined:
+  - "true"
+  - "false"
+- auto: PREDEFINED
+  defaultValue: "false"
+  description: Whether to only return non-system fields. If "true", will only output
+    non-system fields. The default value is "false".
+  name: exclude_system
+  predefined:
+  - "true"
+  - "false"
+- auto: PREDEFINED
+  defaultValue: "false"
+  description: Whether to only include fields that are explicitly associated to the
+    incident type. If "true", only fields which are explicitly associated to the incident
+    type will be included (i.e., excludes fields for which the "associate to any"
+    checkbox is selected). The default value is "false".
+  name: explicit_only
+  predefined:
+  - "true"
+  - "false"
+- auto: PREDEFINED
+  defaultValue: "true"
+  description: Pretty-prints the output.
+  name: pprint
+  predefined:
+  - "true"
+  - "false"
+comment: Returns the incident field names associated to the specified incident type.
+commonfields:
+  id: GetFieldsByIncidentType
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dependson:
+  must:
+  - '|||core-api-get'
+dockerimage: demisto/python3:3.10.13.83255
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: GetFieldsByIncidentType
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('GetFieldsByIncidentType', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+  from pprint import pformat
+
+
+  def main():
+      # get incident fields
+      res = demisto.executeCommand('core-api-get', {'uri': '/incidentfields'})
+      if is_error(res):
+          return_error(res[0]['Contents'])
+
+      fields = res[0]['Contents']['response']
+
+      # 'fields' contains non-incident fields (evidence and indicator), as well, so let's make a version
+      #  containing only incident fields
+      incident_fields = [field for field in fields if field['id'].startswith('incident_')]
+
+      # get arguments
+      args = demisto.args()
+
+      incident_type = args['incident_type']
+
+      exclude_system = False
+      if 'exclude_system' in args and argToBoolean(args['exclude_system']):
+          exclude_system = True
+
+      name_key = 'name'
+      if 'short_names' in args and argToBoolean(args['short_names']):
+          name_key = 'cliName'
+
+      explicit_only = False
+      if 'explicit_only' in args and argToBoolean(args['explicit_only']):
+          explicit_only = True
+
+      # generate results
+
+      matched_fields = []
+      for field in incident_fields:  # using multiple if statements for readability
+          if exclude_system and not field['system']:
+              # skip non-system fields if exclude_system is true
+              continue
+          elif field['associatedToAll'] and not explicit_only:
+              # if explicit_only is false, include fields associated to all incident types
+              matched_fields.append(field[name_key])
+          elif field['associatedTypes'] is not None and incident_type in field['associatedTypes']:
+              # include fields where incident type is in associatedTypes
+              matched_fields.append(field[name_key])
+
+      # output results
+      if 'pprint' in args and argToBoolean(args['pprint']):
+          demisto.results(pformat(matched_fields))
+      else:
+          demisto.results(matched_fields)
+
+
+  if __name__ in ["__builtin__", "builtins"]:
+      main()
+
+  register_module_line('GetFieldsByIncidentType', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags: []
+type: python
