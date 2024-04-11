@@ -1,0 +1,64 @@
+args:
+- default: true
+  description: String to pad with zeros.
+  name: value
+  required: true
+- defaultValue: "0"
+  description: The desired length of the string. The value specified in the "value"
+    argument will be padded with zeros until the string reaches this length.
+  name: length
+  required: true
+comment: Adds zeros (0) to the beginning of the string, until the string reaches the
+  specified length.
+commonfields:
+  id: PadZeros
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.2.61
+    packID: FiltersAndTransformers
+    packName: Filters And Transformers
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.83255
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: PadZeros
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('PadZeros', 'start', __line__())
+  ### pack version: 1.2.61
+
+
+
+  from typing import Dict
+
+
+  def main():
+      args: Dict = demisto.args()
+
+      s: str = str(args.get('value'))
+      length: int = int(args.get('length', 0))
+      demisto.results(s.zfill(length))
+
+
+  if __name__ == 'builtins':
+      main()
+
+  register_module_line('PadZeros', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- transformer
+- string
+- number
+type: python
