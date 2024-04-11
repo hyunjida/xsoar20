@@ -1,0 +1,401 @@
+{
+	"cacheVersn": 0,
+	"contextPath": "IP(val.Address \u0026\u0026 val.Address === obj.Address)",
+	"contextValue": "Address",
+	"defaultMapping": {
+		"asn": {
+			"complex": {
+				"accessor": "ASN",
+				"filters": [],
+				"root": "IP",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"asowner": {
+			"complex": {
+				"accessor": "ASOwner",
+				"filters": [],
+				"root": "URL",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"associations": {
+			"complex": {
+				"accessor": "Associations",
+				"filters": [],
+				"root": "IP",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"blocked": {
+			"complex": {
+				"accessor": "Blocked",
+				"filters": [],
+				"root": "IP",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"communitynotes": {
+			"complex": {
+				"accessor": "CommunityNotes",
+				"filters": [],
+				"root": "IP",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"detectionengines": {
+			"complex": {
+				"accessor": "DetectionEngines",
+				"filters": [],
+				"root": "IP",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"feedrelatedindicators": {
+			"complex": {
+				"accessor": "FeedRelatedIndicators",
+				"filters": [],
+				"root": "IP",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"geocountry": {
+			"complex": {
+				"accessor": "Geo.Country",
+				"filters": [],
+				"root": "IP",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"geolocation": {
+			"complex": {
+				"accessor": "Geo.Location",
+				"filters": [],
+				"root": "IP",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"hostname": {
+			"complex": {
+				"accessor": "Hostname",
+				"filters": [],
+				"root": "IP",
+				"transformers": []
+			}
+		},
+		"internal": {
+			"complex": {
+				"accessor": "Address",
+				"filters": [
+					[
+						{
+							"left": {
+								"isContext": true,
+								"value": {
+									"simple": "IP.Address"
+								}
+							},
+							"operator": "IsInCidrRanges",
+							"right": {
+								"isContext": false,
+								"value": {
+									"simple": "192.168.0.0/16,172.16.0.0/12,10.0.0.0/8,127.0.0.0/8,169.254.0.0/16"
+								}
+							}
+						}
+					]
+				],
+				"root": "IP",
+				"transformers": [
+					{
+						"operator": "uniq"
+					},
+					{
+						"args": {
+							"dt": {
+								"isContext": false,
+								"value": {
+									"simple": ".=Boolean(val)"
+								}
+							}
+						},
+						"operator": "DT"
+					}
+				]
+			}
+		},
+		"malwarefamily": {
+			"complex": {
+				"accessor": "MalwareFamily",
+				"filters": [],
+				"root": "IP",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"organization": {
+			"complex": {
+				"accessor": "Name",
+				"filters": [],
+				"root": "IP.Organization",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"organizationtype": {
+			"complex": {
+				"accessor": "Type",
+				"filters": [],
+				"root": "IP.Organization",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"port": {
+			"complex": {
+				"accessor": "Port",
+				"filters": [],
+				"root": "IP",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"positivedetections": {
+			"complex": {
+				"accessor": "PositiveDetections",
+				"filters": [],
+				"root": "IP",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"publications": {
+			"complex": {
+				"accessor": "Publications",
+				"filters": [],
+				"root": "IP",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"region": {
+			"complex": {
+				"accessor": "Region",
+				"filters": [],
+				"root": "IP",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"registrarabuseaddress": {
+			"complex": {
+				"accessor": "Address",
+				"filters": [],
+				"root": "IP.Registrar.Abuse",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"registrarabusecountry": {
+			"complex": {
+				"accessor": "Country",
+				"filters": [],
+				"root": "IP.Registrar.Abuse",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"registrarabuseemail": {
+			"complex": {
+				"accessor": "Email",
+				"filters": [],
+				"root": "IP.Registrar.Abuse",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"registrarabusename": {
+			"complex": {
+				"accessor": "Name",
+				"filters": [],
+				"root": "IP.Registrar.Abuse",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"registrarabusenetwork": {
+			"complex": {
+				"accessor": "Network",
+				"filters": [],
+				"root": "IP.Registrar.Abuse",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"registrarabusephone": {
+			"complex": {
+				"accessor": "Phone",
+				"filters": [],
+				"root": "IP.Registrar.Abuse",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"reportedby": {
+			"complex": {
+				"accessor": "ReportedBy",
+				"filters": [],
+				"root": "IP",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"tags": {
+			"complex": {
+				"accessor": "Tags",
+				"filters": [],
+				"root": "IP",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"threattypes": {
+			"complex": {
+				"accessor": "ThreatTypes",
+				"filters": [],
+				"root": "IP",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"trafficlightprotocol": {
+			"complex": {
+				"accessor": "TrafficLightProtocol",
+				"filters": [],
+				"root": "IP",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		}
+	},
+	"definitionId": "",
+	"details": "IP",
+	"disabled": false,
+	"enhancementScriptNames": [
+		"IPReputation"
+	],
+	"excludedBrands": [],
+	"expiration": 10080,
+	"file": false,
+	"fileHashesPriority": null,
+	"formatScript": "UnEscapeIPs",
+	"fromServerVersion": "5.5.0",
+	"id": "ipRep",
+	"itemVersion": "3.4.1",
+	"layout": "ipRep",
+	"legacyNames": null,
+	"locked": false,
+	"manualMapping": null,
+	"mergeContext": false,
+	"packID": "CommonTypes",
+	"packName": "Common Types",
+	"packPropagationLabels": [
+		"all"
+	],
+	"propagationLabels": [],
+	"regex": "\\b(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])(?:\\[\\.\\]|\\.)){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\b",
+	"reputationCommand": "ip",
+	"reputationScriptName": "",
+	"shouldShareComments": false,
+	"system": true,
+	"toServerVersion": "",
+	"updateAfter": 0,
+	"version": -1
+}
