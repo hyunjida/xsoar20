@@ -1,0 +1,399 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.5.0
+    itemVersion: 2.6.17
+    packID: VirusTotal
+    packName: VirusTotal
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: Detonate a private file through VirusTotal Private Scanning service
+id: Detonate Private File - VirusTotal Private Scanning
+inputs:
+- description: Private file to be uploaded to VirusTotal.
+  key: File
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: ${File.EntryID}
+name: Detonate Private File - VirusTotal Private Scanning
+outputs:
+- contextPath: VirusTotal.Analysis.data.attributes.date
+  description: Date of the analysis in epoch format.
+  type: number
+- contextPath: VirusTotal.Analysis.data.attributes.status
+  description: Status of the analysis.
+  type: string
+- contextPath: VirusTotal.Analysis.data.attributes.threat_severity_level
+  description: Threat severity level of the private file.
+  type: string
+- contextPath: VirusTotal.Analysis.data.attributes.popular_threat_category
+  description: Popular threat category of the private file.
+  type: string
+- contextPath: VirusTotal.Analysis.data.attributes.threat_verdict
+  description: Threat verdict of the private file.
+  type: string
+- contextPath: VirusTotal.Analysis.data.id
+  description: ID of the analysis.
+  type: string
+- contextPath: VirusTotal.Analysis.data.type
+  description: Type of object (analysis).
+  type: string
+- contextPath: VirusTotal.Analysis.meta.file_info.sha256
+  description: SHA-256 hash of the file (if it is a file).
+  type: string
+- contextPath: VirusTotal.Analysis.meta.file_info.sha1
+  description: SHA-1 hash of the file (if it is a file).
+  type: string
+- contextPath: VirusTotal.Analysis.meta.file_info.md5
+  description: MD5 hash of the file (if it is a file).
+  type: string
+- contextPath: VirusTotal.Analysis.meta.file_info.size
+  description: Size of the file (if it is a file).
+  type: number
+- contextPath: VirusTotal.Analysis.id
+  description: The analysis ID.
+  type: string
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "1"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 601d07e4-e2d6-4232-88de-f39583e69044
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: 601d07e4-e2d6-4232-88de-f39583e69044
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 60
+        }
+      }
+  "1":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: modules.brand
+          operator: isExists
+      - - left:
+            iscontext: true
+            value:
+              simple: modules.brand
+          operator: isEqualString
+          right:
+            value:
+              simple: VirusTotal (API v3)
+      - - left:
+            iscontext: true
+            value:
+              simple: modules.state
+          operator: isEqualString
+          right:
+            value:
+              simple: active
+      label: "yes"
+    continueonerrortype: ""
+    id: "1"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "7"
+      "yes":
+      - "2"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: e1585361-7816-49df-8185-aee705710ac5
+      iscommand: false
+      name: Is VirusTotal (API v3) enabled?
+      type: condition
+      version: -1
+    taskid: e1585361-7816-49df-8185-aee705710ac5
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 230
+        }
+      }
+  "2":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: EntryID
+                root: inputs.File
+          operator: isExists
+      label: "yes"
+    continueonerrortype: ""
+    id: "2"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "7"
+      "yes":
+      - "3"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: c7f7ffed-a39e-46ce-8ccc-ac75624a046c
+      iscommand: false
+      name: Is there a file to detonate?
+      type: condition
+      version: -1
+    taskid: c7f7ffed-a39e-46ce-8ccc-ac75624a046c
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 550,
+          "y": 410
+        }
+      }
+  "3":
+    continueonerrortype: ""
+    id: "3"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "4"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      key:
+        simple: File
+      value:
+        simple: ${inputs.File}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Set a value in context under the key you entered.
+      id: 535543fc-5824-477f-83a5-61daf81ce531
+      iscommand: false
+      name: Set Context
+      script: Set
+      type: regular
+      version: -1
+    taskid: 535543fc-5824-477f-83a5-61daf81ce531
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 650,
+          "y": 590
+        }
+      }
+  "4":
+    continueonerrortype: ""
+    id: "4"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "5"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      entryID:
+        simple: ${File.EntryID}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: VirusTotal (API v3)
+      description: Submits a file for private scanning. Use the vt-privatescanning-analysis-get
+        command to get the scan results.
+      id: afd178af-4137-4f75-8982-9a3916f0ac23
+      iscommand: true
+      name: Send file to VirusTotal
+      script: VirusTotal (API v3)|||vt-privatescanning-file-scan
+      type: regular
+      version: -1
+    taskid: afd178af-4137-4f75-8982-9a3916f0ac23
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 650,
+          "y": 770
+        }
+      }
+  "5":
+    continueonerrortype: ""
+    id: "5"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "6"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      Ids:
+        simple: ${VirusTotal.Submission.id}
+      Interval:
+        simple: "1"
+      PollingCommandArgName:
+        simple: id
+      PollingCommandName:
+        simple: vt-privatescanning-analysis-get
+      Timeout:
+        simple: "10"
+      dt:
+        simple: VirusTotal.Analysis.data(val.attributes.status != 'completed').id
+    separatecontext: true
+    skipunavailable: false
+    task:
+      brand: ""
+      description: |-
+        Use this playbook as a sub-playbook to block execution of the master playbook until a remote action is complete.
+        This playbook implements polling by continuously running the command in Step \#2 until the operation completes.
+        The remote action should have the following structure:
+
+        1. Initiate the operation.
+        2. Poll to check if the operation completed.
+        3. (optional) Get the results of the operation.
+      id: a423f125-10c9-461e-8a0c-846e3b7e30fe
+      iscommand: false
+      name: GenericPolling
+      playbookId: GenericPolling
+      type: playbook
+      version: -1
+    taskid: a423f125-10c9-461e-8a0c-846e3b7e30fe
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 650,
+          "y": 950
+        }
+      }
+  "6":
+    continueonerrortype: ""
+    id: "6"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "7"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      id:
+        simple: ${VirusTotal.Submission.id}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: VirusTotal (API v3)
+      description: Get analysis of a private file submitted to VirusTotal.
+      id: b7bf91db-9dbb-4671-8cb6-b83885ef9bf3
+      iscommand: true
+      name: Get analysis from VirusTotal
+      script: VirusTotal (API v3)|||vt-privatescanning-analysis-get
+      type: regular
+      version: -1
+    taskid: b7bf91db-9dbb-4671-8cb6-b83885ef9bf3
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 650,
+          "y": 1130
+        }
+      }
+  "7":
+    continueonerrortype: ""
+    id: "7"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 00d45f9e-5ac0-4e5b-8a18-481857aece1f
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 00d45f9e-5ac0-4e5b-8a18-481857aece1f
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 1310
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {
+      "1_2_yes": 0.5,
+      "1_7_#default#": 0.45,
+      "2_3_yes": 0.5,
+      "2_7_#default#": 0.64
+    },
+    "paper": {
+      "dimensions": {
+        "height": 1315,
+        "width": 580,
+        "x": 450,
+        "y": 60
+      }
+    }
+  }
