@@ -1,0 +1,462 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.5.0
+    itemVersion: 1.1.23
+    packID: TIM_Processing
+    packName: TIM - Indicator Auto-Processing
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: This playbook checks if file hash indicators exist in a Cortex XSOAR
+  list. If the indicators exist in the list, they are tagged as approved_hash.
+id: TIM - Process Indicators Against Approved Hash List
+inputs:
+- description: A Cortex XSOAR list containing approved hash values. Hash indicators
+    that appear in the list are tagged as approved.
+  key: ApprovedHashList
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: ""
+  key: ""
+  playbookInputQuery:
+    daterange:
+      fromdate: "0001-01-01T00:00:00Z"
+      fromdatelicenseval: "0001-01-01T00:00:00Z"
+      period:
+        by: ""
+        byfrom: ""
+        byto: ""
+        field: ""
+        fromvalue: null
+        tovalue: null
+      todate: "0001-01-01T00:00:00Z"
+    query: ""
+    queryEntity: indicators
+    results: null
+    runFromLastJobTime: false
+  required: false
+  value: {}
+name: TIM - Process Indicators Against Approved Hash List
+outputs:
+- contextPath: HashesInApprovedList
+  description: File hashes that are found in the approved_hash list.
+  type: string
+- contextPath: HashesNotInApprovedList
+  description: File hashes that are not found in the approved_hash list.
+  type: string
+quiet: true
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "19"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 962f88cb-45fc-47df-8cd7-9ccfe47142ac
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: 962f88cb-45fc-47df-8cd7-9ccfe47142ac
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 520,
+          "y": -1260
+        }
+      }
+  "3":
+    continueonerrortype: ""
+    id: "3"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: be3bc4a8-af76-4ac4-83c9-fd54cfb34458
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: be3bc4a8-af76-4ac4-83c9-fd54cfb34458
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 520,
+          "y": -90
+        }
+      }
+  "19":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: playbookQuery.indicator_type
+          operator: isEqualString
+          right:
+            value:
+              simple: File
+      label: "yes"
+    continueonerrortype: ""
+    id: "19"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "3"
+      "yes":
+      - "54"
+    note: false
+    quietmode: 2
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 2116b073-baf6-4ebb-84ae-4d003e8bf0d7
+      iscommand: false
+      name: Are there file hash results?
+      type: condition
+      version: -1
+    taskid: 2116b073-baf6-4ebb-84ae-4d003e8bf0d7
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 520,
+          "y": -1120
+        }
+      }
+  "53":
+    continueonerrortype: ""
+    id: "53"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "3"
+    note: false
+    quietmode: 2
+    scriptarguments:
+      field:
+        simple: tags
+      fieldValue:
+        simple: approved_hash
+      indicatorsValues:
+        simple: ${List.In}
+      value:
+        simple: ${List.In}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: Builtin
+      description: Adds the 'approved_hash' tag to the relevant indicators.
+      id: c53273da-63ee-4f5b-88a8-9116f0b8ff9d
+      iscommand: true
+      name: Add approved hash tag to indicators
+      script: Builtin|||appendIndicatorField
+      type: regular
+      version: -1
+    taskid: c53273da-63ee-4f5b-88a8-9116f0b8ff9d
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": -260
+        }
+      }
+  "54":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: inputs.ApprovedHashList
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "54"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "59"
+      "yes":
+      - "55"
+    note: false
+    quietmode: 2
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 307fe282-7367-4646-8660-fad6d2330e69
+      iscommand: false
+      name: Is there an approved hash list?
+      type: condition
+      version: -1
+    taskid: 307fe282-7367-4646-8660-fad6d2330e69
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 240,
+          "y": -950
+        }
+      }
+  "55":
+    continueonerrortype: ""
+    id: "55"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "56"
+      - "57"
+    note: false
+    quietmode: 2
+    scriptarguments:
+      ignorecase:
+        simple: "yes"
+      listname:
+        simple: ${inputs.ApprovedHashList}
+      matchexact:
+        simple: "yes"
+      values:
+        simple: ${playbookQuery.value}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks whether the specified item is in a Cortex XSOAR list.
+      id: 4722c563-d0ec-40a5-83ed-345ba6330fb5
+      iscommand: false
+      name: Run filter by list check on indicators
+      script: FilterByList
+      type: regular
+      version: -1
+    taskid: 4722c563-d0ec-40a5-83ed-345ba6330fb5
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 20,
+          "y": -780
+        }
+      }
+  "56":
+    continueonerrortype: ""
+    id: "56"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "58"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      append:
+        simple: "true"
+      key:
+        simple: HashesInApprovedList
+      value:
+        simple: ${List.In}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks if the specified value exists in context. If the value exists,
+        it is set in context, otherwise no value is set in context.
+      id: 17527acc-acec-4100-8f3b-f7e9f87ee0b8
+      iscommand: false
+      name: Set values in list
+      script: SetAndHandleEmpty
+      type: regular
+      version: -1
+    taskid: 17527acc-acec-4100-8f3b-f7e9f87ee0b8
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -380,
+          "y": -610
+        }
+      }
+  "57":
+    continueonerrortype: ""
+    id: "57"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "58"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      append:
+        simple: "true"
+      key:
+        simple: HashesNotInApprovedList
+      value:
+        simple: ${List.NotIn}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks if the specified value exists in context. If the value exists,
+        it is set in context, otherwise no value is set in context.
+      id: e9779871-2ec6-4534-85c3-5ddec84debb7
+      iscommand: false
+      name: Set values not in list
+      script: SetAndHandleEmpty
+      type: regular
+      version: -1
+    taskid: e9779871-2ec6-4534-85c3-5ddec84debb7
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 20,
+          "y": -610
+        }
+      }
+  "58":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: List.In
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "58"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "3"
+      "yes":
+      - "53"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: dd7beddc-7ee6-4190-8ea5-c5b87cc7d57e
+      iscommand: false
+      name: Do values appear in approved hash list?
+      type: condition
+      version: -1
+    taskid: dd7beddc-7ee6-4190-8ea5-c5b87cc7d57e
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 240,
+          "y": -440
+        }
+      }
+  "59":
+    continueonerrortype: ""
+    id: "59"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "3"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      append:
+        simple: "true"
+      key:
+        simple: HashesNotInApprovedList
+      value:
+        complex:
+          accessor: value
+          filters:
+          - - left:
+                iscontext: true
+                value:
+                  simple: playbookQuery.indicator_type
+              operator: isEqualString
+              right:
+                value:
+                  simple: File
+          root: playbookQuery
+          transformers:
+          - operator: uniq
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks if the specified value exists in context. If the value exists,
+        it is set in context, otherwise no value is set in context.
+      id: 482d4cb4-6726-4bb4-890e-73690433567e
+      iscommand: false
+      name: Set values
+      script: SetAndHandleEmpty
+      type: regular
+      version: -1
+    taskid: 482d4cb4-6726-4bb4-890e-73690433567e
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 820,
+          "y": -780
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 1235,
+        "width": 1580,
+        "x": -380,
+        "y": -1260
+      }
+    }
+  }
