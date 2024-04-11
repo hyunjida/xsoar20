@@ -1,0 +1,53 @@
+args:
+- default: true
+  description: The error message to be printed.
+  name: message
+  required: true
+comment: Prints an error entry with a given message.
+commonfields:
+  id: PrintErrorEntry
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.83255
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: PrintErrorEntry
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('PrintErrorEntry', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+
+
+  def main():
+      return_results({
+          'Type': EntryType.ERROR,
+          'ContentsFormat': EntryFormat.TEXT,
+          'Contents': demisto.getArg("message")
+      })
+
+
+  if __name__ in ["__builtin__", "builtins"]:
+      main()
+
+  register_module_line('PrintErrorEntry', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags: []
+type: python
