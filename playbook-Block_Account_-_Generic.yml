@@ -1,0 +1,428 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 2.6.15
+    packID: CommonPlaybooks
+    packName: Common Playbooks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+deprecated: true
+description: |-
+  Deprecated. Use 'Block Account - Generic v2' instead. This playbook blocks malicious usernames using all integrations that you have enabled.
+
+  Supported integrations for this playbook:
+  * Active Directory
+  * PAN-OS - This requires PAN-OS 9.1 or higher.
+id: block_account_-_generic
+inputs:
+- description: Array of malicious usernames to block.
+  key: Username
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: PAN-OS Tag name to apply to the username that you want to block.
+  key: Tag
+  playbookInputQuery: null
+  required: false
+  value: {}
+name: Block Account - Generic
+outputs: []
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "8"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: b95110b7-ba18-42a5-87ad-c5d37915401c
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: b95110b7-ba18-42a5-87ad-c5d37915401c
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 20
+        }
+      }
+  "2":
+    continueonerrortype: ""
+    id: "2"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 1808d949-f921-4957-8796-7bbedd822ad9
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 1808d949-f921-4957-8796-7bbedd822ad9
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 0,
+          "y": 1180
+        }
+      }
+  "5":
+    continueonerrortype: ""
+    id: "5"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "12"
+      - "14"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 0b958771-7e06-4239-899f-f7d133be6938
+      iscommand: false
+      name: Block accounts
+      type: title
+      version: -1
+    taskid: 0b958771-7e06-4239-899f-f7d133be6938
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 250,
+          "y": 360
+        }
+      }
+  "8":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: inputs.Username
+          operator: isExists
+      label: "yes"
+    continueonerrortype: ""
+    id: "8"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "2"
+      "yes":
+      - "5"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Verify that the playbook input includes at least one username to
+        block.
+      id: 2c5a17dd-e019-4e20-8f5b-4333678a26e0
+      iscommand: false
+      name: Is there a username to block?
+      type: condition
+      version: -1
+    taskid: 2c5a17dd-e019-4e20-8f5b-4333678a26e0
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 165
+        }
+      }
+  "12":
+    conditions:
+    - condition:
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                accessor: brand
+                filters:
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: activedir
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.state
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: active
+                root: modules
+          operator: isExists
+      label: "yes"
+    continueonerrortype: ""
+    id: "12"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "2"
+      "yes":
+      - "13"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: |
+        Verify that there is a valid instance of Active Directory enabled.
+      id: 5da07472-33bb-451d-8562-365e05f456ec
+      iscommand: false
+      name: Is Active Directory enabled?
+      type: condition
+      version: -1
+    taskid: 5da07472-33bb-451d-8562-365e05f456ec
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 230,
+          "y": 505
+        }
+      }
+  "13":
+    continueonerrortype: ""
+    id: "13"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "2"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      username:
+        complex:
+          root: inputs.Username
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: activedir
+      description: Disable the account using Active Directory.
+      id: c8b9285e-4d21-4070-89b6-33c611531812
+      iscommand: true
+      name: Disable account in active directory
+      script: activedir|||ad-disable-account
+      type: regular
+      version: -1
+    taskid: c8b9285e-4d21-4070-89b6-33c611531812
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 320,
+          "y": 730
+        }
+      }
+  "14":
+    conditions:
+    - condition:
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                accessor: brand
+                filters:
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: panorama
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.state
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: active
+                root: modules
+          operator: isExists
+      label: "yes"
+    continueonerrortype: ""
+    id: "14"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "2"
+      "yes":
+      - "16"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: |
+        Verify that there is a valid instance of PAN-OS enabled.
+      id: 7b9a0521-f530-41f2-8e6c-06df1f72ad87
+      iscommand: false
+      name: Is PAN-OS enabled?
+      type: condition
+      version: -1
+    taskid: 7b9a0521-f530-41f2-8e6c-06df1f72ad87
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 770,
+          "y": 505
+        }
+      }
+  "15":
+    continueonerrortype: ""
+    id: "15"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "2"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      Users:
+        simple: ${inputs.Username}
+      tag:
+        simple: ${inputs.Tag}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Apply a tag to a user.
+      id: 9da1c44c-5522-421f-8f84-a70123600e4a
+      iscommand: true
+      name: PAN-OS - Register Tag to User
+      script: '|||pan-os-register-user-tag'
+      type: regular
+      version: -1
+    taskid: 9da1c44c-5522-421f-8f84-a70123600e4a
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 900,
+          "y": 1000
+        }
+      }
+  "16":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: inputs.Tag
+          operator: isExists
+      label: "yes"
+    continueonerrortype: ""
+    id: "16"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "2"
+      "yes":
+      - "15"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Verify that the playbook input includes at least one tag to apply
+        to the user.
+      id: 06dfb070-8751-4cbc-8dcd-b7ffd39ca2cc
+      iscommand: false
+      name: Is there a Tag name to register?
+      type: condition
+      version: -1
+    taskid: 06dfb070-8751-4cbc-8dcd-b7ffd39ca2cc
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 900,
+          "y": 730
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {
+      "12_2_#default#": 0.1,
+      "14_16_yes": 0.6,
+      "14_2_#default#": 0.1,
+      "16_15_yes": 0.71,
+      "16_2_#default#": 0.1,
+      "8_2_#default#": 0.16
+    },
+    "paper": {
+      "dimensions": {
+        "height": 1225,
+        "width": 1280,
+        "x": 0,
+        "y": 20
+      }
+    }
+  }
