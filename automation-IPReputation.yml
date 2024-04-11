@@ -1,0 +1,60 @@
+args:
+- default: true
+  description: IP address to look up.
+  name: ip
+  required: true
+comment: A context script for IP entities.
+commonfields:
+  id: IPReputation
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.83255
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: IPReputation
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('IPReputation', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+
+
+  def ip_reputation():
+      results = demisto.executeCommand('ip', {'ip': demisto.get(demisto.args(), 'ip')})
+
+      for item in results:
+          if isError(item):
+              item['Contents'] = item['Brand'] + ' returned an error.\n' + str(item['Contents'])
+
+      demisto.results(results)
+
+
+  def main():
+      ip_reputation()
+
+
+  if __name__ in ('__main__', '__builtin__', 'builtins'):  # pragma: no cover
+      main()
+
+  register_module_line('IPReputation', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- enhancement
+type: python
