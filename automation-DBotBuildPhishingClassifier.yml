@@ -1,0 +1,243 @@
+args:
+- description: Additional text by which to query incidents.
+  name: query
+- defaultValue: Phishing
+  description: A comma-separated list of incident types by which to filter.
+  name: incidentTypes
+- description: 'The start date by which to filter incidents. Date format will be the
+    same as in the incidents query page (valid strings example: "3 days ago", ""2019-01-01T00:00:00
+    +0200")'
+  name: fromDate
+- description: 'The end date by which to filter incidents. Date format will be the
+    same as in the incidents query page (valid strings example: "3 days ago", ""2019-01-01T00:00:00
+    +0200")'
+  name: toDate
+- defaultValue: "3000"
+  description: The maximum number of incidents to fetch.
+  name: limit
+- auto: PREDEFINED
+  defaultValue: "false"
+  description: Whether to query and fetch incident context.
+  name: includeContext
+  predefined:
+  - "true"
+  - "false"
+- auto: PREDEFINED
+  defaultValue: created
+  description: The incident field (created or modified) to specify for the date range.
+  name: timeField
+  predefined:
+  - created
+  - modified
+- description: The field name with the label. Supports a comma-separated list, the
+    first non-empty value will be taken.
+  name: tagField
+  required: true
+- defaultValue: "15"
+  description: Sample text of which the total number of words are less than or equal
+    to this number will be ignored.
+  name: removeShortTextThreshold
+- defaultValue: "0.99"
+  description: Remove emails with similarity greater than this threshold, range 0-1,
+    where 1 is completly identical.
+  name: dedupThreshold
+- description: If non-empty, hash every word with this seed.
+  name: hashSeed
+- description: The model name to store in the system.
+  name: modelName
+- defaultValue: '*'
+  description: 'A comma-separated list of email tags values and mapping. The script
+    considers only the tags specified in this field. You can map a label to another
+    value by using this format: LABEL:MAPPED_LABEL. For example, for 4 values in email
+    tag: malicious, credentials harvesting, inner communitcation, external legit email,
+    unclassified. While training, we want to ignore "unclassified" tag, and refer
+    to "credentials harvesting" as "malicious" too. Also, we want to merge "inner
+    communitcation" and "external legit email" to one tag called "non-malicious".
+    The input will be: malicious, credentials harvesting:malicious, inner communitcation:non-malicious,
+    external legit email:non-malicious'
+  name: phishingLabels
+- defaultValue: emailsubject
+  description: Incident field name with the email subject.
+  name: emailsubject
+- defaultValue: emailbody
+  description: Incident field name with the email body (text).
+  name: emailbody
+- defaultValue: emailbodyhtml
+  description: Incident field name with the email body (html).
+  name: emailbodyhtml
+- auto: PREDEFINED
+  defaultValue: Any
+  description: The language of the input text. Default is "Any". Can be "Any", "English",
+    "German", "French", "Spanish", "Portuguese", "Italian", "Dutch", or "Other". If
+    "Any"  or "Other" is selected, the script preprocess the entire input, no matter
+    what its acutual language is. If a specific language is selected, the script filters
+    out any other language from the output text.
+  name: language
+  predefined:
+  - Any
+  - English
+  - German
+  - French
+  - Spanish
+  - Portuguese
+  - Italian
+  - Dutch
+  - Other
+- auto: PREDEFINED
+  defaultValue: auto
+  description: The training algorithm to use for training the model. Default is "auto".
+    If "auto" is selected, the training algorithm will be chosen automatically based
+    on the number of incidents per each label. Use "from_scratch" to train a new model
+    from scratch, based on your incidents only. In general, "from_scratch" will perform
+    better where the number of incidents is high (500 incidents or more per each verdict).
+    "fine-tune" trains a model based on the out-of-the-box model. "fine-tune" will
+    perform better when the number of incidents is relatively low. It's possible to
+    train multiple models using different algorithms options, and compare their results.
+  name: trainingAlgorithm
+  predefined:
+  - auto
+  - from_scratch
+  - fine_tune
+comment: Create a phishing classifier using machine learning technique, based on email
+  content.
+commonfields:
+  id: DBotBuildPhishingClassifier
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.33.35
+    packID: Base
+    packName: Base
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/ml:1.0.0.45981
+engineinfo: {}
+mainengineinfo: {}
+name: DBotBuildPhishingClassifier
+pswd: ""
+runas: DBotWeakRole
+runonce: true
+script: |
+  register_module_line('DBotBuildPhishingClassifier', 'start', __line__())
+  ### pack version: 1.33.35
+  import base64
+  import copy
+  import gc
+
+
+
+  PREFIXES_TO_REMOVE = ['incident.']
+  ALL_LABELS = "*"
+
+
+  def preprocess_incidents_field(incidents_field):
+      incidents_field = incidents_field.strip()
+      for prefix in PREFIXES_TO_REMOVE:
+          if incidents_field.startswith(prefix):
+              incidents_field = incidents_field[len(prefix):]
+      return incidents_field
+
+
+  def get_phishing_map_labels(comma_values):
+      if comma_values == ALL_LABELS:
+          return comma_values
+      values = [x.strip() for x in comma_values.split(",")]
+      labels_dict = {}
+      for v in values:
+          v = v.strip()
+          if ":" in v:
+              splited = v.rsplit(":", maxsplit=1)
+              labels_dict[splited[0].strip()] = splited[1].strip()
+          else:
+              labels_dict[v] = v
+      return {k: v for k, v in labels_dict.items()}
+
+
+  def build_query_in_reepect_to_phishing_labels(args):
+      mapping = args.get('phishingLabels', ALL_LABELS)
+      query = args.get('query', None)
+      if mapping == ALL_LABELS:
+          return args
+      mapping_dict = get_phishing_map_labels(mapping)
+      tag_field = args['tagField']
+      tags_union = ' '.join(['"{}"'.format(label) for label in mapping_dict])
+      mapping_query = '{}:({})'.format(tag_field, tags_union)
+      if 'query' not in args or args['query'].strip() == '':
+          args['query'] = mapping_query
+      else:
+          args['query'] = '({}) and ({})'.format(query, mapping_query)
+      return args
+
+
+  def get_incidents(d_args):
+      get_incidents_by_query_args = copy.deepcopy(d_args)
+      get_incidents_by_query_args['NonEmptyFields'] = d_args['tagField']
+      fields_names_to_populate = ['tagField', 'emailsubject', 'emailbody', "emailbodyhtml"]
+      fields_to_populate = [get_incidents_by_query_args.get(x, None) for x in fields_names_to_populate]
+      fields_to_populate = [x for x in fields_to_populate if x is not None]
+      get_incidents_by_query_args['populateFields'] = ','.join(fields_to_populate)
+      get_incidents_by_query_args = build_query_in_reepect_to_phishing_labels(get_incidents_by_query_args)
+      res = demisto.executeCommand("GetIncidentsByQuery", get_incidents_by_query_args)
+      if is_error(res):
+          return_error(get_error(res))
+      incidents = res[-1]['Contents']
+      return incidents
+
+
+  def preprocess_incidents(incidents, d_args):
+      text_pre_process_args = copy.deepcopy(d_args)
+      text_pre_process_args['inputType'] = 'json_b64_string'
+      text_pre_process_args['input'] = base64.b64encode(incidents.encode('utf-8')).decode('ascii')
+      text_pre_process_args['preProcessType'] = 'nlp'
+      email_body_fields = [text_pre_process_args.get("emailbody"), text_pre_process_args.get("emailbodyhtml")]
+      email_body = "|".join([x for x in email_body_fields if x])
+      text_pre_process_args['textFields'] = "%s,%s" % (text_pre_process_args['emailsubject'], email_body)
+      text_pre_process_args['whitelistFields'] = "{0},{1}".format('dbot_processed_text',
+                                                                  text_pre_process_args['tagField'])
+      res = demisto.executeCommand("DBotPreProcessTextData", text_pre_process_args)
+      if is_error(res):
+          return_error(get_error(res))
+      processed_text_data = res[0]['Contents']
+      demisto.results(res)
+      return processed_text_data
+
+
+  def train_model(processed_text_data, d_args):
+      train_model_args = copy.deepcopy(d_args)
+      train_model_args['inputType'] = 'json_b64_string'
+      train_model_args['input'] = base64.b64encode(processed_text_data.encode('utf-8')).decode('ascii')
+      train_model_args['overrideExistingModel'] = 'true'
+      res = demisto.executeCommand("DBotTrainTextClassifierV2", train_model_args)
+      demisto.results(res)
+
+
+  def main():
+      d_args = dict(demisto.args())
+      for arg in ['tagField', 'emailbody', 'emailbodyhtml', 'emailsubject', 'timeField']:
+          d_args[arg] = preprocess_incidents_field(d_args.get(arg, ''))
+
+      incidents = get_incidents(d_args)
+      gc.collect()
+
+      processed_text_data = preprocess_incidents(incidents, d_args)
+      gc.collect()
+
+      train_model(processed_text_data, d_args)
+
+
+  if __name__ in ['__main__', '__builtin__', 'builtins']:
+      main()
+
+  register_module_line('DBotBuildPhishingClassifier', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- ml
+timeout: 12µs
+type: python
