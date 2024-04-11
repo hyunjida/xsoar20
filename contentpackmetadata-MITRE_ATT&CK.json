@@ -1,0 +1,155 @@
+{
+	"author": "Cortex XSOAR",
+	"authorImage": "content/packs/Base/Author_image.png",
+	"beta": false,
+	"cacheVersn": 0,
+	"categories": [
+		"Data Enrichment \u0026 Threat Intelligence"
+	],
+	"certification": "certified",
+	"contentItemTypes": [
+		"integration",
+		"automation",
+		"dashboard",
+		"playbook"
+	],
+	"contentItems": {
+		"automation": [
+			{
+				"description": "This is a widget script returning MITRE indicators information for top indicators shown in incidents.",
+				"name": "MITREIndicatorsByOpenIncidentsV2",
+				"tags": [
+					"widget"
+				]
+			}
+		],
+		"classifier": null,
+		"dashboard": [
+			{
+				"name": "MITRE ATT\u0026CK"
+			}
+		],
+		"genericfield": null,
+		"generictype": null,
+		"incidentfield": null,
+		"incidenttype": null,
+		"indicatorfield": null,
+		"integration": [
+			{
+				"category": "Data Enrichment \u0026 Threat Intelligence",
+				"commands": [
+					{
+						"description": "Gets the Attack Pattern value from the Attack Pattern ID.",
+						"name": "mitre-get-indicator-name"
+					},
+					{
+						"description": "Retrieves a limited number of indicators.",
+						"name": "mitre-get-indicators"
+					},
+					{
+						"description": "Looks up the reputation of the indicator.",
+						"name": "attack-pattern"
+					},
+					{
+						"description": "Shows the feed names and IDs from TAXII.",
+						"name": "mitre-show-feeds"
+					}
+				],
+				"description": "Use the MITRE ATT\u0026CK® feed to fetch MITRE’s Adversarial Tactics, Techniques, and Common Knowledge (ATT\u0026CK®) content. MITRE ATT\u0026CK is a globally-accessible knowledge base of adversary tactics and techniques based on real-world observations. The ATT\u0026CK knowledge base is used as a foundation for the development of specific threat models and methodologies in the private sector, in government, and in the cybersecurity product and service community.",
+				"id": "MITRE ATT\u0026CK v2",
+				"name": "MITRE ATT\u0026CK"
+			}
+		],
+		"layoutscontainer": null,
+		"list": null,
+		"playbook": [
+			{
+				"description": "This playbook accepts as input MITRE techniques IDs.\nIt returns the MITRE technique name and full technique data using the MITRE integration.",
+				"name": "Mitre Attack - Extract Technique Information From ID"
+			}
+		],
+		"report": null,
+		"reputation": null,
+		"widget": null,
+		"wizard": null
+	},
+	"currentVersion": "1.1.29",
+	"definitionId": "",
+	"dependencies": {
+		"Base": {
+			"author": "Cortex XSOAR",
+			"certification": "certified",
+			"mandatory": true,
+			"minVersion": "1.33.19",
+			"name": "Base"
+		},
+		"CommonScripts": {
+			"author": "Cortex XSOAR",
+			"certification": "certified",
+			"mandatory": true,
+			"minVersion": "1.13.25",
+			"name": "Common Scripts"
+		}
+	},
+	"deprecated": false,
+	"description": "Fetches indicators from MITRE ATT\u0026CK.",
+	"disabledMonthly": false,
+	"downloads": 35729,
+	"eulaLink": "https://github.com/demisto/content/blob/master/LICENSE",
+	"fromServerVersion": "5.0.0",
+	"general": [
+		"generalFieldCertified",
+		"generalFieldByCortexXSOAR",
+		"generalFieldFree",
+		"generalFieldSupportIncluded"
+	],
+	"id": "FeedMitreAttackv2",
+	"installMessage": "",
+	"integrations": [
+		{
+			"imagePath": "content/packs/FeedMitreAttackv2/MITREATT%26CKv2_image.png",
+			"name": "MITRE ATT\u0026CK"
+		}
+	],
+	"itemVersion": "1.1.29",
+	"keywords": [
+		"MITRE",
+		"Feed",
+		"ATT\u0026CK"
+	],
+	"legacy": true,
+	"name": "MITRE ATT\u0026CK",
+	"packID": "FeedMitreAttackv2",
+	"packName": "",
+	"premium": false,
+	"previewOnly": false,
+	"price": 0,
+	"propagationLabels": [
+		"all"
+	],
+	"rawKeywords": null,
+	"rawTags": null,
+	"rawUseCases": null,
+	"readme": "Use the MITRE ATT\u0026CK Feed pack to fetch indicators from MITRE ATT\u0026CK. MITRE ATT\u0026CK is a globally-accessible knowledge base of adversary tactics and techniques based on real-world observations of cyber security threats.\n\nThe newest MITRE Feed V2 Pack introduces the STIX format and ingests more Threat Intel than before. All the MITRE information now in your XSOAR Threat Intel Library.\n- Techniques and SubTechniques are now Attack Pattern\n- Group as Intrusion Set\n- Software as Tool or Malware\n- Mitigation as Course of Action\n- Note: Relationships is supported from version 6.2 and later.\n\nNote: When upgrading from v1 (MITRE IDs Feed) to v2 (MITRE ATT\u0026CK) - disabling the MITRE IDs Feed indicator type, and instance are important for the smooth flow of the upgrade.\n",
+	"searchRank": 10,
+	"serverMaxVersion": "",
+	"serverMinVersion": "5.0.0",
+	"support": "xsoar",
+	"supportDetails": {
+		"email": "",
+		"url": "https://www.paloaltonetworks.com/cortex"
+	},
+	"tags": [
+		"TIM",
+		"Free Feed",
+		"Trending",
+		"Threat Intelligence Management",
+		"Plug \u0026 Fetch"
+	],
+	"toServerVersion": "",
+	"updated": "2024-04-03T19:19:39+09:00",
+	"useCases": [],
+	"version": -1,
+	"versionInfo": "785965",
+	"videos": []
+}
