@@ -1,0 +1,106 @@
+args:
+- default: true
+  description: Entry ID of a file entry to retrieve strings from
+  name: entry
+  required: true
+- description: Number of consecutive characters to be considered a string - default
+    is 4
+  name: chars
+- description: Display first 'size' results - default is 1024
+  name: size
+- description: Regex to filter the strings - compiled with ignore case
+  name: filter
+comment: Extract strings from a file with optional filter - similar to binutils strings
+  command
+commonfields:
+  id: Strings
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.86272
+engineinfo: {}
+mainengineinfo: {}
+name: Strings
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('Strings', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+  import re
+  import string
+
+
+  def strings(args):
+      # Optional arguments and default values
+      chars = 4
+      if 'chars' in args:
+          chars = int(args['chars'])
+      size = 1024
+      if 'size' in args:
+          size = int(args['size'])
+      regex = None
+      if 'filter' in args:
+          regex = re.compile(args['filter'], re.I)
+      fEntry = demisto.executeCommand('getFilePath', {'id': args['entry']})[0]
+      if not isError(fEntry):
+          matches = []
+          with open(demisto.get(fEntry, 'Contents.path'), 'r', 1024 * 1024, errors='ignore') as f:
+              buff = ''
+              c = f.read(1)
+              while c != '':
+                  if c in string.printable:
+                      buff += c
+                  else:
+                      if len(buff) >= chars:
+                          if regex:
+                              if regex.match(buff):
+                                  matches.append(buff)
+                          else:
+                              matches.append(buff)
+                          if len(matches) >= size:
+                              break
+                      buff = ''
+                  c = f.read(1)
+              if len(buff) >= chars and len(matches) < size:
+                  if regex:
+                      if regex.match(buff):
+                          matches.append(buff)
+                  else:
+                      matches.append(buff)
+          if matches:
+              return '\n'.join(matches)
+          else:
+              return 'No strings were found.'
+      else:
+          return fEntry
+
+
+  def main():
+      args = demisto.args()
+      demisto.results(strings(args))
+
+
+  if __name__ in ['__main__', 'builtin', 'builtins']:
+      main()
+
+  register_module_line('Strings', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- server
+- file
+type: python
