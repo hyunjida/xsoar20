@@ -1,0 +1,83 @@
+args:
+- description: The first list. list1 must be the same size as list2.
+  isArray: true
+  name: list1
+  required: true
+- description: "The format to join the lists by. For example, {1}-{2} joins the values
+    for the same index in both lists, \nwhere {1} is replaced with the value from
+    list1 and {2} is replaced with the value from list2."
+  name: format
+- description: The second list. list2 must be the same size as list1.
+  isArray: true
+  name: list2
+  required: true
+comment: Joins values from two lists by index according to a given format.
+commonfields:
+  id: ZipStrings
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.83255
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: ZipStrings
+outputs:
+- contextPath: zipped_list
+  description: A list of joined values as defined by the format.
+  type: string
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('ZipStrings', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+
+  ''' COMMAND FUNCTION '''
+
+
+  def mapper_command(args: Dict[str, Any]) -> CommandResults:
+      format = str(args.get('format', '{1}-{2}'))
+      list1 = argToList(args.get('list1', []))
+      list2 = argToList(args.get('list2', []))
+
+      res = [format.replace('{1}', x).replace('{2}', y) for x, y in zip(list1, list2)]
+
+      return CommandResults(outputs={
+          'zipped_list': res
+      })
+
+
+  ''' MAIN FUNCTION '''
+
+
+  def main():  # pragma: no cover
+      try:
+          return_results(mapper_command(demisto.args()))
+      except Exception as ex:
+          demisto.error(traceback.format_exc())  # print the traceback
+          return_error(f'Failed to execute BaseScript. Error: {str(ex)}')
+
+
+  ''' ENTRY POINT '''
+  if __name__ in ('__main__', '__builtin__', 'builtins'):
+      main()
+
+  register_module_line('ZipStrings', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags: []
+type: python
