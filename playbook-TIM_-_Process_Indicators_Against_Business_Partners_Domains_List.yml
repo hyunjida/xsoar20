@@ -1,0 +1,466 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.5.0
+    itemVersion: 1.1.23
+    packID: TIM_Processing
+    packName: TIM - Indicator Auto-Processing
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: This playbook processes indicators to check if they exist in a Cortex
+  XSOAR list containing the business partner domains, and tags the indicators accordingly.
+id: TIM - Process Indicators Against Business Partners Domains List
+inputs:
+- description: ""
+  key: ""
+  playbookInputQuery:
+    daterange:
+      fromdate: "0001-01-01T00:00:00Z"
+      fromdatelicenseval: "0001-01-01T00:00:00Z"
+      period:
+        by: ""
+        byfrom: ""
+        byto: ""
+        field: ""
+        fromvalue: null
+        tovalue: null
+      todate: "0001-01-01T00:00:00Z"
+    query: ""
+    queryEntity: indicators
+    results: null
+    runFromLastJobTime: false
+  required: false
+  value: {}
+- description: A Cortex XSOAR list containing business partner domain names values.
+    Domain Indicators that appear in the list are tagged as business partner.
+  key: BusinessPartnersDomainsListName
+  playbookInputQuery: null
+  required: false
+  value: {}
+name: TIM - Process Indicators Against Business Partners Domains List
+outputs:
+- contextPath: BusinessPartnerDomain
+  description: Domain that are found in the business partner domains list.
+  type: string
+- contextPath: NotBusinessPartnerDomain
+  description: Domain that are not found in the business partner domains list.
+  type: string
+quiet: true
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "19"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 78e61b73-8045-41d4-8937-e6a0fde8c8f7
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: 78e61b73-8045-41d4-8937-e6a0fde8c8f7
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 510,
+          "y": -1390
+        }
+      }
+  "19":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: playbookQuery.indicator_type
+          operator: isEqualString
+          right:
+            value:
+              simple: Domain
+      label: "yes"
+    continueonerrortype: ""
+    id: "19"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "105"
+      "yes":
+      - "101"
+    note: false
+    quietmode: 2
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: e81312ce-5c7d-4eda-8179-3f8f443047fa
+      iscommand: false
+      name: Are there Domain results?
+      type: condition
+      version: -1
+    taskid: e81312ce-5c7d-4eda-8179-3f8f443047fa
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 510,
+          "y": -1260
+        }
+      }
+  "101":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: inputs.BusinessPartnersDomainsListName
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "101"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "108"
+      "yes":
+      - "102"
+    note: false
+    quietmode: 2
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 3541a32c-5eff-4916-8e3c-4c8dcd5c3b84
+      iscommand: false
+      name: Is there a business partners domain list?
+      type: condition
+      version: -1
+    taskid: 3541a32c-5eff-4916-8e3c-4c8dcd5c3b84
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 270,
+          "y": -1090
+        }
+      }
+  "102":
+    continueonerrortype: ""
+    id: "102"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "106"
+      - "107"
+    note: false
+    quietmode: 2
+    scriptarguments:
+      ignorecase:
+        simple: "yes"
+      listname:
+        simple: ${inputs.BusinessPartnersDomainsListName}
+      matchexact:
+        simple: "yes"
+      values:
+        simple: ${playbookQuery.value}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks whether the specified item is in a Cortex XSOAR list.
+      id: db8ecb83-41a2-40d3-8a5d-0b101ae30ab4
+      iscommand: false
+      name: Run filter by list check on indicators
+      script: FilterByList
+      type: regular
+      version: -1
+    taskid: db8ecb83-41a2-40d3-8a5d-0b101ae30ab4
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 30,
+          "y": -920
+        }
+      }
+  "103":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: List.In
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "103"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "105"
+      "yes":
+      - "104"
+    note: false
+    quietmode: 2
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: cc9a2fca-f919-4642-8f01-848b1645b235
+      iscommand: false
+      name: Do values appear in business partner domain list?
+      type: condition
+      version: -1
+    taskid: cc9a2fca-f919-4642-8f01-848b1645b235
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 280,
+          "y": -580
+        }
+      }
+  "104":
+    continueonerrortype: ""
+    id: "104"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "105"
+    note: false
+    quietmode: 2
+    scriptarguments:
+      field:
+        simple: tags
+      fieldValue:
+        simple: business_partner
+      indicatorsValues:
+        complex:
+          accessor: In
+          root: List
+          transformers:
+          - operator: uniq
+      value:
+        simple: ${List.In}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: Builtin
+      description: Adds the 'business_partner' tag to the relevant indicators.
+      id: 1459bf7b-62d1-4860-8e81-b4c755888805
+      iscommand: true
+      name: Add business partner tag to indicators
+      script: Builtin|||appendIndicatorField
+      type: regular
+      version: -1
+    taskid: 1459bf7b-62d1-4860-8e81-b4c755888805
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 100,
+          "y": -410
+        }
+      }
+  "105":
+    continueonerrortype: ""
+    id: "105"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 33154239-54b9-4257-8b01-e5c4466197c9
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 33154239-54b9-4257-8b01-e5c4466197c9
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 510,
+          "y": -240
+        }
+      }
+  "106":
+    continueonerrortype: ""
+    id: "106"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "103"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      append:
+        simple: "true"
+      key:
+        simple: BusinessPartnerDomain
+      value:
+        simple: ${List.In}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks if the specified value exists in context. If the value exists,
+        it is set in context, otherwise no value is set in context.
+      id: 60a3a95e-596e-4d65-8a4a-b85185b48501
+      iscommand: false
+      name: Set values in list
+      script: SetAndHandleEmpty
+      type: regular
+      version: -1
+    taskid: 60a3a95e-596e-4d65-8a4a-b85185b48501
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -370,
+          "y": -750
+        }
+      }
+  "107":
+    continueonerrortype: ""
+    id: "107"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "103"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      append:
+        simple: "true"
+      key:
+        simple: NotBusinessPartnerDomain
+      value:
+        simple: ${List.NotIn}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks if the specified value exists in context. If the value exists,
+        it is set in context, otherwise no value is set in context.
+      id: 94a9bd3c-163d-4de2-87ee-8a42f6c73556
+      iscommand: false
+      name: Set values not in list
+      script: SetAndHandleEmpty
+      type: regular
+      version: -1
+    taskid: 94a9bd3c-163d-4de2-87ee-8a42f6c73556
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 30,
+          "y": -750
+        }
+      }
+  "108":
+    continueonerrortype: ""
+    id: "108"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "105"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      append:
+        simple: "true"
+      key:
+        simple: NotBusinessPartnerDomain
+      value:
+        complex:
+          accessor: value
+          filters:
+          - - left:
+                iscontext: true
+                value:
+                  simple: playbookQuery.indicator_type
+              operator: isEqualString
+              right:
+                value:
+                  simple: Domain
+          root: playbookQuery
+          transformers:
+          - operator: uniq
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks if the specified value exists in context. If the value exists,
+        it is set in context, otherwise no value is set in context.
+      id: 82d4aa14-2235-47a6-8e81-1c8a364e22eb
+      iscommand: false
+      name: Set values
+      script: SetAndHandleEmpty
+      type: regular
+      version: -1
+    taskid: 82d4aa14-2235-47a6-8e81-1c8a364e22eb
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 790,
+          "y": -920
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 1215,
+        "width": 1540,
+        "x": -370,
+        "y": -1390
+      }
+    }
+  }
