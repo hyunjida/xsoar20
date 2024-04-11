@@ -1,0 +1,37 @@
+{
+	"Cache": null,
+	"cacheVersn": 0,
+	"category": "",
+	"dataType": "scripts",
+	"dateRange": {
+		"fromDate": "0001-01-01T00:00:00Z",
+		"fromDateLicense": "0001-01-01T00:00:00Z",
+		"period": {
+			"by": "",
+			"byFrom": "",
+			"byTo": "",
+			"field": "",
+			"fromValue": null,
+			"toValue": null
+		},
+		"toDate": "0001-01-01T00:00:00Z"
+	},
+	"definitionId": "",
+	"description": "A widget that presents a table of all the ToDo tasks assigned to the current user.",
+	"fromServerVersion": "6.1.0",
+	"id": "My ToDo Tasks",
+	"isPredefined": true,
+	"itemVersion": "1.2.48",
+	"name": "My ToDo Tasks",
+	"packID": "CommonWidgets",
+	"packName": "Common Widgets",
+	"packPropagationLabels": [
+		"all"
+	],
+	"params": {},
+	"propagationLabels": [],
+	"query": "MyToDoTasksWidget",
+	"toServerVersion": "",
+	"version": -1,
+	"widgetType": "text"
+}
