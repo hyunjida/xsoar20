@@ -1,0 +1,123 @@
+args:
+- default: true
+  description: The key to set in context.
+  isArray: true
+  name: key
+  required: true
+- description: The value of the key to set in context. The value is usually a DQ expression.
+    Can be an array.
+  isArray: true
+  name: value
+- auto: PREDEFINED
+  defaultValue: "true"
+  description: Whether to append the new context key to the existing context key.
+    If "false", then the existing context key will be overwritten with the new context
+    key.
+  name: append
+  predefined:
+  - "true"
+  - "false"
+- auto: PREDEFINED
+  defaultValue: "false"
+  description: Whether to save the argument as a string. The default value is "false".
+  name: stringify
+  predefined:
+  - "true"
+  - "false"
+- auto: PREDEFINED
+  defaultValue: "false"
+  description: Whether to force the creation of the context. The default value is
+    "false".
+  name: force
+  predefined:
+  - "true"
+  - "false"
+comment: |-
+  Set a value in context under the key you entered. If no value is entered, the script doesn't do anything.
+
+  This automation runs using the default Limited User role, unless you explicitly change the permissions.
+  For more information, see the section about permissions here:
+  https://docs-cortex.paloaltonetworks.com/r/Cortex-XSOAR/6.10/Cortex-XSOAR-Administrator-Guide/Automations
+commonfields:
+  id: SetAndHandleEmpty
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: SetAndHandleEmpty
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  // pack version: 1.14.2
+  function getValue(value, stringify = false) {
+      if (stringify) {
+          if (value === null || value === undefined) {
+              return '';
+          }
+          return String(value);
+      } else if (!value || !(typeof value === 'string')) {
+          return value;
+      } else {
+          try {
+              return JSON.parse(value);
+          } catch (error) {
+              return value;
+          }
+      }
+  }
+
+  function main() {
+      const keys = argToList(args.key);
+      let value = args.value;
+      const force = args.force === 'true';
+      value = getValue(value, args.stringify === 'true');
+
+      let results = [];
+      for (let i = 0; i < keys.length; i++) {
+          let humanReadable = '';
+          let contextEntry = {};
+
+          if (value || force) {
+              humanReadable = `Key ${keys[i]} set`;
+              contextEntry = { [keys[i]]: value };
+          } else {
+              humanReadable = 'value is None';
+          }
+
+          if (args.append === 'false' && Object.keys(contextEntry).length > 0) {
+              executeCommand('DeleteContext', { key: keys[i], subplaybook: 'auto' });
+          }
+          results.push({
+              Type: entryTypes.note,
+              EntryContext: contextEntry,
+              ContentsFormat: formats.json,
+              Contents: humanReadable,
+              HumanReadable: humanReadable
+          });
+      };
+      return results;
+  }
+
+  try {
+      return main();
+  } catch (error) {
+      throw 'Error occurred while running the script:\n' + error;
+  }
+scripttarget: 0
+system: true
+tags:
+- Utility
+type: javascript
