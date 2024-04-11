@@ -1,0 +1,79 @@
+{
+	"brands": null,
+	"cacheVersn": 0,
+	"defaultIncidentType": "",
+	"definitionId": "",
+	"description": "A mapper of VirusTotal Intelligence LiveHunt Notification",
+	"feed": false,
+	"fromServerVersion": "6.0.0",
+	"id": "VirusTotal Intelligence LiveHunt Notification",
+	"incidentSamples": null,
+	"indicatorSamples": null,
+	"instanceIds": null,
+	"itemVersion": "2.6.17",
+	"keyTypeMap": null,
+	"locked": false,
+	"logicalVersion": 0,
+	"mapping": {
+		"VirusTotal Intelligence LiveHunt Notification": {
+			"dontMapEventToLabels": true,
+			"internalMapping": {
+				"Alert ID": {
+					"simple": "id"
+				},
+				"Country": {
+					"simple": "attributes.source_country"
+				},
+				"File Hash": {
+					"complex": {
+						"filters": [
+							[
+								{
+									"left": {
+										"isContext": true,
+										"value": {
+											"simple": "attributes.tags"
+										}
+									},
+									"operator": "stringHasLength",
+									"right": {
+										"isContext": false,
+										"value": {
+											"simple": "64"
+										}
+									}
+								}
+							]
+						],
+						"root": "attributes.tags",
+						"transformers": []
+					}
+				},
+				"Rule Name": {
+					"simple": "attributes.rule_name"
+				},
+				"Tags": {
+					"simple": "attributes.tags"
+				}
+			}
+		},
+		"dbot_classification_incident_type_all": {
+			"dontMapEventToLabels": false,
+			"internalMapping": {}
+		}
+	},
+	"name": "VirusTotal Intelligence LiveHunt Notification",
+	"nameRaw": "VirusTotal Intelligence LiveHunt Notification",
+	"packID": "VirusTotal",
+	"packName": "VirusTotal",
+	"packPropagationLabels": [
+		"all"
+	],
+	"sourceClassifierId": "",
+	"system": true,
+	"toServerVersion": "",
+	"transformer": {},
+	"type": "mapping-incoming",
+	"unclassifiedCases": null,
+	"version": -1
+}
