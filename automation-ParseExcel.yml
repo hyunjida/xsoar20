@@ -1,0 +1,91 @@
+args:
+- description: The entry id of the excel file
+  name: entryId
+  required: true
+comment: The automation takes Excel file (entryID) as an input and parses its content
+  to the war room and context
+commonfields:
+  id: ParseExcel
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/py3-tools:1.0.0.49703
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: ParseExcel
+outputs:
+- contextPath: ParseExcel
+  description: ParseExcel
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('ParseExcel', 'start', __line__())
+  ### pack version: 1.14.2
+
+  import xlrd
+
+
+  # Fixed xlrd known issue
+  xlrd.xlsx.ensure_elementtree_imported(False, None)
+  xlrd.xlsx.Element_has_iter = True
+
+
+  def parse_excel(file_entry_id):
+
+      res = demisto.getFilePath(file_entry_id)
+      file_path = res['path']
+
+      workbook = xlrd.open_workbook(file_path, on_demand=True)
+      sheet_names = workbook.sheet_names()
+      sheets = []
+      context = {}
+
+      for sheetnum in range(workbook.nsheets):
+          worksheet = workbook.sheet_by_index(sheetnum)
+          first_row = []
+          for col in range(worksheet.ncols):
+              first_row.append(str(worksheet.cell_value(0, col)))
+          data = []
+          for row in range(1, worksheet.nrows):
+              elm = {}
+              for col in range(worksheet.ncols):
+                  elm[first_row[col]] = worksheet.cell_value(row, col)
+              data.append(elm)
+          sheets.append(data)
+          context["ParseExcel"] = sheets
+          demisto.results({
+              'Type': entryTypes['note'],
+              'Contents': data,
+              'ContentsFormat': formats['json'],
+              'HumanReadable': tableToMarkdown(sheet_names[sheetnum], data, first_row),
+              'EntryContext': context
+          })
+
+
+  def main():
+      file_entry_id = demisto.args()['entryId']
+      parse_excel(file_entry_id)
+
+
+  # python2 uses __builtin__ python3 uses builtins
+  if __name__ == "__builtin__" or __name__ == "builtins":
+      main()
+
+  register_module_line('ParseExcel', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags: []
+type: python
