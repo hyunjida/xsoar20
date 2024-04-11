@@ -1,0 +1,74 @@
+args:
+- default: true
+  description: The IPv6 to vriefy.
+  isArray: true
+  name: input
+comment: Verify that the address is a valid IPv6 address.
+commonfields:
+  id: VerifyIPv6Indicator
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.5.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.86272
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: VerifyIPv6Indicator
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('VerifyIPv6Indicator', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+  import ipaddress
+
+
+  def is_valid_ipv6_address(address):
+      try:
+          ipaddress.IPv6Address(address)
+          return True
+      except ValueError:
+          return False
+
+
+  def main():
+      the_input = demisto.args().get('input')
+
+      the_input = argToList(the_input)
+      entries_list = []
+
+      for item in the_input:
+          if is_valid_ipv6_address(item):
+              entries_list.append(item)
+          else:
+              entries_list.append('')
+
+      if entries_list:
+          return_results(entries_list)
+      else:
+          return_results('')
+
+
+  # python2 uses __builtin__ python3 uses builtins
+  if __name__ == "__builtin__" or __name__ == "builtins":
+      main()
+
+  register_module_line('VerifyIPv6Indicator', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- indicator-format
+type: python
