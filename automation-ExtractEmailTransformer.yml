@@ -1,0 +1,55 @@
+args:
+- description: the input value.
+  isArray: true
+  name: value
+  required: true
+comment: Extracts email addresses from the given value.
+commonfields:
+  id: ExtractEmailTransformer
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.11.0
+    itemVersion: 1.2.61
+    packID: FiltersAndTransformers
+    packName: Filters And Transformers
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+engineinfo: {}
+mainengineinfo: {}
+name: ExtractEmailTransformer
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |+
+  // pack version: 1.2.61
+  function extract(values) {
+      // Extracts email addresses from a list of values.
+      // values: Array of strings.
+
+      const listResults = [];
+
+      for (const val of values) {
+          listResults.push(...((val || '').toLowerCase().match(emailRegex) || []));
+      }
+
+      return listResults;
+  }
+
+  try {
+      const values = argToList(args.value);
+      const results = extract(values);
+      return results;
+  } catch (error) {
+      throw 'Error occurred while running the script:\n' + error;
+  }
+
+scripttarget: 0
+system: true
+tags:
+- transformer
+type: javascript
