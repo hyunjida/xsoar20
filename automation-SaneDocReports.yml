@@ -1,0 +1,93 @@
+args:
+- default: true
+  description: sane report json file contents base64
+  name: sane_docx_report_base64
+  required: true
+- defaultValue: portrait
+  description: orientation of the report
+  name: orientation
+- defaultValue: A4
+  description: The paper size for the report.
+  name: paperSize
+- description: Custom logo image.
+  name: customerLogo
+- description: The logo for XSOAR.
+  name: demistoLogo
+comment: Parse Sane-json-reports and export them as docx files (used internally).
+commonfields:
+  id: SaneDocReports
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.5.0
+    itemVersion: 1.33.35
+    packID: Base
+    packName: Base
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+deprecated: true
+dockerimage: demisto/sane-doc-reports:1.0.0.24118
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: SaneDocReports
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('SaneDocReports', 'start', __line__())
+  ### pack version: 1.33.35
+
+
+  import traceback
+
+
+  import os
+  import base64
+  from sane_doc_reports.main import run
+
+
+  OUTPUT_FILE_PATH = 'out.docx'
+  try:
+      sane_json_b64 = demisto.args().get('sane_docx_report_base64', '').encode(
+          'utf-8')
+      orientation = demisto.args().get('orientation', 'portrait')
+      paper_size = demisto.args().get('paperSize', 'A4')
+      demistoLogo = demisto.args().get('demistoLogo', '')
+      customerLogo = demisto.args().get('customerLogo', '')
+
+      with open('sane.json', 'wb') as f:
+          f.write(base64.b64decode(sane_json_b64))
+
+      run('sane.json', OUTPUT_FILE_PATH, {
+          'orientation': orientation,
+          'paper_size': paper_size,
+          'demistoLogo': demistoLogo,
+          'customerLogo': customerLogo,
+      })
+
+      with open(OUTPUT_FILE_PATH, 'rb') as f:  # type: ignore
+          encoded = base64.b64encode(f.read()).decode('utf-8', 'ignore')
+
+      os.remove(OUTPUT_FILE_PATH)
+      return_outputs(readable_output='Successfully generated docx',
+                     outputs={}, raw_response={'data': encoded})
+  except Exception:
+      tb = traceback.format_exc()
+      wrap = "=====sane-doc-reports error====="
+      err = f'{wrap}\n{tb}{wrap}\n'
+      return_error(f'[SaneDocReports Automation Error] - {err}')
+
+  register_module_line('SaneDocReports', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- sane-doc-reports
+- sane-reports
+- docx
+type: python
