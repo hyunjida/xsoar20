@@ -1,0 +1,1145 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.1.0
+    itemVersion: 2.6.15
+    packID: CommonPlaybooks
+    packName: Common Playbooks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: 'This playbook searches and deletes emails with similar attributes of
+  a malicious email using one of the following integrations: * EWS * Office 365 *
+  Gmail * Agari Phishing Defense'
+id: Search And Delete Emails - Generic v2
+inputs:
+- description: The value of the malicious email's "From" attribute.
+  key: From
+  playbookInputQuery: null
+  required: false
+  value:
+    complex:
+      accessor: emailfrom
+      root: incident
+- description: The value of the malicious email's "Subject" attribute.
+  key: Subject
+  playbookInputQuery: null
+  required: false
+  value:
+    complex:
+      accessor: emailsubject
+      root: incident
+- description: The value of the malicious email's "AttachmentName" attribute.
+  key: AttachmentName
+  playbookInputQuery: null
+  required: false
+  value:
+    complex:
+      accessor: attachmentname
+      root: incident
+- description: The integration in which to run the search and delete action. Can be
+    O365, Gmail, EWS, or Agari Phishing Defense.
+  key: SearchAndDeleteIntegration
+  playbookInputQuery: null
+  required: true
+  value: {}
+- description: Used only in O365. A comma-separated list of mailboxes/distribution
+    groups to include, or use the value "All" to include all.
+  key: O365ExchangeLocation
+  playbookInputQuery: null
+  required: false
+  value:
+    complex:
+      accessor: emailto
+      root: incident
+- description: Used only in O365. Text search string or a query that is formatted
+    using the Keyword Query Language (KQL).
+  key: O365KQL
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: Used only in O365. Whether to include mailboxes other than regular
+    user mailboxes in the compliance search.
+  key: O365AllowNotFoundExchangeLocations
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: "False"
+- description: Used only in O365. The delete type to perform on the search results.
+    Possible values are Hard or Soft, or leave empty to select manually (Hard = Unrecoverable,
+    Soft=Recoverable).
+  key: O365DeleteType
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: 'Used only when searching and deleting emails in O365. The exchange
+    location. Determines where to search and delete emails searched using O365 playbooks.
+    Use the value ''All'' to search all mailboxes, use ''SingleMailbox'' to search
+    and delete the email only from the recipient''s inbox, or use ''Manual'' to decide
+    manually for every incident. Note: Searching all mailboxes may take a significant
+    amount of time.'
+  key: O365ExchangeLocationExclusion
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: Whether to limit the search to the current week.
+  key: SearchThisWeek
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: "true"
+name: Search And Delete Emails - Generic v2
+outputs: []
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "4"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 808e9cce-8112-49d4-8624-907a6fbeb394
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: 808e9cce-8112-49d4-8624-907a6fbeb394
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 50
+        }
+      }
+  "1":
+    continueonerrortype: ""
+    id: "1"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 0
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "2"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      AttachmentName:
+        complex:
+          root: inputs.AttachmentName
+      DeleteType:
+        simple: trash
+      From:
+        complex:
+          root: inputs.From
+      Limit:
+        simple: "20"
+      SearchThisWeek:
+        simple: "true"
+      Subject:
+        complex:
+          root: inputs.Subject
+    separatecontext: false
+    skipunavailable: true
+    task:
+      brand: ""
+      description: This playbook searches EWS to identify and delete emails with similar
+        attributes of a malicious email.
+      id: 0a7ca589-107b-48e4-8705-2becca697165
+      iscommand: false
+      name: Search And Delete Emails - EWS
+      playbookName: Search And Delete Emails - EWS
+      type: playbook
+      version: -1
+    taskid: 0a7ca589-107b-48e4-8705-2becca697165
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 780,
+          "y": 1230
+        }
+      }
+  "2":
+    continueonerrortype: ""
+    id: "2"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 88c58e53-8fe7-4ca2-8697-0ed3f67191fe
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 88c58e53-8fe7-4ca2-8697-0ed3f67191fe
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 1510
+        }
+      }
+  "3":
+    continueonerrortype: ""
+    id: "3"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "2"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      allow_not_found_exchange_locations:
+        complex:
+          root: inputs.O365AllowNotFoundExchangeLocations
+      delete_type:
+        complex:
+          root: inputs.O365DeleteType
+      exchange_location:
+        complex:
+          root: ExchangeLocation
+      exchange_location_exclusion:
+        complex:
+          root: inputs.O365ExchangeLocationExclusion
+      force:
+        simple: "false"
+      kql:
+        complex:
+          root: inputs.O365KQL
+      preview:
+        simple: "true"
+    separatecontext: false
+    skipunavailable: true
+    task:
+      brand: ""
+      description: |-
+        This playbook performs the following steps:
+        1. Creates a compliance search.
+        2. Starts a compliance search.
+        3. Waits for the compliance search to complete.
+        4. Gets the results of the compliance search.
+        5. Gets the preview results, if specified.
+        6. Deletes the search results (Hard/Soft).
+      id: b17bdcb8-c603-448c-8fd6-77bca91e7e2f
+      iscommand: false
+      name: O365 - Security And Compliance - Search And Delete
+      playbookName: O365 - Security And Compliance - Search And Delete
+      type: playbook
+      version: -1
+    taskid: b17bdcb8-c603-448c-8fd6-77bca91e7e2f
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": -380,
+          "y": 1325
+        }
+      }
+  "4":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                filters:
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: EWS v2
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.state
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: active
+                root: modules
+          operator: isNotEmpty
+          right:
+            value: {}
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                filters:
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: SecurityAndCompliance
+                  - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: SecurityAndComplianceV2
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.state
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: active
+                root: modules
+          operator: isNotEmpty
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.SearchAndDeleteIntegration
+          operator: isEqualString
+          right:
+            value:
+              simple: O365
+      label: Both Enabled, input is O365
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                filters:
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: SecurityAndCompliance
+                  - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: SecurityAndComplianceV2
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.state
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: active
+                root: modules
+          operator: isNotEmpty
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                filters:
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: EWS v2
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.state
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: active
+                root: modules
+          operator: isEmpty
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.SearchAndDeleteIntegration
+          operator: isEqualString
+          right:
+            value:
+              simple: O365
+      label: Only O365 Enabled
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                filters:
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: EWS v2
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.state
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: active
+                root: modules
+          operator: isNotEmpty
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                filters:
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: SecurityAndCompliance
+                  - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: SecurityAndComplianceV2
+                - - left:
+                      iscontext: true
+                      value:
+                        simple: modules.state
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: active
+                root: modules
+          operator: isNotEmpty
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.SearchAndDeleteIntegration
+          operator: isEqualString
+          right:
+            value:
+              simple: EWS
+      label: Both Enabled, input is EWS
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                filters:
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: EWS v2
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.state
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: active
+                root: modules
+          operator: isNotEmpty
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                filters:
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: SecurityAndCompliance
+                  - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: SecurityAndComplianceV2
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.state
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: active
+                root: modules
+          operator: isEmpty
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.SearchAndDeleteIntegration
+          operator: isEqualString
+          right:
+            value:
+              simple: EWS
+      label: Only EWS enabled
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                filters:
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: Gmail
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.state
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: active
+                root: modules
+          operator: isNotEmpty
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.SearchAndDeleteIntegration
+          operator: isEqualString
+          right:
+            value:
+              simple: Gmail
+      label: Gmail
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                filters:
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: Agari Phishing Defense
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.state
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: active
+                root: modules
+          operator: isNotEmpty
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.SearchAndDeleteIntegration
+          operator: isEqualString
+          right:
+            value:
+              simple: Agari Phishing Defense
+      label: Agari Phishing Defense
+    continueonerrortype: ""
+    id: "4"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "2"
+      Agari Phishing Defense:
+      - "15"
+      Both Enabled, input is EWS:
+      - "9"
+      Both Enabled, input is O365:
+      - "12"
+      Gmail:
+      - "13"
+      Only EWS enabled:
+      - "10"
+      Only O365 Enabled:
+      - "11"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks which integration and playbook should run the search and
+        delete action, by checking the SearchAndDeleteIntegration playbook input.
+      id: 421d875d-ff1a-4808-8451-228e23cd6605
+      iscommand: false
+      name: In what integration should emails be searched and deleted?
+      type: condition
+      version: -1
+    taskid: 421d875d-ff1a-4808-8451-228e23cd6605
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 180
+        }
+      }
+  "5":
+    conditions:
+    - condition:
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.O365ExchangeLocation
+                transformers:
+                - operator: ExtractEmailTransformer
+                - operator: count
+          operator: greaterThan
+          right:
+            value:
+              simple: "0"
+      label: Recipient's Mailbox
+    - condition:
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.O365ExchangeLocation
+          operator: isEqualString
+          right:
+            value:
+              simple: All
+      label: All Mailboxes
+    continueonerrortype: ""
+    id: "5"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "6"
+      All Mailboxes:
+      - "7"
+      Recipient's Mailbox:
+      - "8"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks whether a target to search and delete emails from was specified.
+        Determined by the O365ExchangeLocation playbook input.
+      id: 7db64c69-57c5-4457-8779-2363bcdd4714
+      iscommand: false
+      name: From where should emails be searched and deleted?
+      type: condition
+      version: -1
+    taskid: 7db64c69-57c5-4457-8779-2363bcdd4714
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": -770,
+          "y": 700
+        }
+      }
+  "6":
+    continueonerrortype: ""
+    id: "6"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      All Mailboxes:
+      - "7"
+      Recipients Mailbox:
+      - "8"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Allows the analyst to decide where to search for and delete the
+        email - from the recipient's mailbox, or from all available mailboxes?
+      id: 25801150-ef91-4ccc-8275-5ca5225fc857
+      iscommand: false
+      name: Manually decide where to search & delete the email
+      type: condition
+      version: -1
+    taskid: 25801150-ef91-4ccc-8275-5ca5225fc857
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": -770,
+          "y": 910
+        }
+      }
+  "7":
+    continueonerrortype: ""
+    id: "7"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "3"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      key:
+        simple: ExchangeLocation
+      value:
+        simple: All
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Set a value in context under the key you entered.
+      id: d4e2df0d-57ad-45e8-8def-023393fdc1b3
+      iscommand: false
+      name: Set all mailboxes to be searched
+      script: Set
+      type: regular
+      version: -1
+    taskid: d4e2df0d-57ad-45e8-8def-023393fdc1b3
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -1090,
+          "y": 1110
+        }
+      }
+  "8":
+    continueonerrortype: ""
+    id: "8"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "3"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      key:
+        simple: ExchangeLocation
+      value:
+        complex:
+          root: inputs.O365ExchangeLocation
+          transformers:
+          - args:
+              limit: {}
+              replaceWith: {}
+              toReplace:
+                value:
+                  simple: ' '
+            operator: replace
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Set a value in context under the key you entered.
+      id: b1056daa-1e07-41e9-883b-19aa4fc847fa
+      iscommand: false
+      name: Set the "email to" as the mailbox to search
+      script: Set
+      type: regular
+      version: -1
+    taskid: b1056daa-1e07-41e9-883b-19aa4fc847fa
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -500,
+          "y": 1110
+        }
+      }
+  "9":
+    continueonerrortype: ""
+    id: "9"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "1"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: eca8ae30-ebfa-4f62-82c9-5586e000e431
+      iscommand: false
+      name: Use EWS
+      type: title
+      version: -1
+    taskid: eca8ae30-ebfa-4f62-82c9-5586e000e431
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 1050,
+          "y": 440
+        }
+      }
+  "10":
+    continueonerrortype: ""
+    id: "10"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "1"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 43de9303-2031-43bc-8c5c-0f88a25a78f4
+      iscommand: false
+      name: Use EWS
+      type: title
+      version: -1
+    taskid: 43de9303-2031-43bc-8c5c-0f88a25a78f4
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 520,
+          "y": 440
+        }
+      }
+  "11":
+    continueonerrortype: ""
+    id: "11"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "5"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: afe381a2-655b-4dd3-8b22-2561451fcee2
+      iscommand: false
+      name: Use O365
+      type: title
+      version: -1
+    taskid: afe381a2-655b-4dd3-8b22-2561451fcee2
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": -490,
+          "y": 435
+        }
+      }
+  "12":
+    continueonerrortype: ""
+    id: "12"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "5"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 60128cf4-a622-4411-87b3-1bb25b0b14d2
+      iscommand: false
+      name: Use O365
+      type: title
+      version: -1
+    taskid: 60128cf4-a622-4411-87b3-1bb25b0b14d2
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": -1080,
+          "y": 435
+        }
+      }
+  "13":
+    continueonerrortype: ""
+    id: "13"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "14"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 86139d40-fef3-485f-86e9-fc99d4203c7b
+      iscommand: false
+      name: Use Gmail
+      type: title
+      version: -1
+    taskid: 86139d40-fef3-485f-86e9-fc99d4203c7b
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": -1620,
+          "y": 435
+        }
+      }
+  "14":
+    continueonerrortype: ""
+    id: "14"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "2"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      AttachmentName:
+        complex:
+          root: inputs.AttachmentName
+      DeleteType:
+        simple: "False"
+      From:
+        complex:
+          root: inputs.From
+      Limit:
+        simple: "50"
+      SearchThisWeek:
+        complex:
+          root: inputs.SearchThisWeek
+      Subject:
+        complex:
+          root: inputs.Subject
+    separatecontext: false
+    skipunavailable: true
+    task:
+      brand: ""
+      id: d46dc80f-b44e-4a16-8c42-0e0645017299
+      iscommand: false
+      name: Search And Delete Emails - Gmail
+      playbookName: Search And Delete Emails - Gmail
+      type: playbook
+      version: -1
+    taskid: d46dc80f-b44e-4a16-8c42-0e0645017299
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": -1620,
+          "y": 1320
+        }
+      }
+  "15":
+    continueonerrortype: ""
+    id: "15"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "16"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: bfa45743-9c08-4aba-8df6-cbff71d46bed
+      iscommand: false
+      name: Agari Phishing Defense
+      type: title
+      version: -1
+    taskid: bfa45743-9c08-4aba-8df6-cbff71d46bed
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 1530,
+          "y": 440
+        }
+      }
+  "16":
+    continueonerrortype: ""
+    id: "16"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "2"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      id:
+        complex:
+          accessor: emailinternalmessageid
+          root: incident
+      operation:
+        simple: delete
+    separatecontext: false
+    skipunavailable: true
+    task:
+      brand: Agari Phishing Defense
+      description: Remediates the suspected message.
+      id: b622809c-289a-413c-8019-3d5bafda95cc
+      iscommand: true
+      name: Search And Delete Emails - Agari Phishing Defense
+      script: Agari Phishing Defense|||apd-remediate-message
+      type: regular
+      version: -1
+    taskid: b622809c-289a-413c-8019-3d5bafda95cc
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 1530,
+          "y": 1230
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {
+      "4_13_Gmail": 0.81,
+      "4_15_Agari Phishing Defense": 0.86,
+      "4_2_#default#": 0.9
+    },
+    "paper": {
+      "dimensions": {
+        "height": 1525,
+        "width": 3530,
+        "x": -1620,
+        "y": 50
+      }
+    }
+  }
