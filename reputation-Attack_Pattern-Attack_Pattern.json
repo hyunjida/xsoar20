@@ -1,0 +1,64 @@
+{
+	"cacheVersn": 0,
+	"contextPath": "",
+	"contextValue": "",
+	"defaultMapping": null,
+	"definitionId": "",
+	"details": "Attack Pattern",
+	"disabled": false,
+	"enhancementScriptNames": [],
+	"excludedBrands": [],
+	"expiration": 0,
+	"file": false,
+	"fileHashesPriority": null,
+	"formatScript": "ExtractAttackPattern",
+	"fromServerVersion": "6.2.0",
+	"id": "Attack Pattern",
+	"itemVersion": "3.4.1",
+	"layout": "STIX Attack Pattern",
+	"legacyNames": [
+		"STIX Attack Pattern"
+	],
+	"locked": false,
+	"manualMapping": {
+		"description": {
+			"simple": "AttackPattern.Description"
+		},
+		"firstseenbysource": {
+			"simple": "AttackPattern.FirstSeenBySource"
+		},
+		"killchainphases": {
+			"simple": "AttackPattern.KillChainPhases"
+		},
+		"mitreid": {
+			"simple": "AttackPattern.MITREID"
+		},
+		"operatingsystemrefs": {
+			"simple": "AttackPattern.OperatingSystemRefs"
+		},
+		"publications": {
+			"simple": "AttackPattern.Publications"
+		},
+		"stixid": {
+			"simple": "AttackPattern.STIXID"
+		},
+		"tags": {
+			"simple": "AttackPattern.Tags"
+		}
+	},
+	"mergeContext": false,
+	"packID": "CommonTypes",
+	"packName": "Common Types",
+	"packPropagationLabels": [
+		"all"
+	],
+	"propagationLabels": [],
+	"regex": "\\bT\\d{4}(?:\\.\\d{3})?\\b",
+	"reputationCommand": "",
+	"reputationScriptName": "",
+	"shouldShareComments": false,
+	"system": true,
+	"toServerVersion": "",
+	"updateAfter": 0,
+	"version": -1
+}
