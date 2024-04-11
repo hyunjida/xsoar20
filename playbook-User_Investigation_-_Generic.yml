@@ -1,0 +1,1555 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.5.0
+    itemVersion: 2.6.15
+    packID: CommonPlaybooks
+    packName: Common Playbooks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: |-
+  This playbook performs an investigation on a specific user, using queries and logs from SIEM, Identity management systems, XDR, and firewalls.
+
+  Supported Integrations:
+  -Okta
+  -Splunk
+  -QRadar
+  -Azure Log Analytics
+  -PAN-OS
+  -XDR / Core By Palo Alto Networks.
+id: User Investigation - Generic
+inputs:
+- description: Splunk's index name in which to search. Default is "*" - All.
+  key: SplunkIndex
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: '*'
+- description: The earliest time for the Splunk search query.
+  key: SplunkEarliestTime
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: -1d
+- description: The latest time for the Splunk search query.
+  key: SplunkLatestTime
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: now
+- description: The user email to search Okta logs.
+  key: UserEmail
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: User name.
+  key: Username
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: The Country from which the user logged in.
+  key: LoginCountry
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: Whether to search for failed logon logs from Siem? Can be False or
+    True.
+  key: SIEMFailedLogonSearch
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: "True"
+- description: Whether to search for threat logs from PAN-OS? Can be False or True.
+  key: ThreatLogSearch
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: "True"
+- description: Whether to search for Related alerts from XDR? Can be False or True.
+  key: XDRAlertSearch
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: "True"
+- description: Whether to search for logs from Okta? Can be False or True.
+  key: OktaSearch
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: "True"
+- description: Cortex XDR User name Field.
+  key: XDRUsernameField
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: actor_effective_username
+- description: 'The Search Time for the QRadar search query. for example:  Last 1
+    days'
+  key: QRadarSearchTime
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: Last 1 days
+- description: 'The Search Time for the Azure Log Analytics search query. for example:
+    ago(1d)'
+  key: AzureSearchTime
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: ago(1d)
+- description: The ASN from which the user logged in.
+  key: ASN
+  playbookInputQuery: null
+  required: false
+  value: {}
+name: User Investigation - Generic
+outputs:
+- contextPath: NumOfSiemFailedLogon
+  description: Number of failed login from Siem.
+- contextPath: NumOfThreatLogs
+  description: Number of Threat Logs for the user from Panorama.
+  type: unknown
+- contextPath: PaloAltoNetworksXDR.Alert
+  description: XDR Alerts.
+  type: unknown
+- contextPath: ArraySize
+  description: Number of XDR alert for the user.
+- contextPath: PermanentCountry
+  description: True if the user work from a permanent country from Okta. False if
+    else.
+  type: unknown
+- contextPath: UserDevices
+  description: Devices used by the user from Okta.
+  type: unknown
+- contextPath: NumOfOktaSuspiciousActivities
+  description: Number of Suspicious Activities for the user from Okta.
+  type: unknown
+- contextPath: SuspiciousUserActivities
+  description: Suspicious Activities for the user from Okta.
+  type: unknown
+- contextPath: NumOfOktaSuspiciousUserAgent
+  description: Number of Suspicious User Agent from Okta.
+  type: unknown
+- contextPath: SuspiciousUserAgent
+  description: Suspicious User Agent from Okta.
+  type: unknown
+- contextPath: UserApplication
+  description: ' Applications used by the user from Okta.'
+  type: unknown
+- contextPath: NumOfOktaFailedLogon
+  description: Number of failed login from Okta.
+  type: unknown
+- contextPath: AzureFailedLogonLogs
+  description: The result of the Azure Log Analytics search.
+  type: unknown
+- contextPath: QRadar.Search.Result
+  description: The result of the QRadar search.
+- contextPath: Splunk.Result
+  description: The results of the Splunk search. The results are a JSON array, in
+    which each item is a Splunk event.
+- contextPath: NumOfFailedLogon
+  description: Number of failed login.
+  type: unknown
+- contextPath: NumOfFailedLogonASN
+  description: Number of failed login from ASN by all users.
+  type: unknown
+quiet: true
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "17"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 12d19917-d85e-4a42-8e53-7ff1ab81aa09
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: 12d19917-d85e-4a42-8e53-7ff1ab81aa09
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 720,
+          "y": -155
+        }
+      }
+  "1":
+    continueonerrortype: ""
+    id: "1"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "73"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 93fe0ced-0cc0-4fe6-8d97-11b74243539b
+      iscommand: false
+      name: Failed Logon Search
+      type: title
+      version: -1
+    taskid: 93fe0ced-0cc0-4fe6-8d97-11b74243539b
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 370,
+          "y": 400
+        }
+      }
+  "17":
+    continueonerrortype: ""
+    id: "17"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "49"
+      - "51"
+      - "48"
+      - "74"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 079af6ed-0728-4152-8b8f-6713b79c85bc
+      iscommand: false
+      name: Investigation
+      type: title
+      version: -1
+    taskid: 079af6ed-0728-4152-8b8f-6713b79c85bc
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 720,
+          "y": 10
+        }
+      }
+  "28":
+    continueonerrortype: ""
+    id: "28"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 73c894c8-fd7a-4ea0-8eba-dbfd2db37bcf
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 73c894c8-fd7a-4ea0-8eba-dbfd2db37bcf
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 720,
+          "y": 1840
+        }
+      }
+  "31":
+    continueonerrortype: ""
+    id: "31"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "32"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: b632202b-40e8-41aa-8de5-b98ddef463b2
+      iscommand: false
+      name: Threat Logs Search
+      type: title
+      version: -1
+    taskid: b632202b-40e8-41aa-8de5-b98ddef463b2
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 2070,
+          "y": 400
+        }
+      }
+  "32":
+    conditions:
+    - condition:
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                accessor: state
+                filters:
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: containsString
+                    right:
+                      value:
+                        simple: Panorama
+                root: modules
+          operator: isEqualString
+          right:
+            value:
+              simple: active
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.Username
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "32"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "28"
+      "yes":
+      - "43"
+    note: false
+    quietmode: 2
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Check if PAN-OS integration enabled and the user name is defined
+      id: 2b777de0-64fc-408f-8ec7-b78a5ecb91d2
+      iscommand: false
+      name: Is PAN-OS integration enabled and the user name is defined?
+      type: condition
+      version: -1
+    taskid: 2b777de0-64fc-408f-8ec7-b78a5ecb91d2
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 2070,
+          "y": 530
+        }
+      }
+  "33":
+    continueonerror: true
+    continueonerrortype: ""
+    id: "33"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "35"
+    note: false
+    quietmode: 2
+    scriptarguments:
+      log-type:
+        simple: threat
+      query:
+        simple: (user.src eq ${SplitUsername}) or (user.dst eq ${SplitUsername}) and
+          (time_generated in last-24-hrs)
+    separatecontext: false
+    skipunavailable: true
+    task:
+      brand: ""
+      description: The query logs in Panorama.
+      id: ea25e12c-7774-410a-8af8-77c6320c30ab
+      iscommand: true
+      name: PAN-OS query logs
+      script: '|||pan-os-query-logs'
+      type: regular
+      version: -1
+    taskid: ea25e12c-7774-410a-8af8-77c6320c30ab
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 2070,
+          "y": 1090
+        }
+      }
+  "34":
+    continueonerror: true
+    continueonerrortype: ""
+    id: "34"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "28"
+    note: false
+    quietmode: 2
+    scriptarguments:
+      array:
+        complex:
+          accessor: Logs
+          root: Panorama.Monitor
+      contextKey:
+        simple: NoOfThreatLogs
+      ignore-outputs:
+        simple: "false"
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Count an array size.
+      id: 41b8ee9d-eecb-46a3-8946-778cc405d540
+      iscommand: false
+      name: Count Threat logs for the user from Panorama logs
+      script: CountArraySize
+      type: regular
+      version: -1
+    taskid: 41b8ee9d-eecb-46a3-8946-778cc405d540
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 2070,
+          "y": 1665
+        }
+      }
+  "35":
+    continueonerror: true
+    continueonerrortype: ""
+    id: "35"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "57"
+    note: false
+    quietmode: 2
+    scriptarguments:
+      job_id:
+        complex:
+          accessor: JobID
+          root: Panorama.Monitor
+    separatecontext: false
+    skipunavailable: true
+    task:
+      brand: ""
+      description: Retrieves the data of a log query.
+      id: c2c8a7ad-704d-41a7-8e52-535b07ad9bac
+      iscommand: true
+      name: PAN-OS get logs
+      script: '|||pan-os-get-logs'
+      type: regular
+      version: -1
+    taskid: c2c8a7ad-704d-41a7-8e52-535b07ad9bac
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 2070,
+          "y": 1255
+        }
+      }
+  "43":
+    continueonerrortype: ""
+    id: "43"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "87"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 1e94ed10-2733-4148-8982-a1b6f17c3bb6
+      iscommand: false
+      name: PAN-OS
+      type: title
+      version: -1
+    taskid: 1e94ed10-2733-4148-8982-a1b6f17c3bb6
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 2070,
+          "y": 800
+        }
+      }
+  "45":
+    continueonerrortype: ""
+    id: "45"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "72"
+      - "84"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 0506de8c-0534-4fae-8513-3c734bb4c00a
+      iscommand: false
+      name: Related alerts from XDR / Core
+      type: title
+      version: -1
+    taskid: 0506de8c-0534-4fae-8513-3c734bb4c00a
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 1270,
+          "y": 410
+        }
+      }
+  "48":
+    conditions:
+    - condition:
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.SIEMFailedLogonSearch
+          operator: isEqualString
+          right:
+            value:
+              simple: "True"
+      label: "yes"
+    continueonerrortype: ""
+    id: "48"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "28"
+      "yes":
+      - "1"
+    note: false
+    quietmode: 2
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Check if the Input's value "SIEMFailedLogonSearch" is True.
+      id: efacc27d-aec0-4f92-84dc-2d434f667eca
+      iscommand: false
+      name: Search for Failed logons from SIEM?
+      type: condition
+      version: -1
+    taskid: efacc27d-aec0-4f92-84dc-2d434f667eca
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 370,
+          "y": 170
+        }
+      }
+  "49":
+    conditions:
+    - condition:
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.ThreatLogSearch
+          operator: isEqualString
+          right:
+            value:
+              simple: "True"
+      label: "yes"
+    continueonerrortype: ""
+    id: "49"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "28"
+      "yes":
+      - "31"
+    note: false
+    quietmode: 2
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Check if the Input's value "ThreatLogSearch" is True.
+      id: 1b4ed81e-c512-469d-8d2f-a3cdd721c4bb
+      iscommand: false
+      name: Search for Threat logs?
+      type: condition
+      version: -1
+    taskid: 1b4ed81e-c512-469d-8d2f-a3cdd721c4bb
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 2070,
+          "y": 170
+        }
+      }
+  "51":
+    conditions:
+    - condition:
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.XDRAlertSearch
+          operator: isEqualString
+          right:
+            value:
+              simple: "True"
+      label: "yes"
+    continueonerrortype: ""
+    id: "51"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "28"
+      "yes":
+      - "45"
+    note: false
+    quietmode: 2
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Check if the Input's value "XDRAlertSearch" is True.
+      id: cabb7c6f-735f-4e80-8d09-06d124168d46
+      iscommand: false
+      name: Search for Related alerts from Cortex XDR?
+      type: condition
+      version: -1
+    taskid: cabb7c6f-735f-4e80-8d09-06d124168d46
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 1060,
+          "y": 170
+        }
+      }
+  "57":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: ID
+                root: Panorama.Monitor.Logs
+          operator: isExists
+          right:
+            value: {}
+      label: "yes"
+    continueonerrortype: ""
+    id: "57"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "28"
+      "yes":
+      - "34"
+    note: false
+    quietmode: 2
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Check if there are results from PAN-OS
+      id: 0ac486a0-4182-4bb8-8d03-7c9abc7f2e11
+      iscommand: false
+      name: Found results from PAN-OS?
+      type: condition
+      version: -1
+    taskid: 0ac486a0-4182-4bb8-8d03-7c9abc7f2e11
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 2070,
+          "y": 1430
+        }
+      }
+  "68":
+    continueonerrortype: ""
+    id: "68"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "28"
+    note: false
+    quietmode: 2
+    scriptarguments:
+      EntityType:
+        complex:
+          root: inputs.XDRUsernameField
+      HuntCnCTechniques:
+        simple: "True"
+      HuntCollectionTechniques:
+        simple: "True"
+      HuntCredentialAccessTechniques:
+        simple: "True"
+      HuntDefenseEvasionTechniques:
+        simple: "True"
+      HuntDiscoveryTechniques:
+        simple: "True"
+      HuntExecutionTechniques:
+        simple: "True"
+      HuntImpactTechniques:
+        simple: "True"
+      HuntInitialAccessTechniques:
+        simple: "True"
+      HuntLateralMovementTechniques:
+        simple: "True"
+      HuntPersistenceTechniques:
+        simple: "True"
+      HuntPrivilegeEscalationTechniques:
+        simple: "True"
+      HuntReconnaissanceTechniques:
+        simple: "True"
+      RunAll:
+        simple: "False"
+      entityID:
+        complex:
+          root: inputs.Username
+          transformers:
+          - args:
+              delimiter:
+                value:
+                  simple: \
+            operator: split
+          - operator: LastArrayElement
+          - operator: uniq
+      timeRange:
+        simple: 2 hours
+    separatecontext: true
+    skipunavailable: true
+    task:
+      brand: ""
+      description: |-
+        This playbook is part of the Cortex XDR by Palo Alto Networks’ pack. This playbook searches alerts related to specific entities from Cortex XDR, on a given timeframe, based on MITRE tactics.
+        Note: The playbook's inputs enable manipulating the execution flow. Read the input descriptions for details.
+      id: 83835468-5432-4baa-8656-cfd7c05fecbe
+      iscommand: false
+      name: Cortex XDR - Get entity alerts by MITRE tactics
+      playbookName: Cortex XDR - Get entity alerts by MITRE tactics
+      type: playbook
+      version: -1
+    taskid: 83835468-5432-4baa-8656-cfd7c05fecbe
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 1050,
+          "y": 930
+        }
+      }
+  "72":
+    conditions:
+    - condition:
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                accessor: state
+                filters:
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: Cortex XDR - IR
+                root: modules
+          operator: isEqualString
+          right:
+            value:
+              simple: active
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.XDRUsernameField
+          operator: isNotEmpty
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.Username
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "72"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "28"
+      "yes":
+      - "77"
+    note: false
+    quietmode: 2
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks if Cortex XDR integration is enabled and the user name is
+        defined.
+      id: 34e3a202-b333-4c2b-8e13-bb9d98121c96
+      iscommand: false
+      name: Is Cortex XDR integration enabled and user name is defined?
+      type: condition
+      version: -1
+    taskid: 34e3a202-b333-4c2b-8e13-bb9d98121c96
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 1050,
+          "y": 550
+        }
+      }
+  "73":
+    continueonerrortype: ""
+    id: "73"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "82"
+    note: false
+    quietmode: 2
+    scriptarguments:
+      AzureSearchTime:
+        complex:
+          root: inputs.AzureSearchTime
+      QRadarSearchTime:
+        complex:
+          root: inputs.QRadarSearchTime
+      SplunkEarliestTime:
+        complex:
+          root: inputs.SplunkEarliestTime
+      SplunkIndex:
+        complex:
+          root: inputs.SplunkIndex
+      SplunkLatestTime:
+        complex:
+          root: inputs.SplunkLatestTime
+      Username:
+        complex:
+          root: inputs.Username
+    separatecontext: true
+    skipunavailable: true
+    task:
+      brand: ""
+      description: |-
+        This playbook searches for failed logon on a specific user by querying logs from different sources.
+
+        Supported Integrations:
+        -Splunk
+        -Qradar
+        -Azure Log Analytics
+      id: 31f63fc0-feae-470f-88dc-2b0a38b958eb
+      iscommand: false
+      name: SIEM - Search for Failed logins
+      playbookId: SIEM - Search for Failed logins
+      type: playbook
+      version: -1
+    taskid: 31f63fc0-feae-470f-88dc-2b0a38b958eb
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 370,
+          "y": 540
+        }
+      }
+  "74":
+    conditions:
+    - condition:
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.OktaSearch
+          operator: isEqualString
+          right:
+            value:
+              simple: "True"
+      label: "yes"
+    continueonerrortype: ""
+    id: "74"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "28"
+      "yes":
+      - "75"
+    note: false
+    quietmode: 2
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Check if the Input's value "OktaSearch" is True.
+      id: 8afeebfc-2c1d-4e6d-84b0-3b566114764a
+      iscommand: false
+      name: Search for Okta logs?
+      type: condition
+      version: -1
+    taskid: 8afeebfc-2c1d-4e6d-84b0-3b566114764a
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": -160,
+          "y": 170
+        }
+      }
+  "75":
+    continueonerrortype: ""
+    id: "75"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "76"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 70ac1d98-f750-49b2-84f0-1533328e6bdc
+      iscommand: false
+      name: Okta User Investigation
+      type: title
+      version: -1
+    taskid: 70ac1d98-f750-49b2-84f0-1533328e6bdc
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": -160,
+          "y": 400
+        }
+      }
+  "76":
+    continueonerrortype: ""
+    id: "76"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "83"
+    note: false
+    quietmode: 2
+    scriptarguments:
+      ASN:
+        complex:
+          root: inputs.ASN
+      LoginCountry:
+        complex:
+          root: inputs.LoginCountry
+      UserEmail:
+        complex:
+          root: inputs.UserEmail
+    separatecontext: true
+    skipunavailable: true
+    task:
+      brand: ""
+      description: This playbook performs an investigation on a specific user, using
+        queries and logs from Okta.
+      id: 04488cb1-1067-4a7a-8d91-5013b22d86aa
+      iscommand: false
+      name: Okta - User Investigation
+      playbookName: Okta - User Investigation
+      type: playbook
+      version: -1
+    taskid: 04488cb1-1067-4a7a-8d91-5013b22d86aa
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": -160,
+          "y": 540
+        }
+      }
+  "77":
+    continueonerrortype: ""
+    id: "77"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "68"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 03d8328e-95d5-49b2-83c8-c71eac96f6b0
+      iscommand: false
+      name: Cortex XDR
+      type: title
+      version: -1
+    taskid: 03d8328e-95d5-49b2-83c8-c71eac96f6b0
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 1050,
+          "y": 800
+        }
+      }
+  "80":
+    continueonerror: true
+    continueonerrortype: ""
+    id: "80"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "28"
+    note: false
+    quietmode: 2
+    scriptarguments:
+      action:
+        simple: +
+      contextKey:
+        simple: NumOfFailedLogon
+      ignore-outputs:
+        simple: "false"
+      lh:
+        complex:
+          root: NumOfOktaFailedLogon
+          transformers:
+          - args:
+              applyIfEmpty: {}
+              defaultValue:
+                value:
+                  simple: "0"
+            operator: SetIfEmpty
+      rh:
+        complex:
+          root: NumOfSiemFailedLogon
+          transformers:
+          - args:
+              applyIfEmpty: {}
+              defaultValue:
+                value:
+                  simple: "0"
+            operator: SetIfEmpty
+    separatecontext: false
+    skipunavailable: true
+    task:
+      brand: ""
+      description: |
+        Script will run the provided mathematical action on 2 provided values and produce a result.
+        The result can be stored on the context using the contextKey argument
+      id: 9faef5f8-cf67-4f6f-8419-6104cf012806
+      iscommand: false
+      name: Number Of Failed Logon
+      script: MathUtil
+      type: regular
+      version: -1
+    taskid: 9faef5f8-cf67-4f6f-8419-6104cf012806
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 80,
+          "y": 905
+        }
+      }
+  "82":
+    continueonerrortype: ""
+    id: "82"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "80"
+    note: false
+    quietmode: 2
+    scriptarguments:
+      key:
+        simple: NumOfSiemFailedLogon
+      value:
+        complex:
+          root: inputs.Username
+          transformers:
+          - args:
+              condition:
+                value:
+                  simple: lhs==rhs
+              conditionB: {}
+              conditionInBetween: {}
+              else:
+                iscontext: true
+                value:
+                  simple: NumOfSiemFailedLogon
+              equals: {}
+              lhs:
+                iscontext: true
+                value:
+                  simple: NumOfSiemFailedLogon
+              lhsB: {}
+              options: {}
+              optionsB: {}
+              rhs: {}
+              rhsB: {}
+              then:
+                value:
+                  simple: "0"
+            operator: If-Then-Else
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Set a value in context under the key you entered.
+      id: 8dd8d181-471d-40a0-8865-c25b043dec1f
+      iscommand: false
+      name: Set Number Of SIEM Failed Logon
+      script: Set
+      type: regular
+      version: -1
+    taskid: 8dd8d181-471d-40a0-8865-c25b043dec1f
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 370,
+          "y": 705
+        }
+      }
+  "83":
+    continueonerrortype: ""
+    id: "83"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "80"
+    note: false
+    quietmode: 2
+    scriptarguments:
+      key:
+        simple: NumOfOktaFailedLogon
+      value:
+        complex:
+          root: inputs.Username
+          transformers:
+          - args:
+              condition:
+                value:
+                  simple: lhs==rhs
+              conditionB: {}
+              conditionInBetween: {}
+              else:
+                iscontext: true
+                value:
+                  simple: NumOfOktaFailedLogon
+              equals: {}
+              lhs:
+                iscontext: true
+                value:
+                  simple: NumOfOktaFailedLogon
+              lhsB: {}
+              options: {}
+              optionsB: {}
+              rhs: {}
+              rhsB: {}
+              then:
+                value:
+                  simple: "0"
+            operator: If-Then-Else
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Set a value in context under the key you entered.
+      id: fdffde9f-b35c-4077-83ca-4d1d0bb93701
+      iscommand: false
+      name: Set Number Of Okta Failed Logon
+      script: Set
+      type: regular
+      version: -1
+    taskid: fdffde9f-b35c-4077-83ca-4d1d0bb93701
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -160,
+          "y": 725
+        }
+      }
+  "84":
+    conditions:
+    - condition:
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                accessor: state
+                filters:
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: Cortex Core - IR
+                root: modules
+          operator: isEqualString
+          right:
+            value:
+              simple: active
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.XDRUsernameField
+          operator: isNotEmpty
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.Username
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "84"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "28"
+      "yes":
+      - "85"
+    note: false
+    quietmode: 2
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks if Cortex XDR integration is enabled and the user name is
+        defined.
+      id: 3a2b054d-f7b4-4576-8d76-2bc32cf07f96
+      iscommand: false
+      name: Is Cortex Core integration enabled and user name is defined?
+      type: condition
+      version: -1
+    taskid: 3a2b054d-f7b4-4576-8d76-2bc32cf07f96
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 1490,
+          "y": 550
+        }
+      }
+  "85":
+    continueonerrortype: ""
+    id: "85"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "86"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 0adef6b2-c579-4948-8bbc-73f122ed38c6
+      iscommand: false
+      name: Cortex Core
+      type: title
+      version: -1
+    taskid: 0adef6b2-c579-4948-8bbc-73f122ed38c6
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 1490,
+          "y": 800
+        }
+      }
+  "86":
+    continueonerrortype: ""
+    id: "86"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "28"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      EntityID:
+        complex:
+          root: inputs.Username
+          transformers:
+          - args:
+              delimiter:
+                value:
+                  simple: \
+            operator: split
+          - operator: LastArrayElement
+          - operator: uniq
+      EntityType:
+        complex:
+          root: inputs.XDRUsernameField
+      HuntCnCTechniques:
+        simple: "True"
+      HuntCollectionTechniques:
+        simple: "True"
+      HuntCredentialAccessTechniques:
+        simple: "True"
+      HuntDefenseEvasionTechniques:
+        simple: "True"
+      HuntDiscoveryTechniques:
+        simple: "True"
+      HuntExecutionTechniques:
+        simple: "True"
+      HuntImpactTechniques:
+        simple: "True"
+      HuntInitialAccessTechniques:
+        simple: "True"
+      HuntLateralMovementTechniques:
+        simple: "True"
+      HuntPersistenceTechniques:
+        simple: "True"
+      HuntPrivilegeEscalationTechniques:
+        simple: "True"
+      HuntReconnaissanceTechniques:
+        simple: "True"
+      RunAll:
+        simple: "False"
+      timeRange:
+        simple: 2 hours
+    separatecontext: true
+    skipunavailable: true
+    task:
+      brand: ""
+      description: |-
+        This playbook searches XDR alerts related to specific entities , on a given timeframe, based on MITRE tactics.
+        Note: The playbook's inputs enable manipulating the execution flow. Read the input descriptions for details.
+      id: 30f27e02-ece5-453a-8cc3-0b62510da975
+      iscommand: false
+      name: Get entity alerts by MITRE tactics
+      playbookName: Get entity alerts by MITRE tactics
+      type: playbook
+      version: -1
+    taskid: 30f27e02-ece5-453a-8cc3-0b62510da975
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 1490,
+          "y": 930
+        }
+      }
+  "87":
+    continueonerrortype: ""
+    id: "87"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "33"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      key:
+        simple: SplitUsername
+      value:
+        complex:
+          root: inputs.Username
+          transformers:
+          - args:
+              delimiter:
+                value:
+                  simple: \
+            operator: split
+          - operator: LastArrayElement
+          - operator: uniq
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: |-
+        Set a value in context under the key you entered. If no value is entered, the script doesn't do anything.
+
+        This automation runs using the default Limited User role, unless you explicitly change the permissions.
+        For more information, see the section about permissions here:
+        https://docs-cortex.paloaltonetworks.com/r/Cortex-XSOAR/6.10/Cortex-XSOAR-Administrator-Guide/Automations
+      id: 1fe16618-2b52-443d-891e-3705a9bd5d65
+      iscommand: false
+      name: Save split username
+      script: SetAndHandleEmpty
+      type: regular
+      version: -1
+    taskid: 1fe16618-2b52-443d-891e-3705a9bd5d65
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 2070,
+          "y": 930
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {
+      "32_28_#default#": 0.1,
+      "32_43_yes": 0.67,
+      "48_1_yes": 0.54,
+      "48_28_#default#": 0.1,
+      "49_28_#default#": 0.1,
+      "49_31_yes": 0.52,
+      "51_28_#default#": 0.1,
+      "51_45_yes": 0.55,
+      "57_28_#default#": 0.38,
+      "57_34_yes": 0.56,
+      "72_28_#default#": 0.1,
+      "72_77_yes": 0.67,
+      "74_28_#default#": 0.14,
+      "74_75_yes": 0.47,
+      "84_28_#default#": 0.1
+    },
+    "paper": {
+      "dimensions": {
+        "height": 2060,
+        "width": 2610,
+        "x": -160,
+        "y": -155
+      }
+    }
+  }
