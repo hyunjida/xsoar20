@@ -1,0 +1,215 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.0.0
+    itemVersion: 2.6.15
+    packID: CommonPlaybooks
+    packName: Common Playbooks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: This playbook retrieves a specified EML/MSG file directly from the email
+  security gateway product.
+id: Get Email From Email Gateway - Generic
+inputs:
+- description: The message ID received by the email security product.
+  key: MessageID
+  playbookInputQuery: null
+  required: false
+  value: {}
+name: Get Email From Email Gateway - Generic
+outputs:
+- contextPath: File
+  description: The MSG/EML File Entry ID.
+  type: string
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "5"
+      - "3"
+      - "4"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 4601bd5d-21a9-4f61-8148-7efbd545c017
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: 4601bd5d-21a9-4f61-8148-7efbd545c017
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 190
+        }
+      }
+  "1":
+    continueonerrortype: ""
+    id: "1"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 0be9c4cd-925c-4085-8451-c5a948407d97
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 0be9c4cd-925c-4085-8451-c5a948407d97
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 530
+        }
+      }
+  "3":
+    continueonerrortype: ""
+    id: "3"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "1"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      EmailTimestamp:
+        complex:
+          accessor: occurred
+          root: incident
+      MessageID:
+        complex:
+          root: inputs.MessageID
+    separatecontext: true
+    skipunavailable: true
+    task:
+      brand: ""
+      description: This playbook retrieves a specified EML/MSG file directly from
+        FireEye Email Security or Central Management.
+      id: b32916b5-8000-4c43-80d6-fc491edfedd6
+      iscommand: false
+      name: Get Email From Email Gateway - FireEye
+      playbookName: Get Email From Email Gateway - FireEye
+      type: playbook
+      version: -1
+    taskid: b32916b5-8000-4c43-80d6-fc491edfedd6
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 360
+        }
+      }
+  "4":
+    continueonerrortype: ""
+    id: "4"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "1"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      MessageID:
+        complex:
+          root: inputs.MessageID
+    separatecontext: true
+    skipunavailable: true
+    task:
+      brand: ""
+      description: This playbook retrieves a specified EML/MSG file directly from
+        Mimecast.
+      id: 3415ba42-7642-4fd4-8b5c-85e1b3b7004c
+      iscommand: false
+      name: Get Email From Email Gateway - Mimecast
+      playbookName: Get Email From Email Gateway - Mimecast
+      type: playbook
+      version: -1
+    taskid: 3415ba42-7642-4fd4-8b5c-85e1b3b7004c
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 890,
+          "y": 330
+        }
+      }
+  "5":
+    continueonerrortype: ""
+    id: "5"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "1"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      MessageID:
+        complex:
+          root: inputs.MessageID
+    separatecontext: true
+    skipunavailable: true
+    task:
+      brand: ""
+      description: This playbook retrieves a specified EML/MSG file directly from
+        the Proofpoint Protection Server.
+      id: 8c2ce613-3539-48f2-84a9-fecf1d7c0ee3
+      iscommand: false
+      name: Get Email From Email Gateway - Proofpoint Protection Server
+      playbookName: Get Email From Email Gateway - Proofpoint Protection Server
+      type: playbook
+      version: -1
+    taskid: 8c2ce613-3539-48f2-84a9-fecf1d7c0ee3
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 10,
+          "y": 330
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 405,
+        "width": 1260,
+        "x": 10,
+        "y": 190
+      }
+    }
+  }
