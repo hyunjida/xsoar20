@@ -1,0 +1,356 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.5.0
+    itemVersion: 1.1.23
+    packID: TIM_Processing
+    packName: TIM - Indicator Auto-Processing
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: |-
+  This playbook tags indicators ingested by feeds that require manual approval. The playbook is triggered due to a job. The indicators are tagged as requiring a manual review. The playbook optionally concludes with creating a new incident that includes all of the indicators that the analyst must review.
+  To enable the playbook, the indicator query needs to be configured. An example query is a list of the feeds whose ingested indicators should be manually reviewed. For example, sourceBrands:"Feed A" or sourceBrands:"Feed B".
+id: TIM - Process Indicators - Manual Review
+inputs:
+- description: ""
+  key: ""
+  playbookInputQuery:
+    daterange:
+      fromdate: "0001-01-01T00:00:00Z"
+      fromdatelicenseval: "0001-01-01T00:00:00Z"
+      period:
+        by: ""
+        byfrom: ""
+        byto: ""
+        field: ""
+        fromvalue: null
+        tovalue: null
+      todate: "0001-01-01T00:00:00Z"
+    query: ""
+    queryEntity: indicators
+    results: null
+    runFromLastJobTime: false
+  required: false
+  value: {}
+- description: This input determines if processed indicators that have the manual
+    review tag are reviewed in a new incident. To create an incident, enter any value
+    other than 'No'.
+  key: OpenIncidentToReviewIndicatorsManually
+  playbookInputQuery: null
+  required: true
+  value:
+    simple: "No"
+name: TIM - Process Indicators - Manual Review
+outputs: []
+quiet: true
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "2"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: b59eeea0-db49-4725-8dac-8a7d383cef75
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: b59eeea0-db49-4725-8dac-8a7d383cef75
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": -290
+        }
+      }
+  "2":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: playbookQuery.value
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "2"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "3"
+      "yes":
+      - "5"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: a6ccee14-545f-4e11-8230-4b13f2ced84c
+      iscommand: false
+      name: Are there query results?
+      type: condition
+      version: -1
+    taskid: a6ccee14-545f-4e11-8230-4b13f2ced84c
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": -140
+        }
+      }
+  "3":
+    continueonerrortype: ""
+    id: "3"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 248ee366-c269-479e-8679-5fc5131fce23
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 248ee366-c269-479e-8679-5fc5131fce23
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 1030
+        }
+      }
+  "4":
+    continueonerrortype: ""
+    id: "4"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "3"
+    note: false
+    quietmode: 2
+    scriptarguments:
+      name:
+        simple: Review Indicators Manually
+      type:
+        simple: Review Indicators Manually
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: Builtin
+      description: Creates an incident that includes all of the indicators that must
+        be manually reviewed.
+      id: 2dcdf680-2e84-4095-878b-35f80edb2a42
+      iscommand: true
+      name: Create Process Indicators Manually incident
+      script: Builtin|||createNewIncident
+      type: regular
+      version: -1
+    taskid: 2dcdf680-2e84-4095-878b-35f80edb2a42
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -30,
+          "y": 860
+        }
+      }
+  "5":
+    continueonerrortype: ""
+    id: "5"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "7"
+    note: false
+    quietmode: 0
+    separatecontext: true
+    skipunavailable: false
+    task:
+      brand: ""
+      description: This playbook uses several sub playbooks to process and tag indicators,
+        which is used to identify indicators that shouldn't be added to block list.
+        For example IP indicators that belong to business partners or important hashes
+        we wish to not process. Additional sub playbooks can be added for improving
+        the business logic and tagging according to the user's needs.
+      id: 39a942f7-9326-4700-8900-e0bf16492f88
+      iscommand: false
+      name: TIM - Indicator Auto Processing
+      playbookId: TIM - Indicator Auto Processing
+      type: playbook
+      version: -1
+    taskid: 39a942f7-9326-4700-8900-e0bf16492f88
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 170,
+          "y": 30
+        }
+      }
+  "6":
+    continueonerrortype: ""
+    id: "6"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "8"
+    note: false
+    quietmode: 2
+    scriptarguments:
+      field:
+        simple: tags
+      fieldValue:
+        simple: pending_review
+      indicatorsValues:
+        simple: ${ProcessedIndicators}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: Builtin
+      description: Adds the 'pending_review' tag to the indicators.
+      id: 84328535-4d96-4b52-8fe6-203310a485f4
+      iscommand: true
+      name: Tag indicators as pending review
+      script: Builtin|||appendIndicatorField
+      type: regular
+      version: -1
+    taskid: 84328535-4d96-4b52-8fe6-203310a485f4
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 170,
+          "y": 520
+        }
+      }
+  "7":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: ProcessedIndicators
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "7"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "3"
+      "yes":
+      - "6"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 454fb12b-7e06-4720-8b62-24db965eae8e
+      iscommand: false
+      name: Are there processed indicators to tag for manual review?
+      type: condition
+      version: -1
+    taskid: 454fb12b-7e06-4720-8b62-24db965eae8e
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 170,
+          "y": 170
+        }
+      }
+  "8":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: inputs.OpenIncidentToReviewIndicatorsManually
+          operator: isEqualString
+          right:
+            value:
+              simple: "No"
+      label: "no"
+    continueonerrortype: ""
+    id: "8"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "4"
+      "no":
+      - "3"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 524b8391-97d9-49c2-859a-dfc5909620f2
+      iscommand: false
+      name: Open manual review incident?
+      type: condition
+      version: -1
+    taskid: 524b8391-97d9-49c2-859a-dfc5909620f2
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 170,
+          "y": 690
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 1385,
+        "width": 860,
+        "x": -30,
+        "y": -290
+      }
+    }
+  }
