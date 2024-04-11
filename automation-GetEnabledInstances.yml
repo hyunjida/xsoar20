@@ -1,0 +1,74 @@
+comment: Gets all currently enabled integration instances.
+commonfields:
+  id: GetEnabledInstances
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.83255
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: GetEnabledInstances
+outputs:
+- contextPath: EnabledInstances
+  description: A list of integration instance names that are currently enabled.
+pswd: ""
+runas: DBotRole
+runonce: false
+script: |
+  register_module_line('GetEnabledInstances', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+
+  INTERNAL_MODULES_BRANDS = {
+      'Scripts',
+      'Builtin',
+      'd2',
+      'testmodule',
+  }
+
+
+  def get_enabled_instances():
+      enabled_instances = []
+      readable_output = []
+      instances = demisto.getModules()
+      for instance_name, data in instances.items():
+          if data.get('state') == 'active' and data.get('brand') not in INTERNAL_MODULES_BRANDS:
+              enabled_instances.append(instance_name)
+              readable_output.append({
+                  'Instance Name': instance_name,
+                  'Brand': data.get('brand')
+              })
+
+      return CommandResults(
+          outputs_prefix='EnabledInstances',
+          outputs=enabled_instances,
+          readable_output=tableToMarkdown('Enabled Instances', readable_output),
+          raw_response=enabled_instances
+      )
+
+
+  def main() -> None:
+      return_results(get_enabled_instances())
+
+
+  if __name__ in ("__main__", "__builtin__", "builtins"):
+      main()
+
+  register_module_line('GetEnabledInstances', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags: []
+type: python
