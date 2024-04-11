@@ -1,0 +1,40 @@
+{
+	"autorun": true,
+	"cacheVersn": 0,
+	"closureScript": "",
+	"color": "#80DEEA",
+	"days": 0,
+	"daysR": 0,
+	"default": false,
+	"definitionId": "",
+	"detached": false,
+	"disabled": false,
+	"extractSettings": {
+		"fieldCliNameToExtractSettings": {},
+		"mode": "All"
+	},
+	"fromServerVersion": "5.0.0",
+	"hours": 0,
+	"hoursR": 0,
+	"id": "Hello World Alert",
+	"itemVersion": "3.0.7",
+	"layout": "Hello World Alert",
+	"locked": false,
+	"name": "Hello World Alert",
+	"onChangeRepAlg": 1,
+	"packID": "HelloWorld",
+	"packName": "HelloWorld",
+	"packPropagationLabels": [
+		"all"
+	],
+	"playbookId": "Handle Hello World Alert",
+	"preProcessingScript": "",
+	"propagationLabels": [],
+	"readonly": false,
+	"reputationCalc": 0,
+	"system": true,
+	"toServerVersion": "",
+	"version": -1,
+	"weeks": 0,
+	"weeksR": 0
+}
