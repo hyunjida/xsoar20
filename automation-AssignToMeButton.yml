@@ -1,0 +1,51 @@
+comment: 'Assigns the current Incident to the Cortex XSOAR user who clicked the button '
+commonfields:
+  id: AssignToMeButton
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.86272
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: AssignToMeButton
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('AssignToMeButton', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+
+
+  # get incident id
+  incident_id = demisto.incidents()[0].get('id')
+
+  # get demisto user
+  user = demisto.executeCommand("getUsers", {"current": True})
+
+  username = user[0].get('Contents')[0].get('username')
+
+  # set the Incident Owner
+  demisto.executeCommand("setOwner", {"owner": username})
+
+  demisto.results(f"This one is all yours {username}!")
+
+  register_module_line('AssignToMeButton', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- incident-action-button
+type: python
