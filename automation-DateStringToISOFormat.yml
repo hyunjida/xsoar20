@@ -1,0 +1,111 @@
+args:
+- description: Date value to convert.
+  name: value
+  required: true
+- auto: PREDEFINED
+  default: true
+  defaultValue: "true"
+  description: Whether to interpret the first value in an ambiguous 3-integer date
+    (e.g. 01/05/09) as the day (``True``) or month (``False``). If ``yearfirst`` is
+    set to ``True``, this distinguishes between YDM and YMD.
+  name: dayfirst
+  predefined:
+  - "true"
+  - "false"
+- auto: PREDEFINED
+  default: true
+  defaultValue: "false"
+  description: Whether to interpret the first value in an ambiguous 3-integer date
+    (e.g. 01/05/09) as the year. If ``True``, the first number is taken to be the
+    year, otherwise the last number is taken to be the year.
+  name: yearfirst
+  predefined:
+  - "true"
+  - "false"
+- auto: PREDEFINED
+  default: true
+  defaultValue: "true"
+  description: Whether to allow fuzzy parsing, allowing for string like "Today is
+    January 1, 2047 at 8:21:00AM".
+  name: fuzzy
+  predefined:
+  - "true"
+  - "false"
+- auto: PREDEFINED
+  defaultValue: "false"
+  description: Whether to add UTC timezone to the date string returned in case offset-naive
+    date was provided as input.
+  name: add_utc_timezone
+  predefined:
+  - "true"
+  - "false"
+comment: This is a thin wrapper around the `dateutil.parser.parse` function. It will
+  parse a string containing a date/time stamp and return it in ISO 8601 format.
+commonfields:
+  id: DateStringToISOFormat
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.2.61
+    packID: FiltersAndTransformers
+    packName: Filters And Transformers
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.83255
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: DateStringToISOFormat
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('DateStringToISOFormat', 'start', __line__())
+  ### pack version: 1.2.61
+
+  from dateutil.parser import ParserError, parse  # type: ignore[attr-defined]
+  from datetime import timezone
+
+
+  def parse_datestring_to_iso(
+          date_value: str, day_first: bool, year_first: bool, fuzzy: bool, add_utc_timezone: bool = False
+  ) -> str:
+      try:
+          datetime_obj = parse(date_value, dayfirst=day_first, yearfirst=year_first, fuzzy=fuzzy)
+          if add_utc_timezone and not datetime_obj.tzinfo:
+              datetime_obj = datetime_obj.replace(tzinfo=timezone.utc)
+          return datetime_obj.isoformat()
+      except ParserError as e:
+          demisto.error(f'ParserError occurred: {e}\n Returning the original date string.')
+          date_string = date_value
+      return date_string
+
+
+  def main():
+      args = demisto.args()
+      date_value = args.get('value')
+      day_first = args.get('dayfirst', 'True').lower() == 'true'
+      year_first = args.get('yearfirst', 'False').lower() == 'true'
+      fuzzy = args.get('fuzzy', 'True').lower() == 'true'
+      add_utc_timezone = args.get('add_utc_timezone', 'true').lower() == 'true'
+      iso_string = parse_datestring_to_iso(date_value, day_first, year_first, fuzzy, add_utc_timezone)
+      demisto.results(iso_string)
+
+
+  # python2 uses __builtin__ python3 uses builtins
+  if __name__ in ('__builtin__', 'builtins', '__main__'):
+      main()
+
+  register_module_line('DateStringToISOFormat', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- transformer
+- date
+type: python
