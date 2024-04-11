@@ -1,0 +1,267 @@
+args:
+- description: Context path to list of items with similar properties or key-value
+    pairs.
+  name: context_path
+  required: true
+- description: Grid ID to modify.
+  name: grid_id
+  required: true
+- auto: PREDEFINED
+  defaultValue: "true"
+  description: Set to 'true' to overwrite Grid Data.
+  name: overwrite
+  predefined:
+  - "false"
+  - "true"
+- description: 'Comma-separated list of grid columns, for example: (col1,col2,..,coln).'
+  isArray: true
+  name: columns
+  required: true
+- defaultValue: '*'
+  description: 'Keys to retrieve from items. Keys will not be columns correlated.
+    Default is all keys. **Note**: when the number of values exceeds the number of
+    columns, it truncates the last values that are outside the range for table. If
+    you want to leave an empty column, provide a place holder name that should not
+    be in the context data, such as "PLACE_HOLDER".'
+  isArray: true
+  name: keys
+- description: Columns names by which to sort the rows.
+  isArray: true
+  name: sort_by
+- auto: PREDEFINED
+  defaultValue: "false"
+  description: Set to 'true' to unpack nested elements.
+  name: unpack_nested_elements
+  predefined:
+  - "false"
+  - "true"
+- defaultValue: '*'
+  description: Keys to retrieve from nested dictionaries. Can be used only when the
+    unpack_nested_elements argument is set to false. Keys will not be columns correlated.
+    Default is all keys.
+  isArray: true
+  name: keys_from_nested
+comment: Creates a Grid table from items or key-value pairs.
+commonfields:
+  id: SetGridField
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/pandas:1.0.0.86039
+engineinfo: {}
+mainengineinfo: {}
+name: SetGridField
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: "register_module_line('SetGridField', 'start', __line__())\n### pack version:
+  1.14.2\n\n\n# STD Libraries\nfrom typing import Any\n# 3-rd party libraries\nimport
+  pandas as pd\nimport phrases_case\n# Local packages\n\n\n\ndef get_error_message(grid_id:
+  str) -> str:\n    \"\"\" Gets error message.\n\n    Args:\n        grid_id: The
+  grid ID.\n\n    Returns:\n        str: The error message.\n    \"\"\"\n    return
+  f\"The following grid id was not found: {grid_id}. Make sure you entered the correct
+  \" \\\n           f\"incident type with the \\\"Machine name\\\" as it appears in
+  the incident field editor in \" \\\n           f\"Settings->Advanced ->Fields (Incident).
+  Also make sure that this value appears in the \" \\\n           f\"incident Context
+  Data under incident - if not then consult with PANW support team.\"\n\n\ndef normalized_string(phrase:
+  str) -> str:\n    \"\"\" Normalize a string to flatcase (to match `cli name`).\n\n
+  \   Args:\n        phrase: Phrase to normalize.\n\n    Returns:\n        str: Normalized
+  phrase.\n\n    Examples:\n        >>> normalized_string(\"TestWord\")\n        \"testword\"\n
+  \       >>> normalized_string(\"hello_world\")\n        \"helloworld\"\n    \"\"\"\n
+  \   return phrases_case.camel(phrase).replace(\"'\", \"\").lower()\n\n\ndef normalized_column_name(phrase:
+  str) -> str:\n    \"\"\" Normalize columns or Grid to connected word in lowercase,
+  to match the logic of stripToClumnName() from\n        the client's `strings.js`
+  and the server logic.\n\n    Args:\n        phrase: Phrase to normalize.\n\n    Returns:\n
+  \       str: Normalized phrase.\n\n    Examples:\n        >>> normalized_string(\"Test
+  Word!@#$%^&*()-=+\")\n        \"testword\"\n        >>> normalized_string(\"hello\U0001F9A6_world@\")\n
+  \       \"hello_world\"\n    \"\"\"\n    return re.sub(r'[^a-zA-Z\\d_]', '', phrase).lower()\n\n\ndef
+  filter_dict(dict_obj: dict[Any, Any], keys: list[str], max_keys: int | None = None)
+  -> dict[Any, Any]:\n    \"\"\" Filter keys from Dictionary:\n            1. Will
+  only save keys which specified in keys parameters.\n            2. If key in index
+  0 is \"*\", will save all keys until max_keys (as much as Grid can include).\n\n
+  \   Args:\n        dict_obj: Dictionary to filter keys from.\n        keys: Keys
+  to save.\n        max_keys: Max keys to save in case of keys[0] = \"*\"\n\n    Returns:\n
+  \       dict: Filtered dict.\n    \"\"\"\n    # Iterate over all the items in dictionary\n
+  \   if keys[0] != \"*\":\n        # create empty dict of given headers\n        new_dict
+  = {key: None for key in keys}\n        for (key, value) in dict_obj.items():\n            #
+  Check if item satisfies the given condition then add to new dict\n            if
+  value not in ('', None) and key in keys:\n                new_dict[key] = value\n\n
+  \   else:\n        if max_keys:\n            new_dict = dict(list(dict_obj.items())[:max_keys])\n
+  \       else:\n            new_dict = dict_obj\n\n    return new_dict\n\n\ndef entry_dicts_to_string(dict_obj:
+  dict[Any, Any], keys_to_choose: list[str]):\n    \"\"\"\n\n    Args:\n        dict_obj:
+  context entry to iterate on\n        keys_to_choose: specific keys to filter from
+  the nested dictionaries\n\n    Returns:\n        string contains all selected values
+  from the nested dictionary of the context entry.\n    \"\"\"\n    new_dict = {key:
+  '' for key in dict_obj}\n    for (key, value) in dict_obj.items():\n        if isinstance(value,
+  dict):\n            value = filter_dict(value, keys_to_choose)\n            new_dict[key]
+  = \"\\n\".join(f'{dict_key}: {dict_value}' for dict_key, dict_value in value.items())\n
+  \       elif isinstance(value, list):\n            array_to_join = []\n            for
+  list_value in value:\n                if isinstance(list_value, dict):\n                    list_value
+  = filter_dict(list_value, keys_to_choose)\n                    array_to_join.append(\"\\n\".join(f'{dict_key}:
+  {dict_value}' for dict_key, dict_value in list_value.items()))\n                else:\n
+  \                   array_to_join.append(f\"\\n{list_value}\")\n            final_value
+  = \"\\n\\n\".join(array_to_join)\n            new_dict[key] = final_value\n        else:\n
+  \           new_dict[key] = value\n\n    return new_dict\n\n\ndef unpack_all_data_from_dict(entry_context:
+  dict[Any, Any], keys: list[str], columns: list[str]):\n    \"\"\" Unpacks lists
+  and dicts to flatten the object for the grid.\n\n    Args:\n        entry_context:
+  Dictionary to unpack.\n        keys: Keys to save.\n        columns: Grid columns
+  name.\n\n    Returns:\n        list: Unpacked data.\n    \"\"\"\n    unpacked_data
+  = []  # type: List\n\n    filtered_dict = filter_dict(entry_context, keys)\n\n    def
+  recursively_unpack_data(item_to_unpack: dict[Any, Any], path: str):\n        for
+  key, value in item_to_unpack.items():\n            if isinstance(value, dict):\n
+  \               recursively_unpack_data(filter_dict(value, keys), path + '.' + key)\n
+  \           elif isinstance(value, list):\n                for item in value:\n
+  \                   if isinstance(item, dict):\n                        recursively_unpack_data(filter_dict(item,
+  keys), path + '.' + key)\n                    else:\n                        unpacked_data.append(\n
+  \                           {\n                                columns[0]: key,\n
+  \                               columns[1]: item if isinstance(item, str | int |
+  float | bool) else \"\"\n                            }\n                        )\n
+  \           else:\n                unpacked_data.append(\n                    {\n
+  \                       columns[0]: key,\n                        columns[1]: value
+  if isinstance(value, str | int | float | bool) else \"\"\n                    }\n
+  \               )\n\n    recursively_unpack_data(filtered_dict, '')\n\n    return
+  unpacked_data\n\n\n@logger\ndef get_current_table(grid_id: str) -> pd.DataFrame:\n
+  \   \"\"\" Get current Data from the grid\n\n    Args:\n        grid_id: Grid ID
+  to retrieve data from.\n\n    Returns:\n        DataFrame: Existing grid data.\n
+  \   \"\"\"\n    # Note: in XSIAM empty grid fields doe not exist in the context.\n
+  \   # in XSOAR the fields exist with empty values.\n    incident = demisto.incident()\n
+  \   custom_fields = incident.get(\"CustomFields\", {}) or {}\n    if (not is_xsiam_or_xsoar_saas())
+  and grid_id not in custom_fields:\n        raise ValueError(get_error_message(grid_id))\n
+  \   current_table: list[dict] | None = custom_fields.get(grid_id)\n    return pd.DataFrame(current_table)
+  if current_table else pd.DataFrame()\n\n\n@logger\ndef validate_entry_context(context_path:
+  str, entry_context: Any, unpack_nested_elements: bool):\n    \"\"\" Validate entry
+  context structure is valid, should be:\n        - For unpack_nested_elements==False:\n
+  \           1. List[Dict[str, Any]]\n            2. List[str/bool/int/float]\n            3.
+  Dict[str, str/bool/int/float] - for developer it will be in first index of a list.\n
+  \       - For unpack_nested_elements==True:\n            1. Dict[str, Any]\n\n    Args:\n
+  \       context_path: Path of entry context\n        entry_context: Entry context
+  to validate\n        unpack_nested_elements: True for unpacking nested elements,
+  False otherwise.\n\n    Raises:\n        ValueError: If structure is not valid.\n
+  \       data_type (str): The type of information in the context path.\n    \"\"\"\n
+  \   if unpack_nested_elements:\n        if not isinstance(entry_context, dict):\n
+  \           raise ValueError(\n                'When the unpack_nested_elements
+  argument is set to True, the context object for the path should be '\n                'of
+  type dict.')\n        else:\n            return None\n\n    if not isinstance(entry_context,
+  list | dict):\n        raise ValueError(\n            f'The context object {context_path}
+  should be of type dict or list.\\n'\n            f'Received type: {type(entry_context)}')\n\n
+  \   data_type = 'dict'\n\n    if isinstance(entry_context, dict):\n        return
+  data_type\n\n    has_seen_dict = False\n    for index, item in enumerate(entry_context):\n
+  \       if not isinstance(item, dict):\n            if has_seen_dict:\n                raise
+  ValueError(\n                    f'The context object in index {index} - {item}
+  is of invalid type ({type(item)}).\\n'\n                    f'The object {context_path}
+  should contain only dict type values.')\n            else:\n                break\n\n
+  \       has_seen_dict = True\n\n    if not has_seen_dict:\n        data_type = 'list'\n
+  \       for index, item in enumerate(entry_context):\n            if not isinstance(item,
+  str | int | float | bool):\n                raise ValueError(\n                    f'The
+  context path {context_path} should contain a list of simple values '\n                    f'(string,
+  number, boolean)\\n'\n                    f'received item in index {index} of type
+  {type(item)}:\\n{item}')\n\n    return data_type\n\n\ndef build_grid(context_path:
+  str, keys: list[str], columns: list[str], unpack_nested_elements: bool,\n               keys_from_nested:
+  list[str]) -> pd.DataFrame:\n    \"\"\" Build new DateFrame from current context
+  retrieved by DT.\n        There are 3 cases:\n            1. DT returns dict - In
+  this case we will insert it in the table as key, value in each row.\n            2.
+  DT returns list - In this case each entry in the list will represent a row.\n            3.
+  DT return unknown obj (str..) - return empty list.\n\n    Args:\n        context_path:
+  DT context path.\n        keys: Keys to be included\n        columns: Grid columns
+  name.\n        unpack_nested_elements: True for unpacking nested elements, False
+  otherwise.\n        keys_from_nested: Keys to extract from nested dictionaries.\n\n
+  \   Returns:\n        pd.DataFrame: New Table include data from Entry Context\n
+  \   \"\"\"\n    # Retrieve entry context data\n    entry_context_data = demisto.dt(demisto.context(),
+  context_path)\n    # Validate entry context structure\n    data_type = validate_entry_context(context_path,
+  entry_context_data, unpack_nested_elements)\n\n    demisto.debug('context object
+  is valid. starting to build the grid.')\n    # Building new Grid\n    if unpack_nested_elements:\n\n
+  \       # Handle entry context as dict, with unpacking of nested elements\n        table
+  = pd.DataFrame(unpack_all_data_from_dict(entry_context_data, keys, columns))\n        table
+  = table.rename(columns=dict(zip(table.columns, columns)))\n    elif data_type ==
+  'list':\n        # Handle entry context as list of value\n        table = pd.DataFrame(entry_context_data)\n
+  \       table = table.rename(columns=dict(zip(table.columns, columns)))\n    elif
+  isinstance(entry_context_data, list):\n        # Handle entry context as list of
+  dicts\n        entry_context_data = [entry_dicts_to_string(dict_obj=filter_dict(item,
+  keys, len(columns)),\n                                                    keys_to_choose=keys_from_nested)\n
+  \                             for item in entry_context_data]\n        table = pd.DataFrame(entry_context_data)\n
+  \       table = table.rename(columns=dict(zip(table.columns, columns)))\n    elif
+  isinstance(entry_context_data, dict):\n        # Handle entry context key-value\n
+  \       # If the keys arg is * it means we don't know which keys we have in the
+  context - Will create key-value table.\n        entry_context_data = entry_dicts_to_string(dict_obj=filter_dict(entry_context_data,
+  keys),\n                                                   keys_to_choose=keys_from_nested)\n
+  \       if keys == ['*']:\n            entry_context_data = entry_context_data.items()\n
+  \           table = pd.DataFrame(entry_context_data, columns=columns[:2])\n        else:\n
+  \           entry_context_data = entry_context_data\n            table = pd.DataFrame([entry_context_data])\n
+  \           table = table.rename(columns=dict(zip(table.columns, columns)))\n\n
+  \   else:\n        table = []\n\n    return table\n\n\n@logger\ndef build_grid_command(grid_id:
+  str, context_path: str, keys: list[str], columns: list[str], overwrite: bool,\n
+  \                      sort_by: list[str], unpack_nested_elements: bool, keys_from_nested:
+  list[str]) \\\n        -> list[dict[Any, Any]]:\n    \"\"\" Build Grid in one of
+  the 3 options:\n            1. Context_path contains list of dicts where values
+  are of primitive types (str, int, float, bool),\n                e.g. [{'a': 1,
+  'b': 2}, {'a': 1, 'b': 2}]\n            2. Context_path contains dict (key value
+  pairs), e.g. {'a': 1, 'b': 2}\n            3. Context_path contains dict where values
+  can be non-primitive types,\n            e.g. {'a': 1, 'b': [1, 2, 3], 'c': {'1':
+  1, '2': 2}}\n\n        Warnings:\n            1. The automation can't validate that
+  the columns name correct.\n\n        Args:\n            grid_id: Grid ID to modify.\n
+  \           context_path: Entry context path to collect the values from.\n            keys:
+  Keys to be included in the table, If specified \"*\" will retrieve all availble
+  keys.\n            columns: Name of the columns in the must be equal.\n            overwrite:
+  True if to overwrite existing data else False.\n            sort_by: Name(s) of
+  the columns to sort by.\n            unpack_nested_elements: True for unpacking
+  nested elements, False otherwise.\n            keys_from_nested: Keys to extract
+  from nested dictionaries.\n\n        Returns:\n            list: Table representation
+  for the Grid.\n    \"\"\"\n    # Assert columns match keys\n    if keys[0] != '*'
+  and (len(columns) != len(keys)):\n        raise DemistoException(f'The number of
+  keys: {len(keys)} should match the number of columns: {len(columns)}.')\n    # Get
+  old Data\n    old_table = get_current_table(grid_id=grid_id)\n    # Change columns
+  to all lower case (underscores allowed).\n    columns = [normalized_column_name(phrase)
+  for phrase in columns]\n    # Create new Table from the given context path.\n    new_table:
+  pd.DataFrame = build_grid(context_path=context_path,\n                                         keys=keys,\n
+  \                                        columns=columns,\n                                         unpack_nested_elements=unpack_nested_elements,\n
+  \                                        keys_from_nested=keys_from_nested)\n\n
+  \   # Merge tables if not specified to overwrite.\n    if not overwrite:\n        new_table
+  = pd.concat([new_table, old_table])\n\n    # Sort by column name if specified, support
+  multi columns sort\n    if sort_by and set(sort_by) <= set(new_table.columns):\n
+  \       new_table = new_table.sort_values(by=sort_by)\n\n    # filter empty values
+  in the generated table\n    filtered_table = []\n    for record in new_table.to_dict(orient='records'):\n
+  \       filtered_table.append({k: v for k, v in record.items() if pd.notnull(v)})\n\n
+  \   return filtered_table\n\n\ndef main():  # pragma: no cover\n    args = demisto.args()\n
+  \   try:\n        # Normalize grid id from any form to connected lower words, e.g.
+  my_word/myWord -> myword\n        grid_id = normalized_string(args.get('grid_id'))\n\n
+  \       context_path = args.get('context_path')\n        # Build updated table\n
+  \       table = build_grid_command(grid_id=grid_id,\n                                   context_path=context_path,\n
+  \                                  keys=argToList(args.get('keys')),\n                                   overwrite=argToBoolean(args.get('overwrite')),\n
+  \                                  columns=argToList(args.get('columns')),\n                                   sort_by=argToList(args.get('sort_by')),\n
+  \                                  unpack_nested_elements=argToBoolean(args.get('unpack_nested_elements')),\n
+  \                                  keys_from_nested=argToList(args.get('keys_from_nested'))\n
+  \                                  )\n        # Execute automation 'setIncident`
+  which change the Context data in the incident\n        res_set = demisto.executeCommand(\"setIncident\",
+  {\n            'customFields': {\n                grid_id: table,\n            },\n
+  \       })\n        # we want to check if the incident was succefully updated\n
+  \       # we execute command and not using `demisto.incident()` because we want
+  to get the updated incident and context\n        res = demisto.executeCommand(\"getIncidents\",
+  {\"id\": demisto.incident().get(\"id\")})\n        custom_fields = {}\n        for
+  entry in res:\n            if entry['Contents']:\n                data = entry[\"Contents\"][\"data\"]\n
+  \               custom_fields = data[0].get(\"CustomFields\") if data and data[0].get(\"CustomFields\")
+  else {}\n        # in the debugger, there is an addition of the \"_grid\" suffix
+  to the grid_id.\n        if is_xsiam_or_xsoar_saas() and table and grid_id not in
+  custom_fields and f\"{grid_id}_grid\" not in custom_fields:\n            raise ValueError(get_error_message(grid_id))\n
+  \       if is_error(res_set):\n            demisto.error(f'failed to execute \"setIncident\"
+  with table: {table}.')\n            return_results(res_set)\n        elif is_error(res):\n
+  \           demisto.error('failed to execute \"getIncidents\".')\n            return_results(res)\n
+  \       else:\n            return_results(f'Set grid {grid_id} using {context_path}
+  successfully.')\n\n    except Exception as exc:\n        return_error(f'Failed to
+  execute setGridField. Error: {str(exc)}', error=traceback.format_exc())\n\n\nif
+  __name__ in ('__main__', '__builtin__', 'builtins'):\n    main()\n\nregister_module_line('SetGridField',
+  'end', __line__())\n"
+scripttarget: 0
+subtype: python3
+system: true
+tags: []
+type: python
