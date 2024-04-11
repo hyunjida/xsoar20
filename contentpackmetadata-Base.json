@@ -1,0 +1,288 @@
+{
+	"author": "Cortex XSOAR",
+	"authorImage": "content/packs/Base/Author_image.png",
+	"beta": false,
+	"cacheVersn": 0,
+	"categories": [
+		"Utilities"
+	],
+	"certification": "certified",
+	"contentItemTypes": [
+		"automation",
+		"dashboard"
+	],
+	"contentItems": {
+		"automation": [
+			{
+				"description": "Predict text label using a pre-trained machine learning phishing model, and get the most important words used in the classification decision.",
+				"name": "DBotPredictPhishingWords",
+				"tags": [
+					"ml",
+					"phishing"
+				]
+			},
+			{
+				"description": "Deprecated. No available replacement. Collect telemetry data from the environment.",
+				"name": "DBotMLFetchData",
+				"tags": [
+					"ml"
+				]
+			},
+			{
+				"description": "Find past similar incidents based on incident fields' similarity. Includes an option to also display indicators similarity.",
+				"name": "DBotFindSimilarIncidents",
+				"tags": []
+			},
+			{
+				"description": "Pre-process text data for the machine learning text classifier.",
+				"name": "DBotPreProcessTextData",
+				"tags": [
+					"ml"
+				]
+			},
+			{
+				"description": "Deprecated. No available replacement. Suggests a classifier mapping based on an advanced name matching algorithm.",
+				"name": "DBotSuggestClassifierMapping",
+				"tags": [
+					"ml"
+				]
+			},
+			{
+				"description": "Deprecated. Use DBotFindSimilarIncidents instead.\nFind similar incidents by text comparison - the algorithm based on TF-IDF method.\nTo read more about this method: https://en.wikipedia.org/wiki/Tf%E2%80%93idf\n\nThis automation runs using the default Limited User role, unless you explicitly\nchange the permissions.\nFor more information, see the section about permissions here:\nhttps://docs-cortex.paloaltonetworks.com/r/Cortex-XSOAR/6.10/Cortex-XSOAR-Administrator-Guide/Automations",
+				"name": "FindSimilarIncidentsByText",
+				"tags": [
+					"ml",
+					"dedup",
+					"duplicate",
+					"incidents"
+				]
+			},
+			{
+				"description": "Deprecated. Use DBotPreProcessTextData instead.",
+				"name": "WordTokenizerNLP",
+				"tags": [
+					"phishing",
+					"ml"
+				]
+			},
+			{
+				"description": "Parse Sane-json-reports and export them as pdf files (used internally).",
+				"name": "SanePdfReports",
+				"tags": [
+					"sane-pdf-reports",
+					"sane-reports",
+					"pdf"
+				]
+			},
+			{
+				"description": "Check if a docker image is available for performing docker pull. Script simulates the docker pull flow but doesn't actually pull the image. Returns an entry with 'ok' if all is good otherwise will return an error.",
+				"name": "CheckDockerImageAvailable",
+				"tags": []
+			},
+			{
+				"description": "Common code that will be merged into each server script when it runs.",
+				"name": "CommonServer",
+				"tags": [
+					"infra",
+					"server"
+				]
+			},
+			{
+				"description": "Common code that will be merged into each PowerShell script/integration when it runs.",
+				"name": "CommonServerPowerShell",
+				"tags": [
+					"infra",
+					"server"
+				]
+			},
+			{
+				"description": "This automation allows to delete a relationship between indicator objects based on the relationship id.",
+				"name": "DeleteIndicatorRelationships",
+				"tags": [
+					"basescript"
+				]
+			},
+			{
+				"description": "Runs validation and linting using the Demisto SDK on content items, such as integrations, automations and content packs. This automation script is used as part of the content validation that runs as part of the contribution flow.",
+				"name": "ValidateContent",
+				"tags": []
+			},
+			{
+				"description": "Draw incidents and indicators on the canvas to map and visualize their connections.",
+				"name": "DrawRelatedIncidentsCanvas",
+				"tags": []
+			},
+			{
+				"description": "Gets a list of indicator objects and the associated indicator outputs that match the specified query and filters. The results are returned in a structured data file.",
+				"name": "GetIndicatorsByQuery",
+				"tags": [
+					"ml"
+				]
+			},
+			{
+				"description": "This automation creates a relationship between indicator objects.",
+				"name": "CreateIndicatorRelationship",
+				"tags": [
+					"basescript"
+				]
+			},
+			{
+				"description": "Show clustering model information - model summary and incidents in specific cluster.",
+				"name": "DBotShowClusteringModelInfo",
+				"tags": [
+					"widget"
+				]
+			},
+			{
+				"description": "This automation outputs the indicator relationships to context according to the provided query, using the entities, entityTypes, and relationships arguments. All arguments will use the AND operator. For example, using the following arguments entities=8.8.8.8 entities_types=Domain will provide only relationships that the 8.8.8.8 indicator has with indicators of type domain.",
+				"name": "SearchIndicatorRelationships",
+				"tags": [
+					"basescript"
+				]
+			},
+			{
+				"description": "Common code that will be merged into each server script when it runs.",
+				"name": "CommonServerPython",
+				"tags": [
+					"infra",
+					"server"
+				]
+			},
+			{
+				"description": "Train a machine learning text classifier.",
+				"name": "DBotTrainTextClassifierV2",
+				"tags": [
+					"ml"
+				]
+			},
+			{
+				"description": "Gets a list of incident objects and the associated incident outputs that\nmatch the specified query and filters. The results are returned in a structured data file.\n\nThis automation runs using the default Limited User role, unless you explicitly change the permissions.\nFor more information, see the section about permissions here:\nhttps://docs-cortex.paloaltonetworks.com/r/Cortex-XSOAR/6.10/Cortex-XSOAR-Administrator-Guide/Automations",
+				"name": "GetIncidentsByQuery",
+				"tags": [
+					"ml"
+				]
+			},
+			{
+				"description": "Parse STIX files to Cortex XSOAR indicators by clicking the **Upload STIX File** button.",
+				"name": "StixParser",
+				"tags": [
+					"stix",
+					"ioc"
+				]
+			},
+			{
+				"description": "Train clustering model on any incident type.",
+				"name": "DBotTrainClustering",
+				"tags": [
+					"ml"
+				]
+			},
+			{
+				"description": "Finds similar incidents based on indicators' similarity. Indicators' contribution to the final score is based on their scarcity.",
+				"name": "DBotFindSimilarIncidentsByIndicators",
+				"tags": []
+			},
+			{
+				"description": "Highlight words inside a given text.",
+				"name": "HighlightWords",
+				"tags": []
+			},
+			{
+				"description": "Create a phishing classifier using machine learning technique, based on email content.",
+				"name": "DBotBuildPhishingClassifier",
+				"tags": [
+					"ml"
+				]
+			},
+			{
+				"description": "Finds a threshold for ML model, and performs an evaluation based on it",
+				"name": "GetMLModelEvaluation",
+				"tags": [
+					"ml"
+				]
+			},
+			{
+				"description": "Parse Sane-json-reports and export them as docx files (used internally).",
+				"name": "SaneDocReports",
+				"tags": [
+					"sane-doc-reports",
+					"sane-reports",
+					"docx"
+				]
+			}
+		],
+		"classifier": null,
+		"dashboard": [
+			{
+				"name": "System Health"
+			}
+		],
+		"genericfield": null,
+		"generictype": null,
+		"incidentfield": null,
+		"incidenttype": null,
+		"indicatorfield": null,
+		"integration": null,
+		"layoutscontainer": null,
+		"list": null,
+		"playbook": null,
+		"report": null,
+		"reputation": null,
+		"widget": null,
+		"wizard": null
+	},
+	"currentVersion": "1.33.35",
+	"definitionId": "",
+	"dependencies": {},
+	"deprecated": false,
+	"description": "The base pack for Cortex XSOAR.",
+	"disabledMonthly": false,
+	"downloads": 150357,
+	"eulaLink": "https://github.com/demisto/content/blob/master/LICENSE",
+	"fromServerVersion": "6.0.0",
+	"general": [
+		"generalFieldCertified",
+		"generalFieldByCortexXSOAR",
+		"generalFieldFree",
+		"generalFieldSupportIncluded"
+	],
+	"id": "Base",
+	"installMessage": "",
+	"integrations": [],
+	"itemVersion": "1.33.35",
+	"keywords": [
+		"base",
+		"common"
+	],
+	"legacy": true,
+	"name": "Base",
+	"packID": "Base",
+	"packName": "",
+	"premium": false,
+	"previewOnly": false,
+	"price": 0,
+	"propagationLabels": [
+		"all"
+	],
+	"rawKeywords": null,
+	"rawTags": null,
+	"rawUseCases": null,
+	"searchRank": 10,
+	"serverMaxVersion": "",
+	"serverMinVersion": "6.0.0",
+	"support": "xsoar",
+	"supportDetails": {
+		"email": "",
+		"url": "https://www.paloaltonetworks.com/cortex"
+	},
+	"tags": [
+		"Trending",
+		"Core"
+	],
+	"toServerVersion": "",
+	"updated": "2024-04-08T04:27:00+09:00",
+	"useCases": [],
+	"version": -1,
+	"versionInfo": "842208",
+	"videos": []
+}
