@@ -1,0 +1,458 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.5.0
+    itemVersion: 1.5.9
+    packID: Whois
+    packName: Whois
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: This playbook uses several sub playbooks to process and tag indicators
+  based on the results of the Whois tool.
+id: TIM - Process Domains With Whois
+inputs:
+- description: Setting this input as True will run the TIM - Process Domain registrant
+    With Whois playbook.
+  key: CheckForWhoisRegistrant
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: "True"
+- description: Setting this input as True will run the TIM - Process Domain Creation
+    Age With Whois playbook.
+  key: CheckForWhoisDomainAgeCreation
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: "True"
+name: TIM - Process Domains With Whois
+outputs:
+- contextPath: DomainsNotApproved
+  description: Domains for which the registrant isn't approved.
+  type: string
+- contextPath: ApprovedRegistrantDomains
+  description: Domains for which the registrant is approved.
+  type: string
+- contextPath: DomainsNotResolvedByWhois
+  description: Domains Not Resolved By Whois.
+  type: string
+- contextPath: NewDomains
+  description: Domains whose create value is after the tested date.
+  type: string
+- contextPath: NotNewDomains
+  description: Domains whose create value is before the tested date.
+  type: string
+- contextPath: DomainsNotProcessed
+  description: Domains that could not be processed for any reason are outputted to
+    this context path.
+  type: string
+quiet: true
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "1"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 433dce95-7704-43e4-8a24-aab3ce6d0b7a
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: 433dce95-7704-43e4-8a24-aab3ce6d0b7a
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 460,
+          "y": 90
+        }
+      }
+  "1":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: playbookQuery.value
+          operator: isNotEmpty
+      - - left:
+            iscontext: true
+            value:
+              simple: playbookQuery.indicator_type
+          operator: isEqualString
+          right:
+            value:
+              simple: Domain
+      label: "yes"
+    continueonerrortype: ""
+    id: "1"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "2"
+      "yes":
+      - "12"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 4377baae-b28b-4ed3-88eb-92739f774496
+      iscommand: false
+      name: Are there query results?
+      type: condition
+      version: -1
+    taskid: 4377baae-b28b-4ed3-88eb-92739f774496
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 460,
+          "y": 220
+        }
+      }
+  "2":
+    continueonerrortype: ""
+    id: "2"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 3e91d851-7939-4aae-8eaf-44824d0de234
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 3e91d851-7939-4aae-8eaf-44824d0de234
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 460,
+          "y": 1220
+        }
+      }
+  "4":
+    continueonerror: true
+    continueonerrortype: errorPath
+    id: "4"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#error#':
+      - "2"
+      '#none#':
+      - "6"
+      - "8"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      query:
+        complex:
+          accessor: value
+          filters:
+          - - left:
+                iscontext: true
+                value:
+                  simple: playbookQuery.indicator_type
+              operator: isEqualString
+              right:
+                value:
+                  simple: Domain
+          root: playbookQuery
+          transformers:
+          - operator: uniq
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Enrich domains with data from the whois script.
+      id: f20880ef-0dc5-48f0-8e4d-7b6f365ae65b
+      iscommand: true
+      name: Run Whois on domain indicators
+      script: '|||whois'
+      type: regular
+      version: -1
+    taskid: f20880ef-0dc5-48f0-8e4d-7b6f365ae65b
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 130,
+          "y": 630
+        }
+      }
+  "6":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: inputs.CheckForWhoisRegistrant
+          operator: isEqualString
+          right:
+            value:
+              simple: "True"
+      label: "yes"
+    continueonerrortype: ""
+    id: "6"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "2"
+      "yes":
+      - "7"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 96773908-372c-4daa-8d9e-15eddee6e4dc
+      iscommand: false
+      name: Was the registrant check enabled?
+      type: condition
+      version: -1
+    taskid: 96773908-372c-4daa-8d9e-15eddee6e4dc
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 130,
+          "y": 825
+        }
+      }
+  "7":
+    continueonerrortype: ""
+    id: "7"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "2"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      WhoisResults:
+        simple: ${Domain}
+    separatecontext: true
+    skipunavailable: false
+    task:
+      brand: ""
+      description: This playbook compares the domain registrant against the Cortex
+        XSOAR list of approved registrants provided in the inputs. A registrant is
+        the company or entity that owns the domain.
+      id: 71774b85-6fd5-4762-8c28-bd64d3527b6a
+      iscommand: false
+      name: TIM - Process Domain Registrant With Whois
+      playbookId: TIM - Process Domain Registrant With Whois
+      type: playbook
+      version: -1
+    taskid: 71774b85-6fd5-4762-8c28-bd64d3527b6a
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": -150,
+          "y": 1040
+        }
+      }
+  "8":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: inputs.CheckForWhoisDomainAgeCreation
+          operator: isEqualString
+          right:
+            value:
+              simple: "True"
+      label: "yes"
+    continueonerrortype: ""
+    id: "8"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "2"
+      "yes":
+      - "11"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: ba4eea74-f034-4d54-8082-8279783819d6
+      iscommand: false
+      name: Was the domain creation date check enabled?
+      type: condition
+      version: -1
+    taskid: ba4eea74-f034-4d54-8082-8279783819d6
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": -550,
+          "y": 840
+        }
+      }
+  "11":
+    continueonerrortype: ""
+    id: "11"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "2"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      MinimumAgeOfDomainMonths:
+        simple: "1"
+      WhoisResults:
+        simple: ${Domain}
+    separatecontext: true
+    skipunavailable: false
+    task:
+      brand: ""
+      description: This playbook compares the domain creation time against a provided
+        time value such as one month ago. The period can be configured within the
+        playbook inputs MinimumAgeOfDomainMonths or MinimumAgeOfDomainHours. The playbook
+        calculates the timestamp for the relevant period and compares it to the domain
+        creation time value provided by Whois. The domains are outputted accordingly
+        if they were created before or after the compared time, respectively.
+      id: c3687b9a-158f-4fbe-89ec-3ae97d61a750
+      iscommand: false
+      name: TIM - Process Domain Age With Whois
+      playbookId: TIM - Process Domain Age With Whois
+      type: playbook
+      version: -1
+    taskid: c3687b9a-158f-4fbe-89ec-3ae97d61a750
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": -740,
+          "y": 1040
+        }
+      }
+  "12":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: brand
+                filters:
+                - - left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: Whois
+                - - left:
+                      iscontext: true
+                      value:
+                        simple: modules.state
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: active
+                root: modules
+          operator: isExists
+      label: "yes"
+    continueonerrortype: ""
+    id: "12"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "2"
+      "yes":
+      - "4"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 73ce68b3-5868-401b-8d1d-f476272d3b0c
+      iscommand: false
+      name: Is Whois enabled?
+      type: condition
+      version: -1
+    taskid: 73ce68b3-5868-401b-8d1d-f476272d3b0c
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 250,
+          "y": 390
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 1195,
+        "width": 1580,
+        "x": -740,
+        "y": 90
+      }
+    }
+  }
