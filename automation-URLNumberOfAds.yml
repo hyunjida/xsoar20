@@ -1,0 +1,95 @@
+args:
+- default: true
+  description: URL to load and count ads on.
+  name: url
+  required: true
+- defaultValue: https://easylist.github.io/easylist/easylist.txt
+  description: Optional easylist to get ads from.
+  name: easylist
+comment: Fetches the numbers of ads in the given url.
+commonfields:
+  id: URLNumberOfAds
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.83255
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: URLNumberOfAds
+outputs:
+- contextPath: Ads.URL
+  description: Ad URL found.
+- contextPath: Ads.Count
+  description: The count for the ad found.
+- contextPath: URL.Data
+  description: The URL we are checking.
+- contextPath: URL.AdsCount
+  description: The ads count on the URL.
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('URLNumberOfAds', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+  import re
+
+  import requests
+
+  from functools import reduce
+
+
+  def ads(html, termlist):
+      results: dict = {}
+      tags = re.findall("<[^/][^>]*>", html)
+      for item in termlist.split('\n'):
+          if not item.strip():
+              continue
+          if item.startswith('!') or item.startswith('[Adbl') or item.startswith('@@'):
+              continue
+          if item.startswith('###'):
+              item = item[3:]
+          if item.startswith('||'):
+              item = item[2:item.find("^$")]
+          for t in tags:
+              if item in t:
+                  results[item] = (results[item] + 1) if item in results else 1
+      return results
+
+
+  def main():  # pragma: no cover
+      u = demisto.args()['url']
+      r = requests.get(u)
+      reasy = requests.get(demisto.args()['easylist'] if 'easylist' in demisto.args()
+                           else 'https://easylist.github.io/easylist/easylist.txt')
+      res = ads(r.text, reasy.text)
+      nicerRes = [{'URL': k, 'Count': res[k]} for k in res]
+      totalAds = reduce(lambda x, y: x + y['Count'], nicerRes, 0)
+      demisto.results({'Type': entryTypes['note'], 'Contents': nicerRes, 'ContentsFormat': formats['json'],
+                       'HumanReadable': tableToMarkdown('AD URLs', nicerRes) + '\nTotal: ' + str(totalAds),
+                       'EntryContext': {'Ads': nicerRes,
+                                        'URL(val.Data == obj.Data)': {'Data': u, 'AdsCount': totalAds}}})
+
+
+  if __name__ in ['__main__', '__builtin__', 'builtins']:
+      main()
+
+  register_module_line('URLNumberOfAds', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- Utility
+type: python
