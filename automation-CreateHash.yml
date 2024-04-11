@@ -1,0 +1,108 @@
+args:
+- description: Text or string for which a hash should be created.
+  name: text
+  required: true
+- auto: PREDEFINED
+  defaultValue: sha256
+  description: Hash method to be used.
+  name: type
+  predefined:
+  - sha512
+  - sha256
+  - md5
+  - sha1
+  - blake
+  required: true
+comment: |
+  Creating a hash of a given input, support sha1, sha256, sha512, md5 and blake. Wrapper for https://docs.python.org/3/library/hashlib.html.
+commonfields:
+  id: CreateHash
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.86272
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: CreateHash
+outputs:
+- contextPath: CreateHash
+  description: Hash will be stored
+  type: string
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('CreateHash', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+
+  import hashlib
+  from hashlib import blake2b
+
+
+  def create_hash(text, hashtype):
+      """Create a hash from a given input and return it as a context outputs
+
+      Args:
+          text (str): input to hash
+          hashtype (str): hash type
+
+      Returns:
+          Dict[str,str]: Dictionary representing the command results context
+      """
+      if hashtype == "sha512":
+          h = hashlib.sha512()
+          h.update(text.encode('utf-8'))
+      elif hashtype == "sha256":
+          h = hashlib.sha256()
+          h.update(text.encode('utf-8'))
+      elif hashtype == 'sha1':
+          h = hashlib.sha1()  # nosec
+          h.update(text.encode('utf-8'))
+      elif hashtype == 'md5':
+          h = hashlib.md5()  # nosec
+          h.update(text.encode('utf-8'))
+      else:
+          h = blake2b()
+          h.update(text.encode('utf-8'))
+
+      context = {
+          "CreateHash": str(h.hexdigest())
+      }
+
+      return context
+
+
+  def main():  # pragma: no cover
+      args = demisto.args()
+      text = args.get('text')
+      hashtype = args.get('type')
+
+      context = create_hash(text, hashtype)
+      return_results(CommandResults(outputs=context))
+
+
+  if __name__ in ('__builtin__', 'builtins', '__main__'):
+      main()
+
+  register_module_line('CreateHash', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- transformer
+- Utilities
+- hash
+type: python
