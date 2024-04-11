@@ -1,0 +1,102 @@
+{
+	"author": "Cortex XSOAR",
+	"authorImage": "content/packs/Base/Author_image.png",
+	"beta": false,
+	"cacheVersn": 0,
+	"categories": [
+		"Data Enrichment \u0026 Threat Intelligence"
+	],
+	"certification": "certified",
+	"contentItemTypes": [
+		"automation",
+		"dashboard"
+	],
+	"contentItems": {
+		"automation": [
+			{
+				"description": "Total number of incidents per OOTB feed.\n\nThis automation runs using the default Limited User role, unless you explicitly change the permissions.\nFor more information, see the section about permissions here:\nhttps://docs-cortex.paloaltonetworks.com/r/Cortex-XSOAR/6.10/Cortex-XSOAR-Administrator-Guide/Automations",
+				"name": "ThreatIntelManagementGetIncidentsPerFeed",
+				"tags": [
+					"Threat Intel Management"
+				]
+			}
+		],
+		"classifier": null,
+		"dashboard": [
+			{
+				"name": "Threat Intel Management"
+			}
+		],
+		"genericfield": null,
+		"generictype": null,
+		"incidentfield": null,
+		"incidenttype": null,
+		"indicatorfield": null,
+		"integration": null,
+		"layoutscontainer": null,
+		"list": null,
+		"playbook": null,
+		"report": null,
+		"reputation": null,
+		"widget": null,
+		"wizard": null
+	},
+	"currentVersion": "1.1.9",
+	"definitionId": "",
+	"dependencies": {
+		"Base": {
+			"author": "Cortex XSOAR",
+			"certification": "certified",
+			"mandatory": true,
+			"minVersion": "1.33.24",
+			"name": "Base"
+		}
+	},
+	"deprecated": false,
+	"description": "Threat Intelligence Management Pack",
+	"disabledMonthly": false,
+	"downloads": 10991,
+	"eulaLink": "https://github.com/demisto/content/blob/master/LICENSE",
+	"fromServerVersion": "5.5.0",
+	"general": [
+		"generalFieldCertified",
+		"generalFieldByCortexXSOAR",
+		"generalFieldFree",
+		"generalFieldSupportIncluded"
+	],
+	"id": "ThreatIntelligenceManagement",
+	"installMessage": "",
+	"integrations": [],
+	"itemVersion": "1.1.9",
+	"keywords": [],
+	"legacy": true,
+	"name": "Threat Intelligence Management",
+	"packID": "ThreatIntelligenceManagement",
+	"packName": "",
+	"premium": false,
+	"previewOnly": false,
+	"price": 0,
+	"propagationLabels": [
+		"all"
+	],
+	"rawKeywords": null,
+	"rawTags": null,
+	"rawUseCases": null,
+	"searchRank": 10,
+	"serverMaxVersion": "",
+	"serverMinVersion": "5.5.0",
+	"support": "xsoar",
+	"supportDetails": {
+		"email": "",
+		"url": "https://www.paloaltonetworks.com/cortex"
+	},
+	"tags": [
+		"Threat Intelligence Management"
+	],
+	"toServerVersion": "",
+	"updated": "2024-02-01T19:32:47+09:00",
+	"useCases": [],
+	"version": -1,
+	"versionInfo": "798475",
+	"videos": []
+}
