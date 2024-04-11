@@ -1,0 +1,85 @@
+args:
+- description: A comma-separated list of CIDR inputs.
+  isArray: true
+  name: input
+  required: true
+comment: Verify that the CIDRs are valid.
+commonfields:
+  id: VerifyCIDR
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.5.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.83255
+engineinfo: {}
+mainengineinfo: {}
+name: VerifyCIDR
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('VerifyCIDR', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+  import ipaddress
+
+
+  ''' STANDALONE FUNCTION '''
+
+
+  def is_valid_cidr(cidr: str) -> bool:
+      try:
+          ipaddress.ip_network(cidr)
+          return True
+      except ValueError:
+          return False
+
+
+  ''' MAIN FUNCTION '''
+
+
+  def main():
+      try:
+          input_cidr = demisto.args().get('input')
+          input_cidr = argToList(input_cidr)
+
+          valid_cidr = []
+
+          for item in input_cidr:
+              if is_valid_cidr(item):
+                  valid_cidr.append(item)
+              else:
+                  valid_cidr.append('')
+
+          if valid_cidr:
+              return_results(valid_cidr)
+          else:
+              return_results('')
+
+      except Exception as e:
+          return_error(f'Failed to execute VerifyCIDR. Error: {str(e)}')
+
+
+  ''' ENTRY POINT '''
+
+
+  if __name__ in ('__main__', '__builtin__', 'builtins'):
+      main()
+
+  register_module_line('VerifyCIDR', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- indicator-format
+type: python
