@@ -1,0 +1,43 @@
+{
+	"Cache": null,
+	"cacheVersn": 0,
+	"category": "",
+	"dataType": "incidents",
+	"dateRange": {
+		"fromDate": "0001-01-01T00:00:00Z",
+		"fromDateLicense": "0001-01-01T00:00:00Z",
+		"period": {
+			"by": "",
+			"byFrom": "days",
+			"byTo": "",
+			"field": "",
+			"fromValue": 7,
+			"toValue": null
+		},
+		"toDate": "0001-01-01T00:00:00Z"
+	},
+	"definitionId": "",
+	"fromServerVersion": "6.5.0",
+	"id": "92d112e0-cfb8-4efc-8bc4-9cce6e34f2d1",
+	"isPredefined": true,
+	"itemVersion": "1.2.48",
+	"name": "MTTC by Severity",
+	"packID": "CommonWidgets",
+	"packName": "Common Widgets",
+	"packPropagationLabels": [
+		"all"
+	],
+	"params": {
+		"groupBy": [
+			"occurred(d)",
+			"severity"
+		],
+		"timeFrame": "days",
+		"valuesFormat": "abbreviated"
+	},
+	"propagationLabels": [],
+	"query": "-category:job and containmentsla.runStatus:ended",
+	"toServerVersion": "",
+	"version": -1,
+	"widgetType": "line"
+}
