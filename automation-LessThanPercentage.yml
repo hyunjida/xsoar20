@@ -1,0 +1,61 @@
+args:
+- default: true
+  description: First percentage.
+  name: firstPercentage
+  required: true
+- description: Second percentage.
+  name: secondPercentage
+  required: true
+comment: |-
+  Checks if one percentage is less than another
+  Returns less: if firstPercentage < secondPercentage
+  Returns more: if firstPercentage >= secondPercentage
+  Returns exception if one of the inputs is not a float
+commonfields:
+  id: LessThanPercentage
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: LessThanPercentage
+outputs:
+- contextPath: less
+  description: if firstPercentage < secondPercentage
+- contextPath: more
+  description: if firstPercentage >= secondPercentage
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  // pack version: 1.14.2
+  first = parseFloat(args.firstPercentage);
+  if (!first) {
+      throw 'firstPercentage is not valid: '+args.firstPercentage;
+  }
+  second = parseFloat(args.secondPercentage);
+  if (!second) {
+      throw 'firstPercentage is not valid: '+args.secondPercentage;
+  }
+  if (first < second) {
+      return 'less';
+  } else {
+      return 'more';
+  }
+scripttarget: 0
+system: true
+tags:
+- Utility
+- Condition
+type: javascript
