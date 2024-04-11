@@ -1,0 +1,29 @@
+{
+	"allRead": true,
+	"allReadWrite": true,
+	"cacheVersn": 0,
+	"data": "",
+	"definitionId": "",
+	"description": "",
+	"detached": false,
+	"fromServerVersion": "6.5.0",
+	"id": "InternalDomains",
+	"itemVersion": "1.14.2",
+	"locked": false,
+	"name": "InternalDomains",
+	"nameLocked": false,
+	"packID": "CommonScripts",
+	"packName": "Common Scripts",
+	"packPropagationLabels": [
+		"all"
+	],
+	"previousAllRead": true,
+	"previousAllReadWrite": true,
+	"propagationLabels": [],
+	"system": true,
+	"tags": null,
+	"toServerVersion": "",
+	"truncated": false,
+	"type": "plain_text",
+	"version": -1
+}
