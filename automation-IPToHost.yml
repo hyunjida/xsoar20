@@ -1,0 +1,86 @@
+args:
+- default: true
+  description: The IP to check
+  name: ip
+  required: true
+comment: Try to get the hostname correlated with the input IP.
+commonfields:
+  id: IPToHost
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.86272
+engineinfo: {}
+mainengineinfo: {}
+name: IPToHost
+outputs:
+- contextPath: Endpoint
+  description: The endpoint object.
+- contextPath: Endpoint.Hostname
+  description: The endpoint hostname.
+  type: string
+- contextPath: Endpoint.IP
+  description: The endpoint IP.
+  type: string
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('IPToHost', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+  import socket
+
+
+  def ip_to_host(ip: str) -> CommandResults:
+      host_info = socket.gethostbyaddr(ip)
+
+      if not host_info:
+          raise DemistoException('No results were found for the given value.')
+
+      hostname = host_info[0]
+
+      output = {
+          'Hostname': str(hostname),
+          'IP': ip
+      }
+
+      md = tableToMarkdown('IP to Host', [output])
+
+      return CommandResults(
+          outputs=output,
+          outputs_prefix='Endpoint',
+          outputs_key_field='Hostname',
+          readable_output=md,
+      )
+
+
+  def main():
+      try:
+          ip = demisto.args().get('ip')
+          return_results(ip_to_host(ip))
+      except Exception as e:
+          demisto.error(traceback.format_exc())
+          return_error(f'Couldn\'t get the IP host info. Error information: {str(e)}')
+
+
+  if __name__ in ('__main__', '__builtin__', 'builtins'):
+      main()
+
+  register_module_line('IPToHost', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags: []
+type: python
