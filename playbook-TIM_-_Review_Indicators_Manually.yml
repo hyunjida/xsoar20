@@ -1,0 +1,581 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.5.0
+    itemVersion: 1.1.23
+    packID: TIM_Processing
+    packName: TIM - Indicator Auto-Processing
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: This playbook helps analysts manage the manual process of reviewing indicators.
+  The playbook indicator query is set to search for indicators that have the 'pending
+  review' tag. The playbook's layout displays all of the related indicators in the
+  summary page. While reviewing the indicators, the analyst can go to the summary
+  page and tag the indicators accordingly with tags 'such as, 'approved_black', 'approved_white',
+  etc. Once the analyst completes their review, the playbook can optionally send an
+  email with a list of changes done by the analyst which haven't been approved. Once
+  complete, the playbook removes the 'pending review' tag from the indicators.
+id: TIM - Review Indicators Manually
+inputs:
+- description: ""
+  key: ""
+  playbookInputQuery:
+    daterange:
+      fromdate: "0001-01-01T00:00:00Z"
+      fromdatelicenseval: "0001-01-01T00:00:00Z"
+      period:
+        by: ""
+        byfrom: ""
+        byto: ""
+        field: ""
+        fromvalue: null
+        tovalue: null
+      todate: "0001-01-01T00:00:00Z"
+    query: tags:pending_review and -tags:being_reviewed
+    queryEntity: indicators
+    results: null
+    runFromLastJobTime: false
+  required: false
+  value: {}
+- description: This input specifies the email address to which to send the approval
+    form if approval is required.
+  key: ApproversEmailAddress
+  playbookInputQuery: null
+  required: false
+  value: {}
+name: TIM - Review Indicators Manually
+outputs: []
+quiet: true
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "11"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: f162095d-8a2a-4284-8067-de9cc4e1f2b2
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: f162095d-8a2a-4284-8067-de9cc4e1f2b2
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": -40,
+          "y": 50
+        }
+      }
+  "1":
+    continueonerrortype: ""
+    id: "1"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "2"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      incidentId:
+        simple: ${incident.id}
+      value:
+        simple: ${playbookQuery.value}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: Builtin
+      description: Associates indicators to an incident.
+      id: f0d90b34-79f7-4b83-838d-90536bd85b72
+      iscommand: true
+      name: Associate indicators to incident
+      script: Builtin|||associateIndicatorToIncident
+      type: regular
+      version: -1
+    taskid: f0d90b34-79f7-4b83-838d-90536bd85b72
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 162.5,
+          "y": 545
+        }
+      }
+  "2":
+    continueonerrortype: ""
+    id: "2"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "16"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Manually review the indicators. The review process can include
+        running reputation calculation on the indicator, or reviewing the indicator
+        online in various engines. At the end of the process, the analyst needs to
+        add the relevant indicator tags, such as approved_watchlist, approved_white,
+        approved_black, etc. These tags are later used by another playbook to send
+        the indicators to relevant 3rd party systems such as SIEM, EDR, EDL etc.
+      id: 22a51e47-818d-4bdb-84b7-2ce46c053108
+      iscommand: false
+      name: Manually review indicators
+      type: regular
+      version: -1
+    taskid: 22a51e47-818d-4bdb-84b7-2ce46c053108
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 162.5,
+          "y": 720
+        }
+      }
+  "3":
+    continueonerrortype: ""
+    id: "3"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: d6303bc0-484d-4642-8678-d74488ed3d91
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: d6303bc0-484d-4642-8678-d74488ed3d91
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": -40,
+          "y": 2080
+        }
+      }
+  "4":
+    continueonerrortype: ""
+    id: "4"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "1"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      field:
+        simple: tags
+      fieldValue:
+        simple: being_reviewed
+      indicatorsValues:
+        simple: ${playbookQuery.value}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: Builtin
+      description: Add being reviewed tag to indicators
+      id: 673fbda5-c8c1-4628-8167-b550c3e36013
+      iscommand: true
+      name: Add being reviewed tag to indicators
+      script: Builtin|||appendIndicatorField
+      type: regular
+      version: -1
+    taskid: 673fbda5-c8c1-4628-8167-b550c3e36013
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 162.5,
+          "y": 370
+        }
+      }
+  "6":
+    continueonerrortype: ""
+    id: "6"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "12"
+      "yes":
+      - "8"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: dca3b3a9-aba8-449b-8947-899260a923d6
+      iscommand: false
+      name: Allow to remove pending review tag from all indicators
+      type: condition
+      version: -1
+    taskid: dca3b3a9-aba8-449b-8947-899260a923d6
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 162.5,
+          "y": 1570
+        }
+      }
+  "8":
+    continueonerrortype: ""
+    id: "8"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "12"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      field:
+        simple: tags
+      fieldValue:
+        simple: pending_review
+      indicatorsValues:
+        simple: ${playbookQuery.value}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: Builtin
+      description: Remove pending review tag from indicators
+      id: f4ec900c-87b6-4144-844d-8d9355f3882b
+      iscommand: true
+      name: Remove pending review tag from indicators
+      script: Builtin|||removeIndicatorField
+      type: regular
+      version: -1
+    taskid: f4ec900c-87b6-4144-844d-8d9355f3882b
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 410,
+          "y": 1740
+        }
+      }
+  "11":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: playbookQuery.value
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "11"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "3"
+      "yes":
+      - "4"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 988f9d8e-1eed-4246-8a33-90f7301be80c
+      iscommand: false
+      name: Are there query results?
+      type: condition
+      version: -1
+    taskid: 988f9d8e-1eed-4246-8a33-90f7301be80c
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": -40,
+          "y": 185
+        }
+      }
+  "12":
+    continueonerrortype: ""
+    id: "12"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "3"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      field:
+        simple: tags
+      fieldValue:
+        simple: being_reviewed
+      indicatorsValues:
+        simple: ${playbookQuery.value}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: Builtin
+      description: Removes the 'being_reviewed' tag from the indicator.
+      id: 69a24474-140a-4fce-8fc3-770b257a3cc3
+      iscommand: true
+      name: Remove being reviewed tag from indicators
+      script: Builtin|||removeIndicatorField
+      type: regular
+      version: -1
+    taskid: 69a24474-140a-4fce-8fc3-770b257a3cc3
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 162.5,
+          "y": 1910
+        }
+      }
+  "14":
+    continueonerrortype: ""
+    id: "14"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "6"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: d7d97ca9-8558-4063-8d5f-e2cb8fc97087
+      iscommand: false
+      name: Make changes according the approvers request
+      type: regular
+      version: -1
+    taskid: d7d97ca9-8558-4063-8d5f-e2cb8fc97087
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 600,
+          "y": 1400
+        }
+      }
+  "15":
+    continueonerrortype: ""
+    form:
+      description: The approver reviews the incident and changes made by the analyst.
+        In case the approver needs specific indicators to be changed, they will list
+        the indicators in question.
+      expired: false
+      questions:
+      - defaultrows: []
+        fieldassociated: ""
+        gridcolumns: []
+        id: "0"
+        label: ""
+        labelarg:
+          simple: Specify the indicators that weren't approved
+        options: []
+        optionsarg: []
+        placeholder: ""
+        readonly: false
+        required: false
+        tooltip: ""
+        type: longText
+      sender: ""
+      title: List the indicators are are not approved
+      totalanswers: 0
+    id: "15"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    message:
+      bcc: null
+      body:
+        simple: |-
+          Please review this incident
+          ${demistoUrls.server}/#/Custom/indeooemoh/${incident.investigationId}
+          And approve the changes made to the indicators.
+          Related indicators will appear in the Indicators tab.
+      cc: null
+      format: html
+      methods:
+      - email
+      replyOptions:
+      - "Yes"
+      - "No"
+      subject:
+        simple: Approve indicator changes
+      timings:
+        completeafterreplies: 1
+        completeaftersla: false
+        completeafterv2: false
+        retriescount: 2
+        retriesinterval: 360
+      to:
+        simple: ${inputs.ApproversEmailAddress}
+    nexttasks:
+      '#none#':
+      - "18"
+    note: false
+    quietmode: 2
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 689ca540-4687-441f-8971-0202ce7d004d
+      iscommand: false
+      name: Email for indicator changes approval
+      type: collection
+      version: -1
+    taskid: 689ca540-4687-441f-8971-0202ce7d004d
+    timertriggers: []
+    type: collection
+    view: |-
+      {
+        "position": {
+          "x": 430,
+          "y": 1070
+        }
+      }
+  "16":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: inputs.ApproversEmailAddress
+          operator: isNotEmpty
+      - - left:
+            iscontext: true
+            value:
+              simple: inputs.ApproversEmailAddress
+          operator: match
+          right:
+            value:
+              simple: .*@.*\.*
+      label: "yes"
+    continueonerrortype: ""
+    id: "16"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "6"
+      "yes":
+      - "15"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: c3cd5682-a73d-4725-8685-c3b54dacb587
+      iscommand: false
+      name: Was an email address provided for approval?
+      type: condition
+      version: -1
+    taskid: c3cd5682-a73d-4725-8685-c3b54dacb587
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 162.5,
+          "y": 885
+        }
+      }
+  "18":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: List the indicators are are not approved.Answers.0
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "18"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "6"
+      "yes":
+      - "14"
+    note: false
+    quietmode: 2
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 12758c44-b346-4c69-86fe-83e72d221b4c
+      iscommand: false
+      name: Are there indicators that werent approved?
+      type: condition
+      version: -1
+    taskid: 12758c44-b346-4c69-86fe-83e72d221b4c
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 430,
+          "y": 1220
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 2095,
+        "width": 1020,
+        "x": -40,
+        "y": 50
+      }
+    }
+  }
