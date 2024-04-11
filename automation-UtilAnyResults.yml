@@ -1,0 +1,70 @@
+args:
+- default: true
+  description: Data to check - can be a list or a string. Strings containing only
+    commas are considered empty results.
+  name: data
+  required: true
+comment: Utility script to use in playbooks - returns "yes" if the input is non-empty.
+commonfields:
+  id: UtilAnyResults
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.83255
+engineinfo: {}
+mainengineinfo: {}
+name: UtilAnyResults
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('UtilAnyResults', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+
+
+  def util_any_results(args):
+      try:
+          res = []
+          data = demisto.get(args, 'data')
+          if isinstance(data, list) and data:
+              res.append("yes")
+          elif isinstance(data, str) and data:
+              if data[0] in ['[', '{']:
+                  data = data[1:]
+              if data[-1] in [']', '}']:
+                  data = data[:-1]
+              # If data resembles one of ",,," or "[,,]" or "[]" it is considered empty of results.
+              res.append('yes' if data.replace(',', '') else 'no')
+          else:
+              res.append("no")
+      except Exception as ex:
+          res.append({"Type": entryTypes["error"], "ContentsFormat": formats["text"],
+                      "Contents": "Error occurred while parsing data. Exception info:\n" + str(
+                          ex) + "\n\nInvalid data:\n" + str(data)})  # type: ignore
+      return res
+
+
+  def main():
+      args = demisto.args()
+      demisto.results(util_any_results(args))
+
+  register_module_line('UtilAnyResults', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- Utility
+- Condition
+type: python
