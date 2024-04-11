@@ -1,0 +1,108 @@
+{
+	"author": "Cortex XSOAR",
+	"authorImage": "content/packs/Base/Author_image.png",
+	"beta": false,
+	"cacheVersn": 0,
+	"categories": [
+		"Data Enrichment \u0026 Threat Intelligence"
+	],
+	"certification": "certified",
+	"contentItemTypes": [
+		"integration"
+	],
+	"contentItems": {
+		"automation": null,
+		"classifier": null,
+		"dashboard": null,
+		"genericfield": null,
+		"generictype": null,
+		"incidentfield": null,
+		"incidenttype": null,
+		"indicatorfield": null,
+		"integration": [
+			{
+				"category": "Data Enrichment \u0026 Threat Intelligence",
+				"commands": [
+					{
+						"description": "Retrieves a limited number of the indicators.",
+						"name": "unit42-get-indicators"
+					}
+				],
+				"description": "Unit 42 feed of published IOCs, which contains known malicious indicators.",
+				"id": "Unit42v2 Feed",
+				"name": "Unit 42 ATOMs Feed"
+			}
+		],
+		"layoutscontainer": null,
+		"list": null,
+		"playbook": null,
+		"report": null,
+		"reputation": null,
+		"widget": null,
+		"wizard": null
+	},
+	"currentVersion": "1.0.47",
+	"definitionId": "",
+	"dependencies": {
+		"Base": {
+			"author": "Cortex XSOAR",
+			"certification": "certified",
+			"mandatory": true,
+			"minVersion": "1.33.27",
+			"name": "Base"
+		}
+	},
+	"deprecated": false,
+	"description": "Unit 42 feed of published IOCs which contains malicious indicators.",
+	"disabledMonthly": false,
+	"downloads": 25890,
+	"eulaLink": "https://github.com/demisto/content/blob/master/LICENSE",
+	"fromServerVersion": "5.5.0",
+	"general": [
+		"generalFieldCertified",
+		"generalFieldByCortexXSOAR",
+		"generalFieldFree",
+		"generalFieldSupportIncluded"
+	],
+	"id": "FeedUnit42v2",
+	"installMessage": "",
+	"integrations": [
+		{
+			"imagePath": "content/packs/FeedUnit42v2/Unit42v2Feed_image.png",
+			"name": "Unit 42 ATOMs Feed"
+		}
+	],
+	"itemVersion": "1.0.47",
+	"keywords": [],
+	"legacy": true,
+	"name": "Unit 42 ATOMs Feed",
+	"packID": "FeedUnit42v2",
+	"packName": "",
+	"premium": false,
+	"previewOnly": false,
+	"price": 0,
+	"propagationLabels": [
+		"all"
+	],
+	"rawKeywords": null,
+	"rawTags": null,
+	"rawUseCases": null,
+	"readme": "The Unit 42 v2 feed provides access to published IOCs that contain known malicious indicators. You can configure the number of indicators to be returned. The default is 10.\n\nThe newest Unit 42 Feed V2 Pack introduces the STIX format and ingests more Threat Intel than before. All the Unit42 ATOM information now in your XSOAR Threat Intel Library.\n- STIX object-oriented - we are now using: Report, Intrusion Set, Campaign, Attack Pattern, Course of Action, and of course IOCs\n- The main Report object is associated to its related Intrusion Set and Campaigns\n- Each Campaign has its specific Attack Patterns, Course of Actions and IOCs \n- Starting with version 6.2 - RELATIONSHIPS between objects is now supported!\n\nIn order to access the Unit 42 feed, you first must register for an account.\n\n1. Go to https://stix2.unit42.org/ to sign up.\n2. Log in and create an API key for the service using the 'API Keys' page.\n3. Click the '+' button in the table header to create a new key.\n4. Use the 'copy' icon in the new key's row to copy the full key to the clipboard.\n",
+	"searchRank": 10,
+	"serverMaxVersion": "",
+	"serverMinVersion": "5.5.0",
+	"support": "xsoar",
+	"supportDetails": {
+		"email": "",
+		"url": "https://www.paloaltonetworks.com/cortex"
+	},
+	"tags": [
+		"TIM"
+	],
+	"toServerVersion": "",
+	"updated": "2024-04-03T19:20:14+09:00",
+	"useCases": [],
+	"version": -1,
+	"versionInfo": "823153",
+	"videos": []
+}
