@@ -1,0 +1,76 @@
+args:
+- default: true
+  description: Array or comma-separated list of IPv4 Addresses to filter.
+  isArray: true
+  name: value
+  required: true
+- description: Array or comma-separated list of IPv4 ranges, in CIDR notation, against
+    which to match the IPv4 addresses.
+  isArray: true
+  name: cidr_ranges
+  required: true
+comment: Transformer that returns a filtered list of IPv4 addresses, based on whether
+  they match a comma-separated list of IPv4 ranges.  Useful for filtering in internal
+  IP address space.
+commonfields:
+  id: IPv4Whitelist
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.2.61
+    packID: FiltersAndTransformers
+    packName: Filters And Transformers
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/netutils:1.0.0.83404
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: IPv4Whitelist
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('IPv4Whitelist', 'start', __line__())
+  ### pack version: 1.2.61
+
+
+
+  from netaddr import IPAddress, IPNetwork
+
+
+  def main():
+      ip_addresses = argToList(demisto.args()['value'])
+      cidr_range_list = argToList(demisto.args()['cidr_ranges'])
+
+      included_addresses = []
+
+      for ip_address in ip_addresses:
+          ip = IPAddress(ip_address)
+
+          for cidr_range in cidr_range_list:
+              if ip in IPNetwork(cidr_range):
+                  included_addresses.append(ip_address)
+
+      if not included_addresses:
+          demisto.results(None)
+      else:
+          demisto.results(included_addresses)
+
+
+  if __name__ == "__builtin__" or __name__ == "builtins":
+      main()
+
+  register_module_line('IPv4Whitelist', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- transformer
+- entirelist
+type: python
