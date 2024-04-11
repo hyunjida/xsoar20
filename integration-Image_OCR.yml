@@ -1,0 +1,196 @@
+category: Utilities
+commonfields:
+  id: Image OCR
+  version: -1
+configuration:
+- advanced: true
+  display: A CSV of language codes of the language to use for OCR (leave empty to
+    use defaults).
+  name: langs
+  required: false
+  section: Connect
+  type: 0
+- additionalinfo: If true, will not raise an error if the image is corrupted and could
+    not be processed.
+  advanced: true
+  display: Skip on corrupted images
+  name: skip_corrupted
+  required: false
+  section: Connect
+  type: 8
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.1.27
+    packID: ImageOCR
+    packName: Image OCR
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: Extracts text from images.
+detaileddescription: "## Image OCR\nUse the Image OCR integration to extract text
+  from images. The integration utilizes the open-source [**tesseract**](https://github.com/tesseract-ocr/tesseract/)
+  OCR engine.\n\nThe default language used for OCR is English. To configure additional
+  languages, in the **Languages** parameter specify a CSV list of language codes.
+  For example, to set the integration for English and French, set this value: *eng,fra*.
+  To see all supported language codes,run the following command:\n```\n!image-ocr-list-languages\n```\n
+  \n\n\n---\n[View Integration Documentation](https://xsoar.pan.dev/docs/reference/integrations/image-ocr)"
+display: Image OCR
+image: data:image/png;base64,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
+name: Image OCR
+script:
+  commands:
+  - arguments: []
+    description: Lists supported languages for which the integration can extract text.
+    name: image-ocr-list-languages
+  - arguments:
+    - description: A comma-separated list of Entry IDs of image files to process.
+      isArray: true
+      name: entryid
+      required: true
+    - description: A CSV of language codes of the language to use for OCR. Overrides
+        the default configured language list.
+      isArray: true
+      name: langs
+    description: Extracts text from an image.
+    name: image-ocr-extract-text
+    outputs:
+    - contextPath: File.Text
+      description: Extracted text from the passed image file.
+      type: String
+  dockerimage: demisto/tesseract:1.0.0.87375
+  runonce: false
+  script: |
+    register_module_line('Image OCR', 'start', __line__())
+    ### pack version: 1.1.27
+
+
+    import subprocess
+
+    TESSERACT_EXE = 'tesseract'
+    CORRUPTED_ERR = 'pix not read'
+    CORRUPTED_MSG = 'WARNING: failed to extract text - image is corrupted'
+
+
+    def list_languages() -> list[str]:
+        lang_out = subprocess.check_output([TESSERACT_EXE, '--list-langs'], universal_newlines=True)
+        if not lang_out:  # something went wrong
+            raise ValueError('No output from --list-langs')
+        lines = lang_out.splitlines()
+        if len(lines) <= 1:
+            raise ValueError('No output from --list-langs')
+        return sorted(lines[1:])  # ignore first line
+
+
+    def extract_text(image_path: str, languages: list[str] = None) -> str:
+        exe_params = [TESSERACT_EXE, "-v", image_path, 'stdout']
+        if languages:
+            exe_params.extend(['-l', '+'.join(languages)])
+        res = subprocess.run(exe_params, capture_output=True, check=True, text=True)
+        if res.stderr:
+            demisto.debug(f'tesseract returned ok but stderr contains warnings: {res.stderr}')
+        return res.stdout
+
+
+    def list_languages_command() -> CommandResults:
+        langs = list_languages()
+        return CommandResults(
+            readable_output="## Image OCR Supported Languages\n\n" + "\n".join(['* ' + s for s in langs]),
+            raw_response=langs
+        )
+
+
+    def extract_text_command(args: dict, instance_languages: list, skip_corrupted: bool) -> tuple[list, list]:
+        langs = argToList(args.get('langs')) or instance_languages
+        demisto.debug(f"Using langs settings: {langs}")
+        results, errors = [], []
+
+        entry_ids = argToList(args.get('entryid'))
+        for entry_id in entry_ids:
+            try:
+                file_path = demisto.getFilePath(entry_id)
+                if not file_path:
+                    raise DemistoException(f"Couldn't find entry id: {entry_id}")
+
+                demisto.debug(f'Extracting text from file: {file_path}')
+                res = extract_text(file_path['path'], langs)
+                file_entry = {'EntryID': entry_id, 'Text': res}
+                results.append(
+                    CommandResults(
+                        readable_output=f"## Image OCR Extracted Text for Entry ID {entry_id}\n\n" + res,
+                        outputs_prefix='File',
+                        outputs_key_field='EntryID',
+                        outputs=file_entry,
+                        raw_response=res,
+                    )
+                )
+            except subprocess.CalledProcessError as cpe:
+                if CORRUPTED_ERR in cpe.stderr and skip_corrupted:
+                    file_entry = {"EntryID": entry_id, "Text": CORRUPTED_MSG}
+                    results.append(
+                        CommandResults(
+                            readable_output=f"## Could not process file with entry ID {entry_id} - image is corrupted",
+                            outputs_prefix='File',
+                            outputs_key_field='EntryID',
+                            outputs=file_entry,
+                            entry_type=EntryType.WARNING,
+                        )
+                    )
+                else:
+                    errors.append(
+                        f"An error occurred while trying to process {entry_id=}: "
+                        f"Failed {cpe.cmd} execution. Return status: {cpe.returncode}.\n"
+                        f"Error:\n{cpe.stderr}\n"
+                        f"Stdout:\n{cpe.stdout}"
+                    )
+            except Exception as e:
+                errors.append(f"An error occurred while trying to process {entry_id=}: {e}")
+
+        return results, errors
+
+
+    def run_test_module(instance_languages: list) -> str:
+        try:
+            supported_langs = list_languages()
+            if instance_languages:
+                for language in instance_languages:
+                    if language not in supported_langs:
+                        raise DemistoException(f'Unsupported language configured: {language}')
+            return 'ok'
+        except Exception as exception:
+            raise Exception(f'Failed testing {TESSERACT_EXE}: {exception}')
+
+
+    def main() -> None:
+        command = demisto.command()
+        args = demisto.args()
+        params = demisto.params()
+        instance_languages = argToList(params.get('langs'))
+        skip_corrupted = params.get('skip_corrupted')
+        try:
+            if command == 'test-module':
+                return_results(run_test_module(instance_languages))
+            elif command == 'image-ocr-list-languages':
+                return_results(list_languages_command())
+            elif command == 'image-ocr-extract-text':
+                results, errors = extract_text_command(args, instance_languages, skip_corrupted)
+                return_results(results)
+                if errors:
+                    raise DemistoException("\n".join(errors))
+            else:
+                raise NotImplementedError(f'Command {command} was not implemented.')
+        except Exception as err:
+            return_error(f"Failed with error(s): {err}")
+
+
+    # python2 uses __builtin__ python3 uses builtins
+    if __name__ in ("__builtin__", "builtins", '__main__'):
+        main()
+
+    register_module_line('Image OCR', 'end', __line__())
+  subtype: python3
+  type: python
+system: true
