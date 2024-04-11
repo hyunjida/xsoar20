@@ -1,0 +1,357 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.5.0
+    itemVersion: 1.1.23
+    packID: TIM_Processing
+    packName: TIM - Indicator Auto-Processing
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: This playbook processes CIDR indicators of both IPV4 and IPV6. By specifying
+  in the inputs the maximum number of hosts allowed per CIDR, the playbook tags any
+  CIDR that exceeds the number as pending_review. If the maximum CIDR size is not
+  specified in the inputs, the playbook does not run.
+id: TIM - Process CIDR Indicators By Size
+inputs:
+- description: ""
+  key: ""
+  playbookInputQuery:
+    daterange:
+      fromdate: "0001-01-01T00:00:00Z"
+      fromdatelicenseval: "0001-01-01T00:00:00Z"
+      period:
+        by: ""
+        byfrom: ""
+        byto: ""
+        field: ""
+        fromvalue: null
+        tovalue: null
+      todate: "0001-01-01T00:00:00Z"
+    query: ""
+    queryEntity: indicators
+    results: null
+    runFromLastJobTime: false
+  required: false
+  value: {}
+- description: The maximum number of hosts that a CIDR can contain for auto approval.
+    If the number of hosts is greater than approved, the CIDR is tagged for manual
+    review.
+  key: MaximumHostSizePermitted
+  playbookInputQuery: null
+  required: false
+  value: {}
+name: TIM - Process CIDR Indicators By Size
+outputs: []
+quiet: true
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "2"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: a863f210-8172-41b0-814a-ce5c168fc17b
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: a863f210-8172-41b0-814a-ce5c168fc17b
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 50
+        }
+      }
+  "1":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: value
+                filters:
+                - - left:
+                      iscontext: true
+                      value:
+                        simple: playbookQuery.indicator_type
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: CIDR
+                  - left:
+                      iscontext: true
+                      value:
+                        simple: playbookQuery.indicator_type
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: IPv6CIDR
+                root: playbookQuery
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "1"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "3"
+      "yes":
+      - "4"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 7e2cc8ff-7ff3-4c0b-856d-2204c2bfb53d
+      iscommand: false
+      name: Are there CIDR results?
+      type: condition
+      version: -1
+    taskid: 7e2cc8ff-7ff3-4c0b-856d-2204c2bfb53d
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 230,
+          "y": 360
+        }
+      }
+  "2":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: inputs.MaximumHostSizePermitted
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "2"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "3"
+      "yes":
+      - "1"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Was the maximum number of hosts permitted defined.
+      id: c5e590d9-9679-469b-8815-1b1c495aaa6b
+      iscommand: false
+      name: Was maximum host size specified?
+      type: condition
+      version: -1
+    taskid: c5e590d9-9679-469b-8815-1b1c495aaa6b
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 180
+        }
+      }
+  "3":
+    continueonerrortype: ""
+    id: "3"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 6d9f44d8-e31f-4537-801c-b16b0070cacb
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 6d9f44d8-e31f-4537-801c-b16b0070cacb
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 890
+        }
+      }
+  "4":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: value
+                filters:
+                - - left:
+                      iscontext: true
+                      value:
+                        simple: playbookQuery.indicator_type
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: CIDR
+                  - left:
+                      iscontext: true
+                      value:
+                        simple: playbookQuery.indicator_type
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: IPv6CIDR
+                - - left:
+                      iscontext: true
+                      value:
+                        simple: playbookQuery.value
+                    operator: GreaterCidrNumAddresses
+                    right:
+                      iscontext: true
+                      value:
+                        simple: inputs.MaximumHostSizePermitted
+                root: playbookQuery
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "4"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "3"
+      "yes":
+      - "5"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: db408f8d-0b56-4566-8e96-4f4f5b7fa6cd
+      iscommand: false
+      name: Are there CIDRs that exceed the maximum number of hosts allowed?
+      type: condition
+      version: -1
+    taskid: db408f8d-0b56-4566-8e96-4f4f5b7fa6cd
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 30,
+          "y": 540
+        }
+      }
+  "5":
+    continueonerrortype: ""
+    id: "5"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "3"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      field:
+        simple: tags
+      fieldValue:
+        simple: pending_review
+      indicatorsValues:
+        complex:
+          accessor: value
+          filters:
+          - - left:
+                iscontext: true
+                value:
+                  simple: playbookQuery.indicator_type
+              operator: isEqualString
+              right:
+                value:
+                  simple: CIDR
+            - left:
+                iscontext: true
+                value:
+                  simple: playbookQuery.indicator_type
+              operator: isEqualString
+              right:
+                value:
+                  simple: IPv6CIDR
+          - - left:
+                iscontext: true
+                value:
+                  simple: playbookQuery.value
+              operator: GreaterCidrNumAddresses
+              right:
+                iscontext: true
+                value:
+                  simple: inputs.MaximumHostSizePermitted
+          root: playbookQuery
+          transformers:
+          - operator: uniq
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: Builtin
+      description: Adds the pending_review tag to the indicator
+      id: 700f659e-b059-4583-8386-23908fe27198
+      iscommand: true
+      name: Tag CIDR indicators for manual review
+      script: Builtin|||appendIndicatorField
+      type: regular
+      version: -1
+    taskid: 700f659e-b059-4583-8386-23908fe27198
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -170,
+          "y": 720
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 905,
+        "width": 1000,
+        "x": -170,
+        "y": 50
+      }
+    }
+  }
