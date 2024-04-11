@@ -1,0 +1,143 @@
+args:
+- description: Text to match against, e.g., The quick brown fox.
+  name: value
+  required: true
+- description: Regex pattern to search (in Python), e.g., (The)\s(quick).*(fox).
+  name: regex
+  required: true
+- auto: PREDEFINED
+  defaultValue: "false"
+  description: Process value in multiline mode.  See more information on re.MULTILINE,
+    see https://docs.python.org/3/library/re.html.
+  name: multi_line
+  predefined:
+  - "false"
+  - "true"
+- auto: PREDEFINED
+  defaultValue: "false"
+  description: Whether character matching will be case-insensitive. Default is "false".
+  name: ignore_case
+  predefined:
+  - "false"
+  - "true"
+- auto: PREDEFINED
+  defaultValue: "false"
+  description: Whether to make the '.' character also match a new line. Default is
+    "false".
+  name: period_matches_newline
+  predefined:
+  - "false"
+  - "true"
+- auto: PREDEFINED
+  defaultValue: "false"
+  description: Only set to 'true' if used in a playbook task and you want that failure
+    will return an error.
+  name: error_if_no_match
+  predefined:
+  - "false"
+  - "true"
+- auto: PREDEFINED
+  defaultValue: "false"
+  description: Whether to unpack the tuple values of results. Default is "false".
+  name: unpack_matches
+  predefined:
+  - "false"
+  - "true"
+comment: |-
+  Extraction of all matches from a specified regular expression pattern from a provided string.  Returns an array of results.  This differs from RegexGroups in several ways:
+
+  * It returns all matches of the specified pattern, not just specific groups.  This is useful for extracting things using a pattern where the content of the source string is indeterminate, such as extracting all email addresses.
+  * Some "convenience" arguments have been added to enhance usability: multi-line, ignore_case, period_matches_newline
+  * Added a new argument, "error_if_no_match".  The script will not ordinarily throw an error if a match is not found but if not using as a transformer within a playbook, it may, in certain limited circumstances, be desirable to throw an error if the expression doesn't match.
+  * It uses the 'regex'  library, which supports more some more advanced regex functionality than the standard 're' library.  For more info, see https://pypi.org/project/regex/.
+commonfields:
+  id: RegexExtractAll
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.2.61
+    packID: FiltersAndTransformers
+    packName: Filters And Transformers
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.86272
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: RegexExtractAll
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('RegexExtractAll', 'start', __line__())
+  ### pack version: 1.2.61
+
+  import regex
+
+  # pylint: disable=no-member
+
+
+  def main():
+      match_target = demisto.args()['value']
+
+      re_flags = regex.V1
+      error_if_no_match = False
+      unpack_matches = False
+
+      try:
+
+          if demisto.args()['multi_line'].lower() == 'true':
+              re_flags |= regex.MULTILINE
+
+          if demisto.args()['ignore_case'].lower() == 'true':
+              re_flags |= regex.IGNORECASE
+
+          if demisto.args()['period_matches_newline'].lower() == 'true':
+              re_flags |= regex.DOTALL
+
+          if demisto.args()['error_if_no_match'].lower() == 'true':
+              error_if_no_match = True
+
+          if demisto.args()['unpack_matches'].lower() == 'true':
+              unpack_matches = True
+
+      except KeyError:
+          pass
+
+      regex_pattern = regex.compile(r'{}'.format(demisto.args()['regex']), flags=re_flags)
+
+      try:
+          matches = regex.findall(regex_pattern, match_target)
+
+          if error_if_no_match is False or len(matches) != 0:
+              if unpack_matches and matches:
+                  results = []
+                  for m in matches:
+                      results.extend([v for v in (m if isinstance(m, tuple) else [m]) if v])
+              else:
+                  results = matches
+
+              demisto.results(results)
+          else:
+              return_error('No results found')
+
+      except Exception:
+          raise
+
+
+  if __name__ == "__builtin__" or __name__ == "builtins":
+      main()
+
+  register_module_line('RegexExtractAll', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- transformer
+- string
+type: python
