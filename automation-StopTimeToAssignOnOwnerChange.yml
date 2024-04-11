@@ -1,0 +1,65 @@
+args:
+- description: The old value of the changed field.
+  name: old
+- description: The new value of the changed field.
+  name: new
+comment: Stops the "Time To Assign" timer if the owner of the incident was changed.
+commonfields:
+  id: StopTimeToAssignOnOwnerChange
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.83255
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: StopTimeToAssignOnOwnerChange
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('StopTimeToAssignOnOwnerChange', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+
+
+  # ##### Help #####
+  # This is an example script. The script is used to stop the Time to Assignment SLA field,
+  # once an owner was set to an incident. If you want to use this script, you should go to
+  # the Owner field, and set this script as the script to run upon change of field value.
+
+
+  def main():
+      args = demisto.args()
+      try:
+          if not args.get('old') and args.get('new'):  # If owner was no-one and is now someone:
+              demisto.executeCommand("stopTimer", {"timerField": "timetoassignment"})
+              demisto.results("Assignment of the incident was successful and so the Time To Assignment"
+                              " timer has been stopped.")
+      except Exception as e:  # pragma: no cover
+          err_msg = f'Encountered an error while running the script: [{e}]'
+          return_error(err_msg, error=e)
+
+
+  if __name__ in ('__main__', '__builtin__', 'builtins'):
+      main()
+
+  register_module_line('StopTimeToAssignOnOwnerChange', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- field-change-triggered
+- example
+type: python
