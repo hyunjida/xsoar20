@@ -1,0 +1,50 @@
+args:
+- description: Text to trim (e.g. "~!!~www.mydomain.com~!~!~")
+  name: value
+  required: true
+- description: Characters to stripped from the text (e.g. "!~")
+  name: chars
+  required: true
+comment: |-
+  Strip set of characters from prefix and/or suffix
+  e.g. StripChar value=~!!~www.mydomain.com~!~!~  chars=!~ will return www.mydomain.com
+commonfields:
+  id: StripChars
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.2.61
+    packID: FiltersAndTransformers
+    packName: Filters And Transformers
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.86272
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: StripChars
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('StripChars', 'start', __line__())
+  ### pack version: 1.2.61
+
+  value = demisto.args()["value"]
+  chars = demisto.args().get("chars", "")
+
+  demisto.results(value.strip(chars))
+
+  register_module_line('StripChars', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- transformer
+- string
+type: python
