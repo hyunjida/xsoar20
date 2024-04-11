@@ -1,0 +1,82 @@
+comment: Generates a random UUID (UUID 4).
+commonfields:
+  id: GenerateRandomUUID
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.86272
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: GenerateRandomUUID
+outputs:
+- contextPath: GeneratedUUID
+  description: The generated UUID.
+  type: string
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('GenerateRandomUUID', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+
+
+  import uuid
+
+
+  ''' STANDALONE FUNCTION '''
+
+
+  def generate_random_uuid() -> str:
+      return str(uuid.uuid4())
+
+
+  ''' COMMAND FUNCTION '''
+
+
+  def generate_random_uuid_command() -> CommandResults:
+      outputs = {
+          'GeneratedUUID': generate_random_uuid()
+      }
+
+      return CommandResults(
+          readable_output=f'## Random UUID Generated: {outputs["GeneratedUUID"]}',
+          outputs=outputs,
+      )
+
+
+  ''' MAIN FUNCTION '''
+
+
+  def main():
+      try:
+          return_results(generate_random_uuid_command())
+      except Exception as ex:
+          demisto.error(traceback.format_exc())  # print the traceback
+          return_error(f'Failed to execute GenerateRandomUUID. Error: {str(ex)}')
+
+
+  ''' ENTRY POINT '''
+
+
+  if __name__ in ('__main__', '__builtin__', 'builtins'):
+      main()
+
+  register_module_line('GenerateRandomUUID', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags: []
+type: python
