@@ -1,0 +1,378 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.5.0
+    itemVersion: 2.1.42
+    packID: Palo_Alto_Networks_WildFire
+    packName: WildFire by Palo Alto Networks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: |
+  This playbook uploads, detonates, and analyzes files for the Wildfire sandbox.
+id: Wildfire Detonate and Analyze File
+inputs:
+- description: The details of the file to detonate.
+  key: File
+  playbookInputQuery: null
+  required: false
+  value: {}
+name: Wildfire Detonate and Analyze File
+outputs:
+- contextPath: WildFire.Report
+  description: The Wildfire findings.
+  type: string
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "5"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: bc87b321-1f83-4c71-8e0a-d0018948ad65
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: bc87b321-1f83-4c71-8e0a-d0018948ad65
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 140,
+          "y": 240
+        }
+      }
+  "3":
+    continueonerrortype: ""
+    id: "3"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 614caa8a-35e6-473a-8f88-db285a7a231c
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 614caa8a-35e6-473a-8f88-db285a7a231c
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 140,
+          "y": 1440
+        }
+      }
+  "5":
+    continueonerrortype: ""
+    id: "5"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      "no":
+      - "3"
+      "yes":
+      - "9"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      brandname:
+        simple: WildFire-v2
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Returns 'yes' if the WildFire integration is available.
+      id: 906821d8-ce2c-42d6-8446-020eb9190a16
+      iscommand: false
+      name: Is WildFire enabled?
+      script: IsIntegrationAvailable
+      type: condition
+      version: -1
+    taskid: 906821d8-ce2c-42d6-8446-020eb9190a16
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 140,
+          "y": 390
+        }
+      }
+  "6":
+    conditions:
+    - condition:
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                accessor: EntryID
+                filters:
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: inputs.File.Type
+                    operator: match
+                    right:
+                      value:
+                        simple: .*(?:APK|JAR|DOC|DOCX|RTF|XLS|XLSX|PPT|PPTX|OOXML|PE32|PE|PE64|PDF|DMG|PKG|RAR|7Z|JS|ELF|HTA|LNK|VBS|PS1|PERL|sh|PYTHON|SHELL|DLL|MSI)\b
+                  - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: inputs.File.Info
+                    operator: match
+                    right:
+                      value:
+                        simple: .*(?:APK|JAR|DOC|DOCX|RTF|XLS|XLSX|PPT|PPTX|OOXML|PE32|PE|PE64|PDF|DMG|PKG|RAR|7Z|JS|ELF|HTA|LNK|VBS|PS1|PERL|sh|PYTHON|SHELL|DLL|MSI)\b
+                  - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: inputs.File.Extension
+                    operator: match
+                    right:
+                      value:
+                        simple: .*(?:APK|JAR|DOC|DOCX|RTF|XLS|XLSX|PPT|PPTX|OOXML|PE32|PE|PDF|DMG|PKG|RAR|7Z|JS|EXE|ELF|HTA|LNK|VBS|PS1|PERL|sh|PYTHON|SHELL|DLL|MSI)\b
+                root: inputs.File
+          operator: isExists
+          right:
+            value: {}
+      label: "yes"
+    continueonerrortype: ""
+    id: "6"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "3"
+      "yes":
+      - "8"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks if the file type is supported.
+      id: 120313a9-69b0-4e9d-8e67-e05f642f6ecc
+      iscommand: false
+      name: Is the file type supported?
+      type: condition
+      version: -1
+    taskid: 120313a9-69b0-4e9d-8e67-e05f642f6ecc
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 500,
+          "y": 950
+        }
+      }
+  "7":
+    continueonerrortype: ""
+    id: "7"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "6"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      key:
+        simple: File
+      value:
+        complex:
+          root: inputs.File
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Sets the file into the context with the given context key.
+      id: e2805bfe-ee3b-4768-81cf-f9f781ae9dc1
+      iscommand: false
+      name: Set File to context
+      script: Set
+      type: regular
+      version: -1
+    taskid: e2805bfe-ee3b-4768-81cf-f9f781ae9dc1
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 500,
+          "y": 790
+        }
+      }
+  "8":
+    continueonerrortype: ""
+    evidencedata:
+      customfields: {}
+      description:
+        simple: Wildfire sandbox report
+    id: "8"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "10"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      extended_data:
+        simple: "true"
+      format:
+        simple: xml
+      polling:
+        simple: "true"
+      upload:
+        complex:
+          accessor: EntryID
+          root: File
+      verbose:
+        simple: "true"
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Uploads a file to WildFire for analysis.
+      id: 69f76281-06f3-4731-8efc-5588fc5ae8fd
+      iscommand: true
+      name: WildFire upload and detonate
+      script: '|||wildfire-upload'
+      type: regular
+      version: -1
+    taskid: 69f76281-06f3-4731-8efc-5588fc5ae8fd
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 720,
+          "y": 1120
+        }
+      }
+  "9":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: inputs.File
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "9"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "3"
+      "yes":
+      - "7"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks if there is a file available for detonation.
+      id: 49233973-0851-4042-8982-4de93aa1e96b
+      iscommand: false
+      name: Is there a file to detonate?
+      type: condition
+      version: -1
+    taskid: 49233973-0851-4042-8982-4de93aa1e96b
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 350,
+          "y": 560
+        }
+      }
+  "10":
+    continueonerrortype: ""
+    evidencedata:
+      customfields: {}
+      description:
+        simple: Wildfire Report
+    id: "10"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "3"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      format:
+        simple: pdf
+      sha256:
+        simple: ${File.SHA256}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Uses WildFire to retrieve a PDF report for a file hash.
+      id: aadeceae-8901-4d3b-814a-b53aa4aa9e0f
+      iscommand: true
+      name: Wildfire get report PDF
+      script: '|||wildfire-report'
+      type: regular
+      version: -1
+    taskid: aadeceae-8901-4d3b-814a-b53aa4aa9e0f
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 720,
+          "y": 1260
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 1265,
+        "width": 960,
+        "x": 140,
+        "y": 240
+      }
+    }
+  }
