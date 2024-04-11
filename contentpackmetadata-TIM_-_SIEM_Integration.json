@@ -1,0 +1,146 @@
+{
+	"author": "Cortex XSOAR",
+	"authorImage": "content/packs/Base/Author_image.png",
+	"beta": false,
+	"cacheVersn": 0,
+	"categories": [
+		"Data Enrichment \u0026 Threat Intelligence"
+	],
+	"certification": "certified",
+	"contentItemTypes": [
+		"playbook"
+	],
+	"contentItems": {
+		"automation": null,
+		"classifier": null,
+		"dashboard": null,
+		"genericfield": null,
+		"generictype": null,
+		"incidentfield": null,
+		"incidenttype": null,
+		"indicatorfield": null,
+		"integration": null,
+		"layoutscontainer": null,
+		"list": null,
+		"playbook": [
+			{
+				"description": "TIM playbook - This playbook receives indicators from its parent playbook\n  and provides the indicators as inputs for the sub-playbooks that push the indicators\n  to your SIEM.",
+				"name": "TIM - Add IP Indicators To SIEM"
+			},
+			{
+				"description": "This playbook receives indicators from its parent playbook and provides the indicators as inputs for the sub-playbooks that push the indicators to the SIEM.",
+				"name": "TIM - Add Domain Indicators To SIEM"
+			},
+			{
+				"description": "TIM playbook - This playbook receives indicators from its parent playbook\n  and provides the indicators as inputs for the sub-playbooks that push the indicators\n  to your SIEM.",
+				"name": "TIM - Add Url Indicators To SIEM"
+			},
+			{
+				"description": "This playbook recives indicators from its parent playbook\nand provides the indicators as inputs for the sub-playbooks that push the indicators\nto the SIEM.",
+				"name": "TIM - Add Bad Hash Indicators To SIEM"
+			},
+			{
+				"description": "This playbook runs sub playbooks that send indicators to your SIEM. To select the indicators you want to add, go to playbook inputs, choose “from indicators” and set your query. For example tags:approved_black, approved_white etc. The purpose of the playbook is to send to SIEM only indicators that have been processed and tagged accordingly after an automatic or manual review process. The default playbook query is\"\n(type:ip or type:file or type:Domain or type:URL) -tags:pending_review and (tags:approved_black or tags:approved_white or tags:approved_watchlist)\"\nIn case more indicator types need to be sent to the SIEM, the query must be edited accordingly.",
+				"name": "TIM - Add All Indicator Types To SIEM"
+			}
+		],
+		"report": null,
+		"reputation": null,
+		"widget": null,
+		"wizard": null
+	},
+	"currentVersion": "1.1.3",
+	"definitionId": "",
+	"dependencies": {
+		"ArcSightESM": {
+			"author": "Cortex XSOAR",
+			"certification": "certified",
+			"mandatory": false,
+			"minVersion": "1.2.0",
+			"name": "ArcSight ESM"
+		},
+		"Base": {
+			"author": "Cortex XSOAR",
+			"certification": "certified",
+			"mandatory": true,
+			"minVersion": "1.33.19",
+			"name": "Base"
+		},
+		"QRadar": {
+			"author": "Cortex XSOAR",
+			"certification": "certified",
+			"mandatory": false,
+			"minVersion": "2.4.47",
+			"name": "IBM QRadar"
+		}
+	},
+	"deprecated": false,
+	"description": "Update your SIEM with minimal fuss! This Content Pack automates the delivery of indicators to your SIEM for correlation, with minimal configuration.",
+	"disabledMonthly": false,
+	"downloads": 5047,
+	"eulaLink": "https://github.com/demisto/content/blob/master/LICENSE",
+	"fromServerVersion": "5.5.0",
+	"general": [
+		"generalFieldCertified",
+		"generalFieldByCortexXSOAR",
+		"generalFieldFree",
+		"generalFieldSupportIncluded"
+	],
+	"id": "TIM_SIEM",
+	"installMessage": "",
+	"integrations": [
+		{
+			"imagePath": "content/packs/QRadar/QRadar_image.png",
+			"name": "IBM QRadar (Deprecated)"
+		},
+		{
+			"imagePath": "content/packs/QRadar/QRadar_v2_image.png",
+			"name": "IBM QRadar v2 (Deprecated)"
+		},
+		{
+			"imagePath": "content/packs/QRadar/QRadarv3_image.png",
+			"name": "IBM QRadar v3"
+		},
+		{
+			"imagePath": "content/packs/ArcSightESM/ArcSightESMv2_image.png",
+			"name": "ArcSight ESM v2"
+		}
+	],
+	"itemVersion": "1.1.3",
+	"keywords": [],
+	"legacy": true,
+	"name": "TIM - SIEM Integration",
+	"packID": "TIM_SIEM",
+	"packName": "",
+	"premium": false,
+	"previewOnly": false,
+	"price": 0,
+	"propagationLabels": [
+		"all"
+	],
+	"rawKeywords": null,
+	"rawTags": null,
+	"rawUseCases": null,
+	"readme": "Threat Intelligence is an important aspect of incident response as it provides indicators and rich context. One of the main processes of working with indicators is sending them to 3rd party systems such as SIEM systems in order to allow correlations, reporting and searching for indicators within the SIEM.\nThe TIM - SIEM Integration pack includes playbooks that automate the process of sending indicators to 3rd party SIEM systems including ArcSight and QRadar. By customizing which indicators should be sent to SIEM.\nWith this content pack, you can significantly reduce the time and effort by automating the delivery of indicators to your SIEM, with minimal configuration.\n\n##### What does this pack do?\n\nThe playbooks included in this pack help you automate repetitive tasks associated with with the handling of indicators:\n\n- Sending indicators of type IP, Domains, URLs and more to the customers SIEM product of choice.\n\n_For more information, visit our [Cortex XSOAR Developer Docs](https://xsoar.pan.dev/docs/reference/index)_\n",
+	"searchRank": 10,
+	"serverMaxVersion": "",
+	"serverMinVersion": "5.5.0",
+	"support": "xsoar",
+	"supportDetails": {
+		"email": "",
+		"url": "https://www.paloaltonetworks.com/cortex"
+	},
+	"tags": [
+		"Getting Started",
+		"Use Case",
+		"TIM"
+	],
+	"toServerVersion": "",
+	"updated": "2024-01-23T06:43:08+09:00",
+	"useCases": [
+		"Threat Intelligence Management"
+	],
+	"version": -1,
+	"versionInfo": "778227",
+	"videos": []
+}
