@@ -1,0 +1,198 @@
+{
+	"brands": null,
+	"cacheVersn": 0,
+	"defaultIncidentType": "Phishing",
+	"definitionId": "",
+	"description": "Maps incoming phishing email messages fields.",
+	"feed": false,
+	"fromServerVersion": "6.0.0",
+	"id": "mail-listener-mapper",
+	"incidentSamples": null,
+	"indicatorSamples": null,
+	"instanceIds": null,
+	"itemVersion": "3.4.1",
+	"keyTypeMap": null,
+	"locked": false,
+	"logicalVersion": 0,
+	"mapping": {
+		"Phishing": {
+			"dontMapEventToLabels": false,
+			"internalMapping": {
+				"Attachment Name": {
+					"simple": "attachments"
+				},
+				"Email BCC": {
+					"simple": "bcc"
+				},
+				"Email Body": {
+					"simple": "text"
+				},
+				"Email CC": {
+					"complex": {
+						"filters": [],
+						"root": "cc",
+						"transformers": [
+							{
+								"args": {
+									"separator": {
+										"isContext": false,
+										"value": {
+											"simple": ","
+										}
+									}
+								},
+								"operator": "join"
+							}
+						]
+					}
+				},
+				"Email From": {
+					"simple": "headers.From"
+				},
+				"Email HTML": {
+					"simple": "HTML"
+				},
+				"Email Message ID": {
+					"complex": {
+						"filters": [],
+						"root": "rawHeaders",
+						"transformers": [
+							{
+								"args": {
+									"from": {
+										"isContext": false,
+										"value": {
+											"simple": "Message-ID: \u003c"
+										}
+									}
+								},
+								"operator": "substringFrom"
+							},
+							{
+								"args": {
+									"to": {
+										"isContext": false,
+										"value": {
+											"simple": "\u003e"
+										}
+									}
+								},
+								"operator": "substringTo"
+							}
+						]
+					}
+				},
+				"Email Received": {
+					"complex": {
+						"filters": [],
+						"root": "rawHeaders",
+						"transformers": [
+							{
+								"args": {
+									"from": {
+										"isContext": false,
+										"value": {
+											"simple": "Received:"
+										}
+									}
+								},
+								"operator": "substringFrom"
+							},
+							{
+								"args": {
+									"to": {
+										"isContext": false,
+										"value": {
+											"simple": ";"
+										}
+									}
+								},
+								"operator": "substringTo"
+							}
+						]
+					}
+				},
+				"Email Return Path": {
+					"simple": "headers.Return-Path"
+				},
+				"Email Sender IP": {
+					"complex": {
+						"filters": [],
+						"root": "rawHeaders",
+						"transformers": [
+							{
+								"args": {
+									"from": {
+										"isContext": false,
+										"value": {
+											"simple": "x-originating-ip: ["
+										}
+									}
+								},
+								"operator": "substringFrom"
+							},
+							{
+								"args": {
+									"to": {
+										"isContext": false,
+										"value": {
+											"simple": "]"
+										}
+									}
+								},
+								"operator": "substringTo"
+							}
+						]
+					}
+				},
+				"Email Subject": {
+					"simple": "subject"
+				},
+				"Email To": {
+					"complex": {
+						"filters": [],
+						"root": "to",
+						"transformers": [
+							{
+								"args": {
+									"separator": {
+										"isContext": false,
+										"value": {
+											"simple": ","
+										}
+									}
+								},
+								"operator": "join"
+							}
+						]
+					}
+				},
+				"Email To Count": {
+					"complex": {
+						"filters": [],
+						"root": "to",
+						"transformers": [
+							{
+								"operator": "count"
+							}
+						]
+					}
+				}
+			}
+		}
+	},
+	"name": "Mail Listener - Incoming Mapper",
+	"nameRaw": "Mail Listener - Incoming Mapper",
+	"packID": "CommonTypes",
+	"packName": "Common Types",
+	"packPropagationLabels": [
+		"all"
+	],
+	"sourceClassifierId": "",
+	"system": true,
+	"toServerVersion": "",
+	"transformer": {},
+	"type": "mapping-incoming",
+	"unclassifiedCases": null,
+	"version": -1
+}
