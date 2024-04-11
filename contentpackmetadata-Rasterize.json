@@ -1,0 +1,124 @@
+{
+	"author": "Cortex XSOAR",
+	"authorImage": "content/packs/Base/Author_image.png",
+	"beta": false,
+	"cacheVersn": 0,
+	"categories": [
+		"Utilities"
+	],
+	"certification": "certified",
+	"contentItemTypes": [
+		"integration"
+	],
+	"contentItems": {
+		"automation": null,
+		"classifier": null,
+		"dashboard": null,
+		"genericfield": null,
+		"generictype": null,
+		"incidentfield": null,
+		"incidenttype": null,
+		"indicatorfield": null,
+		"integration": [
+			{
+				"category": "Utilities",
+				"commands": [
+					{
+						"description": "Converts an HTML file to an image file or a PDF file.",
+						"name": "rasterize-html"
+					},
+					{
+						"description": "Converts an image file to a PDF file.",
+						"name": "rasterize-image"
+					},
+					{
+						"description": "Converts the body of an email to an image file or a PDF file.",
+						"name": "rasterize-email"
+					},
+					{
+						"description": "Converts the contents of a URL to an image file or a PDF file.",
+						"name": "rasterize"
+					},
+					{
+						"description": "Converts a PDF file to an image file.",
+						"name": "rasterize-pdf"
+					}
+				],
+				"description": "Converts URLs, PDF files, and emails to an image file or PDF file.",
+				"id": "Rasterize",
+				"name": "Rasterize"
+			}
+		],
+		"layoutscontainer": null,
+		"list": null,
+		"playbook": null,
+		"report": null,
+		"reputation": null,
+		"widget": null,
+		"wizard": null
+	},
+	"currentVersion": "2.0.0",
+	"definitionId": "",
+	"dependencies": {
+		"Base": {
+			"author": "Cortex XSOAR",
+			"certification": "certified",
+			"mandatory": true,
+			"minVersion": "1.33.26",
+			"name": "Base"
+		}
+	},
+	"deprecated": false,
+	"description": "Converts URLs, PDF files, and emails to an image file or PDF file.",
+	"disabledMonthly": false,
+	"downloads": 51432,
+	"eulaLink": "https://github.com/demisto/content/blob/master/LICENSE",
+	"fromServerVersion": "5.0.0",
+	"general": [
+		"generalFieldCertified",
+		"generalFieldByCortexXSOAR",
+		"generalFieldFree",
+		"generalFieldSupportIncluded"
+	],
+	"id": "rasterize",
+	"installMessage": "",
+	"integrations": [
+		{
+			"imagePath": "content/packs/rasterize/Rasterize_image.png",
+			"name": "Rasterize"
+		}
+	],
+	"itemVersion": "2.0.0",
+	"keywords": [],
+	"legacy": true,
+	"name": "Rasterize",
+	"packID": "rasterize",
+	"packName": "",
+	"premium": false,
+	"previewOnly": false,
+	"price": 0,
+	"propagationLabels": [
+		"all"
+	],
+	"rawKeywords": null,
+	"rawTags": null,
+	"rawUseCases": null,
+	"readme": "During incident investigation you can enhance the investigation with screenshots of URLS or with emails and other PDF files.  \n**Note:**  \nThis content pack is installed by default when Cortex XSOAR is initially deployed.  \n\n## What Does This Pack Do?  \nConverts URLs, PDF files, and emails to an image file or a PDF file.\n",
+	"searchRank": 10,
+	"serverMaxVersion": "",
+	"serverMinVersion": "5.0.0",
+	"support": "xsoar",
+	"supportDetails": {
+		"email": "",
+		"url": "https://www.paloaltonetworks.com/cortex"
+	},
+	"tags": [
+		"Trending"
+	],
+	"toServerVersion": "",
+	"updated": "2024-04-10T18:28:25+09:00",
+	"useCases": [],
+	"version": -1,
+	"versionInfo": "819156",
+	"videos": []
+}
