@@ -1,0 +1,466 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.5.0
+    itemVersion: 1.1.23
+    packID: TIM_Processing
+    packName: TIM - Indicator Auto-Processing
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: This playbook processes indicators to check if they exist in a Cortex
+  XSOAR list containing business partner IP addresses, and tags the indicators accordingly.
+id: TIM - Process Indicators Against Business Partners IP List
+inputs:
+- description: ""
+  key: ""
+  playbookInputQuery:
+    daterange:
+      fromdate: "0001-01-01T00:00:00Z"
+      fromdatelicenseval: "0001-01-01T00:00:00Z"
+      period:
+        by: ""
+        byfrom: ""
+        byto: ""
+        field: ""
+        fromvalue: null
+        tovalue: null
+      todate: "0001-01-01T00:00:00Z"
+    query: type:ip
+    queryEntity: indicators
+    results: null
+    runFromLastJobTime: true
+  required: false
+  value: {}
+- description: A Cortex XSOAR list containing business partner IP address values.
+    IP Indicators that appear in the list are tagged as business partner ip.
+  key: BusinessPartnersIPListName
+  playbookInputQuery: null
+  required: false
+  value: {}
+name: TIM - Process Indicators Against Business Partners IP List
+outputs:
+- contextPath: BusinessPartnerIP
+  description: IP addresses that are found in the business partner ip list.
+  type: string
+- contextPath: NotBusinessPartnerIP
+  description: IP addresses that are not found in the business partner ip list.
+  type: string
+quiet: true
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "19"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 78e61b73-8045-41d4-8937-e6a0fde8c8f7
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: 78e61b73-8045-41d4-8937-e6a0fde8c8f7
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 510,
+          "y": -1390
+        }
+      }
+  "19":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: playbookQuery.indicator_type
+          operator: isEqualString
+          right:
+            value:
+              simple: IP
+      label: "yes"
+    continueonerrortype: ""
+    id: "19"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "105"
+      "yes":
+      - "101"
+    note: false
+    quietmode: 2
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: dd483014-89ca-4e56-8ad7-57bbd5fe9466
+      iscommand: false
+      name: Are there IP results?
+      type: condition
+      version: -1
+    taskid: dd483014-89ca-4e56-8ad7-57bbd5fe9466
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 510,
+          "y": -1260
+        }
+      }
+  "101":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: inputs.BusinessPartnersIPListName
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "101"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "108"
+      "yes":
+      - "102"
+    note: false
+    quietmode: 2
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 291ca346-9f7f-421e-8839-23be8d8f2cd7
+      iscommand: false
+      name: Is there a business partners IP list
+      type: condition
+      version: -1
+    taskid: 291ca346-9f7f-421e-8839-23be8d8f2cd7
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 270,
+          "y": -1090
+        }
+      }
+  "102":
+    continueonerrortype: ""
+    id: "102"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "107"
+      - "106"
+    note: false
+    quietmode: 2
+    scriptarguments:
+      ignorecase:
+        simple: "yes"
+      listname:
+        simple: ${inputs.BusinessPartnersIPListName}
+      matchexact:
+        simple: "yes"
+      values:
+        simple: ${playbookQuery.value}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks whether the specified item is in a Cortex XSOAR list.
+      id: 530ac080-6865-4b0f-8588-5a50e1c0d7e4
+      iscommand: false
+      name: Run filter by list check on indicators
+      script: FilterByList
+      type: regular
+      version: -1
+    taskid: 530ac080-6865-4b0f-8588-5a50e1c0d7e4
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 20,
+          "y": -920
+        }
+      }
+  "103":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: List.In
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "103"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "105"
+      "yes":
+      - "104"
+    note: false
+    quietmode: 2
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 1ceccd6c-02cf-4974-8ef6-d2ef45e34b53
+      iscommand: false
+      name: Do values appear in business partners IP list?
+      type: condition
+      version: -1
+    taskid: 1ceccd6c-02cf-4974-8ef6-d2ef45e34b53
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 270,
+          "y": -580
+        }
+      }
+  "104":
+    continueonerrortype: ""
+    id: "104"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "105"
+    note: false
+    quietmode: 2
+    scriptarguments:
+      field:
+        simple: tags
+      fieldValue:
+        simple: business_partner
+      indicatorsValues:
+        complex:
+          accessor: In
+          root: List
+          transformers:
+          - operator: uniq
+      value:
+        simple: ${List.In}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: Builtin
+      description: Adds the 'business_partner' tag to the relevant indicators.
+      id: d4900654-bb29-41ea-8fb5-7ef59de09708
+      iscommand: true
+      name: Add business partner tag to indicators
+      script: Builtin|||appendIndicatorField
+      type: regular
+      version: -1
+    taskid: d4900654-bb29-41ea-8fb5-7ef59de09708
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 110,
+          "y": -380
+        }
+      }
+  "105":
+    continueonerrortype: ""
+    id: "105"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 33154239-54b9-4257-8b01-e5c4466197c9
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 33154239-54b9-4257-8b01-e5c4466197c9
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 510,
+          "y": -200
+        }
+      }
+  "106":
+    continueonerrortype: ""
+    id: "106"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "103"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      append:
+        simple: "true"
+      key:
+        simple: BusinessPartnerIP
+      value:
+        simple: ${List.In}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks if the specified value exists in context. If the value exists,
+        it is set in context, otherwise no value is set in context.
+      id: 4481bfbe-06c3-4ede-89ac-74b2ed5bfbc0
+      iscommand: false
+      name: Set values in list
+      script: SetAndHandleEmpty
+      type: regular
+      version: -1
+    taskid: 4481bfbe-06c3-4ede-89ac-74b2ed5bfbc0
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -390,
+          "y": -750
+        }
+      }
+  "107":
+    continueonerrortype: ""
+    id: "107"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "103"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      append:
+        simple: "true"
+      key:
+        simple: NotBusinessPartnerIP
+      value:
+        simple: ${List.NotIn}
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks if the specified value exists in context. If the value exists,
+        it is set in context, otherwise no value is set in context.
+      id: 42397b05-76ee-4d92-857d-76d662da3f91
+      iscommand: false
+      name: Set values not in list
+      script: SetAndHandleEmpty
+      type: regular
+      version: -1
+    taskid: 42397b05-76ee-4d92-857d-76d662da3f91
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 20,
+          "y": -750
+        }
+      }
+  "108":
+    continueonerrortype: ""
+    id: "108"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "105"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      append:
+        simple: "true"
+      key:
+        simple: NotBusinessPartnerIP
+      value:
+        complex:
+          accessor: value
+          filters:
+          - - left:
+                iscontext: true
+                value:
+                  simple: playbookQuery.indicator_type
+              operator: isEqualString
+              right:
+                value:
+                  simple: IP
+          root: playbookQuery
+          transformers:
+          - operator: uniq
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks if the specified value exists in context. If the value exists,
+        it is set in context, otherwise no value is set in context.
+      id: d160dff9-bf72-4652-8d21-2a910831733c
+      iscommand: false
+      name: Set values
+      script: SetAndHandleEmpty
+      type: regular
+      version: -1
+    taskid: d160dff9-bf72-4652-8d21-2a910831733c
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 800,
+          "y": -920
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 1255,
+        "width": 1570,
+        "x": -390,
+        "y": -1390
+      }
+    }
+  }
