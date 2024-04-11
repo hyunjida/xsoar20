@@ -1,0 +1,59 @@
+{
+	"cacheVersn": 0,
+	"contextPath": "",
+	"contextValue": "",
+	"defaultMapping": null,
+	"definitionId": "",
+	"details": "Intrusion Set",
+	"disabled": false,
+	"enhancementScriptNames": null,
+	"excludedBrands": null,
+	"expiration": 0,
+	"file": false,
+	"fileHashesPriority": null,
+	"formatScript": "",
+	"fromServerVersion": "5.5.0",
+	"id": "Intrusion Set",
+	"itemVersion": "3.4.1",
+	"layout": "Intrusion Set",
+	"legacyNames": null,
+	"locked": false,
+	"manualMapping": {
+		"aliases": {
+			"simple": "IntrusionSet.aliases"
+		},
+		"description": {
+			"simple": "IntrusionSet.description"
+		},
+		"goals": {
+			"simple": "IntrusionSet.goals"
+		},
+		"primarymotivation": {
+			"simple": "IntrusionSet.primarymotivation"
+		},
+		"resourcelevel": {
+			"simple": "IntrusionSet.resourcelevel"
+		},
+		"secondarymotivations": {
+			"simple": "IntrusionSet.secondarymotivations"
+		},
+		"stixid": {
+			"simple": "IntrusionSet.stixid"
+		}
+	},
+	"mergeContext": false,
+	"packID": "CommonTypes",
+	"packName": "Common Types",
+	"packPropagationLabels": [
+		"all"
+	],
+	"propagationLabels": [],
+	"regex": "",
+	"reputationCommand": "",
+	"reputationScriptName": "",
+	"shouldShareComments": false,
+	"system": true,
+	"toServerVersion": "",
+	"updateAfter": 0,
+	"version": -1
+}
