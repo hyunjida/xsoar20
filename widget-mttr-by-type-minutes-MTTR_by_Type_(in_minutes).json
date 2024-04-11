@@ -1,0 +1,46 @@
+{
+	"Cache": null,
+	"cacheVersn": 0,
+	"category": "",
+	"dataType": "incidents",
+	"dateRange": {
+		"fromDate": "0001-01-01T00:00:00Z",
+		"fromDateLicense": "0001-01-01T00:00:00Z",
+		"period": {
+			"by": "",
+			"byFrom": "days",
+			"byTo": "",
+			"field": "",
+			"fromValue": 7,
+			"toValue": null
+		},
+		"toDate": "0001-01-01T00:00:00Z"
+	},
+	"definitionId": "",
+	"description": "Shows changes in Mean Time to Resolution (in minutes), over time, while differentiating between incident types.",
+	"fromServerVersion": "5.0.0",
+	"id": "mttr-by-type-minutes",
+	"isPredefined": true,
+	"itemVersion": "1.2.48",
+	"name": "MTTR by Type (in minutes)",
+	"packID": "CommonWidgets",
+	"packName": "Common Widgets",
+	"packPropagationLabels": [
+		"all"
+	],
+	"params": {
+		"groupBy": [
+			"occurred(d)",
+			"rawType"
+		],
+		"keys": [
+			"avg|openDuration / 60"
+		],
+		"timeFrame": "minutes"
+	},
+	"propagationLabels": [],
+	"query": "-category:job and status:closed",
+	"toServerVersion": "",
+	"version": -1,
+	"widgetType": "line"
+}
