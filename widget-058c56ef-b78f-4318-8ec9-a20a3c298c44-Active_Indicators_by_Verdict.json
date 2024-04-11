@@ -1,0 +1,41 @@
+{
+	"Cache": null,
+	"cacheVersn": 0,
+	"category": "",
+	"dataType": "indicators",
+	"dateRange": {
+		"fromDate": "0001-01-01T00:00:00Z",
+		"fromDateLicense": "0001-01-01T00:00:00Z",
+		"period": {
+			"by": "",
+			"byFrom": "days",
+			"byTo": "",
+			"field": "",
+			"fromValue": 7,
+			"toValue": null
+		},
+		"toDate": "0001-01-01T00:00:00Z"
+	},
+	"definitionId": "",
+	"fromServerVersion": "6.2.0",
+	"id": "058c56ef-b78f-4318-8ec9-a20a3c298c44",
+	"isPredefined": true,
+	"itemVersion": "1.2.48",
+	"name": "Active Indicators by Verdict",
+	"packID": "CommonWidgets",
+	"packName": "Common Widgets",
+	"packPropagationLabels": [
+		"all"
+	],
+	"params": {
+		"groupBy": [
+			"score"
+		],
+		"valuesFormat": "abbreviated"
+	},
+	"propagationLabels": [],
+	"query": "(expirationStatus:active or expirationStatus:\"\")",
+	"toServerVersion": "",
+	"version": -1,
+	"widgetType": "pie"
+}
