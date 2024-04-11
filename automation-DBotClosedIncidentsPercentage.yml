@@ -1,0 +1,49 @@
+comment: Data output script for populating dashboard pie graph widget with the percentage
+  of incidents closed by DBot vs. incidents closed by analysts.
+commonfields:
+  id: DBotClosedIncidentsPercentage
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: DBotClosedIncidentsPercentage
+pswd: ""
+runas: DBotRole
+runonce: false
+script: |
+  // pack version: 1.14.2
+  var res = executeCommand("getIncidents", {
+      'query': 'status:closed and closingUser:DBot',
+      'fromdate': args.from,
+      'todate': args.to,
+      'size': 0
+  });
+  var closedByDbot = res[0].Contents.total;
+
+  res = executeCommand("getIncidents", {
+      'status': 'closed',
+      'fromdate': args.from,
+      'todate': args.to,
+      'size': 0
+  });
+  var overallClosed = res[0].Contents.total;
+
+  var result = Math.round(closedByDbot * 100 / overallClosed);
+  return isNaN(result) ? 0 : result;
+scripttarget: 0
+system: true
+tags:
+- widget
+type: javascript
