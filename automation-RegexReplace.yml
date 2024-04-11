@@ -1,0 +1,136 @@
+args:
+- description: Text to match against
+  name: value
+  required: true
+- description: Regex pattern to search
+  name: regex
+  required: true
+- description: Template string to format patterns matched with regex
+  name: output_format
+- auto: PREDEFINED
+  defaultValue: "false"
+  description: Whether character matching will be case-insensitive. Default is "false".
+  name: ignore_case
+  predefined:
+  - "true"
+  - "false"
+- auto: PREDEFINED
+  defaultValue: "false"
+  description: Process value in multiline mode.  See more information on re.MULTILINE,
+    see https://docs.python.org/3/library/re.html.
+  name: multi_line
+  predefined:
+  - "true"
+  - "false"
+- auto: PREDEFINED
+  defaultValue: "false"
+  description: Whether to make the '.' character also match a new line. Default is
+    "false".
+  name: period_matches_newline
+  predefined:
+  - "true"
+  - "false"
+- description: The last action for each matched value to transform
+  name: action_dt
+comment: |-
+  Format patterns matched with regex. If the regex does not match any pattern, the original value is returned.
+
+  Example 1:
+   value: user=john
+   regex: user=(.*)
+   output_format: name=\1
+   -> output value: name=john
+
+  Example 2:
+   value: xxx=yyy
+   regex: user=(.*)
+   output_format: name=\1
+   -> output value: xxx=yyy
+commonfields:
+  id: RegexReplace
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.5.0
+    itemVersion: 1.2.61
+    packID: FiltersAndTransformers
+    packName: Filters And Transformers
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.86272
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: RegexReplace
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('RegexReplace', 'start', __line__())
+  ### pack version: 1.2.61
+
+
+  import re
+  from typing import Optional
+
+
+  class Main:
+      def __init__(self, input_text: str, output_format: str, regex: str, action_dt: Optional[str], regex_flags: int):
+          self.__input_text = input_text
+          self.__output_format = output_format.replace(r'\0', r'\g<0>')
+          self.__pattern = re.compile(regex, flags=regex_flags)
+          self.__action_dt = action_dt
+
+      def __replace(self, m: re.Match) -> Any:
+          value = m.expand(self.__output_format)
+          if self.__action_dt:
+              value = demisto.dt(value, self.__action_dt)
+              if value is None:
+                  value = ''
+              elif isinstance(value, bool):
+                  value = json.dumps(value)
+              else:
+                  value = str(value)
+          return value
+
+      def run(self) -> Any:
+          output_text = self.__pattern.sub(self.__replace, self.__input_text)
+          return_results(output_text)
+
+
+  def main():
+      args = demisto.args()
+      try:
+          flags = 0
+          if argToBoolean(args.get('ignore_case') or False):
+              flags |= re.IGNORECASE
+          if argToBoolean(args.get('multi_line') or False):
+              flags |= re.MULTILINE
+          if argToBoolean(args.get('period_matches_newline') or False):
+              flags |= re.DOTALL
+
+          Main(input_text=args['value'],
+               output_format=args.get('output_format') or '',
+               regex=args['regex'],
+               action_dt=args.get('action_dt'),
+               regex_flags=flags).run()
+      except Exception as err:
+          # Don't return an error by return_error() as this is transformer.
+          raise DemistoException(str(err))
+
+
+  if __name__ in ('__builtin__', 'builtins', '__main__'):
+      main()
+
+  register_module_line('RegexReplace', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- transformer
+- string
+type: python
