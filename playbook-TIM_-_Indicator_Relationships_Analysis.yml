@@ -1,0 +1,1008 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.8.0
+    itemVersion: 1.1.23
+    packID: TIM_Processing
+    packName: TIM - Indicator Auto-Processing
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: |-
+  This playbook is designed to assist with a security investigation by providing an analysis of indicator relationships. The following information is included:
+  - Indicators of compromise (IOCs) related to the investigation.
+  - Attack patterns related to the investigation.
+  - Campaigns related to the investigation.
+  - IOCs associated with the identified campaigns.
+  - Reports containing details on the identified campaigns.
+id: TIM - Indicator Relationships Analysis
+inputs:
+- description: Input an indicator to analyze its relationships.
+  key: Indicator
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: The number of results to return. If the input is empty, the limit will
+    be 20.
+  key: LimitResults
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: "200"
+name: TIM - Indicator Relationships Analysis
+outputs:
+- contextPath: RelatedAttackPatterns
+  description: Attack patterns related to the indicator.
+  type: unknown
+- contextPath: RelatedCampaign
+  description: Campaign related to the indicator.
+  type: unknown
+- contextPath: RelatedReport
+  description: Report related to the campaign.
+  type: unknown
+- contextPath: RelatedFiles
+  description: Files related to the indicator and campaign.
+  type: unknown
+- contextPath: RelatedDomains
+  description: Domains related to the indicator and campaign.
+  type: unknown
+- contextPath: RelatedIPs
+  description: IPs related to the indicator and campaign.
+  type: unknown
+- contextPath: RelatedURLs
+  description: URLs related to the indicator and campaign.
+  type: unknown
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "23"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 9d2e0d37-76d0-4248-8a40-8911ac4a3518
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: 9d2e0d37-76d0-4248-8a40-8911ac4a3518
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 440,
+          "y": -830
+        }
+      }
+  "2":
+    conditions:
+    - condition:
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                accessor: EntityBType
+                root: Relationships
+          operator: containsGeneral
+          right:
+            value:
+              simple: campaign
+      label: "yes"
+    continueonerrortype: ""
+    id: "2"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "21"
+      "yes":
+      - "17"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Check if the indicator is related to a campaign.
+      id: 408729ca-ca33-4d44-8528-ba22c6afb08d
+      iscommand: false
+      name: Has related campaign?
+      type: condition
+      version: -1
+    taskid: 408729ca-ca33-4d44-8528-ba22c6afb08d
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": -430,
+          "y": -350
+        }
+      }
+  "4":
+    continueonerrortype: ""
+    id: "4"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "12"
+    note: false
+    quietmode: 0
+    reputationcalc: 1
+    scriptarguments:
+      key:
+        simple: RelatedFiles
+      value:
+        complex:
+          accessor: EntityB
+          filters:
+          - - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: Relationships.EntityBType
+              operator: isEqualString
+              right:
+                value:
+                  simple: File
+          root: Relationships
+          transformers:
+          - operator: uniq
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Set a value in context under the key you entered.
+      id: f887bdd1-e1fc-445f-88bf-9fc992e06d0c
+      iscommand: false
+      name: Set related files
+      script: Set
+      type: regular
+      version: -1
+    taskid: f887bdd1-e1fc-445f-88bf-9fc992e06d0c
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 220,
+          "y": 1150
+        }
+      }
+  "5":
+    continueonerrortype: ""
+    id: "5"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "12"
+    note: false
+    quietmode: 0
+    reputationcalc: 1
+    scriptarguments:
+      key:
+        simple: RelatedIPs
+      value:
+        complex:
+          accessor: EntityB
+          filters:
+          - - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: Relationships.EntityBType
+              operator: isEqualString
+              right:
+                value:
+                  simple: IP
+          root: Relationships
+          transformers:
+          - operator: uniq
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Set a value in context under the key you entered.
+      id: 71537cc3-6bfd-4a59-88d5-1ed758f1955a
+      iscommand: false
+      name: Set related IPs
+      script: Set
+      type: regular
+      version: -1
+    taskid: 71537cc3-6bfd-4a59-88d5-1ed758f1955a
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -220,
+          "y": 1150
+        }
+      }
+  "6":
+    continueonerrortype: ""
+    id: "6"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "12"
+    note: false
+    quietmode: 0
+    reputationcalc: 1
+    scriptarguments:
+      key:
+        simple: RelatedDomains
+      value:
+        complex:
+          accessor: EntityB
+          filters:
+          - - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: Relationships.EntityBType
+              operator: isEqualString
+              right:
+                value:
+                  simple: domain
+          root: Relationships
+          transformers:
+          - operator: uniq
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Set a value in context under the key you entered.
+      id: 7a4b5529-78df-4a5a-80f8-eec848eb4754
+      iscommand: false
+      name: Set related Domains
+      script: Set
+      type: regular
+      version: -1
+    taskid: 7a4b5529-78df-4a5a-80f8-eec848eb4754
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -650,
+          "y": 1150
+        }
+      }
+  "7":
+    continueonerrortype: ""
+    id: "7"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "12"
+    note: false
+    quietmode: 0
+    reputationcalc: 1
+    scriptarguments:
+      key:
+        simple: RelatedURLs
+      value:
+        complex:
+          accessor: EntityB
+          filters:
+          - - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: Relationships.EntityBType
+              operator: isEqualString
+              right:
+                value:
+                  simple: URL
+          root: Relationships
+          transformers:
+          - operator: uniq
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Set a value in context under the key you entered.
+      id: 4ab0e8b4-b007-45f6-8d0b-8ea4baff78da
+      iscommand: false
+      name: Set related URLs
+      script: Set
+      type: regular
+      version: -1
+    taskid: 4ab0e8b4-b007-45f6-8d0b-8ea4baff78da
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -1050,
+          "y": 1150
+        }
+      }
+  "8":
+    conditions:
+    - condition:
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                accessor: EntityBType
+                root: Relationships
+          operator: containsGeneral
+          right:
+            value:
+              simple: File
+      label: "yes"
+    continueonerrortype: ""
+    id: "8"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "12"
+      "yes":
+      - "4"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Check if FILE type indicators exist.
+      id: 7a6cd9f0-7aed-43fb-8e6c-25e11dc4e1e2
+      iscommand: false
+      name: Is there a File type indicators?
+      type: condition
+      version: -1
+    taskid: 7a6cd9f0-7aed-43fb-8e6c-25e11dc4e1e2
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 220,
+          "y": 975
+        }
+      }
+  "9":
+    conditions:
+    - condition:
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                accessor: EntityBType
+                root: Relationships
+          operator: containsGeneral
+          right:
+            value:
+              simple: URL
+      label: "yes"
+    continueonerrortype: ""
+    id: "9"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "12"
+      "yes":
+      - "7"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Check if URL type indicators exist.
+      id: 81ba69cf-145c-4836-8fb7-ab3d856fd02b
+      iscommand: false
+      name: Is there a URL type indicators?
+      type: condition
+      version: -1
+    taskid: 81ba69cf-145c-4836-8fb7-ab3d856fd02b
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": -1060,
+          "y": 975
+        }
+      }
+  "10":
+    conditions:
+    - condition:
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                accessor: EntityBType
+                root: Relationships
+          operator: containsGeneral
+          right:
+            value:
+              simple: Domain
+      label: "yes"
+    continueonerrortype: ""
+    id: "10"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "12"
+      "yes":
+      - "6"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Check if Domain type indicators exist.
+      id: 08c5c837-a41e-4914-8236-58cf78a1a728
+      iscommand: false
+      name: Is there a Domain type indicators?
+      type: condition
+      version: -1
+    taskid: 08c5c837-a41e-4914-8236-58cf78a1a728
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": -650,
+          "y": 975
+        }
+      }
+  "11":
+    conditions:
+    - condition:
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                accessor: EntityBType
+                root: Relationships
+          operator: containsGeneral
+          right:
+            value:
+              simple: IP
+      label: "yes"
+    continueonerrortype: ""
+    id: "11"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "12"
+      "yes":
+      - "5"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Check if IP type indicators exist.
+      id: 8aa12485-1f21-42c5-8e89-0c1d13322335
+      iscommand: false
+      name: Is there a IP type indicators?
+      type: condition
+      version: -1
+    taskid: 8aa12485-1f21-42c5-8e89-0c1d13322335
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": -220,
+          "y": 975
+        }
+      }
+  "12":
+    continueonerrortype: ""
+    id: "12"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 2a6bc227-35b4-46de-8553-6e0049a6222e
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 2a6bc227-35b4-46de-8553-6e0049a6222e
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 440,
+          "y": 1330
+        }
+      }
+  "15":
+    continueonerrortype: ""
+    id: "15"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "2"
+    note: false
+    quietmode: 0
+    reputationcalc: 1
+    scriptarguments:
+      entities:
+        complex:
+          root: inputs.Indicator
+          transformers:
+          - operator: uniq
+      limit:
+        complex:
+          root: inputs.LimitResults
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: This automation outputs the indicator relationships to context
+        according to the provided query, using the entities, entityTypes, and relationships
+        arguments. All arguments will use the AND operator. For example, using the
+        following arguments entities=8.8.8.8 entities_types=Domain will provide only
+        relationships that the 8.8.8.8 indicator has with indicators of type domain.
+      id: 80cf3376-e70a-405d-827c-0ada20a23b1b
+      iscommand: false
+      name: Get Indicator Relationships
+      script: SearchIndicatorRelationships
+      type: regular
+      version: -1
+    taskid: 80cf3376-e70a-405d-827c-0ada20a23b1b
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -430,
+          "y": -530
+        }
+      }
+  "16":
+    continueonerrortype: ""
+    id: "16"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "19"
+    note: false
+    quietmode: 0
+    reputationcalc: 1
+    scriptarguments:
+      entities:
+        complex:
+          root: RelatedCampaign
+          transformers:
+          - operator: uniq
+      limit:
+        complex:
+          root: inputs.LimitResults
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: This automation outputs the indicator relationships to context
+        according to the provided query, using the entities, entityTypes, and relationships
+        arguments. All arguments will use the AND operator. For example, using the
+        following arguments entities=8.8.8.8 entities_types=Domain will provide only
+        relationships that the 8.8.8.8 indicator has with indicators of type domain.
+      id: 9d136426-ed53-4dcb-8dbd-f16ebb1a804e
+      iscommand: false
+      name: Get Campaign related indicators
+      script: SearchIndicatorRelationships
+      type: regular
+      version: -1
+    taskid: 9d136426-ed53-4dcb-8dbd-f16ebb1a804e
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -660,
+          "y": -20
+        }
+      }
+  "17":
+    continueonerrortype: ""
+    fieldMapping:
+    - incidentfield: Related Campaign
+      output:
+        complex:
+          root: RelatedCampaign
+    id: "17"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "16"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      key:
+        simple: RelatedCampaign
+      value:
+        complex:
+          accessor: EntityB
+          filters:
+          - - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: Relationships.EntityBType
+              operator: isEqualString
+              right:
+                value:
+                  simple: campaign
+          root: Relationships
+          transformers:
+          - operator: uniq
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Set a value in context under the key you entered.
+      id: 028a3bac-0ebf-4f5a-842a-713d71e96c50
+      iscommand: false
+      name: Set Related Campaign
+      script: Set
+      type: regular
+      version: -1
+    taskid: 028a3bac-0ebf-4f5a-842a-713d71e96c50
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -660,
+          "y": -180
+        }
+      }
+  "18":
+    continueonerrortype: ""
+    id: "18"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "10"
+      - "11"
+      - "8"
+      - "9"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: e619041b-721d-4a9b-8029-ffdca8500d8c
+      iscommand: false
+      name: Set Indicators
+      type: title
+      version: -1
+    taskid: e619041b-721d-4a9b-8029-ffdca8500d8c
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": -430,
+          "y": 830
+        }
+      }
+  "19":
+    conditions:
+    - condition:
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                accessor: EntityBType
+                root: Relationships
+          operator: isEqualString
+          right:
+            value:
+              simple: report
+      label: "yes"
+    continueonerrortype: ""
+    id: "19"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "21"
+      "yes":
+      - "20"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Check if the campaign has related reports.
+      id: 81762b42-569e-4cd7-883f-fb96904758ac
+      iscommand: false
+      name: Has reports?
+      type: condition
+      version: -1
+    taskid: 81762b42-569e-4cd7-883f-fb96904758ac
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": -660,
+          "y": 140
+        }
+      }
+  "20":
+    continueonerrortype: ""
+    fieldMapping:
+    - incidentfield: Related Report
+      output:
+        complex:
+          root: RelatedReport
+    id: "20"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "21"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      key:
+        simple: RelatedReport
+      value:
+        complex:
+          accessor: EntityB
+          filters:
+          - - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: Relationships.EntityBType
+              operator: isEqualString
+              right:
+                value:
+                  simple: report
+          root: Relationships
+          transformers:
+          - operator: uniq
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Set a value in context under the key you entered.
+      id: b67e368e-9ab2-41f6-8d48-efdbd49bcf17
+      iscommand: false
+      name: Set Report
+      script: Set
+      type: regular
+      version: -1
+    taskid: b67e368e-9ab2-41f6-8d48-efdbd49bcf17
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -890,
+          "y": 320
+        }
+      }
+  "21":
+    conditions:
+    - condition:
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                accessor: EntityBType
+                root: Relationships
+          operator: isEqualString
+          right:
+            value:
+              simple: attack pattern
+      label: "yes"
+    continueonerrortype: ""
+    id: "21"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "18"
+      "yes":
+      - "22"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Check if the indicator has related attack patterns.
+      id: bad25040-e60a-4fa3-8f35-9a20a19be6c4
+      iscommand: false
+      name: Has Related Attack Patterns?
+      type: condition
+      version: -1
+    taskid: bad25040-e60a-4fa3-8f35-9a20a19be6c4
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": -430,
+          "y": 490
+        }
+      }
+  "22":
+    continueonerrortype: ""
+    fieldMapping:
+    - incidentfield: MITRE Technique Name
+      output:
+        complex:
+          root: RelatedAttackPatterns
+    id: "22"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "18"
+    note: false
+    quietmode: 0
+    reputationcalc: 1
+    scriptarguments:
+      key:
+        simple: RelatedAttackPatterns
+      value:
+        complex:
+          accessor: EntityB
+          filters:
+          - - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: Relationships.EntityBType
+              operator: isEqualString
+              right:
+                value:
+                  simple: attack pattern
+          root: Relationships
+          transformers:
+          - operator: uniq
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Set a value in context under the key you entered.
+      id: 647753c5-8148-46a4-81bc-9bab23feb836
+      iscommand: false
+      name: Set Related Attack Patterns
+      script: Set
+      type: regular
+      version: -1
+    taskid: 647753c5-8148-46a4-81bc-9bab23feb836
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -650,
+          "y": 660
+        }
+      }
+  "23":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.Indicator
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "23"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "12"
+      "yes":
+      - "15"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Check if an input indicator exists.
+      id: 41ea1dab-1062-4835-8f3f-ea99bc964815
+      iscommand: false
+      name: Has Indicator?
+      type: condition
+      version: -1
+    taskid: 41ea1dab-1062-4835-8f3f-ea99bc964815
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 440,
+          "y": -700
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {
+      "10_12_#default#": 0.1,
+      "11_12_#default#": 0.15,
+      "19_21_#default#": 0.37,
+      "2_17_yes": 0.9,
+      "8_12_#default#": 0.36,
+      "9_12_#default#": 0.1
+    },
+    "paper": {
+      "dimensions": {
+        "height": 2225,
+        "width": 1880,
+        "x": -1060,
+        "y": -830
+      }
+    }
+  }
