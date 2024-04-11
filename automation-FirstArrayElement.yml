@@ -1,0 +1,48 @@
+args:
+- default: true
+  description: An array for which to return the first element.
+  isArray: true
+  name: value
+  required: true
+comment: Returns the first element of an array.  If the value passed is not an array,
+  it returns the original value that was passed.
+commonfields:
+  id: FirstArrayElement
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.2.61
+    packID: FiltersAndTransformers
+    packName: Filters And Transformers
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: FirstArrayElement
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  // pack version: 1.2.61
+  let value = args.value;
+
+  if (Array.isArray(value) && value.length > 0) {
+      value = value[0];
+  } else if (value === null) {
+      value = [];
+  }
+
+  return value;
+scripttarget: 0
+system: true
+tags:
+- general
+- transformer
+- entirelist
+type: javascript
