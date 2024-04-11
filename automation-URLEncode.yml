@@ -1,0 +1,75 @@
+args:
+- description: The URL to encode.
+  name: value
+  required: true
+- default: true
+  defaultValue: /
+  description: The optional safe_character argument allows to specify ASCII characters
+    that should not be encoded. Default value is "/".
+  name: safe_character
+- auto: PREDEFINED
+  defaultValue: "false"
+  description: Whether to ignore safe_character argument encoding - all characters
+    will be encoded. Default is "false".
+  name: ignore_safe_character
+  predefined:
+  - "true"
+  - "false"
+comment: 'Encodes a URL string by replacing special characters in the string using
+  the %xx escape. For example: https://example.com converts to https:%2F%2Fexample.com.'
+commonfields:
+  id: URLEncode
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.2.61
+    packID: FiltersAndTransformers
+    packName: Filters And Transformers
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.83255
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: URLEncode
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('URLEncode', 'start', __line__())
+  ### pack version: 1.2.61
+
+
+  from urllib.parse import quote, unquote
+
+  ''' MAIN FUNCTION '''
+
+
+  def main():
+      try:
+          args = demisto.args()
+          value = args.get('value')
+          decoded_value = unquote(value)
+          if argToBoolean(args.get('ignore_safe_character', 'false')):
+              return_results(quote(decoded_value, safe=''))
+          else:
+              return_results(quote(decoded_value, safe=args.get('safe_character', '/')))
+      except Exception as exc:
+          return_error(f'Failed to execute URLEncode.\nError: {str(exc)}', error=exc)
+
+
+  if __name__ in ('__main__', '__builtin__', 'builtins'):
+      main()  # pragma: no cover
+
+  register_module_line('URLEncode', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- transformer
+type: python
