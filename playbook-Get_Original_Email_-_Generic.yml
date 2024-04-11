@@ -1,0 +1,248 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 2.6.15
+    packID: CommonPlaybooks
+    packName: Common Playbooks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+deprecated: true
+description: Deprecated. Use the "Get Original Email - Generic v2" playbook under
+  the "Phishing" pack instead.
+id: get_original_email_-_generic
+inputs: []
+name: Get Original Email - Generic
+outputs:
+- contextPath: Email
+  description: The email object
+  type: unknown
+- contextPath: File
+  description: Original attachments
+  type: unknown
+- contextPath: Email.To
+  description: The recipient of the email
+  type: string
+- contextPath: Email.From
+  description: The sender of the email
+  type: string
+- contextPath: Email.CC
+  description: The CC address of the email
+  type: string
+- contextPath: Email.BCC
+  description: The BCC address of the email
+  type: string
+- contextPath: Email.HTML
+  description: The email HTML
+  type: string
+- contextPath: Email.Body
+  description: The email text body
+  type: string
+- contextPath: Email.Headers
+  description: The email headers
+  type: unknown
+- contextPath: Email.Subject
+  description: The email subject
+  type: string
+- contextPath: Email.HeadersMap
+  description: The headers of the email.
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "6"
+      - "8"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: d7920fee-8ada-4d48-8197-2e08d19a54dc
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: d7920fee-8ada-4d48-8197-2e08d19a54dc
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 50
+        }
+      }
+  "3":
+    continueonerrortype: ""
+    id: "3"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: b52aade3-aa90-4343-8417-d4aa26803d62
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: b52aade3-aa90-4343-8417-d4aa26803d62
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 370
+        }
+      }
+  "6":
+    continueonerrortype: ""
+    id: "6"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "3"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      EmailID:
+        complex:
+          accessor: emailmessageid
+          root: incident
+      From:
+        complex:
+          accessor: emailfrom
+          root: incident
+          transformers:
+          - args:
+              regex:
+                value:
+                  simple: (?i).*<([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})>
+              replaceWith:
+                value:
+                  simple: $1
+            operator: replaceMatch
+      User:
+        complex:
+          accessor: emailto
+          root: incident
+          transformers:
+          - args:
+              regex:
+                value:
+                  simple: (?i).*<([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})>
+              replaceWith:
+                value:
+                  simple: $1
+            operator: replaceMatch
+    separatecontext: true
+    skipunavailable: true
+    task:
+      brand: ""
+      description: |
+        Use this playbook to retrieve the original email in the thread, including headers and attahcments, when the reporting user forwarded the original email not as an attachment.
+
+        You must have the necessary permissions in your Gmail service to execute global search: Google Apps Domain-Wide Delegation of Authority
+      id: ff2153f9-61b9-43ed-8e5f-ca84225d8c1d
+      iscommand: false
+      name: Get Original Email - Gmail
+      playbookName: Get Original Email - Gmail
+      type: playbook
+      version: -1
+    taskid: ff2153f9-61b9-43ed-8e5f-ca84225d8c1d
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 195
+        }
+      }
+  "8":
+    continueonerrortype: ""
+    id: "8"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "3"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      InReplyTo:
+        complex:
+          accessor: labels.Email/Header/In-Reply-To
+          root: incident
+      Mailbox:
+        complex:
+          accessor: labels.Email/from
+          root: incident
+      ThreadTopic:
+        complex:
+          accessor: labels.Email/Header/Thread-Topic
+          root: incident
+    separatecontext: true
+    skipunavailable: true
+    task:
+      brand: ""
+      description: |-
+        Use this playbook to retrieve the original email in the thread, including headers and attahcments, when the reporting user forwarded the original email not as an attachment.
+
+        You must have the necessary permissions in the EWS integration to execute global search: eDiscovery
+      id: 5540bb6e-e237-464e-8d65-0ff7c98881f3
+      iscommand: false
+      name: Get Original Email - EWS
+      playbookName: Get Original Email - EWS
+      type: playbook
+      version: -1
+    taskid: 5540bb6e-e237-464e-8d65-0ff7c98881f3
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 195
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 385,
+        "width": 810,
+        "x": 50,
+        "y": 50
+      }
+    }
+  }
