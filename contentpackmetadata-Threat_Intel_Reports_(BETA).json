@@ -1,0 +1,372 @@
+{
+	"author": "Cortex XSOAR",
+	"authorImage": "content/packs/Base/Author_image.png",
+	"beta": false,
+	"cacheVersn": 0,
+	"categories": [
+		"Data Enrichment \u0026 Threat Intelligence"
+	],
+	"certification": "certified",
+	"contentItemTypes": [
+		"automation",
+		"layoutscontainer",
+		"generictype",
+		"genericfield",
+		"genericmodule",
+		"genericdefinition"
+	],
+	"contentItems": {
+		"automation": [
+			{
+				"description": "Sets a Threat Intel Report as unpublished.",
+				"name": "UnpublishThreatIntelReport",
+				"tags": [
+					"threatIntelReport-action-button"
+				]
+			},
+			{
+				"description": "Sets a Threat Intel Report as published.",
+				"name": "PublishThreatIntelReport",
+				"tags": [
+					"threatIntelReport-action-button"
+				]
+			}
+		],
+		"classifier": null,
+		"dashboard": null,
+		"genericdefinition": [
+			{
+				"deprecated": false,
+				"description": "",
+				"fromversion": "6.5.0",
+				"id": "ThreatIntelReport",
+				"name": "Threat Intel Report",
+				"toversion": ""
+			}
+		],
+		"genericfield": [
+			{
+				"description": "",
+				"name": "Threat Actor",
+				"type": "shortText"
+			},
+			{
+				"description": "",
+				"name": "Sophistication",
+				"type": "shortText"
+			},
+			{
+				"description": "",
+				"name": "Modified",
+				"type": "date"
+			},
+			{
+				"description": "",
+				"name": "Body Malware",
+				"type": "markdown"
+			},
+			{
+				"description": "",
+				"name": "Traffic Light Protocol",
+				"type": "singleSelect"
+			},
+			{
+				"description": "",
+				"name": "Goals",
+				"type": "tagsSelect"
+			},
+			{
+				"description": "",
+				"name": "CVE",
+				"type": "shortText"
+			},
+			{
+				"description": "",
+				"name": "Source",
+				"type": "shortText"
+			},
+			{
+				"description": "",
+				"name": "Vulnerability Type",
+				"type": "multiSelect"
+			},
+			{
+				"description": "",
+				"name": "Creator",
+				"type": "shortText"
+			},
+			{
+				"description": "",
+				"name": "Report Status",
+				"type": "singleSelect"
+			},
+			{
+				"description": "",
+				"name": "Secondary Motivations",
+				"type": "shortText"
+			},
+			{
+				"description": "",
+				"name": "Body Vulnerability",
+				"type": "markdown"
+			},
+			{
+				"description": "",
+				"name": "Logo",
+				"type": "markdown"
+			},
+			{
+				"description": "",
+				"name": "Last Seen",
+				"type": "date"
+			},
+			{
+				"description": "",
+				"name": "Fuzzy Hash",
+				"type": "shortText"
+			},
+			{
+				"description": "",
+				"name": "First Seen By Source",
+				"type": "shortText"
+			},
+			{
+				"description": "",
+				"name": "Operating System",
+				"type": "tagsSelect"
+			},
+			{
+				"description": "",
+				"name": "Objective",
+				"type": "shortText"
+			},
+			{
+				"description": "",
+				"name": "Published",
+				"type": "date"
+			},
+			{
+				"description": "",
+				"name": "Threat Actor Types",
+				"type": "multiSelect"
+			},
+			{
+				"description": "",
+				"name": "Malware Type",
+				"type": "multiSelect"
+			},
+			{
+				"description": "",
+				"name": "First Seen",
+				"type": "date"
+			},
+			{
+				"description": "",
+				"name": "Value",
+				"type": "shortText"
+			},
+			{
+				"description": "",
+				"name": "Body Executive Brief",
+				"type": "markdown"
+			},
+			{
+				"description": "",
+				"name": "Tags",
+				"type": "tagsSelect"
+			},
+			{
+				"description": "",
+				"name": "Body Campaign",
+				"type": "markdown"
+			},
+			{
+				"description": "",
+				"name": "Primary Motivation",
+				"type": "shortText"
+			},
+			{
+				"description": "",
+				"name": "Description",
+				"type": "markdown"
+			},
+			{
+				"description": "",
+				"name": "CVSS",
+				"type": "shortText"
+			},
+			{
+				"description": "",
+				"name": "Aliases",
+				"type": "shortText"
+			},
+			{
+				"description": "",
+				"name": "Body Threat Actor",
+				"type": "markdown"
+			},
+			{
+				"description": "",
+				"name": "Targeting",
+				"type": "shortText"
+			},
+			{
+				"description": "",
+				"name": "Indicator Type",
+				"type": "shortText"
+			}
+		],
+		"genericmodule": [
+			{
+				"deprecated": false,
+				"description": "",
+				"fromversion": "6.5.0",
+				"id": "threatIntel",
+				"name": "Threat Intel",
+				"toversion": ""
+			}
+		],
+		"generictype": [
+			{
+				"description": "",
+				"name": "Malware"
+			},
+			{
+				"description": "",
+				"name": "Executive Brief"
+			},
+			{
+				"description": "",
+				"name": "Threat Actor"
+			},
+			{
+				"description": "",
+				"name": "Campaign"
+			},
+			{
+				"description": "",
+				"name": "Vulnerability"
+			}
+		],
+		"incidentfield": null,
+		"incidenttype": null,
+		"indicatorfield": null,
+		"integration": null,
+		"layoutscontainer": [
+			{
+				"description": "A report tailored for vulnerability with a special section for CVE, CVSS and more",
+				"name": "Vulnerability Report"
+			},
+			{
+				"description": "A basic template for an Executive brief or any kind of a generic report",
+				"name": "Executive Brief Report"
+			},
+			{
+				"description": "A layout template for an out of the box report describing a Campaign ran by a threat actor",
+				"name": "Campaign Report"
+			},
+			{
+				"description": "A template specifically designed for a report about a malware with fields such as OS, hash and more",
+				"name": "Malware Report"
+			},
+			{
+				"description": "A report specifically made dor Threat Actors with additional sections including meta data about the actor",
+				"name": "Threat Actor Report"
+			}
+		],
+		"list": null,
+		"playbook": null,
+		"report": null,
+		"reputation": null,
+		"widget": null,
+		"wizard": null
+	},
+	"currentVersion": "1.0.13",
+	"definitionId": "",
+	"dependencies": {
+		"Base": {
+			"author": "Cortex XSOAR",
+			"certification": "certified",
+			"mandatory": true,
+			"minVersion": "1.33.31",
+			"name": "Base"
+		},
+		"CommonTypes": {
+			"author": "Cortex XSOAR",
+			"certification": "certified",
+			"mandatory": false,
+			"minVersion": "3.4.1",
+			"name": "Common Types"
+		},
+		"FireMonSecurityManager": {
+			"author": "FireMon",
+			"certification": "certified",
+			"mandatory": false,
+			"minVersion": "1.1.23",
+			"name": "FireMon Security Manager"
+		},
+		"Malware": {
+			"author": "Cortex XSOAR",
+			"certification": "certified",
+			"mandatory": false,
+			"minVersion": "1.4.11",
+			"name": "Malware Core"
+		}
+	},
+	"deprecated": false,
+	"description": "Threat Intel Reports gives the user the ability to create, review, publish, and export threat intelligence reports.",
+	"disabledMonthly": false,
+	"downloads": 7199,
+	"eulaLink": "https://github.com/demisto/content/blob/master/LICENSE",
+	"fromServerVersion": "6.5.0",
+	"general": [
+		"generalFieldCertified",
+		"generalFieldByCortexXSOAR",
+		"generalFieldFree",
+		"generalFieldSupportIncluded"
+	],
+	"id": "ThreatIntelReports",
+	"installMessage": "",
+	"integrations": [
+		{
+			"imagePath": "content/packs/FireMonSecurityManager/FireMonSecurityManager_image.png",
+			"name": "FireMon Security Manager"
+		}
+	],
+	"itemVersion": "1.0.13",
+	"keywords": [],
+	"legacy": true,
+	"name": "Threat Intel Reports (BETA)",
+	"packID": "ThreatIntelReports",
+	"packName": "",
+	"premium": false,
+	"previewOnly": false,
+	"price": 0,
+	"propagationLabels": [
+		"all"
+	],
+	"rawKeywords": null,
+	"rawTags": null,
+	"rawUseCases": null,
+	"readme": "Threat intel reports summarize and share threat intelligence research conducted within your organization by threat analysts and threat hunters. Threat intelligence reports help you to communicate the current threat landscape to internal and external stakeholders, whether in the form of high-level summary reports for C-level executives, or detailed, tactical reports for the SOC and other security stakeholders.\n\n## What does this pack do?\n\nThis pack lets you:\n- Create threat intel reports based on out-of-the-box or customized layouts, while applying rich formatting to the body of the report.\n- Publish a report within Cortex XSOAR to share with other users.\n- Export a report to PDF format.\n\nThe pack comes with 5 out-of-the-box report layouts for easier use:\n1. Executive Brief\n2. Campaign Report\n3. Threat actor report\n4. Malware Report\n5. Vulnerability Report\n\nYou can also add relationships between reports and indicators to add additional data to the report. Markdown is supported in the report body, allowing you to add formatting such as tables, images, and font/background color.\n\nExecutive brief report\n![Layout](https://storage.googleapis.com/marketplace-dist/content/packs/ThreatIntelReports/readme_images/executive_brief.png)\n\nThreat actor report\n![Layout](https://storage.googleapis.com/marketplace-dist/content/packs/ThreatIntelReports/readme_images/threat_actor.png)\n\nMalware report\n![Layout](https://storage.googleapis.com/marketplace-dist/content/packs/ThreatIntelReports/readme_images/malware.png)\n\nVulnerability report\n![Layout](https://storage.googleapis.com/marketplace-dist/content/packs/ThreatIntelReports/readme_images/vulnerability.png)\n",
+	"searchRank": 10,
+	"serverMaxVersion": "",
+	"serverMinVersion": "6.5.0",
+	"support": "xsoar",
+	"supportDetails": {
+		"email": "",
+		"url": "https://www.paloaltonetworks.com/cortex"
+	},
+	"tags": [
+		"Core",
+		"Use Case"
+	],
+	"toServerVersion": "",
+	"updated": "2024-02-19T05:18:09+09:00",
+	"useCases": [
+		"Threat Intelligence Management"
+	],
+	"version": -1,
+	"versionInfo": "836299",
+	"videos": []
+}
