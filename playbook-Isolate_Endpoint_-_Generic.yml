@@ -1,0 +1,337 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 2.6.15
+    packID: CommonPlaybooks
+    packName: Common Playbooks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+deprecated: true
+description: Deprecated. Use the "Isolate Endpoint - Generic V2" playbook instead.
+id: Isolate Endpoint - Generic
+inputs:
+- description: Hostname of the endpoint for isolation.
+  key: Hostname
+  playbookInputQuery: null
+  required: false
+  value:
+    complex:
+      accessor: Hostname
+      root: Endpoint
+- description: Endpoint ID to isolate using Traps.
+  key: EndpointId
+  playbookInputQuery: null
+  required: false
+  value:
+    complex:
+      accessor: Endpoint.endpoint_id
+      root: PaloAltoNetworksXDR
+- description: The endpoint ID (string) to isolate using Cortex XDR. You can retrieve
+    the string from the xdr-get-endpoints command.
+  key: xdr_endpoint_id
+  playbookInputQuery: null
+  required: false
+  value:
+    complex:
+      accessor: Endpoint.endpoint_id
+      root: PaloAltoNetworksXDR
+- description: IP address of the endpoint for isolation.
+  key: IP
+  playbookInputQuery: null
+  required: false
+  value:
+    complex:
+      accessor: Address
+      root: IP
+name: Isolate Endpoint - Generic
+outputs:
+- contextPath: CbResponse.Sensors.CbSensorID
+  description: Carbon Black Response Sensors ids that has been isolated.
+  type: string
+- contextPath: Endpoint
+  description: The isolated enpoint.
+  type: string
+- contextPath: Traps.Isolate.EndpointID
+  description: The ID of the endpoint.
+  type: string
+- contextPath: Traps.IsolateResult.Status
+  description: The status of the isolation operation.
+  type: string
+- contextPath: Cybereason.Machine
+  description: Cybereason Machine name.
+- contextPath: Cybereason.IsIsolated
+  description: Is the machine isolated.
+- contextPath: Endpoint.Hostname
+  description: Hostname of the endpoint.
+- contextPath: PaloAltoNetworksXDR.Endpoint.endpoint_id
+  description: The endpoint ID.
+- contextPath: PaloAltoNetworksXDR.Endpoint.endpoint_name
+  description: The endpoint name.
+- contextPath: PaloAltoNetworksXDR.Endpoint.endpoint_status
+  description: The status of the endpoint.
+- contextPath: PaloAltoNetworksXDR.Endpoint.ip
+  description: The endpoint's IP addresses.
+- contextPath: PaloAltoNetworksXDR.Endpoint.is_isolated
+  description: Whether the endpoint is isolated.
+- contextPath: CbResponse.Sensors.Status
+  description: Sensor status.
+  type: unknown
+- contextPath: CbResponse.Sensors.Isolated
+  description: Is sensor isolated.
+  type: unknown
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "3"
+      - "6"
+      - "7"
+      - "8"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 20f01f93-7b37-4f3f-8c17-a466dac351ef
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: 20f01f93-7b37-4f3f-8c17-a466dac351ef
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 50
+        }
+      }
+  "2":
+    continueonerrortype: ""
+    id: "2"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 050d36dd-0ec3-4490-827e-e210ac5e9a04
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 050d36dd-0ec3-4490-827e-e210ac5e9a04
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 370
+        }
+      }
+  "3":
+    continueonerrortype: ""
+    id: "3"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 0
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "2"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      EndpointId:
+        complex:
+          root: inputs.EndpointId
+          transformers:
+          - operator: uniq
+    separatecontext: true
+    skipunavailable: true
+    task:
+      brand: ""
+      id: 33a00cbb-bc23-47d0-8062-81dbcc134d25
+      iscommand: false
+      name: Traps Isolate Endpoint
+      playbookName: Traps Isolate Endpoint
+      type: playbook
+      version: -1
+    taskid: 33a00cbb-bc23-47d0-8062-81dbcc134d25
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 195
+        }
+      }
+  "6":
+    continueonerrortype: ""
+    id: "6"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "2"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      Hostname:
+        complex:
+          root: inputs.Hostname
+          transformers:
+          - operator: uniq
+    separatecontext: true
+    skipunavailable: true
+    task:
+      brand: ""
+      description: Isolate Endpoint - Cybereason
+      id: 0342c5df-d2ff-448e-8ef1-3f4674c42bff
+      iscommand: false
+      name: Isolate Endpoint - Cybereason
+      playbookName: Isolate Endpoint - Cybereason
+      type: playbook
+      version: -1
+    taskid: 0342c5df-d2ff-448e-8ef1-3f4674c42bff
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 195
+        }
+      }
+  "7":
+    continueonerrortype: ""
+    id: "7"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "2"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      endpoint_id:
+        complex:
+          root: inputs.xdr_endpoint_id
+          transformers:
+          - operator: uniq
+      hostname:
+        complex:
+          root: inputs.Hostname
+          transformers:
+          - operator: uniq
+      ip_list:
+        complex:
+          root: inputs.IP
+          transformers:
+          - operator: uniq
+    separatecontext: true
+    skipunavailable: true
+    task:
+      brand: ""
+      id: 8045389b-6e5f-406f-834d-98fc70d8421a
+      iscommand: false
+      name: Cortex XDR - Isolate Endpoint
+      playbookName: Cortex XDR - Isolate Endpoint
+      type: playbook
+      version: -1
+    taskid: 8045389b-6e5f-406f-834d-98fc70d8421a
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 195
+        }
+      }
+  "8":
+    continueonerrortype: ""
+    id: "8"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "2"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      Hostname:
+        complex:
+          root: inputs.Hostname
+    separatecontext: true
+    skipunavailable: true
+    task:
+      brand: ""
+      id: ed275240-5110-4452-88ba-66244c7a914a
+      iscommand: false
+      name: Block Endpoint - Carbon Black Response
+      playbookName: Block Endpoint - Carbon Black Response
+      type: playbook
+      version: -1
+    taskid: ed275240-5110-4452-88ba-66244c7a914a
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 1340,
+          "y": 195
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 385,
+        "width": 1670,
+        "x": 50,
+        "y": 50
+      }
+    }
+  }
