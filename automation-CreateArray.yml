@@ -1,0 +1,59 @@
+args:
+- default: true
+  description: 'This is the array data to create array from, should be in the format
+    of comma separator by default: val1,val2,val3'
+  name: arrayData
+- description: Separator to use to split arrayData, by default will be comma ',' .
+  name: separator
+- description: The key to place result array in context, by default will be "array".
+  name: contextKey
+comment: 'Will create an array object in context from given string input '
+commonfields:
+  id: CreateArray
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: CreateArray
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  // pack version: 1.14.2
+  var data = args.arrayData;
+  var seperator = ',';
+  if (args.separator){
+      seperator = args.separator;
+  }
+  var contextKey = 'array';
+  if (args.contextKey){
+      contextKey = args.contextKey;
+  }
+  var array = data.split(seperator);
+  for (var i=0; i<array.length; i++) {
+      array[i]= array[i].trim();
+  }
+  var context = {};
+  context[contextKey] = array;
+  return {Type: entryTypes.note,
+        Contents: JSON.stringify(array),
+        ContentsFormat: formats.json,
+        EntryContext: context
+  };
+scripttarget: 0
+system: true
+tags:
+- Utility
+type: javascript
