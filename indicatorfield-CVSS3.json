@@ -1,0 +1,111 @@
+{
+	"aliasTo": "",
+	"aliases": null,
+	"associatedToAll": false,
+	"associatedTypes": [
+		"CVE"
+	],
+	"autoCompleteTags": null,
+	"breachScript": "",
+	"cacheVersn": 0,
+	"caseInsensitive": true,
+	"cliName": "cvss3",
+	"closeForm": false,
+	"columns": [
+		{
+			"displayName": "Metric",
+			"fieldCalcScript": "",
+			"isDefault": true,
+			"isReadOnly": true,
+			"key": "metric",
+			"orgType": "shortText",
+			"required": false,
+			"script": "",
+			"selectValues": null,
+			"type": "shortText",
+			"width": 167
+		},
+		{
+			"displayName": "Values",
+			"fieldCalcScript": "",
+			"isDefault": true,
+			"isReadOnly": false,
+			"key": "values",
+			"orgType": "shortText",
+			"required": false,
+			"script": "",
+			"selectValues": null,
+			"type": "shortText",
+			"width": 154
+		}
+	],
+	"content": true,
+	"defaultRows": [
+		{
+			"cvss31": "Attack Vector"
+		},
+		{
+			"cvss31": "Attack Complexity"
+		},
+		{
+			"cvss31": "Privileges Required "
+		},
+		{
+			"cvss31": "User Interaction"
+		},
+		{
+			"cvss31": "Scope"
+		},
+		{
+			"cvss31": "Confidentiality"
+		},
+		{
+			"cvss31": "Integrity"
+		},
+		{
+			"cvss31": "Availibility"
+		}
+	],
+	"definitionId": "",
+	"description": "",
+	"editForm": true,
+	"fieldCalcScript": "",
+	"fromServerVersion": "5.5.0",
+	"group": 2,
+	"hidden": false,
+	"id": "indicator_cvss3",
+	"isReadOnly": true,
+	"itemVersion": "3.4.1",
+	"locked": false,
+	"mergeStrategy": "",
+	"name": "CVSS3",
+	"neverSetAsRequired": false,
+	"openEnded": false,
+	"orgType": "grid",
+	"ownerOnly": false,
+	"packID": "CommonTypes",
+	"packName": "Common Types",
+	"packPropagationLabels": [
+		"all"
+	],
+	"placeholder": "",
+	"propagationLabels": [],
+	"required": false,
+	"runScriptAfterUpdate": false,
+	"script": "",
+	"selectValues": null,
+	"sla": 0,
+	"system": false,
+	"systemAssociatedTypes": null,
+	"template": "",
+	"threshold": 72,
+	"toServerVersion": "",
+	"type": "grid",
+	"unmapped": false,
+	"unsearchable": true,
+	"useAsKpi": false,
+	"validatedError": "",
+	"validationRegex": "",
+	"version": -1,
+	"x2_fields": ""
+}
