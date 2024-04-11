@@ -1,0 +1,39 @@
+args:
+- default: true
+  description: The array to encode
+  isArray: true
+  name: value
+  required: true
+comment: Return the string encoded with JSON from the whole array
+commonfields:
+  id: StringifyArray
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.0.0
+    itemVersion: 1.2.61
+    packID: FiltersAndTransformers
+    packName: Filters And Transformers
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: StringifyArray
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  // pack version: 1.2.61
+  return JSON.stringify(args.value)
+scripttarget: 0
+system: true
+tags:
+- entirelist
+- transformer
+- general
+type: javascript
