@@ -1,0 +1,421 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.5.0
+    itemVersion: 1.1.23
+    packID: TIM_Processing
+    packName: TIM - Indicator Auto-Processing
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: |-
+  This playbook performs enrichment on indicators
+    based on playbook query, as specified in the playbook
+    inputs. This playbook needs to be used with caution as it might use up the user
+    enrichment integration's API license when running enrichment for large amounts of
+    indicators. Example queries can be "tags:example_tag" for indicators with a specific tag. For a specific feed name"
+    the query will be "sourceBrands:example_feed". For a specifc reputation the query will be "reputation:None" etc.
+id: TIM - Run Enrichment For All Indicator Types
+inputs:
+- description: ""
+  key: ""
+  playbookInputQuery:
+    daterange:
+      fromdate: "0001-01-01T00:00:00Z"
+      fromdatelicenseval: "0001-01-01T00:00:00Z"
+      period:
+        by: ""
+        byfrom: ""
+        byto: ""
+        field: ""
+        fromvalue: null
+        tovalue: null
+      todate: "0001-01-01T00:00:00Z"
+    query: ""
+    queryEntity: indicators
+    results: null
+    runFromLastJobTime: false
+  required: false
+  value: {}
+name: TIM - Run Enrichment For All Indicator Types
+outputs: []
+quiet: true
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "3"
+      - "5"
+      - "11"
+      - "10"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 02ac0455-7ef3-412f-8f27-3be705fb69d2
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: 02ac0455-7ef3-412f-8f27-3be705fb69d2
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": -10
+        }
+      }
+  "1":
+    continueonerrortype: ""
+    id: "1"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "7"
+    note: false
+    quietmode: 0
+    separatecontext: true
+    skipunavailable: false
+    task:
+      brand: ""
+      description: |-
+        This playbook processes indicators enriching indicators based on the indicator feed's reputation, as specified in the
+                playbook inputs. The playbook ignores indicators that have been tagged by other processing playbooks.
+      id: 4ebcc123-837c-4723-88a0-9e4c317c085d
+      iscommand: false
+      name: TIM - Run Enrichment For IP Indicators
+      playbookId: TIM - Run Enrichment For IP Indicators
+      type: playbook
+      version: -1
+    taskid: 4ebcc123-837c-4723-88a0-9e4c317c085d
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": -40,
+          "y": 310
+        }
+      }
+  "2":
+    continueonerrortype: ""
+    id: "2"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "7"
+    note: false
+    quietmode: 0
+    separatecontext: true
+    skipunavailable: false
+    task:
+      brand: ""
+      description: |-
+        This playbook processes indicators enriching indicators based on the indicator feed's reputation, as specified in the
+                playbook inputs. The playbook ignores indicators that have been tagged by other processing playbooks.
+      id: 2c05429b-ee28-4e32-849c-7010e608823c
+      iscommand: false
+      name: TIM - Run Enrichment For Hash Indicators
+      playbookId: TIM - Run Enrichment For Hash Indicators
+      type: playbook
+      version: -1
+    taskid: 2c05429b-ee28-4e32-849c-7010e608823c
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 960,
+          "y": 310
+        }
+      }
+  "3":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: playbookQuery.indicator_type
+          operator: isEqualString
+          right:
+            value:
+              simple: IP
+      label: "yes"
+    continueonerrortype: ""
+    id: "3"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "7"
+      "yes":
+      - "1"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 7f161475-0dfb-4ef3-816a-03a04a3fc0f1
+      iscommand: false
+      name: Are there IP indicators?
+      type: condition
+      version: -1
+    taskid: 7f161475-0dfb-4ef3-816a-03a04a3fc0f1
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 230,
+          "y": 130
+        }
+      }
+  "5":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: playbookQuery.indicator_type
+          operator: isEqualString
+          right:
+            value:
+              simple: File
+      label: "yes"
+    continueonerrortype: ""
+    id: "5"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "7"
+      "yes":
+      - "2"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 6fb8eebc-1740-41a7-8909-fce3c1bb4ce0
+      iscommand: false
+      name: Are there file hash indicators?
+      type: condition
+      version: -1
+    taskid: 6fb8eebc-1740-41a7-8909-fce3c1bb4ce0
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 730,
+          "y": 130
+        }
+      }
+  "7":
+    continueonerrortype: ""
+    id: "7"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 1e7f8bd4-2d90-4dcb-8eed-4ea324d1dda8
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 1e7f8bd4-2d90-4dcb-8eed-4ea324d1dda8
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 510
+        }
+      }
+  "8":
+    continueonerrortype: ""
+    id: "8"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "7"
+    note: false
+    quietmode: 0
+    separatecontext: true
+    skipunavailable: false
+    task:
+      brand: ""
+      id: f1827ab1-aa83-4e0a-8668-bf1f1a4a6810
+      iscommand: false
+      name: TIM - Run Enrichment For Domain Indicators
+      playbookId: TIM - Run Enrichment For Domain Indicators
+      type: playbook
+      version: -1
+    taskid: f1827ab1-aa83-4e0a-8668-bf1f1a4a6810
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 1540,
+          "y": 310
+        }
+      }
+  "9":
+    continueonerrortype: ""
+    id: "9"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "7"
+    note: false
+    quietmode: 0
+    separatecontext: true
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 15a11194-7277-46a2-8469-55834e6fb029
+      iscommand: false
+      name: TIM - Run Enrichment For Url Indicators
+      playbookId: TIM - Run Enrichment For Url Indicators
+      type: playbook
+      version: -1
+    taskid: 15a11194-7277-46a2-8469-55834e6fb029
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": -650,
+          "y": 310
+        }
+      }
+  "10":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: playbookQuery.indicator_type
+          operator: isEqualString
+          right:
+            value:
+              simple: URL
+      label: "yes"
+    continueonerrortype: ""
+    id: "10"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "7"
+      "yes":
+      - "9"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 78049a49-d20c-41d7-81ff-c609e6637faa
+      iscommand: false
+      name: Are there Url indicators?
+      type: condition
+      version: -1
+    taskid: 78049a49-d20c-41d7-81ff-c609e6637faa
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": -480,
+          "y": 130
+        }
+      }
+  "11":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: playbookQuery.indicator_type
+          operator: isEqualString
+          right:
+            value:
+              simple: Domain
+      label: "yes"
+    continueonerrortype: ""
+    id: "11"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "7"
+      "yes":
+      - "8"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 5c1ad124-83d3-4d15-894c-660eec5ce2dc
+      iscommand: false
+      name: Are there domain indicators?
+      type: condition
+      version: -1
+    taskid: 5c1ad124-83d3-4d15-894c-660eec5ce2dc
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 1360,
+          "y": 130
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 585,
+        "width": 2570,
+        "x": -650,
+        "y": -10
+      }
+    }
+  }
