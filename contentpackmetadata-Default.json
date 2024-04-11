@@ -1,0 +1,122 @@
+{
+	"author": "Cortex XSOAR",
+	"authorImage": "content/packs/Base/Author_image.png",
+	"beta": false,
+	"cacheVersn": 0,
+	"categories": [
+		"Data Enrichment \u0026 Threat Intelligence"
+	],
+	"certification": "certified",
+	"contentItemTypes": [
+		"playbook",
+		"layoutscontainer"
+	],
+	"contentItems": {
+		"automation": null,
+		"classifier": null,
+		"dashboard": null,
+		"genericfield": null,
+		"generictype": null,
+		"incidentfield": null,
+		"incidenttype": null,
+		"indicatorfield": null,
+		"integration": null,
+		"layoutscontainer": [
+			{
+				"description": "",
+				"name": "Default"
+			}
+		],
+		"list": null,
+		"playbook": [
+			{
+				"description": "This playbook executes when no other playbook is associated with an incident. It performs the following actions:\n- Extracts and enriches indicators in an incident using one or more integrations.\n- Deduplicates by linking and closing similar incidents.\n- Retrieves related files from endpoints using hash / file path.\n- Hunts for occurrences of suspicious files in the organization's endpoints.\n- Unzips zipped files, and extracts indicators from them.\n- Detonates files and URLs in sandbox integrations.\n- Calculates a severity for the incident.\n- Allows the analyst to remediate the incident by blocking malicious indicators that were found.\n\n",
+				"name": "Default"
+			}
+		],
+		"report": null,
+		"reputation": null,
+		"widget": null,
+		"wizard": null
+	},
+	"currentVersion": "2.0.9",
+	"definitionId": "",
+	"dependencies": {
+		"Base": {
+			"author": "Cortex XSOAR",
+			"certification": "certified",
+			"mandatory": true,
+			"minVersion": "1.33.27",
+			"name": "Base"
+		},
+		"CommonPlaybooks": {
+			"author": "Cortex XSOAR",
+			"certification": "certified",
+			"mandatory": true,
+			"minVersion": "2.6.12",
+			"name": "Common Playbooks"
+		},
+		"CommonScripts": {
+			"author": "Cortex XSOAR",
+			"certification": "certified",
+			"mandatory": true,
+			"minVersion": "1.13.38",
+			"name": "Common Scripts"
+		},
+		"CommonTypes": {
+			"author": "Cortex XSOAR",
+			"certification": "certified",
+			"mandatory": false,
+			"minVersion": "3.4.1",
+			"name": "Common Types"
+		}
+	},
+	"deprecated": false,
+	"description": "Got a unique incident? This Content Pack helps you automate the core steps of enrichment and severity calculation for any kind of incident.",
+	"disabledMonthly": false,
+	"downloads": 10980,
+	"eulaLink": "https://github.com/demisto/content/blob/master/LICENSE",
+	"fromServerVersion": "5.0.0",
+	"general": [
+		"generalFieldCertified",
+		"generalFieldByCortexXSOAR",
+		"generalFieldFree",
+		"generalFieldSupportIncluded"
+	],
+	"id": "DefaultPlaybook",
+	"installMessage": "",
+	"integrations": [],
+	"itemVersion": "2.0.9",
+	"keywords": [],
+	"legacy": true,
+	"name": "Default",
+	"packID": "DefaultPlaybook",
+	"packName": "",
+	"premium": false,
+	"previewOnly": false,
+	"price": 0,
+	"propagationLabels": [
+		"all"
+	],
+	"rawKeywords": null,
+	"rawTags": null,
+	"rawUseCases": null,
+	"readme": "Sometimes you may have an incident, or just some data at hand, that does not fall into any specific category. When you simply create an incident from scratch or just want to get more information about an indicator without performing a full investigation, we recommend using our Default playbook.\n\nThis pack provides you with the Default playbook and layout, which help automate the core steps of every investigation.\nThe Default playbook automatically enriches indicators, parses files, detonates files and URLs, maps affected endpoints and calculates a severity for the incident.\nThe Default layout is a good match for any incident type, as it dynamically displays mapped or unmapped incident data, file attachments and assets and indicators.\n\nThe layout also features remediation buttons as well as a collection of utilities any analyst would love to have at hand.\n\n##### What does this pack do?\n- Extracts and enriches indicators in an incident using one or more integrations.\n- Deduplicates by linking and closing similar incidents.\n- Retrieves related files from endpoints using hash / file path.\n- Hunts for occurrences of suspicious files in the organization's endpoints.\n- Unzips zipped files, and extracts indicators from them.\n- Detonates files and URLs in sandbox integrations.\n- Calculates a severity for the incident.\n- Allows the analyst to remediate the incident by blocking malicious indicators that were found.\n- Gives the analyst an overview of incident data and additional data collected during the incident.\n- Gives the analyst the ability to remediate the incident through the incident layout.\n- Provides a \"swiss army knife\" of important tools every analyst needs.\n\n\nThe playbook found in this pack provides a great out-of-the-box solution, yet it can be customized should you want to add additional logic to the default behavior.\n\n_For more information, visit our [Cortex XSOAR Reference Docs](https://xsoar.pan.dev/docs/reference/articles/the-default-pack)_\n\n![Default](https://storage.googleapis.com/marketplace-dist/content/packs/DefaultPlaybook/readme_images/Default_8_2.png)\n",
+	"searchRank": 10,
+	"serverMaxVersion": "",
+	"serverMinVersion": "5.0.0",
+	"support": "xsoar",
+	"supportDetails": {
+		"email": "",
+		"url": "https://www.paloaltonetworks.com/cortex"
+	},
+	"tags": [
+		"Core"
+	],
+	"toServerVersion": "",
+	"updated": "2024-02-13T05:19:44+09:00",
+	"useCases": [],
+	"version": -1,
+	"versionInfo": "823153",
+	"videos": []
+}
