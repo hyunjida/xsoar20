@@ -1,0 +1,76 @@
+{
+	"cacheVersn": 0,
+	"contextPath": "Account.Email(val.Address \u0026\u0026 val.Address === obj.Address)",
+	"contextValue": "Address",
+	"defaultMapping": {
+		"blocked": {
+			"complex": {
+				"accessor": "Blocked",
+				"filters": [],
+				"root": "Account",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"domainname": {
+			"complex": {
+				"accessor": "Domain",
+				"filters": [],
+				"root": "Account",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		},
+		"emailaddress": {
+			"complex": {
+				"accessor": "Email.Address",
+				"filters": [],
+				"root": "Account",
+				"transformers": [
+					{
+						"operator": "uniq"
+					}
+				]
+			}
+		}
+	},
+	"definitionId": "",
+	"details": "Email",
+	"disabled": false,
+	"enhancementScriptNames": [
+		"EmailReputation"
+	],
+	"excludedBrands": [],
+	"expiration": 0,
+	"file": false,
+	"fileHashesPriority": null,
+	"formatScript": "ExtractEmailV2",
+	"fromServerVersion": "5.0.0",
+	"id": "emailRep",
+	"itemVersion": "3.4.1",
+	"layout": "emailRep",
+	"legacyNames": null,
+	"locked": false,
+	"manualMapping": null,
+	"mergeContext": false,
+	"packID": "CommonTypes",
+	"packName": "Common Types",
+	"packPropagationLabels": [
+		"all"
+	],
+	"propagationLabels": [],
+	"regex": "(?:(?:\\\\|\\^{3})u[a-f\\d]{4})?(?P\u003clocalpart\u003e[\\p{L}\\d.!#$%\u0026'*+/=?^_\\xe60{}~-][\\p{L}\\d.!#$%\u0026'*+/=?^_\\xe60{|}~-]{0,63})\\[?@]?(?P\u003cdomain\u003e[\\p{L}\\d-]{1,255}(?:\\[?\\.]?(?:[\\p{L}\\d-]{2,}))*(?:\\[?\\.]?(?P\u003ctld\u003e[\\p{L}]{2,})))",
+	"reputationCommand": "email",
+	"reputationScriptName": "",
+	"shouldShareComments": false,
+	"system": true,
+	"toServerVersion": "",
+	"updateAfter": 0,
+	"version": -1
+}
