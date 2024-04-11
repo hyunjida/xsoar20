@@ -1,0 +1,52 @@
+args:
+- description: Value to perform the transformation on.
+  name: value
+  required: true
+- description: DT expression.
+  name: dt
+  required: true
+comment: This automation allows the usage of DT scripts within playbooks transformers
+commonfields:
+  id: DT
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.2.61
+    packID: FiltersAndTransformers
+    packName: Filters And Transformers
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.86272
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: DT
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('DT', 'start', __line__())
+  ### pack version: 1.2.61
+
+
+
+  args = demisto.args()
+  value = args["value"]
+  dt = args["dt"]
+
+  res = demisto.dt(value, dt)
+  return_results(encode_string_results(res))
+
+  register_module_line('DT', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- transformer
+- general
+type: python
