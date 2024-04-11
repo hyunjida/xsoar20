@@ -1,0 +1,354 @@
+{
+	"cacheVersn": 0,
+	"definitionId": "",
+	"fromDate": "0001-01-01T00:00:00Z",
+	"fromDateLicense": "0001-01-01T00:00:00Z",
+	"fromServerVersion": "5.0.0",
+	"hidePivot": false,
+	"hideSearch": false,
+	"id": "health-status-dashboard",
+	"isCommon": true,
+	"itemVersion": "1.33.35",
+	"layout": [
+		{
+			"forceRange": false,
+			"h": 3,
+			"i": "2a235a60-2ead-11e8-be34-cd9a232a8686",
+			"id": "2a235a60-2ead-11e8-be34-cd9a232a8686",
+			"reflectDimensions": false,
+			"w": 2,
+			"widget": {
+				"Cache": null,
+				"cacheVersn": 0,
+				"category": "",
+				"commitMessage": "",
+				"created": "0001-01-01T00:00:00Z",
+				"dataType": "system",
+				"dateRange": {
+					"fromDate": "0001-01-01T00:00:00Z",
+					"fromDateLicense": "0001-01-01T00:00:00Z",
+					"period": {
+						"by": "",
+						"byFrom": "days",
+						"byTo": "",
+						"field": "",
+						"fromValue": 1,
+						"toValue": null
+					},
+					"toDate": "0001-01-01T00:00:00Z"
+				},
+				"definitionId": "",
+				"fromServerVersion": "",
+				"id": "3",
+				"isPredefined": true,
+				"itemVersion": "",
+				"modified": "2018-03-24T00:16:10.634227+09:00",
+				"name": "Disk Used Percentage",
+				"packID": "",
+				"packName": "",
+				"params": {
+					"colors": {
+						"isEnabled": true,
+						"items": {
+							"#00CD33": {
+								"value": -1
+							},
+							"#FAC100": {
+								"value": 50
+							},
+							"#FF1B15": {
+								"value": 80
+							}
+						},
+						"type": "above"
+					},
+					"sign": "%",
+					"signAlignment": "right",
+					"timeFrame": "minutes"
+				},
+				"prevName": "",
+				"query": "disk.usedPercent",
+				"shouldCommit": false,
+				"size": 60,
+				"sizeInBytes": 0,
+				"toServerVersion": "",
+				"vcShouldIgnore": false,
+				"vcShouldKeepItemLegacyProdMachine": false,
+				"version": 1,
+				"widgetType": "number"
+			},
+			"x": 0,
+			"y": 0
+		},
+		{
+			"forceRange": false,
+			"h": 1,
+			"i": "4b2ab4b0-2ead-11e8-be34-cd9a232a8686",
+			"id": "4b2ab4b0-2ead-11e8-be34-cd9a232a8686",
+			"reflectDimensions": false,
+			"w": 5,
+			"widget": {
+				"Cache": null,
+				"cacheVersn": 0,
+				"category": "",
+				"commitMessage": "",
+				"created": "0001-01-01T00:00:00Z",
+				"dataType": "system",
+				"dateRange": {
+					"fromDate": "0001-01-01T00:00:00Z",
+					"fromDateLicense": "0001-01-01T00:00:00Z",
+					"period": {
+						"by": "",
+						"byFrom": "days",
+						"byTo": "",
+						"field": "",
+						"fromValue": 1,
+						"toValue": null
+					},
+					"toDate": "0001-01-01T00:00:00Z"
+				},
+				"definitionId": "",
+				"fromServerVersion": "",
+				"id": "4",
+				"isPredefined": true,
+				"itemVersion": "",
+				"modified": "2018-03-24T00:17:18.728545+09:00",
+				"name": "CPU Use Percentage",
+				"packID": "",
+				"packName": "",
+				"params": {
+					"colors": {
+						"isEnabled": true,
+						"items": {
+							"#00CD33": {
+								"value": -1
+							},
+							"#FAC100": {
+								"value": 50
+							},
+							"#FF1B15": {
+								"value": 80
+							}
+						},
+						"type": "above"
+					},
+					"sign": "%",
+					"signAlignment": "right",
+					"timeFrame": "minutes"
+				},
+				"prevName": "",
+				"query": "cpu.usedPercent",
+				"shouldCommit": false,
+				"size": 60,
+				"sizeInBytes": 0,
+				"toServerVersion": "",
+				"vcShouldIgnore": false,
+				"vcShouldKeepItemLegacyProdMachine": false,
+				"version": 1,
+				"widgetType": "number"
+			},
+			"x": 2,
+			"y": 0
+		},
+		{
+			"forceRange": false,
+			"h": 1,
+			"i": "fbd3e590-2eb0-11e8-be34-cd9a232a8686",
+			"id": "fbd3e590-2eb0-11e8-be34-cd9a232a8686",
+			"reflectDimensions": false,
+			"w": 5,
+			"widget": {
+				"Cache": null,
+				"cacheVersn": 0,
+				"category": "",
+				"commitMessage": "",
+				"created": "0001-01-01T00:00:00Z",
+				"dataType": "system",
+				"dateRange": {
+					"fromDate": "0001-01-01T00:00:00Z",
+					"fromDateLicense": "0001-01-01T00:00:00Z",
+					"period": {
+						"by": "",
+						"byFrom": "minutes",
+						"byTo": "",
+						"field": "",
+						"fromValue": 60,
+						"toValue": null
+					},
+					"toDate": "0001-01-01T00:00:00Z"
+				},
+				"definitionId": "",
+				"fromServerVersion": "",
+				"id": "12",
+				"isPredefined": true,
+				"itemVersion": "",
+				"modified": "2018-03-24T00:43:35.777902+09:00",
+				"name": "Memory Use Percentage",
+				"packID": "",
+				"packName": "",
+				"params": {
+					"colors": {
+						"isEnabled": true,
+						"items": {
+							"#00CD33": {
+								"value": -1
+							},
+							"#FAC100": {
+								"value": 70
+							},
+							"#FF1B15": {
+								"value": 90
+							}
+						},
+						"type": "above"
+					},
+					"sign": "%",
+					"signAlignment": "right",
+					"timeFrame": "minutes"
+				},
+				"prevName": "",
+				"query": "memory.usedPercent",
+				"shouldCommit": false,
+				"size": 61,
+				"sizeInBytes": 0,
+				"toServerVersion": "",
+				"vcShouldIgnore": false,
+				"vcShouldKeepItemLegacyProdMachine": false,
+				"version": 1,
+				"widgetType": "number"
+			},
+			"x": 7,
+			"y": 0
+		},
+		{
+			"forceRange": false,
+			"h": 2,
+			"i": "a9a8aba0-b288-11e8-913c-f7dc2aeedf6e",
+			"id": "a9a8aba0-b288-11e8-913c-f7dc2aeedf6e",
+			"reflectDimensions": false,
+			"w": 5,
+			"widget": {
+				"Cache": null,
+				"cacheVersn": 0,
+				"category": "",
+				"commitMessage": "",
+				"created": "0001-01-01T00:00:00Z",
+				"dataType": "system",
+				"dateRange": {
+					"fromDate": "0001-01-01T00:00:00Z",
+					"fromDateLicense": "0001-01-01T00:00:00Z",
+					"period": {
+						"by": "",
+						"byFrom": "minutes",
+						"byTo": "",
+						"field": "",
+						"fromValue": 60,
+						"toValue": null
+					},
+					"toDate": "0001-01-01T00:00:00Z"
+				},
+				"definitionId": "",
+				"description": "Server CPU usage in the previous 24 hours",
+				"fromServerVersion": "",
+				"id": "cpu-percentage-trend",
+				"isPredefined": true,
+				"itemVersion": "",
+				"modified": "2018-09-07T19:26:12.309081+09:00",
+				"name": "Server CPU Usage % (last 24h)",
+				"packID": "",
+				"packName": "",
+				"params": {
+					"timeFrame": "minutes"
+				},
+				"prevName": "",
+				"query": "cpu.usedPercent",
+				"shouldCommit": false,
+				"size": 1440,
+				"sizeInBytes": 0,
+				"toServerVersion": "",
+				"vcShouldIgnore": false,
+				"vcShouldKeepItemLegacyProdMachine": false,
+				"version": 1,
+				"widgetType": "line"
+			},
+			"x": 2,
+			"y": 1
+		},
+		{
+			"forceRange": false,
+			"h": 2,
+			"i": "b5c9d580-b288-11e8-913c-f7dc2aeedf6e",
+			"id": "b5c9d580-b288-11e8-913c-f7dc2aeedf6e",
+			"reflectDimensions": false,
+			"w": 5,
+			"widget": {
+				"Cache": null,
+				"cacheVersn": 0,
+				"category": "",
+				"commitMessage": "",
+				"created": "0001-01-01T00:00:00Z",
+				"dataType": "system",
+				"dateRange": {
+					"fromDate": "0001-01-01T00:00:00Z",
+					"fromDateLicense": "0001-01-01T00:00:00Z",
+					"period": {
+						"by": "",
+						"byFrom": "minutes",
+						"byTo": "",
+						"field": "",
+						"fromValue": 60,
+						"toValue": null
+					},
+					"toDate": "0001-01-01T00:00:00Z"
+				},
+				"definitionId": "",
+				"description": "Server memory usage % (previous 24 hours)",
+				"fromServerVersion": "",
+				"id": "memory-percentage-trend",
+				"isPredefined": true,
+				"itemVersion": "",
+				"modified": "2018-09-07T19:26:12.335105+09:00",
+				"name": "Server Memory Usage % (last 24h)",
+				"packID": "",
+				"packName": "",
+				"params": {
+					"timeFrame": "minutes"
+				},
+				"prevName": "",
+				"query": "memory.usedPercent",
+				"shouldCommit": false,
+				"size": 1440,
+				"sizeInBytes": 0,
+				"toServerVersion": "",
+				"vcShouldIgnore": false,
+				"vcShouldKeepItemLegacyProdMachine": false,
+				"version": 1,
+				"widgetType": "line"
+			},
+			"x": 7,
+			"y": 1
+		}
+	],
+	"locked": false,
+	"modulePage": false,
+	"name": "System Health",
+	"owner": "",
+	"packID": "Base",
+	"packName": "Base",
+	"packPropagationLabels": [
+		"all"
+	],
+	"period": {
+		"by": "",
+		"byFrom": "minutes",
+		"byTo": "days",
+		"field": "",
+		"fromValue": 60,
+		"toValue": 0
+	},
+	"propagationLabels": [],
+	"system": true,
+	"toDate": "0001-01-01T00:00:00Z",
+	"toServerVersion": "",
+	"version": -1
+}
