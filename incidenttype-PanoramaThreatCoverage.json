@@ -1,0 +1,40 @@
+{
+	"autorun": false,
+	"cacheVersn": 0,
+	"closureScript": "",
+	"color": "#b02c83",
+	"days": 0,
+	"daysR": 0,
+	"default": false,
+	"definitionId": "",
+	"detached": false,
+	"disabled": false,
+	"extractSettings": {
+		"fieldCliNameToExtractSettings": {},
+		"mode": "All"
+	},
+	"fromServerVersion": "5.0.0",
+	"hours": 0,
+	"hoursR": 0,
+	"id": "PanoramaThreatCoverage",
+	"itemVersion": "2.1.22",
+	"layout": "Panorama Threat Coverage Layout",
+	"locked": false,
+	"name": "PanoramaThreatCoverage",
+	"onChangeRepAlg": 1,
+	"packID": "PAN-OS",
+	"packName": "PAN-OS by Palo Alto Networks",
+	"packPropagationLabels": [
+		"all"
+	],
+	"playbookId": "NetOps Panorama coverage by CVE",
+	"preProcessingScript": "",
+	"propagationLabels": [],
+	"readonly": false,
+	"reputationCalc": 0,
+	"system": true,
+	"toServerVersion": "",
+	"version": -1,
+	"weeks": 0,
+	"weeksR": 0
+}
