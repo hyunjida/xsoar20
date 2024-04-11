@@ -1,0 +1,112 @@
+args:
+- description: Incident ID to copy notes to.
+  name: target_incident
+  required: true
+- auto: PREDEFINED
+  defaultValue: "true"
+  description: Whether auto extract the indicators from the notes.
+  name: auto_extract
+  predefined:
+  - "true"
+  - "false"
+- description: Replicate only notes with these tags (array or comma separated).
+  isArray: true
+  name: tags
+comment: Copy all entries marked as notes from current incident to another incident.
+commonfields:
+  id: CopyNotesToIncident
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.86272
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: CopyNotesToIncident
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('CopyNotesToIncident', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+
+
+  from typing import Any
+  import traceback
+
+  ''' STANDALONE FUNCTION '''
+
+
+  def remove_id_and_version_from_entry(entry):
+      entry.pop('ID', None)
+      entry.pop('Version', None)
+
+
+  def copy_notes_to_target_incident(args: dict[str, Any]) -> CommandResults:
+
+      target_incident = args.get('target_incident', None)
+      if not target_incident:
+          raise ValueError('Target Incident ID not specified')
+
+      tags = argToList(args.get('tags'))
+      auto_extract = args.get('auto_extract', False)
+      auto_extract_value = "none" if not auto_extract else "inline"
+      entries = demisto.executeCommand('getEntries', {'filter': {'tags': tags, "auto_extract": auto_extract_value}})
+
+      note_entries: list = []
+      md: str = ''
+
+      if isinstance(entries, list) and len(entries) > 0:
+          for entry in entries:
+              if entry.get('Note') is True:
+                  remove_id_and_version_from_entry(entry)
+                  note_entries.append(entry)
+
+          if len(note_entries) > 0:
+              demisto.executeCommand("addEntries", {"id": target_incident,
+                                                    "entries": note_entries,
+                                                    "auto_extract": auto_extract_value})
+              md = f'## {len(note_entries)} notes copied'
+          else:
+              md = '## No notes found'
+      else:
+          md = '## No notes found'
+
+      return CommandResults(readable_output=md)
+
+
+  ''' MAIN FUNCTION '''
+
+
+  def main():
+      try:
+          return_results(copy_notes_to_target_incident(demisto.args()))
+      except Exception as ex:
+          demisto.error(traceback.format_exc())  # print the traceback
+          return_error(f'Failed to execute CopyNotesToIncident. Error: {str(ex)}')
+
+
+  ''' ENTRY POINT '''
+
+
+  if __name__ in ('__main__', '__builtin__', 'builtins'):
+      main()
+
+  register_module_line('CopyNotesToIncident', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags: []
+type: python
