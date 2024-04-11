@@ -1,0 +1,628 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.8.0
+    itemVersion: 2.6.15
+    packID: CommonPlaybooks
+    packName: Common Playbooks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: This playbook provides a generic enrichment of AWS, GCP, and Azure compute
+  resources.
+id: Cloud Compute Enrichment - Generic
+inputs:
+- description: The cloud provider involved.
+  key: cloudProvider
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: The instance name.
+  key: instanceName
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: The instance ID.
+  key: instanceID
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: The zone holding the instance.
+  key: zone
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: The region holding the instance.
+  key: region
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: The instance's resource group.
+  key: azureResourceGroup
+  playbookInputQuery: null
+  required: false
+  value: {}
+name: Cloud Compute Enrichment - Generic
+outputs:
+- contextPath: AWS.EC2.Instances
+  description: The instances.
+  type: unknown
+- contextPath: AWS.EC2.Instances.Monitoring
+  description: The monitoring for the instance.
+  type: unknown
+- contextPath: AWS.EC2.Instances.State
+  description: The current state of the instance.
+  type: unknown
+- contextPath: AWS.EC2.Instances.IamInstanceProfile
+  description: The IAM instance profile associated with the instance, if applicable.
+  type: unknown
+- contextPath: AWS.EC2.Instances.NetworkInterfaces
+  description: The network interfaces for the instance.
+  type: unknown
+- contextPath: AWS.EC2.Instances.NetworkInterfaces.PrivateIpAddresses
+  description: The private IPv4 addresses associated with the network interface.
+  type: unknown
+- contextPath: AWS.EC2.Instances.SecurityGroups
+  description: The security groups for the instance.
+  type: unknown
+- contextPath: AWS.EC2.Instances.StateReason
+  description: The reason for the most recent state transition.
+  type: unknown
+- contextPath: AWS.EC2.Instances.Tags
+  description: Any tags assigned to the instance.
+  type: unknown
+- contextPath: GoogleCloudCompute.Instances
+  description: The instances.
+  type: unknown
+- contextPath: GoogleCloudCompute.Instances.tags
+  description: Tags to apply to this instance. Tags are used to identify valid sources
+    or targets for network firewalls and are specified by the client during instance
+    creation. The tags can be later modified by the setTags method. Each tag within
+    the list must comply with RFC1035. Multiple tags can be specified via the tags.items
+    field.
+- contextPath: GoogleCloudCompute.Instances.networkInterfaces
+  description: An array of network configurations for this instance. These specify
+    how interfaces are configured to interact with other network services, such as
+    connecting to the internet. Multiple interfaces are supported per instance.
+- contextPath: GoogleCloudCompute.Instances.networkInterfaces.aliasIpRanges
+  description: An array of alias IP ranges for this network interface. Can only be
+    specified for network interfaces on subnet-mode networks.
+- contextPath: GoogleCloudCompute.Instances.disks
+  description: Array of disks associated with this instance. Persistent disks must
+    be created before you can assign them.
+- contextPath: GoogleCloudCompute.Instances.disks.initializeParams
+  description: Specifies the parameters for a new disk that will be created alongside
+    the new instance. Use initialization parameters to create boot disks or local
+    SSDs attached to the new instance.
+- contextPath: GoogleCloudCompute.Instances.disks.initializeParams.sourceImageEncryptionKey
+  description: The customer-supplied encryption key of the source image. Required
+    if the source image is protected by a customer-supplied encryption key.
+- contextPath: GoogleCloudCompute.Instances.disks.initializeParams.labels
+  description: Labels to apply to this disk. These can be later modified by the disks.setLabels
+    method. This field is only applicable for persistent disks.
+- contextPath: GoogleCloudCompute.Instances.disks.guestOsFeatures
+  description: A list of features to enable on the guest operating system. Applicable
+    only for bootable images. Read Enabling guest operating system features to see
+    a list of available options.
+- contextPath: GoogleCloudCompute.Instances.disks.diskEncryptionKey
+  description: Encrypts or decrypts a disk using a customer-supplied encryption key.
+- contextPath: GoogleCloudCompute.Instances.metadata
+  description: The metadata key/value pairs assigned to this instance. This includes
+    custom metadata and predefined keys.
+- contextPath: GoogleCloudCompute.Instances.metadata.items
+  description: Array of key/value pairs. The total size of all keys and values must
+    be less than 512 KB.
+- contextPath: GoogleCloudCompute.Instances.serviceAccounts
+  description: A list of service accounts, with their specified scopes, authorized
+    for this instance. Only one service account per VM instance is supported.
+- contextPath: GoogleCloudCompute.Instances.scheduling
+  description: Sets the scheduling options for this instance.
+- contextPath: GoogleCloudCompute.Instances.scheduling.nodeAffinities
+  description: A set of node affinity and anti-affinity.
+- contextPath: GoogleCloudCompute.Instances.labels
+  description: Labels to apply to this instance. These can be later modified by the
+    setLabels method.
+- contextPath: GoogleCloudCompute.Instances.guestAccelerators
+  description: A list of the type and count of accelerator cards attached to the instance.
+- contextPath: Azure.Compute
+  description: The VMs.
+  type: unknown
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "1"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 3f8e7f67-8491-49fb-89db-2727f1841b18
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: 3f8e7f67-8491-49fb-89db-2727f1841b18
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 50
+        }
+      }
+  "1":
+    conditions:
+    - condition:
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.cloudProvider
+          operator: isEqualString
+          right:
+            value:
+              simple: AWS
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                accessor: state
+                filters:
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: AWS - IAM
+                root: modules
+          operator: isEqualString
+          right:
+            value:
+              simple: active
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.instanceID
+          operator: isNotEmpty
+      label: AWS
+    - condition:
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.cloudProvider
+          operator: isEqualString
+          right:
+            value:
+              simple: Azure
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                accessor: state
+                filters:
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: MicrosoftGraphIdentityandAccess
+                root: modules
+          operator: isEqualString
+          right:
+            value:
+              simple: active
+        - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                accessor: state
+                filters:
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: Microsoft Graph Groups
+                root: modules
+          operator: isEqualString
+          right:
+            value:
+              simple: active
+        - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                accessor: state
+                filters:
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: Microsoft Graph User
+                root: modules
+          operator: isEqualString
+          right:
+            value:
+              simple: active
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.instanceName
+          operator: isNotEmpty
+      label: Azure
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.cloudProvider
+          operator: isEqualString
+          right:
+            value:
+              simple: GCP
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                accessor: state
+                filters:
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: GSuiteAdmin
+                root: modules
+          operator: isEqualString
+          right:
+            value:
+              simple: active
+        - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                accessor: state
+                filters:
+                - - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: modules.brand
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: GCP-IAM
+                root: modules
+          operator: isEqualString
+          right:
+            value:
+              simple: active
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.instanceName
+          operator: isNotEmpty
+      label: GCP
+    continueonerrortype: ""
+    id: "1"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "9"
+      AWS:
+      - "3"
+      Azure:
+      - "2"
+      GCP:
+      - "4"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Checks the cloud provider.
+      id: ae4cee68-df82-4603-87cb-e79445256411
+      iscommand: false
+      name: Select cloud provider
+      type: condition
+      version: -1
+    taskid: ae4cee68-df82-4603-87cb-e79445256411
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 180
+        }
+      }
+  "2":
+    continueonerrortype: ""
+    id: "2"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "8"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 1439edfd-f3a0-4047-871b-1f1d48d53728
+      iscommand: false
+      name: 'Azure Enrichment '
+      type: title
+      version: -1
+    taskid: 1439edfd-f3a0-4047-871b-1f1d48d53728
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 10,
+          "y": 390
+        }
+      }
+  "3":
+    continueonerrortype: ""
+    id: "3"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "5"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 5c4e9bb3-a12e-441f-8f45-3af3f4ed10ce
+      iscommand: false
+      name: AWS Enrichment
+      type: title
+      version: -1
+    taskid: 5c4e9bb3-a12e-441f-8f45-3af3f4ed10ce
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 390
+        }
+      }
+  "4":
+    continueonerrortype: ""
+    id: "4"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "7"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: eab4ac86-7bbd-415d-820b-d2bd7d6a502c
+      iscommand: false
+      name: GCP Enrichment
+      type: title
+      version: -1
+    taskid: eab4ac86-7bbd-415d-820b-d2bd7d6a502c
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 890,
+          "y": 390
+        }
+      }
+  "5":
+    continueonerrortype: ""
+    id: "5"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "9"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      instanceIds:
+        complex:
+          root: inputs.instanceID
+      region:
+        complex:
+          root: inputs.region
+    separatecontext: false
+    skipunavailable: true
+    task:
+      brand: ""
+      description: Describes one or more of your instances.
+      id: d24e7a76-18aa-49e5-8190-de87e42077ec
+      iscommand: true
+      name: Get instance details
+      script: '|||aws-ec2-describe-instances'
+      type: regular
+      version: -1
+    taskid: d24e7a76-18aa-49e5-8190-de87e42077ec
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 520
+        }
+      }
+  "7":
+    continueonerrortype: ""
+    id: "7"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "9"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      instance:
+        complex:
+          root: inputs.instanceName
+      zone:
+        complex:
+          root: inputs.zone
+    separatecontext: false
+    skipunavailable: true
+    task:
+      brand: ""
+      description: Returns the specified Instance resource. Gets a list of available
+        instances by making a list() request.
+      id: f16ac6d2-41ab-4b1e-8929-03d9b58302ac
+      iscommand: true
+      name: Get instance details
+      script: '|||gcp-compute-get-instance'
+      type: regular
+      version: -1
+    taskid: f16ac6d2-41ab-4b1e-8929-03d9b58302ac
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 890,
+          "y": 520
+        }
+      }
+  "8":
+    continueonerrortype: ""
+    id: "8"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "9"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      resource_group:
+        complex:
+          root: inputs.azureResourceGroup
+      virtual_machine_name:
+        complex:
+          root: inputs.instanceName
+    separatecontext: false
+    skipunavailable: true
+    task:
+      brand: ""
+      description: Gets the properties of a given virtual machine.
+      id: 8432e791-c422-43da-8a8b-19ee2d20a26c
+      iscommand: true
+      name: Get instance details
+      script: '|||azure-vm-get-instance-details'
+      type: regular
+      version: -1
+    taskid: 8432e791-c422-43da-8a8b-19ee2d20a26c
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 10,
+          "y": 520
+        }
+      }
+  "9":
+    continueonerrortype: ""
+    id: "9"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 223fe0e9-f4d8-473f-8eb5-2144fe1d244e
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 223fe0e9-f4d8-473f-8eb5-2144fe1d244e
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 690
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 705,
+        "width": 1260,
+        "x": 10,
+        "y": 50
+      }
+    }
+  }
