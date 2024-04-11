@@ -1,0 +1,85 @@
+args:
+- default: true
+  description: 'Input date or time in a format that is supported by the dateparser.parse()
+    function as outlined here- https://dateparser.readthedocs.io/en/latest/#popular-formats.
+    For example: ''2020-01-01'' or ''1999/02/03 12:01:59''.'
+  name: value
+  required: true
+- description: 'Variation of time (for example: ''in 1 day'', or ''3 months ago'').
+    Must be supported by the dateparser.parse() function here - https://dateparser.readthedocs.io/en/latest/#relative-dates'
+  name: variation
+  required: true
+comment: Takes a date or time input and adds or subtracts a determined amount of time.
+  Returns a string in date or time in ISO Format.
+commonfields:
+  id: ModifyDateTime
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.2.61
+    packID: FiltersAndTransformers
+    packName: Filters And Transformers
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.83255
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: ModifyDateTime
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('ModifyDateTime', 'start', __line__())
+  ### pack version: 1.2.61
+
+
+
+
+  import dateparser
+  from typing import Optional
+
+
+  def apply_variation(original_datetime: datetime, variation: str) -> Optional[datetime]:
+      try:
+          new_time = dateparser.parse(variation, settings={'RELATIVE_BASE': original_datetime})
+          assert new_time is not None, f'could not parse {variation}'
+          new_time = new_time.replace(tzinfo=original_datetime.tzinfo)
+      except Exception as err:
+          return_error(f"Error adding variation to the date / time - {err}")
+
+      return new_time
+
+
+  def main():
+      args = demisto.args()
+      value = args.get('value')
+      try:
+          original_datetime = dateparser.parse(value)
+      except Exception as err:
+          return_error(f"Error with input date / time - {err}")
+
+      variation = args.get('variation')
+      new_time = apply_variation(original_datetime, variation)  # type: ignore
+      if isinstance(new_time, datetime):
+          return_results(new_time.isoformat())
+      else:
+          return_error('Invalid variation specified')
+
+
+  if __name__ in ('__main__', 'builtin', 'builtins'):
+      main()
+
+  register_module_line('ModifyDateTime', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- transformer
+- date
+type: python
