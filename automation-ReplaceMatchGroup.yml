@@ -1,0 +1,76 @@
+args:
+- description: An array of email addresses to be filtered by domain.
+  name: value
+  required: true
+- description: A regex pattern who's groups to be replaced by the replaceWith argument.
+  name: regex
+  required: true
+- description: The replacement string.
+  name: replace_with
+  required: true
+comment: Returns a string with all matches of a regex pattern groups replaced by a
+  replacement.
+commonfields:
+  id: ReplaceMatchGroup
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.83255
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: ReplaceMatchGroup
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('ReplaceMatchGroup', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+  import re
+
+
+  def main(args):
+      value = args['value']
+      replace_with = args['replace_with']
+      output = list()
+      start = 0
+
+      try:
+          regex = re.compile(args['regex'])
+      except (re.error, TypeError):
+          raise DemistoException('Could not compile regex.')
+
+      for match in regex.finditer(value):
+          for index, _ in enumerate(match.groups(), start=1):
+              end = match.start(index)
+              output.append(value[start:end])
+              output.append(replace_with)
+              start = match.end(index)
+      output.append(value[start:])  # Handling the tail of the string
+
+      return ''.join(output)
+
+
+  if __name__ in ["__builtin__", "builtins", "__main__"]:
+      result = main(demisto.args())
+      demisto.results(result)
+
+  register_module_line('ReplaceMatchGroup', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- transformer
+type: python
