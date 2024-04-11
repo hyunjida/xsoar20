@@ -1,0 +1,409 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.5.0
+    itemVersion: 2.6.15
+    packID: CommonPlaybooks
+    packName: Common Playbooks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: This playbook checks whether a file has an extension that supports unzipping,
+  and unzips the file.
+id: Unzip File
+inputs:
+- description: A file object.
+  key: File
+  playbookInputQuery: null
+  required: false
+  value:
+    complex:
+      root: File
+- description: The password used to protect the zipped file. Required for unzipping
+    password-protected files.
+  key: Password
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: 'The tool used to unzip the file. The options are: 7z, zipfile.'
+  key: ZipTool
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: 7z
+name: Unzip File
+outputs:
+- contextPath: ExtractedFiles
+  description: Files that were unzipped.
+  type: unknown
+- contextPath: File
+  description: File objects - includes the zipped file and any unzipped files.
+  type: unknown
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "3"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 1a15af2c-7e11-4bd8-8011-08b69036846c
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: 1a15af2c-7e11-4bd8-8011-08b69036846c
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 50
+        }
+      }
+  "2":
+    continueonerrortype: ""
+    id: "2"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "8"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 2bd8c6c6-8e56-428a-8dd8-e4e05dd8f6fa
+      iscommand: false
+      name: No File / Unsupported File
+      type: title
+      version: -1
+    taskid: 2bd8c6c6-8e56-428a-8dd8-e4e05dd8f6fa
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": -10,
+          "y": 525
+        }
+      }
+  "3":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                filters:
+                - - left:
+                      iscontext: true
+                      value:
+                        simple: inputs.File.Extension
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: 7z
+                  - left:
+                      iscontext: true
+                      value:
+                        simple: inputs.File.Extension
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: gzip
+                  - left:
+                      iscontext: true
+                      value:
+                        simple: inputs.File.Extension
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: tar
+                  - left:
+                      iscontext: true
+                      value:
+                        simple: inputs.File.Extension
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: zip
+                  - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: inputs.File.Extension
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: rar
+                  - ignorecase: true
+                    left:
+                      iscontext: true
+                      value:
+                        simple: inputs.File.Extension
+                    operator: isEqualString
+                    right:
+                      value:
+                        simple: gz
+                root: inputs.File
+          operator: isNotEmpty
+          right:
+            value: {}
+      label: "yes"
+    continueonerrortype: ""
+    id: "3"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "2"
+      "yes":
+      - "7"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: 'Checks whether there is a zipped file in the incident. The following
+        extensions are checked: 7z, gzip, tar, zip.'
+      id: c5f41b44-aa87-40bb-81d7-16d14591a0b3
+      iscommand: false
+      name: Is there a zipped file?
+      type: condition
+      version: -1
+    taskid: c5f41b44-aa87-40bb-81d7-16d14591a0b3
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 190
+        }
+      }
+  "4":
+    continueonerrortype: ""
+    id: "4"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "8"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      entryID:
+        complex:
+          accessor: EntryID
+          root: ZipFile
+          transformers:
+          - operator: uniq
+      nonsensitive_password:
+        complex:
+          root: inputs.Password
+      zipTool:
+        complex:
+          root: inputs.ZipTool
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Unzip a file using fileName or entryID to specify a file. Unzipped
+        files will be loaded to the War Room and names will be put into the context.
+      id: a0822541-24c7-4c65-86f3-6afc288bbb2e
+      iscommand: false
+      name: Unzip file
+      script: UnzipFile
+      type: regular
+      version: -1
+    taskid: a0822541-24c7-4c65-86f3-6afc288bbb2e
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 690
+        }
+      }
+  "5":
+    continueonerrortype: ""
+    id: "5"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "4"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      key:
+        simple: ZipFile
+      value:
+        complex:
+          filters:
+          - - left:
+                iscontext: true
+                value:
+                  simple: inputs.File.Extension
+              operator: isEqualString
+              right:
+                value:
+                  simple: 7z
+            - left:
+                iscontext: true
+                value:
+                  simple: inputs.File.Extension
+              operator: isEqualString
+              right:
+                value:
+                  simple: gzip
+            - left:
+                iscontext: true
+                value:
+                  simple: inputs.File.Extension
+              operator: isEqualString
+              right:
+                value:
+                  simple: tar
+            - left:
+                iscontext: true
+                value:
+                  simple: inputs.File.Extension
+              operator: isEqualString
+              right:
+                value:
+                  simple: zip
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.File.Extension
+              operator: isEqualString
+              right:
+                value:
+                  simple: rar
+            - ignorecase: true
+              left:
+                iscontext: true
+                value:
+                  simple: inputs.File.Extension
+              operator: isEqualString
+              right:
+                value:
+                  simple: gz
+          root: inputs.File
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Set a value in context under the key you entered.
+      id: ee6e7c90-b233-4a54-8600-8f5e531fb4bd
+      iscommand: false
+      name: Save zip file in a separate key
+      script: Set
+      type: regular
+      version: -1
+    taskid: ee6e7c90-b233-4a54-8600-8f5e531fb4bd
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 510
+        }
+      }
+  "7":
+    continueonerrortype: ""
+    id: "7"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "5"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 51a28574-428c-401e-8ddf-608584b2190d
+      iscommand: false
+      name: Zip Extraction
+      type: title
+      version: -1
+    taskid: 51a28574-428c-401e-8ddf-608584b2190d
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 370
+        }
+      }
+  "8":
+    continueonerrortype: ""
+    id: "8"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 5cc5f04e-34dd-490b-8d2c-370404c650d6
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 5cc5f04e-34dd-490b-8d2c-370404c650d6
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 870
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {
+      "3_2_#default#": 0.46,
+      "3_7_yes": 0.53
+    },
+    "paper": {
+      "dimensions": {
+        "height": 885,
+        "width": 840,
+        "x": -10,
+        "y": 50
+      }
+    }
+  }
