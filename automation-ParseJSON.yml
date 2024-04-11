@@ -1,0 +1,44 @@
+args:
+- default: true
+  description: The string value to convert to JSON.
+  name: value
+  required: true
+comment: 'Parse a given JSON string "value" to a representative object. Example: ''{"a":
+  "value"}'' => {"a": "value"}.'
+commonfields:
+  id: ParseJSON
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.2.61
+    packID: FiltersAndTransformers
+    packName: Filters And Transformers
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: ParseJSON
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  // pack version: 1.2.61
+  var value = args.value;
+  try {
+    return JSON.parse(value);
+  } catch(err) {
+    return err;
+  }
+  return null;
+scripttarget: 0
+system: true
+tags:
+- transformer
+- string
+type: javascript
