@@ -1,0 +1,597 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.10.0
+    itemVersion: 2.6.15
+    packID: CommonPlaybooks
+    packName: Common Playbooks
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: |-
+  Retrieves the owners of a cloud account based on account ID.
+  Current supported platforms:
+  - GCP
+  - Prisma Cloud.
+id: Get Cloud Account Owner - Generic
+inputs:
+- description: The account ID to search the owner for.
+  key: AccountID
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: |-
+    The account CSP.
+    Available options:
+    - PrismaCloud
+    - GCP
+  key: Provider
+  playbookInputQuery: null
+  required: false
+  value: {}
+name: Get Cloud Account Owner - Generic
+outputs:
+- contextPath: CloudAccountOwner
+  description: The owner's email, if found.
+  type: unknown
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "1"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: c935bfae-c976-43ee-8274-70156b9278f2
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: c935bfae-c976-43ee-8274-70156b9278f2
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": -60
+        }
+      }
+  "1":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.AccountID
+          operator: isNotEmpty
+          right:
+            value: {}
+      label: "yes"
+    continueonerrortype: ""
+    id: "1"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "8"
+      "yes":
+      - "13"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: dc9e08e9-916e-44d0-8432-9a604273de39
+      iscommand: false
+      name: Is there an account ID?
+      type: condition
+      version: -1
+    taskid: dc9e08e9-916e-44d0-8432-9a604273de39
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 90
+        }
+      }
+  "3":
+    conditions:
+    - condition:
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.Provider
+          operator: isEqualString
+          right:
+            value:
+              simple: GCP
+      label: GCP
+    - condition:
+      - - ignorecase: true
+          left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.Provider
+          operator: isEqualString
+          right:
+            value:
+              simple: PrismaCloud
+      label: Prisma Cloud
+    continueonerrortype: ""
+    id: "3"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "8"
+      GCP:
+      - "6"
+      Prisma Cloud:
+      - "9"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: c5fbe8bf-5366-4f91-8a7e-570e660ad593
+      iscommand: false
+      name: Check CSP
+      type: condition
+      version: -1
+    taskid: c5fbe8bf-5366-4f91-8a7e-570e660ad593
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 520
+        }
+      }
+  "4":
+    continueonerrortype: ""
+    id: "4"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "5"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      project_name:
+        simple: projects/${inputs.AccountID}
+    separatecontext: false
+    skipunavailable: true
+    task:
+      brand: ""
+      description: Retrieves the IAM access control policy for the specified project.
+      id: 812e2d22-75d6-4a66-8726-fc46b7964d9a
+      iscommand: true
+      name: GCP - get project's policy
+      script: '|||gcp-iam-project-iam-policy-get'
+      type: regular
+      version: -1
+    taskid: 812e2d22-75d6-4a66-8726-fc46b7964d9a
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -180,
+          "y": 1210
+        }
+      }
+  "5":
+    continueonerrortype: ""
+    id: "5"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "8"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      key:
+        simple: CloudAccountOwner
+      value:
+        complex:
+          accessor: members
+          filters:
+          - - left:
+                iscontext: true
+                value:
+                  simple: GCPIAM.Policy.bindings.role
+              operator: isEqualString
+              right:
+                value:
+                  simple: roles/owner
+          root: GCPIAM.Policy.bindings
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: |-
+        Set a value in context under the key you entered. If no value is entered, the script doesn't do anything.
+
+        This automation runs using the default Limited User role, unless you explicitly change the permissions.
+        For more information, see the section about permissions here:
+        https://docs-cortex.paloaltonetworks.com/r/Cortex-XSOAR/6.12/Cortex-XSOAR-Administrator-Guide/Automations
+      id: 41bba9c6-e8d1-497f-87b3-3afb623c8204
+      iscommand: false
+      name: Set owner
+      script: SetAndHandleEmpty
+      type: regular
+      version: -1
+    taskid: 41bba9c6-e8d1-497f-87b3-3afb623c8204
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -180,
+          "y": 1400
+        }
+      }
+  "6":
+    continueonerrortype: ""
+    id: "6"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "7"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      project_name:
+        simple: projects/${inputs.AccountID}
+    separatecontext: false
+    skipunavailable: true
+    task:
+      brand: ""
+      description: 'Lists project under the specified parent, or retrieves a specific
+        project''s information. One of the following arguments must be provided: "parent"
+        or "project_name".'
+      id: e1035ce5-63ee-4801-854b-8c9871d780b9
+      iscommand: true
+      name: Get project
+      script: '|||gcp-iam-projects-get'
+      type: regular
+      version: -1
+    taskid: e1035ce5-63ee-4801-854b-8c9871d780b9
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": -180,
+          "y": 790
+        }
+      }
+  "7":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: projectId
+                root: GCPIAM.Project
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "7"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "8"
+      "yes":
+      - "4"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 3ae5ad32-e46a-41a1-801a-ea32a2c5649d
+      iscommand: false
+      name: Project found?
+      type: condition
+      version: -1
+    taskid: 3ae5ad32-e46a-41a1-801a-ea32a2c5649d
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": -180,
+          "y": 990
+        }
+      }
+  "8":
+    continueonerrortype: ""
+    id: "8"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: ebc83fc6-88ee-41df-84ca-c08567bd1214
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: ebc83fc6-88ee-41df-84ca-c08567bd1214
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 1620
+        }
+      }
+  "9":
+    continueonerrortype: ""
+    id: "9"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "10"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      all_results:
+        simple: "true"
+      extend-context:
+        simple: PCAccounts=accountId
+      ignore-outputs:
+        simple: "true"
+    separatecontext: false
+    skipunavailable: true
+    task:
+      brand: ""
+      description: List accounts.
+      id: afa1d5ed-0c22-4b0c-8914-441882478c02
+      iscommand: true
+      name: List Prisma Cloud Accounts
+      script: '|||prisma-cloud-account-list'
+      type: regular
+      version: -1
+    taskid: afa1d5ed-0c22-4b0c-8914-441882478c02
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 280,
+          "y": 790
+        }
+      }
+  "10":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.AccountID
+          operator: in
+          right:
+            iscontext: true
+            value:
+              complex:
+                root: PCAccounts
+      label: "yes"
+    continueonerrortype: ""
+    id: "10"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "8"
+      "yes":
+      - "11"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 8553270b-6049-4971-8b80-3de9702448e3
+      iscommand: false
+      name: Account found?
+      type: condition
+      version: -1
+    taskid: 8553270b-6049-4971-8b80-3de9702448e3
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 280,
+          "y": 990
+        }
+      }
+  "11":
+    continueonerrortype: ""
+    id: "11"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "12"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      account_ids:
+        complex:
+          root: inputs.AccountID
+    separatecontext: false
+    skipunavailable: true
+    task:
+      brand: ""
+      description: Get the owners of the provided accounts.
+      id: e5925130-f7d9-4042-8bc5-188d0a74cdc5
+      iscommand: true
+      name: Get account owner
+      script: '|||prisma-cloud-account-owner-list'
+      type: regular
+      version: -1
+    taskid: e5925130-f7d9-4042-8bc5-188d0a74cdc5
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 280,
+          "y": 1210
+        }
+      }
+  "12":
+    continueonerrortype: ""
+    id: "12"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "8"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      key:
+        simple: CloudAccountOwner
+      value:
+        complex:
+          accessor: emails
+          root: PrismaCloud.Account
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: |-
+        Set a value in context under the key you entered. If no value is entered, the script doesn't do anything.
+
+        This automation runs using the default Limited User role, unless you explicitly change the permissions.
+        For more information, see the section about permissions here:
+        https://docs-cortex.paloaltonetworks.com/r/Cortex-XSOAR/6.12/Cortex-XSOAR-Administrator-Guide/Automations
+      id: 93e48465-cb9e-4f9f-87f8-12750dda30f3
+      iscommand: false
+      name: Set owner
+      script: SetAndHandleEmpty
+      type: regular
+      version: -1
+    taskid: 93e48465-cb9e-4f9f-87f8-12750dda30f3
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 280,
+          "y": 1400
+        }
+      }
+  "13":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.Provider
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "13"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "6"
+      - "9"
+      "yes":
+      - "3"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 320b2294-4133-420c-844c-9fbce6c21bf7
+      iscommand: false
+      name: Is there a provider?
+      type: condition
+      version: -1
+    taskid: 320b2294-4133-420c-844c-9fbce6c21bf7
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 290
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {
+      "10_11_yes": 0.48,
+      "10_8_#default#": 0.17,
+      "13_3_yes": 0.42,
+      "1_13_yes": 0.45,
+      "1_8_#default#": 0.1,
+      "3_6_GCP": 0.33,
+      "3_8_#default#": 0.13,
+      "3_9_Prisma Cloud": 0.31,
+      "7_4_yes": 0.66,
+      "7_8_#default#": 0.18
+    },
+    "paper": {
+      "dimensions": {
+        "height": 1745,
+        "width": 840,
+        "x": -180,
+        "y": -60
+      }
+    }
+  }
