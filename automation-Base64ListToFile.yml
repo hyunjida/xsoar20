@@ -1,0 +1,102 @@
+args:
+- description: List Name of Base64 item (need to be a single file in list)
+  name: listname
+  required: true
+- description: Optional Warroom Output Filename (default filename is list name)
+  name: filename
+- auto: PREDEFINED
+  defaultValue: "no"
+  description: Is data compressed (zip format)?
+  name: isZipFile
+  predefined:
+  - "yes"
+  - "no"
+comment: Converts Base64 file in a list to a binary file and upload to warroom
+commonfields:
+  id: Base64ListToFile
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 5.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.86272
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: Base64ListToFile
+outputs:
+- contextPath: File.Name
+  description: Filename (only in case of report type=json)
+- contextPath: File.Type
+  description: File type e.g. "PE" (only in case of report type=json)
+- contextPath: File.Size
+  description: File size (only in case of report type=json)
+- contextPath: File.MD5
+  description: MD5 hash of the file (only in case of report type=json)
+- contextPath: File.SHA1
+  description: SHA1 hash of the file (only in case of report type=json)
+- contextPath: File.SHA256
+  description: SHA256 hash of the file (only in case of report type=json)
+- contextPath: File.EntryID
+  description: EntryID of the file (only in case of report type=json)
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('Base64ListToFile', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+  import base64
+  import zlib
+
+
+  def base64_list_to_file(args):
+      # Output file name
+      if 'filename' in args:
+          outfilename = args['filename']
+      else:
+          outfilename = args['listname']
+
+      # get the list
+      res = demisto.executeCommand('getList', {'listName': args['listname']})
+      res = res[0]
+      if is_error(res):
+          raise DemistoException("error reading list %s from demisto" % args['listname'])
+
+      # convert base64 file to binary file
+      bin_file = base64.decodebytes(bytes(res['Contents'], 'utf-8'))
+      if args.get('isZipFile', 'no') == 'yes':
+          bin_file = zlib.decompress(bin_file)
+
+      # output file to warroom
+      return fileResult(outfilename, bin_file)
+
+
+  def main():
+      try:
+          file_entry = base64_list_to_file(demisto.args())
+          return_results(file_entry)
+      except DemistoException as ex:
+          return_error(ex.message)
+
+
+  if __name__ in ["__builtin__", "builtins"]:
+      main()
+
+  register_module_line('Base64ListToFile', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- list
+- Utility
+type: python
