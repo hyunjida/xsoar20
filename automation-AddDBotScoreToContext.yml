@@ -1,0 +1,87 @@
+args:
+- description: The indicator value (ex 1.1.1.1)
+  name: indicator
+  required: true
+- description: The indicator type (ex ip, url, email, domain)
+  name: indicatorType
+  required: true
+- description: The indicator score
+  name: score
+  required: true
+- description: The vendor to assign to this DBotScoreEntry
+  name: vendor
+  required: true
+- auto: PREDEFINED
+  description: The reputation reliability
+  name: reliability
+  predefined:
+  - A+ - 3rd party enrichment
+  - A - Completely reliable
+  - B - Usually reliable
+  - C - Fairly reliable
+  - D - Not usually reliable
+  - E - Unreliable
+  - F - Reliability cannot be judged
+comment: Add DBot score to context for indicators with custom vendor, score, reliability,
+  and type.
+commonfields:
+  id: AddDBotScoreToContext
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.0.0
+    itemVersion: 1.14.2
+    packID: CommonScripts
+    packName: Common Scripts
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.13.86272
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: AddDBotScoreToContext
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('AddDBotScoreToContext', 'start', __line__())
+  ### pack version: 1.14.2
+
+
+
+
+  def main():
+      indicator = demisto.args().get("indicator")
+      indicatorType = demisto.args().get("indicatorType")
+      score = int(demisto.args().get("score"))
+      vendor = demisto.args().get("vendor")
+      reliability = demisto.args().get("reliability", None)
+
+      dbotscore = {
+          "Indicator": indicator,
+          "Type": indicatorType,
+          "Vendor": vendor,
+          "Score": score,
+          "Reliability": reliability
+      }
+
+      command_results = CommandResults(
+          outputs_prefix='DBotScore',
+          outputs=dbotscore
+      )
+      return_results(command_results)
+
+
+  if __name__ == "__builtin__" or __name__ == "builtins":
+      main()
+
+  register_module_line('AddDBotScoreToContext', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags: []
+type: python
