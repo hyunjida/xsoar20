@@ -1,0 +1,208 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: ""
+    itemVersion: ""
+    packID: ""
+    packName: ""
+    prevname: ""
+    propagationLabels:
+    - all
+    toServerVersion: ""
+id: 55b11b7f-43e7-4fd1-8a9f-eee4d0cb90ae
+inputs: []
+name: test_schan_0415
+outputs: []
+starttaskid: "0"
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "1"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 751ed4ec-9d3c-428f-89d8-33c6cbed59b6
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: 751ed4ec-9d3c-428f-89d8-33c6cbed59b6
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 460,
+          "y": -180
+        }
+      }
+  "1":
+    continueonerrortype: ""
+    id: "1"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    scriptarguments:
+      data:
+        simple: '[{"ASN":"24940","ASOwner":"Hetzner Online GmbH","COUNTRY":"FI","IP":"65.109.198.96"},{"ASN":"208308","ASOwner":"Canopy
+          Flow, LLC","COUNTRY":"US","IP":"66.245.195.109"}], [{"ASN":"24940","ASOwner":"Hetzner
+          Online GmbH","COUNTRY":"FI","IP":"65.109.198.96","REASON":"TEST"},{"ASN":"208308","ASOwner":"Canopy
+          Flow, LLC","COUNTRY":"US","IP":"66.245.195.109","REASON":"TEST"}], [{"ASN":"24940","ASOwner":"Hetzner
+          Online GmbH","COUNTRY":"FI","IP":"65.109.198.96"},{"ASN":"208308","ASOwner":"Canopy
+          Flow, LLC","COUNTRY":"US","IP":"66.245.195.109"}]'
+      file_name:
+        simple: test.xlsx
+      headers:
+        simple: IP,COUNTRY,ASN,ASOwner;IP,COUNTRY,ASN,ASOwner,REASON;IP,COUNTRY,ASN,ASOwner
+      sheet_name:
+        simple: '"차단", "필터", "차단대기"'
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Exports context data to a Microsoft Excel Open XML Spreadsheet
+        (XLSX) file.
+      id: 5d039ad0-3fb0-4230-8f64-4f4df61248be
+      iscommand: false
+      name: "\bXLSX"
+      script: 55c01c58-b379-40e2-8fce-268038acfbe2
+      type: regular
+      version: -1
+    taskid: 5d039ad0-3fb0-4230-8f64-4f4df61248be
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 520,
+          "y": 190
+        }
+      }
+  "2":
+    continueonerrortype: ""
+    id: "2"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    scriptarguments:
+      key:
+        simple: bd_json
+      value:
+        simple: '[{"ASN":"24940","ASOwner":"Hetzner Online GmbH","COUNTRY":"FI","IP":"65.109.198.96"},{"ASN":"208308","ASOwner":"Canopy
+          Flow, LLC","COUNTRY":"US","IP":"66.245.195.109"}]'
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Set a value in context under the key you entered.
+      id: 3fae2700-12a5-44fd-8085-eed23b0aa68c
+      iscommand: false
+      name: bd_json
+      script: Set
+      type: regular
+      version: -1
+    taskid: 3fae2700-12a5-44fd-8085-eed23b0aa68c
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 160,
+          "y": -20
+        }
+      }
+  "3":
+    continueonerrortype: ""
+    id: "3"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    scriptarguments:
+      key:
+        simple: fd_json
+      value:
+        simple: '[{"ASN":"24940","ASOwner":"Hetzner Online GmbH","COUNTRY":"FI","IP":"65.109.198.96","REASON":"TEST"},{"ASN":"208308","ASOwner":"Canopy
+          Flow, LLC","COUNTRY":"US","IP":"66.245.195.109","REASON":"TEST"}]'
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Set a value in context under the key you entered.
+      id: 8176c1a1-2bfe-49c6-823e-b1a33bb1936a
+      iscommand: false
+      name: fd_json
+      script: Set
+      type: regular
+      version: -1
+    taskid: 8176c1a1-2bfe-49c6-823e-b1a33bb1936a
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 580,
+          "y": -20
+        }
+      }
+  "4":
+    continueonerrortype: ""
+    id: "4"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    scriptarguments:
+      key:
+        simple: hd_json
+      value:
+        simple: '[{"ASN":"24940","ASOwner":"Hetzner Online GmbH","COUNTRY":"FI","IP":"65.109.198.96"},{"ASN":"208308","ASOwner":"Canopy
+          Flow, LLC","COUNTRY":"US","IP":"66.245.195.109"}]'
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Set a value in context under the key you entered.
+      id: d47dba5c-a07d-4c99-822e-22ddcdaec4b8
+      iscommand: false
+      name: hd_json
+      script: Set
+      type: regular
+      version: -1
+    taskid: d47dba5c-a07d-4c99-822e-22ddcdaec4b8
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 1000,
+          "y": -20
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 465,
+        "width": 1220,
+        "x": 160,
+        "y": -180
+      }
+    }
+  }
