@@ -12,8 +12,8 @@
 		"layoutscontainer",
 		"generictype",
 		"genericfield",
-		"genericmodule",
-		"genericdefinition"
+		"genericdefinition",
+		"genericmodule"
 	],
 	"contentItems": {
 		"automation": [
