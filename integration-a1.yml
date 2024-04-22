@@ -98,7 +98,8 @@ contentitemexportablefields:
     packID: ""
     packName: ""
     prevname: ""
-    propagationLabels: []
+    propagationLabels:
+    - all
     toServerVersion: ""
 description: This is the Hello World integration for getting started.
 detaileddescription: |-
